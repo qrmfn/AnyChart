@@ -485,6 +485,7 @@ anychart.ConsistencyStorage;
  */
 anychart.core.Base = function() {
   anychart.core.Base.base(this, 'constructor');
+  // console.log(++anychart.counter);
 
   /**
    * Own settings.
@@ -510,6 +511,20 @@ anychart.core.Base = function() {
    * @private
    */
   this.needsForceSignalsDispatching_ = false;
+
+  /**
+   *
+   * @type {Array.<Object>}
+   * @private
+   */
+  this.themes_ = [];
+
+  /**
+   *
+   * @type {Object}
+   * @private
+   */
+  this.flatTheme = {};
 
   /**
    * Consistency storage map.
@@ -648,8 +663,51 @@ anychart.core.Base.prototype.getParentState = function() {
 
 
 //endregion
+//region -- Theme boost.
+/**
+ * Add themes. Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie') from
+ * basic theme to very specific.
+ * @param {...(Object|string)} var_args - Themes.
+ */
+anychart.core.Base.prototype.addThemes = function(var_args) {
+  for (var i = 0; i < arguments.length; i++) {
+    this.themes_.push(arguments[i]);
+  }
+  this.flattenThemes();
+};
 
 
+/**
+ * Flattens themes.
+ */
+anychart.core.Base.prototype.flattenThemes = function() {
+  var th = anychart.getTheme();
+  for (var i = 0; i < this.themes_.length; i++) {
+    var theme = this.themes_[i];
+    if (goog.isString(theme)) {
+      var splitPath = theme.split('.');
+      theme = th;
+      for (var j = 0; j < splitPath.length; j++) {
+        var part = splitPath[j];
+        theme = theme[part];
+      }
+    }
+    goog.mixin(this.flatTheme, theme);
+  }
+  this.themeSettings = this.flatTheme;
+};
+
+
+/**
+ * TODO (A.Kudryavtsev): Getter for a while.
+ * @return {Object}
+ */
+anychart.core.Base.prototype.getFlatTheme = function() {
+  return this.flatTheme;
+};
+
+
+//endregion
 /**
  * Whether to dispatch signals even if current consistency state is not effective.
  * @param {boolean=} opt_value - Value to set.

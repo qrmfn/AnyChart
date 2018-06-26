@@ -136,7 +136,9 @@ anychart.core.StateSettings.OUTLINE_AFTER_INIT_CALLBACK = 'outlineAfterInitCallb
  * @return {anychart.core.ui.LabelsFactory}
  */
 anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
-  return new anychart.core.ui.LabelsFactory();
+  var l = new anychart.core.ui.LabelsFactory();
+  l.addThemes('defaultLabelFactory');
+  return l;
 };
 
 
@@ -146,7 +148,9 @@ anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
  * @return {anychart.core.ui.CircularLabelsFactory}
  */
 anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR = function() {
-  return new anychart.core.ui.CircularLabelsFactory();
+  var l = new anychart.core.ui.CircularLabelsFactory();
+  l.addThemes('defaultLabelFactory');
+  return l;
 };
 
 

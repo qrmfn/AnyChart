@@ -42,6 +42,9 @@ goog.forwardDeclare('anychart.core.Chart');
 anychart.graphics = anychart.window['acgraph'];
 
 
+// anychart.counter = 0;
+
+
 /**
  * Get/Set global object.
  * @param {Window=} opt_value Global context.
@@ -558,6 +561,23 @@ anychart.isValidKey = function() {
 //
 //----------------------------------------------------------------------------------------------------------------------
 /**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * TODO (A.Kudryavtsev): Should replace useless multiple themes like anychart.themes_ .
+ * @type {?(string|Object)}
+ * @private
+ */
+anychart.currentTheme_ = null;
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * @type {?Object}
+ * @private
+ */
+anychart.currentThemeCache_ = null;
+
+
+/**
  * Array of themes that will be applied for anychart globally.
  * @type {Array<string|Object>}
  * @private
@@ -579,6 +599,32 @@ anychart.themeClones_ = [];
  * @private
  */
 anychart.mergedThemeClones_ = [];
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * @param {Object|string} value - New theme. TODO (A.Kudryavtsev): Describe.
+ */
+anychart.setTheme = function(value) {
+  anychart.currentTheme_ = goog.isString(value) ?
+      anychart.window['anychart']['themes'][value] :
+      value;
+};
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * TODO (A.Kudryavtsev): Describe.
+ * @return {Object}
+ */
+anychart.getTheme = function() {
+  if (!anychart.currentThemeCache_) {
+    anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
+    if (anychart.currentTheme_)
+      goog.mixin(anychart.currentThemeCache_, anychart.currentTheme_);
+  }
+  return anychart.currentThemeCache_;
+};
 
 
 /**

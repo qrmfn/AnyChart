@@ -42,6 +42,10 @@ goog.require('goog.labs.userAgent.device');
  */
 anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.pieModule.Chart.base(this, 'constructor');
+
+  this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
+  this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
+
   this.suspendSignalsDispatching();
 
   /**
@@ -198,8 +202,10 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', pieFillNormalizer]
   ];
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL, descriptorsOverride);
+  this.normal_.addThemes('chart.normal', 'pieFunnelPyramidBase.normal', 'pie.normal');
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
+    factory.addThemes('chart.normal.labels', 'pieFunnelPyramidBase.normal.labels', 'pie.normal.labels');
     factory.listenSignals(this.labelsInvalidated_, this);
     factory.setParentEventTarget(this);
     this.invalidate(anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW);
@@ -1158,6 +1164,7 @@ anychart.pieModule.Chart.prototype.isNoData = function() {
 anychart.pieModule.Chart.prototype.center = function(opt_value) {
   if (!this.center_) {
     this.center_ = new anychart.core.ui.Center(this);
+    this.center_.addThemes(this.mainTheme_['center']);
     this.center_.listenSignals(this.pieCenterInvalidated_, this);
   }
 
@@ -2121,7 +2128,7 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   // }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
-    if (this.center_.contentLayer) {
+    if (this.center().contentLayer) {
       this.center_.clearContent();
       this.center_.contentLayer.parent(this.rootElement);
       this.center_.contentLayer.zIndex(anychart.pieModule.Chart.ZINDEX_CENTER_CONTENT_LAYER);
