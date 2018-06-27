@@ -1986,17 +1986,17 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
-  if ('title' in config)
-    this.title(config['title']);
+  // if ('title' in config)
+  //   this.title(config['title']);
 
-  if ('background' in config)
-    this.background(config['background']);
+  // if ('background' in config)
+  //   this.background(config['background']);
 
-  if ('padding' in config)
-    this.padding(config['padding']);
+  // if ('padding' in config)
+  //   this.padding(config['padding']);
 
-  if ('margin' in config)
-    this.margin(config['margin']);
+  // if ('margin' in config)
+  //   this.margin(config['margin']);
 
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {
@@ -2009,7 +2009,7 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.container(config['container']);
 
   // from VisualBaseWithBounds
-  this.bounds(config['bounds']);
+  // this.bounds(config['bounds']);
   this.left(config['left']);
   this.top(config['top']);
   this.width(config['width']);
@@ -2017,17 +2017,17 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.right(config['right']);
   this.bottom(config['bottom']);
   this.animation(config['animation']);
-  this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
+  // this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
 
-  if ('tooltip' in config)
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+  // if ('tooltip' in config)
+  //   this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
-  this.a11y(config['a11y']);
+  // this.a11y(config['a11y']);
 
-  if (goog.isDef(config['contextMenu']))
-    this.contextMenu(config['contextMenu']);
+  // if (goog.isDef(config['contextMenu']))
+  //   this.contextMenu(config['contextMenu']);
 
-  this.credits(config['credits']);
+  // this.credits(config['credits']);
 
   if (config['exports'])
     this.exports(config['exports']);

@@ -1331,10 +1331,10 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   anychart.core.settings.deserialize(this, anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS, config, opt_default);
   this.minBubbleSize(config['minBubbleSize']);
   this.maxBubbleSize(config['maxBubbleSize']);
-  this.palette(config['palette']);
-  this.markerPalette(config['markerPalette']);
-  this.hatchFillPalette(config['hatchFillPalette']);
-  this.dataArea().setupInternal(!!opt_default, config['dataArea']);
+  // this.palette(config['palette']);
+  // this.markerPalette(config['markerPalette']);
+  // this.hatchFillPalette(config['hatchFillPalette']);
+  // this.dataArea().setupInternal(!!opt_default, config['dataArea']);
 
   this.normal_.setupInternal(!!opt_default, config);
   this.normal_.setupInternal(!!opt_default, config['normal']);

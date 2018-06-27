@@ -383,8 +383,8 @@ anychart.core.CartesianBase.prototype.getBoundsChangedSignal = function() {
 anychart.core.CartesianBase.prototype.drawElements = function() {
   anychart.core.CartesianBase.base(this, 'drawElements');
   if (this.hasInvalidationState(anychart.ConsistencyState.CARTESIAN_X_SCROLLER)) {
-    this.xScroller().container(this.rootElement);
-    this.xScroller().draw();
+    // this.xScroller().container(this.rootElement);
+    // this.xScroller().draw();
     this.markConsistent(anychart.ConsistencyState.CARTESIAN_X_SCROLLER);
   }
 };
