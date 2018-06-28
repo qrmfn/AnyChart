@@ -1403,6 +1403,8 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
 
   var i, count;
 
+  console['timeStamp']('Start ChartWithAxes calculation: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   this.calculate();
 
   if (this.isConsistent()) {
@@ -1445,6 +1447,8 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
   // calculate axes space first, the result is data bounds
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
     // bounds of data area
+    console['timeStamp']('Getting bounds without axes: ' + ((new Date()).getTime() - anychart['currTime']));
+    anychart['currTime'] = (new Date()).getTime();
     this.dataBounds = this.getBoundsWithoutAxes(this.getContentAreaBounds(bounds));
 
     // we do not invalidate series BOUNDS state, because it will be invalidate naturally in series drawing section
@@ -1455,9 +1459,13 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
   anychart.performance.end('Cartesian bounds calc');
 
   anychart.performance.start('Cartesian elements drawing');
+  console['timeStamp']('Drawing elements: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   this.drawElements();
   anychart.performance.end('Cartesian elements drawing');
 
+  console['timeStamp']('Drawing series: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   this.drawSeries(this.topAxisPadding_, this.rightAxisPadding_, this.bottomAxisPadding_,
       this.leftAxisPadding_);
 

@@ -1621,9 +1621,13 @@ anychart.core.Chart.prototype.drawInternal = function() {
   //total chart area bounds, do not override, it can be useful later
   anychart.performance.start('Chart.calculateBounds()');
   var totalBounds = /** @type {!anychart.math.Rect} */(this.getPixelBounds());
+  console['timeStamp']('Calculating content area space: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   this.contentBounds = this.calculateContentAreaSpace(totalBounds);
   anychart.performance.end('Chart.calculateBounds()');
   anychart.performance.start('Chart.drawContent()');
+  console['timeStamp']('Drawing content: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   this.drawContent(this.contentBounds);
 
   this.specialDraw(this.getPlotBounds());
@@ -1680,6 +1684,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
 
   if (manualSuspend) {
     anychart.performance.start('Stage resume');
+    console['timeStamp']('Rendering (stage resume): ' + ((new Date()).getTime() - anychart['currTime']));
+    anychart['currTime'] = (new Date()).getTime();
     stage.resume();
     anychart.performance.end('Stage resume');
   }
@@ -1701,6 +1707,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
     this.onInteractivitySignal();
 
   anychart.performance.end('Chart.draw()');
+  console['timeStamp']('Finish: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
 };
 
 

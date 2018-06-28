@@ -210,13 +210,22 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.FINANCIAL] = anychart.financial
  */
 anychart.line = function(var_args) {
   anychart.performance.start('anychart.line()');
+  console['timeStamp']('Call anychart.cartesianModule.Chart(): ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   var chart = new anychart.cartesianModule.Chart();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.LINE);
 
-  chart.setupInternal(true, anychart.getFullTheme('line'));
+  console['timeStamp']('Getting full theme: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
+  var theme = anychart.getFullTheme('line');
+  console['timeStamp']('Setup chart: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
+  chart.setupInternal(true, theme);
 
+  console['timeStamp']('Creating series: ' + ((new Date()).getTime() - anychart['currTime']));
+  anychart['currTime'] = (new Date()).getTime();
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['line'](arguments[i]);
   }
