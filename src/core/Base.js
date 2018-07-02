@@ -231,6 +231,7 @@ anychart.ConsistencyState = {
   TOOLTIP_VISIBILITY: 1 << 11,
   TOOLTIP_MODE: 1 << 12,
   TOOLTIP_ALLOWANCE: 1 << 13, //allowLeaveScreen or allowLeaveChart.
+  TOOLTIP_HTML_MODE: 1 << 14, //html-tooltip usage.
   //------------------------------ CIRCULAR/LINEAR GAUGE (CHART) ------------------------------
   GAUGE_POINTERS: 1 << 12,
   GAUGE_KNOB: 1 << 13,
@@ -423,11 +424,7 @@ anychart.PointState = {
 anychart.SettingsState = {
   NORMAL: 0,
   HOVERED: 1,
-  SELECTED: 2,
-  EXPANDED: 3,
-  COLLAPSED: 4,
-  PUSHED: 5,
-  DISABLED: 6
+  SELECTED: 2
 };
 
 
