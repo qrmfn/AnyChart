@@ -46,6 +46,13 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
   this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
 
+  /** @inheritDoc */
+  this.themesMap = {
+    'title' : {
+      themes: ['defaultTitle', 'chart.title', 'chart.defaultQuarterSettings.title']
+    }
+  };
+
   this.suspendSignalsDispatching();
 
   /**
@@ -565,7 +572,7 @@ anychart.pieModule.Chart.prototype.data = function(opt_value, opt_csvSettings) {
     // handle HTML table data
     if (opt_value) {
       var title = opt_value['title'] || opt_value['caption'];
-      if (title) this.title(title);
+      if (title && this.getCreated('title')) this.title(title);
       if (opt_value['rows']) opt_value = opt_value['rows'];
     }
 

@@ -57,6 +57,11 @@ anychart.core.Chart = function() {
   this.addThemes('chart');
 
   /**
+   * @type {Object}
+   */
+  this.themesMap = {};
+
+  /**
    * @type {acgraph.vector.Layer}
    * @protected
    */
@@ -535,12 +540,17 @@ anychart.core.Chart.prototype.backgroundInvalidated_ = function(event) {
  * @return {!(anychart.core.ui.Title|anychart.core.Chart)} .
  */
 anychart.core.Chart.prototype.title = function(opt_value) {
+  debugger
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
     this.title_.setParentEventTarget(this);
-    this.title_.addThemes('chart.title');
+
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.registerDisposable(this.title_);
+
+    this.title_.addThemes(this.getFlatTheme('title'));
+    this.title_.setupInternal(true);
+    this.themesMap['title'].instance = this.title_;
   }
 
   if (goog.isDef(opt_value)) {
@@ -1499,18 +1509,20 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
   boundsWithoutBackgroundThickness = background.enabled() ? background.getRemainingBounds() : boundsWithoutMargin;
   boundsWithoutCredits = this.drawCredits(boundsWithoutBackgroundThickness);
   boundsWithoutPadding = this.padding().tightenBounds(boundsWithoutCredits);
-
-  var title = this.title();
+debugger
+  var title = this.getCreated('title');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_TITLE | anychart.ConsistencyState.BOUNDS)) {
-    title.suspendSignalsDispatching();
-    if (!title.container()) title.container(this.rootElement);
-    title.parentBounds(boundsWithoutPadding);
-    title.resumeSignalsDispatching(false);
-    title.draw();
+    if (title) {
+      title.suspendSignalsDispatching();
+      if (!title.container()) title.container(this.rootElement);
+      title.parentBounds(boundsWithoutPadding);
+      title.resumeSignalsDispatching(false);
+      title.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.CHART_TITLE);
   }
 
-  boundsWithoutTitle = title.enabled() ? title.getRemainingBounds() : boundsWithoutPadding;
+  boundsWithoutTitle = title && title.enabled() ? title.getRemainingBounds() : boundsWithoutPadding;
 
   return boundsWithoutTitle.clone();
 };
@@ -1948,7 +1960,10 @@ anychart.core.Chart.prototype.getDefaultThemeObj = function() {
 /** @inheritDoc */
 anychart.core.Chart.prototype.serialize = function() {
   var json = anychart.core.Chart.base(this, 'serialize');
-  json['title'] = this.title().serialize();
+
+  if (this.getCreated('title'))
+    json['title'] = this.title().serialize();
+
   json['background'] = this.background().serialize();
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
@@ -1994,10 +2009,11 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   // if ('defaultLabelSettings' in config)
   //   this.defaultLabelSettings(config['defaultLabelSettings']);
-  //
-  // if ('title' in config)
-  //   this.title(config['title']);
-  //
+
+  debugger
+  if (this.isEnabledByTheme('title'))
+    this.title();
+
   // if ('background' in config)
   //   this.background(config['background']);
   //
@@ -3752,6 +3768,47 @@ anychart.core.Chart.prototype.saveAsXlsx = function(opt_chartDataExportMode, opt
 };
 
 
+//endregion
+//region --- Theme Map Processing
+//------------------------------------------------------------------------------
+//
+//  Theme Map Processing
+//
+//------------------------------------------------------------------------------
+anychart.core.Chart.prototype.getCreated = function(stringId) {
+  return this.themesMap[stringId].instance;
+};
+
+
+anychart.core.Chart.prototype.isEnabledByTheme = function(stringId) {
+  // debugger
+  if (stringId in this.themesMap) {
+    if (this.themesMap[stringId].created)
+      return true;
+
+    if (goog.isDef(this.themesMap[stringId].enabled))
+      return this.themesMap[stringId].enabled;
+
+    var th = anychart.getTheme();
+    var themes = this.themesMap[stringId].themes;
+    for (var i = themes.length; i--;) {
+      var theme = themes[i];
+      if (goog.isString(theme)) {
+        var splitPath = theme.split('.');
+        theme = th;
+        for (var j = 0; j < splitPath.length; j++) {
+          var part = splitPath[j];
+          theme = theme[part];
+        }
+      }
+      if (goog.isDef(theme['enabled'])) {
+        this.themesMap[stringId].enabled = theme['enabled'];
+        return this.themesMap[stringId].enabled;
+      }
+    }
+  }
+  return void 0;
+};
 //endregion
 //region ------- Charts tracking
 
