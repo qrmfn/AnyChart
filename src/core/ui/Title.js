@@ -469,6 +469,8 @@ anychart.core.ui.Title.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+    this.background_.addThemes(this.getFlatTheme('background'));
+    this.background_.setupInternal(true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1153,7 +1155,7 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 
 /** @inheritDoc */
 anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
+  var enabled = anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
   if (opt_default) {
     // this.setThemeSettings(config);
@@ -1162,14 +1164,18 @@ anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
     anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
   }
 
-  if ('background' in config)
-    this.background(config['background']);
+  if (enabled) {
+    // if ('background' in config)
+    //   this.background(config['background']);
 
-  if ('padding' in config)
-    this.padding(config['padding']);
+    // if ('padding' in config)
+    //   this.padding(config['padding']);
+    //
+    // if ('margin' in config)
+    //   this.margin(config['margin']);
+  }
 
-  if ('margin' in config)
-    this.margin(config['margin']);
+  return enabled;
 };
 
 

@@ -81,6 +81,11 @@ anychart.core.SeparateChart.prototype.legend = function(opt_value) {
     this.registerDisposable(this.legend_);
     this.legend_.listenSignals(this.onLegendSignal_, this);
     this.legend_.setParentEventTarget(this);
+
+    // var th = this.getFlatTheme('legend');
+    // th['enabled'] = false;
+    this.legend_.addThemes(this.getFlatTheme('legend'));
+    this.legend_.setupInternal(true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -219,7 +224,8 @@ anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(total
   var bounds = anychart.core.SeparateChart.base(this, 'calculateContentAreaSpace', totalBounds);
 
   var legend = /** @type {anychart.core.ui.Legend} */(this.legend());
-  if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS) &&
+  if (legend.enabled() &&
+      this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS) &&
       legend.positionMode() == anychart.enums.LegendPositionMode.OUTSIDE) {
     this.drawLegend(bounds);
   }
@@ -237,11 +243,11 @@ anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(total
  */
 anychart.core.SeparateChart.prototype.specialDraw = function(bounds) {
   var legend = /** @type {anychart.core.ui.Legend} */(this.legend());
-  if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS) &&
+  if (legend.enabled() &&
+      this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS) &&
       legend.positionMode() == anychart.enums.LegendPositionMode.INSIDE) {
 
     this.drawLegend(bounds);
-    this.markConsistent(anychart.ConsistencyState.CHART_LEGEND);
   }
 };
 
@@ -272,7 +278,6 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
-  this.legend(config['legend']);
   this.interactivity(config['interactivity']);
 };
 

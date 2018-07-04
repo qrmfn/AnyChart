@@ -59,6 +59,11 @@ anychart.core.VisualBase = function() {
   this.supportsEnabledSuspension = true;
 
   this.invalidate(anychart.ConsistencyState.ALL);
+
+  /**
+   * @type {boolean}
+   */
+  this.initialized = false;
 };
 goog.inherits(anychart.core.VisualBase, anychart.core.Base);
 
@@ -390,6 +395,11 @@ anychart.core.VisualBase.prototype.enabled = function(opt_value) {
     if (this.ownSettings['enabled'] !== opt_value) {
       this.ownSettings['enabled'] = opt_value;
       this.invalidate(anychart.ConsistencyState.ENABLED, this.getEnableChangeSignals());
+
+      if (this.ownSettings['enabled'] && !this.initialized) {
+        this.setupInternal(true);
+      }
+
       if (this.supportsEnabledSuspension) {
         if (this.ownSettings['enabled']) {
           if (this.suspendedByEnable) {
@@ -963,6 +973,11 @@ anychart.core.VisualBase.prototype.setupByJSON = function(config, opt_default) {
     this.enabled(goog.isDefAndNotNull(enabled) ? enabled : !goog.isDef(enabled) ? true : undefined);
     this.zIndex(config['zIndex']);
   }
+
+  if (this.enabled() && !this.initialized)
+    this.initialized = true;
+
+  return this.enabled();
 };
 
 

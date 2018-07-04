@@ -421,6 +421,11 @@ anychart.core.Text.prototype.enabled = function(opt_value) {
   if (goog.isDef(opt_value)) {
     if (this.ownSettings['enabled'] != opt_value) {
       this.ownSettings['enabled'] = opt_value;
+
+      if (this.ownSettings['enabled'] && !this.initialized) {
+        this.setupInternal(true);
+      }
+
       this.invalidate(anychart.ConsistencyState.ENABLED,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED | anychart.Signal.ENABLED_STATE_CHANGED);
       if (this.ownSettings['enabled']) {
@@ -451,12 +456,13 @@ anychart.core.Text.prototype.serialize = function() {
 
 /** @inheritDoc */
 anychart.core.Text.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.Text.base(this, 'setupByJSON', config, opt_default);
+  var enabled = anychart.core.Text.base(this, 'setupByJSON', config, opt_default);
   if (opt_default) {
     anychart.core.settings.copy(this.themeSettings, anychart.core.Text.BASE_DESCRIPTORS, config);
   } else {
     anychart.core.settings.deserialize(this, anychart.core.Text.BASE_DESCRIPTORS, config);
   }
+  return enabled;
 };
 
 
