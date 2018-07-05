@@ -29,6 +29,7 @@ goog.require('goog.object');
  * @extends {anychart.core.Text}
  */
 anychart.core.ui.Legend = function() {
+  console.log("Create legend!");
   anychart.core.ui.Legend.base(this, 'constructor');
 
   this.addThemes('defaultLegend');
@@ -1894,8 +1895,8 @@ anychart.core.ui.Legend.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_BACKGROUND)) {
-    var background = /** @type {anychart.core.ui.Background} */(this.background());
-    if (background.enabled()) {
+    var background = this.getCreated('background');
+    if (background) {
       background.suspendSignalsDispatching();
       background.parentBounds(this.relativeBoundsWithoutMargin_);
       if (this.enabled()) background.container(this.rootElement);
@@ -2381,19 +2382,17 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
 
-  console.log("Legend setup");
-
   if (this.isEnabledByTheme('title'))
     this.title();
 
   if (this.isEnabledByTheme('background'))
-    this.background(config['background']);
+    this.background();
 
   if (this.isEnabledByTheme('paginator'))
-    this.paginator(config['paginator']);
+    this.paginator();
 
   if (this.isEnabledByTheme('titleSeparator'))
-    this.titleSeparator(config['titleSeparator']);
+    this.titleSeparator();
 
   if ('padding' in config)
     this.padding(config['padding']);

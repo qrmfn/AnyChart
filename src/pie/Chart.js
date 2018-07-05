@@ -4549,7 +4549,6 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   this.registerDisposable(tooltip);
   tooltip.chart(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
-
   return tooltip;
 };
 
@@ -4570,7 +4569,8 @@ anychart.pieModule.Chart.prototype.onTooltipSignal_ = function(event) {
  * @protected
  */
 anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
-  if (opt_event && opt_event['target'] == this.legend()) {
+  var legend = this.getCreated('legend');
+  if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
   var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());

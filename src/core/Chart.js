@@ -2045,7 +2045,7 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.animation(config['animation']);
   this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
 
-  if ('tooltip' in config)
+  if (this.isEnabledByTheme('tooltip'))
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.a11y(config['a11y']);

@@ -1259,6 +1259,7 @@ anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
     if (goog.isDef(this.themesMap[stringId].enabled))
       return this.themesMap[stringId].enabled;
 
+    // console.log("check enabled", stringId);
     var th = anychart.getTheme();
     var themes = this.themesMap[stringId].themes || [];
     themes.push(this.getFlatTheme(stringId));
@@ -1274,6 +1275,7 @@ anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
       }
       if (theme && goog.isDef(theme['enabled'])) {
         this.themesMap[stringId].enabled = theme['enabled'];
+        // console.log("return", this.themesMap[stringId].enabled);
         return this.themesMap[stringId].enabled;
       }
     }
