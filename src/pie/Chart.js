@@ -559,7 +559,7 @@ anychart.pieModule.Chart.prototype.data = function(opt_value, opt_csvSettings) {
     // handle HTML table data
     if (opt_value) {
       var title = opt_value['title'] || opt_value['caption'];
-      if (title) this.title(title);
+      if (title && this.getCreated('title')) this.title(title);
       if (opt_value['rows']) opt_value = opt_value['rows'];
     }
 
@@ -4562,7 +4562,8 @@ anychart.pieModule.Chart.prototype.onTooltipSignal_ = function(event) {
  * @protected
  */
 anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
-  if (opt_event && opt_event['target'] == this.legend()) {
+  var legend = this.getCreated('legend');
+  if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
   var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
@@ -4574,19 +4575,6 @@ anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
     this.listen(goog.labs.userAgent.device.isDesktop() ?
         goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
   }
-  // if (tooltip.isFloating() && opt_event) {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(opt_event['clientX'], opt_event['clientY']));
-  //
-  //   // for float
-  //   this.listen(goog.events.EventType.MOUSEMOVE, this.showTooltip);
-  //
-  // } else {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(0, 0));
-  // }
 };
 
 

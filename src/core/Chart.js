@@ -54,6 +54,10 @@ anychart.core.Chart = function() {
   this.suspendSignalsDispatching();
   anychart.core.Chart.base(this, 'constructor');
 
+  this.themesMap['title'] = {};
+  this.themesMap['background'] = {};
+  this.themesMap['tooltip'] = {};
+
   /**
    * @type {acgraph.vector.Layer}
    * @protected
@@ -493,6 +497,8 @@ anychart.core.Chart.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.registerDisposable(this.background_);
+
+    this.setCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -535,6 +541,8 @@ anychart.core.Chart.prototype.title = function(opt_value) {
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.registerDisposable(this.title_);
+
+    this.setCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -793,6 +801,8 @@ anychart.core.Chart.prototype.getStat = function(key) {
 anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
+
+    this.setCreated('tooltip', this.tooltip_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1477,31 +1487,35 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
 
   boundsWithoutMargin = this.margin().tightenBounds(totalBounds);
 
-  var background = this.background();
+  var background = this.getCreated('background');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_BACKGROUND | anychart.ConsistencyState.BOUNDS)) {
-    background.suspendSignalsDispatching();
-    if (!background.container()) background.container(this.rootElement);
-    background.parentBounds(boundsWithoutMargin);
-    background.resumeSignalsDispatching(false);
-    background.draw();
+    if (background) {
+      background.suspendSignalsDispatching();
+      if (!background.container()) background.container(this.rootElement);
+      background.parentBounds(boundsWithoutMargin);
+      background.resumeSignalsDispatching(false);
+      background.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.CHART_BACKGROUND);
   }
 
-  boundsWithoutBackgroundThickness = background.enabled() ? background.getRemainingBounds() : boundsWithoutMargin;
+  boundsWithoutBackgroundThickness = background && background.enabled() ? background.getRemainingBounds() : boundsWithoutMargin;
   boundsWithoutCredits = this.drawCredits(boundsWithoutBackgroundThickness);
   boundsWithoutPadding = this.padding().tightenBounds(boundsWithoutCredits);
 
-  var title = this.title();
+  var title = this.getCreated('title');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_TITLE | anychart.ConsistencyState.BOUNDS)) {
-    title.suspendSignalsDispatching();
-    if (!title.container()) title.container(this.rootElement);
-    title.parentBounds(boundsWithoutPadding);
-    title.resumeSignalsDispatching(false);
-    title.draw();
+    if (title) {
+      title.suspendSignalsDispatching();
+      if (!title.container()) title.container(this.rootElement);
+      title.parentBounds(boundsWithoutPadding);
+      title.resumeSignalsDispatching(false);
+      title.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.CHART_TITLE);
   }
 
-  boundsWithoutTitle = title.enabled() ? title.getRemainingBounds() : boundsWithoutPadding;
+  boundsWithoutTitle = title && title.enabled() ? title.getRemainingBounds() : boundsWithoutPadding;
 
   return boundsWithoutTitle.clone();
 };
@@ -1631,14 +1645,16 @@ anychart.core.Chart.prototype.drawInternal = function() {
   anychart.performance.end('Chart.drawContent()');
 
   // used for crosshair
-  var background = this.background();
-  var fill = background.getOption('fill');
-  if ((!background.enabled() || !fill || fill == 'none')) {
-    if (!this.shadowRect) {
-      this.shadowRect = this.rootElement.rect();
-      this.shadowRect.fill(anychart.color.TRANSPARENT_HANDLER).stroke(null);
+  var background = this.getCreated('background');
+  if (background) {
+    var fill = background.getOption('fill');
+    if ((!background.enabled() || !fill || fill == 'none')) {
+      if (!this.shadowRect) {
+        this.shadowRect = this.rootElement.rect();
+        this.shadowRect.fill(anychart.color.TRANSPARENT_HANDLER).stroke(null);
+      }
+      this.shadowRect.setBounds(this.contentBounds);
     }
-    this.shadowRect.setBounds(this.contentBounds);
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LABELS | anychart.ConsistencyState.BOUNDS)) {
@@ -1939,8 +1955,16 @@ anychart.core.Chart.prototype.getDefaultThemeObj = function() {
 /** @inheritDoc */
 anychart.core.Chart.prototype.serialize = function() {
   var json = anychart.core.Chart.base(this, 'serialize');
-  json['title'] = this.title().serialize();
-  json['background'] = this.background().serialize();
+
+  if (this.getCreated('title'))
+    json['title'] = this.title().serialize();
+
+  if (this.getCreated('background'))
+    json['background'] = this.background().serialize();
+
+  if (this.getCreated('tooltip'))
+    json['tooltip'] = this.tooltip().serialize();
+
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
   json['a11y'] = this.a11y().serialize();
@@ -1956,7 +1980,6 @@ anychart.core.Chart.prototype.serialize = function() {
   // from VisualBaseWithBounds
   json['bounds'] = this.bounds().serialize();
   json['animation'] = this.animation().serialize();
-  json['tooltip'] = this.tooltip().serialize();
   json['noDataLabel'] = this.noData().label().serialize();
   if (this.contextMenu_) {
     json['contextMenu'] = this.contextMenu()['serialize']();
@@ -1986,11 +2009,11 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
-  if ('title' in config)
-    this.title(config['title']);
+  if (this.isEnabledByTheme('title', config))
+    this.title();
 
-  if ('background' in config)
-    this.background(config['background']);
+  if (this.isEnabledByTheme('background', config))
+    this.background();
 
   if ('padding' in config)
     this.padding(config['padding']);
@@ -2019,7 +2042,7 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.animation(config['animation']);
   this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
 
-  if ('tooltip' in config)
+  if (this.isEnabledByTheme('tooltip', config))
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.a11y(config['a11y']);

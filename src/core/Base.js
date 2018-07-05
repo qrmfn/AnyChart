@@ -509,6 +509,11 @@ anychart.core.Base = function() {
   this.needsForceSignalsDispatching_ = false;
 
   /**
+   * @type {Object}
+   */
+  this.themesMap = {};
+
+  /**
    * Consistency storage map.
    * Please see type definition for more information.
    * @type {anychart.ConsistencyStorage}
@@ -1147,6 +1152,51 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
   return false;
 };
 
+
+//region --- Lazy Setup
+//------------------------------------------------------------------------------
+//
+//  LAZY SETUP
+//
+//------------------------------------------------------------------------------
+/**
+ *
+ * @param {string} stringId
+ * @return {anychart.core.Base|undefined}
+ */
+anychart.core.Base.prototype.getCreated = function(stringId) {
+  return this.themesMap[stringId].instance;
+};
+
+
+/**
+ *
+ * @param {string} stringId
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setCreated = function(stringId, instance) {
+  this.themesMap[stringId].instance = instance;
+};
+
+
+/**
+ *
+ * @param {string} stringId
+ * @param {Object} config
+ * @return {boolean|undefined}
+ */
+anychart.core.Base.prototype.isEnabledByTheme = function(stringId, config) {
+  if (stringId in this.themesMap) {
+    if (this.themesMap[stringId].instance)
+      return true;
+
+    var enabled = stringId in config && config[stringId] && goog.isDef(config[stringId]['enabled']) && config[stringId]['enabled'];
+    // console.log(stringId, "is", enabled);
+    return enabled;
+  }
+  return stringId in config;
+};
+//endregion
 
 /**
  * Dispatches external event with a timeout to detach it from the other code execution frame.
