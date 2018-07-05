@@ -2010,10 +2010,10 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
   if (this.isEnabledByTheme('title', config))
-    this.title();
+    this.title(config['title']);
 
   if (this.isEnabledByTheme('background', config))
-    this.background();
+    this.background(config['background']);
 
   if ('padding' in config)
     this.padding(config['padding']);

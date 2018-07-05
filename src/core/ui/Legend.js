@@ -32,6 +32,11 @@ anychart.core.ui.Legend = function() {
   console.log("Create legend!");
   anychart.core.ui.Legend.base(this, 'constructor');
 
+  this.themesMap['background'] = {};
+  this.themesMap['paginator'] = {};
+  this.themesMap['title'] = {};
+  this.themesMap['titleSeparator'] = {};
+
   /**
    * Drag.
    * @type {boolean}
@@ -2375,17 +2380,17 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
 
-  if (this.isEnabledByTheme('title'))
-    this.title();
+  if (this.isEnabledByTheme('title', config))
+    this.title(config['title']);
 
-  if (this.isEnabledByTheme('background'))
-    this.background();
+  if (this.isEnabledByTheme('background', config))
+    this.background(config['background']);
 
-  if (this.isEnabledByTheme('paginator'))
-    this.paginator();
+  if (this.isEnabledByTheme('paginator', config))
+    this.paginator(config['paginator']);
 
-  if (this.isEnabledByTheme('titleSeparator'))
-    this.titleSeparator();
+  if (this.isEnabledByTheme('titleSeparator', config))
+    this.titleSeparator(config['titleSeparator']);
 
   if ('padding' in config)
     this.padding(config['padding']);

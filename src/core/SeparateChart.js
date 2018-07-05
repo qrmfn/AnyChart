@@ -278,7 +278,7 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
   if (this.isEnabledByTheme('legend', config))
-    this.legend();
+    this.legend(config['legend']);
   this.interactivity(config['interactivity']);
 };
 
