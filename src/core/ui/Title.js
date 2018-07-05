@@ -469,8 +469,9 @@ anychart.core.ui.Title.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
     this.background_.addThemes(this.getFlatTheme('background'));
-    this.background_.setupInternal(true);
+    this.background_.setupByFlatTheme();
   }
 
   if (goog.isDef(opt_value)) {
@@ -520,6 +521,9 @@ anychart.core.ui.Title.prototype.margin = function(opt_spaceOrTopOrTopAndBottom,
     this.margin_ = new anychart.core.utils.Margin();
     this.registerDisposable(this.margin_);
     this.margin_.listenSignals(this.boundsInvalidated_, this);
+
+    this.margin_.addThemes(this.getFlatTheme('margin'));
+    this.margin_.setupByFlatTheme();
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.margin_.setup.apply(this.margin_, arguments);
@@ -542,6 +546,9 @@ anychart.core.ui.Title.prototype.padding = function(opt_spaceOrTopOrTopAndBottom
     this.padding_ = new anychart.core.utils.Padding();
     this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.boundsInvalidated_, this);
+
+    this.padding_.addThemes(this.getFlatTheme('padding'));
+    this.padding_.setupByFlatTheme();
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.padding_.setup.apply(this.padding_, arguments);
@@ -1155,27 +1162,23 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 
 /** @inheritDoc */
 anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
-  var enabled = anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
+  anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
   if (opt_default) {
-    // this.setThemeSettings(config);
+    this.setThemeSettings(config);
   } else {
     anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config);
     anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
   }
 
-  if (enabled) {
-    // if ('background' in config)
-    //   this.background(config['background']);
+  if ('background' in config)
+    this.background(config['background']);
 
-    // if ('padding' in config)
-    //   this.padding(config['padding']);
-    //
-    // if ('margin' in config)
-    //   this.margin(config['margin']);
-  }
+  if ('padding' in config)
+    this.padding(config['padding']);
 
-  return enabled;
+  if ('margin' in config)
+    this.margin(config['margin']);
 };
 
 

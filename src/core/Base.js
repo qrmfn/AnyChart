@@ -482,7 +482,6 @@ anychart.ConsistencyStorage;
  */
 anychart.core.Base = function() {
   anychart.core.Base.base(this, 'constructor');
-  // console.log(++anychart.counter);
 
   /**
    * Own settings.
@@ -522,6 +521,11 @@ anychart.core.Base = function() {
    * @private
    */
   this.flatTheme = {};
+
+  /**
+   * @type {Object}
+   */
+  this.themesMap = {};
 
   /**
    * Consistency storage map.
@@ -1170,10 +1174,6 @@ anychart.core.Base.prototype.setup = function(var_args) {
  */
 anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
   var mainArg = arguments[1];
-
-  if (isDefault && !goog.isDef(mainArg))
-    mainArg = this.getFlatTheme();
-
   if (goog.isDef(mainArg)) {
     this.suspendSignalsDispatching();
     var args = [];
@@ -1193,10 +1193,8 @@ anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
  * Setups current instance using passed JSON object.
  * @param {!Object} json .
  * @param {boolean=} opt_default Identifies that we should setup defaults.
- * @return {boolean} true is setup is done
  */
 anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
-  return true;
 };
 
 
@@ -1211,6 +1209,78 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
   return false;
 };
 
+
+//region --- Theme Map Processing
+//------------------------------------------------------------------------------
+//
+//  Theme Map Processing
+//
+//------------------------------------------------------------------------------
+/**
+ * todo: (chernetsky) Write description
+ */
+anychart.core.Base.prototype.setupByFlatTheme = function() {
+  this.setupByJSON(this.getFlatTheme());
+};
+
+
+/**
+ *
+ * @param {string} stringId
+ * @return {anychart.core.Base|undefined}
+ */
+anychart.core.Base.prototype.getCreated = function(stringId) {
+  return this.themesMap[stringId].instance;
+};
+
+
+/**
+ *
+ * @param {string} stringId
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setCreated = function(stringId, instance) {
+  instance.addThemes(this.getFlatTheme(stringId));
+  instance.setupByFlatTheme();
+  this.themesMap[stringId].instance = instance;
+};
+
+
+/**
+ *
+ * @param {string} stringId
+ * @return {boolean|undefined}
+ */
+anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
+  if (stringId in this.themesMap) {
+    if (this.themesMap[stringId].instance)
+      return true;
+
+    if (goog.isDef(this.themesMap[stringId].enabled))
+      return this.themesMap[stringId].enabled;
+
+    var th = anychart.getTheme();
+    var themes = this.themesMap[stringId].themes || [];
+    themes.push(this.getFlatTheme(stringId));
+    for (var i = themes.length; i--;) {
+      var theme = themes[i];
+      if (goog.isString(theme)) {
+        var splitPath = theme.split('.');
+        theme = th;
+        for (var j = 0; j < splitPath.length; j++) {
+          var part = splitPath[j];
+          theme = theme[part];
+        }
+      }
+      if (theme && goog.isDef(theme['enabled'])) {
+        this.themesMap[stringId].enabled = theme['enabled'];
+        return this.themesMap[stringId].enabled;
+      }
+    }
+  }
+  return void 0;
+};
+//endregion
 
 /**
  * Dispatches external event with a timeout to detach it from the other code execution frame.

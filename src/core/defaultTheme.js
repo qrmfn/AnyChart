@@ -2020,7 +2020,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
       'autoColor': anychart.core.defaultTheme.fontColorReversedNormal
     },
     'legend': {
-      'enabled': true,
+      'enabled': false,
       'padding': {'top': 10, 'right': 10, 'bottom': 0, 'left': 10},
       'position': 'bottom'
     },

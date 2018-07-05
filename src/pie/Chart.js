@@ -46,13 +46,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
   this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
 
-  /** @inheritDoc */
-  this.themesMap = {
-    'title' : {
-      themes: ['defaultTitle', 'chart.title', 'chart.defaultQuarterSettings.title']
-    }
-  };
-
   this.suspendSignalsDispatching();
 
   /**
@@ -4556,6 +4549,7 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   this.registerDisposable(tooltip);
   tooltip.chart(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
+
   return tooltip;
 };
 
@@ -4588,19 +4582,6 @@ anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
     this.listen(goog.labs.userAgent.device.isDesktop() ?
         goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
   }
-  // if (tooltip.isFloating() && opt_event) {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(opt_event['clientX'], opt_event['clientY']));
-  //
-  //   // for float
-  //   this.listen(goog.events.EventType.MOUSEMOVE, this.showTooltip);
-  //
-  // } else {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(0, 0));
-  // }
 };
 
 

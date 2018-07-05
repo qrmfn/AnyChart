@@ -254,7 +254,7 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
     }
 
     var title = this.chart.getCreated('title');
-    if (title && !titleText && title.getOption('text'))
+    if (title && !titleText && title.getOption('text') && title.enabled())
       titleText = title.getOption('text');
 
     if (this.mode_ == anychart.enums.A11yMode.DATA_TABLE) {
