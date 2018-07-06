@@ -29,7 +29,7 @@ goog.require('goog.object');
  * @extends {anychart.core.Text}
  */
 anychart.core.ui.Legend = function() {
-  console.log("Create legend!");
+  // console.log("Create legend!");
   anychart.core.ui.Legend.base(this, 'constructor');
 
   this.addThemes('defaultLegend');
