@@ -35,6 +35,10 @@ anychart.core.ui.Tooltip = function(capability) {
 
   this.addThemes('defaultTooltip');
 
+  this.themesMap['background'] = {themes: ['defaultBackground', this.getFlatTheme('background')]};
+  this.themesMap['title'] = {themes: ['defaultTitle', this.getFlatTheme('title')]};
+  this.themesMap['separator'] = {themes: ['defaultSeparator', this.getFlatTheme('separator')]};
+
   delete this.themeSettings['enabled'];
 
   /**
@@ -573,6 +577,8 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.background_.setParentEventTarget(this);
     this.registerDisposable(this.background_);
+
+    this.setCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -607,6 +613,8 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
+
+    this.setCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -644,6 +652,8 @@ anychart.core.ui.Tooltip.prototype.separator = function(opt_value) {
     this.separator_.listenSignals(this.onSeparatorSignal_, this);
     this.separator_.setParentEventTarget(this);
     this.registerDisposable(this.separator_);
+
+    this.setCreated('separator', this.separator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -709,9 +719,9 @@ anychart.core.ui.Tooltip.prototype.draw = function() {
     return this;
 
 
-  var background = /** @type {anychart.core.ui.Background} */(this.background());
-  var title = this.title();
-  var separator = /** @type {anychart.core.ui.Separator} */(this.separator());
+  var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
+  var title = this.getCreated('title') && this.title();
+  var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
   var content = /** @type {anychart.core.ui.Label} */(this.contentInternal());
 
   this.setContainerToTooltip_(this);
@@ -745,38 +755,41 @@ anychart.core.ui.Tooltip.prototype.draw = function() {
     this.htmlTooltip.updateTexts();
   } else {
     if (this.hasInvalidationState(anychart.ConsistencyState.TOOLTIP_BACKGROUND)) {
-      background.suspendSignalsDispatching();
-      background.parentBounds(this.contentBounds_);
-      background.container(this.getRootLayer_());
-      background.draw();
-      background.resumeSignalsDispatching(false);
-
+      if (background) {
+        background.suspendSignalsDispatching();
+        background.parentBounds(this.contentBounds_);
+        background.container(this.getRootLayer_());
+        background.draw();
+        background.resumeSignalsDispatching(false);
+      }
       this.markConsistent(anychart.ConsistencyState.TOOLTIP_BACKGROUND);
     }
 
     if (this.hasInvalidationState(anychart.ConsistencyState.TOOLTIP_TITLE)) {
-      title.suspendSignalsDispatching();
-      title.parentBounds(this.boundsWithoutPadding_);
-      title.draw();
-      title.resumeSignalsDispatching(false);
+      if (title) {
+        title.suspendSignalsDispatching();
+        title.parentBounds(this.boundsWithoutPadding_);
+        title.draw();
+        title.resumeSignalsDispatching(false);
 
-      // title bounds
-      if (!this.titleRemainingBounds_ && title.enabled())
-        this.titleRemainingBounds_ = title.getRemainingBounds();
-
+        // title bounds
+        if (!this.titleRemainingBounds_ && title.enabled())
+          this.titleRemainingBounds_ = title.getRemainingBounds();
+      }
       this.markConsistent(anychart.ConsistencyState.TOOLTIP_TITLE);
     }
 
     if (this.hasInvalidationState(anychart.ConsistencyState.TOOLTIP_SEPARATOR)) {
-      separator.suspendSignalsDispatching();
-      separator.parentBounds(this.titleRemainingBounds_ || this.boundsWithoutPadding_);
-      separator.draw();
-      separator.resumeSignalsDispatching(false);
+      if (separator) {
+        separator.suspendSignalsDispatching();
+        separator.parentBounds(this.titleRemainingBounds_ || this.boundsWithoutPadding_);
+        separator.draw();
+        separator.resumeSignalsDispatching(false);
 
-      //separator bounds
-      if (!this.separatorRemainingBounds_ && separator.enabled())
-        this.separatorRemainingBounds_ = separator.getRemainingBounds();
-
+        //separator bounds
+        if (!this.separatorRemainingBounds_ && separator.enabled())
+          this.separatorRemainingBounds_ = separator.getRemainingBounds();
+      }
       this.markConsistent(anychart.ConsistencyState.TOOLTIP_SEPARATOR);
     }
 
@@ -1469,9 +1482,16 @@ anychart.core.ui.Tooltip.prototype.needsForceSignalsDispatching = function(opt_v
  */
 anychart.core.ui.Tooltip.prototype.updateForceInvalidation = function() {
   var forceInvalidation = /** @type {boolean} */ (this.needsForceSignalsDispatching());
-  this.title().needsForceSignalsDispatching(forceInvalidation);
-  this.separator().needsForceSignalsDispatching(forceInvalidation);
-  this.background().needsForceSignalsDispatching(forceInvalidation);
+
+  if (this.getCreated('title') && this.title())
+    this.title().needsForceSignalsDispatching(forceInvalidation);
+
+  if (this.getCreated('separator') && this.separator())
+    this.separator().needsForceSignalsDispatching(forceInvalidation);
+
+  if (this.getCreated('background') && this.background())
+    this.background().needsForceSignalsDispatching(forceInvalidation);
+
   this.padding().needsForceSignalsDispatching(forceInvalidation);
 };
 
@@ -1542,14 +1562,20 @@ anychart.core.ui.Tooltip.prototype.getRootLayer_ = function() {
     this.registerDisposable(this.rootLayer_);
     this.bindHandlersToGraphics(this.rootLayer_);
 
-    var background = /** @type {anychart.core.ui.Background} */(this.background());
-    var title = this.title();
-    var separator = /** @type {anychart.core.ui.Separator} */(this.separator());
+    var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
+    var title = this.getCreated('title') && this.title();
+    var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
     var content = /** @type {anychart.core.ui.Label} */(this.contentInternal());
 
-    background.container(this.rootLayer_);
-    title.container(this.rootLayer_);
-    separator.container(this.rootLayer_);
+    if (background)
+      background.container(this.rootLayer_);
+
+    if (title)
+      title.container(this.rootLayer_);
+
+    if (separator)
+      separator.container(this.rootLayer_);
+
     content.container(this.rootLayer_);
   }
   return this.rootLayer_;
@@ -2162,12 +2188,20 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
   if (goog.isDef(opt_value)) {
     if (this.parent_ != opt_value) {
       var uid = String(goog.getUid(this));
+      var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
+      var title = this.getCreated('title') && this.title();
+      var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
       if (goog.isNull(opt_value)) { //removing parent tooltip.
         //this.parent_ is not null here.
         this.parent_.unlistenSignals(this.parentInvalidated_, this);
-        this.title().parent(null);
-        this.separator().parent(null);
-        this.background().parent(null);
+
+        if (background)
+          background.parent(null);
+        if (title)
+          title.parent(null);
+        if (separator)
+          separator.parent(null);
+
         this.padding().parent(null);
         this.contentInternal().padding().parent(null);
         delete this.parent_.childTooltipsMap[uid];
@@ -2176,9 +2210,14 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
         if (this.parent_)
           this.parent_.unlistenSignals(this.parentInvalidated_, this);
         this.parent_ = opt_value;
-        this.title().parent(this.parent_.title());
-        this.separator().parent(this.parent_.separator());
-        this.background().parent(this.parent_.background());
+
+        if (title)
+          title.parent(this.parent_.title());
+        if (separator)
+          separator.parent(this.parent_.separator());
+        if (background)
+          background.parent(this.parent_.background());
+
         this.padding().parent(this.parent_.padding());
         this.contentInternal().padding().parent(this.parent_.contentInternal().padding());
         this.parent_.childTooltipsMap[uid] = this;
@@ -2424,9 +2463,6 @@ anychart.core.ui.Tooltip.prototype.setupByJSON = function(config, opt_default) {
     anychart.core.settings.deserialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, config);
   }
 
-  this.title().setupInternal(!!opt_default, config['title']);
-  this.separator().setupInternal(!!opt_default, config['separator']);
-  this.background().setupInternal(!!opt_default, config['background']);
   this.padding().setupInternal(!!opt_default, config['padding']);
   this.hideDelay(config['hideDelay']);
 

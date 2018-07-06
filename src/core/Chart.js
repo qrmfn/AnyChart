@@ -56,9 +56,10 @@ anychart.core.Chart = function() {
 
   this.addThemes('chart');
 
-  this.themesMap['title'] = {themes: ['defaultTitle']};
-  this.themesMap['background'] = {themes: ['defaultBackground']};
-  this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
+  this.themesMap['title'] = {themes: ['defaultTitle', 'chart.title']};
+  this.themesMap['background'] = {themes: ['defaultBackground', 'chart.background']};
+  this.themesMap['tooltip'] = {themes: ['defaultTooltip', 'chart.tooltip']};
+  this.themesMap['interactivity'] = {themes: ['chart.interactivity']};
 
   /**
    * @type {acgraph.vector.Layer}
@@ -823,7 +824,6 @@ anychart.core.Chart.prototype.tooltip = function(opt_value) {
  */
 anychart.core.Chart.prototype.createTooltip = function() {
   var tooltip = new anychart.core.ui.Tooltip(anychart.core.ui.Tooltip.Capabilities.ANY);
-  tooltip.addThemes('chart.tooltip');
   this.registerDisposable(tooltip);
   tooltip.chart(this);
 
@@ -1492,7 +1492,7 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
 
   boundsWithoutMargin = this.margin().tightenBounds(totalBounds);
 
-  var background = this.getCreated('background');
+  var background = this.getCreated('background') && this.background();
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_BACKGROUND | anychart.ConsistencyState.BOUNDS)) {
     if (background) {
       background.suspendSignalsDispatching();
@@ -1508,7 +1508,7 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
   boundsWithoutCredits = this.drawCredits(boundsWithoutBackgroundThickness);
   boundsWithoutPadding = this.padding().tightenBounds(boundsWithoutCredits);
 
-  var title = this.getCreated('title');
+  var title = this.getCreated('title') && this.title();
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_TITLE | anychart.ConsistencyState.BOUNDS)) {
     if (title) {
       title.suspendSignalsDispatching();
@@ -1613,7 +1613,9 @@ anychart.core.Chart.prototype.drawInternal = function() {
       this.rootElement.parent(/** @type {acgraph.vector.ILayer} */(this.container()));
     }
 
-    this.tooltip().containerProvider(this);
+    var tooltip = this.getCreated('tooltip') && this.tooltip();
+    if (tooltip)
+      tooltip.containerProvider(this);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
   }
 
@@ -1650,7 +1652,7 @@ anychart.core.Chart.prototype.drawInternal = function() {
   anychart.performance.end('Chart.drawContent()');
 
   // used for crosshair
-  var background = this.getCreated('background');
+  var background = this.getCreated('background') && this.background();
   if (background) {
     var fill = background.getOption('fill');
     if ((!background.enabled() || !fill || fill == 'none')) {
@@ -1718,8 +1720,9 @@ anychart.core.Chart.prototype.drawInternal = function() {
     anychart.core.reporting.info(msg);
   }
 
-  if (this.supportsBaseHighlight())
-    this.onInteractivitySignal();
+  // To avoid interactivity creation before draw
+  // if (this.supportsBaseHighlight())
+  //   this.onInteractivitySignal();
 
   anychart.performance.end('Chart.draw()');
 };
@@ -2012,18 +2015,6 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
-  if (this.isEnabledByTheme('title'))
-    this.title();
-
-  if (this.isEnabledByTheme('background'))
-    this.background();
-
-  if ('padding' in config)
-    this.padding(config['padding']);
-
-  if ('margin' in config)
-    this.margin(config['margin']);
-
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {
     for (var i = 0; i < labels.length; i++)
@@ -2044,9 +2035,6 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.bottom(config['bottom']);
   this.animation(config['animation']);
   this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
-
-  if (this.isEnabledByTheme('tooltip'))
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.a11y(config['a11y']);
 
@@ -2844,6 +2832,8 @@ anychart.core.Chart.prototype.interactivity = function(opt_value) {
   if (!this.interactivity_) {
     this.interactivity_ = this.createInteractivitySettings();
     this.interactivity_.listenSignals(this.onInteractivitySignal, this);
+
+    this.setCreated('interactivity', this.interactivity_);
   }
 
   if (goog.isDef(opt_value)) {

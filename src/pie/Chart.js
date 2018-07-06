@@ -46,6 +46,17 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
   this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
 
+  this.themesMap['center'] = {themes: [this.mainTheme_['center']]};
+
+  this.themesMap['legend'].themes.push('pieFunnelPyramidBase.legend');
+  this.themesMap['legend'].themes.push(this.mainTheme_['legend']);
+
+  this.themesMap['interactivity'].themes.push('pieFunnelPyramidBase.interactivity');
+  this.themesMap['interactivity'].themes.push(this.mainTheme_['interactivity']);
+
+  this.themesMap['tooltip'].themes.push('pieFunnelPyramidBase.tooltip');
+  this.themesMap['tooltip'].themes.push(this.mainTheme_['tooltip']);
+
   this.suspendSignalsDispatching();
 
   /**
@@ -789,7 +800,7 @@ anychart.pieModule.Chart.prototype.setupPalette_ = function(cls, opt_cloneFrom) 
  * @return {!(anychart.palettes.HatchFills|anychart.pieModule.Chart)} Return current chart hatch fill palette or itself
  * for chaining call.
  */
-anychart.pieModule.Chart.prototype.hatchFillPalette = function(opt_value) {
+anychart.pieModule.Chart.prototype.hatchFillPalette = function(opt_value) {debugger
   if (!this.hatchFillPalette_) {
     this.hatchFillPalette_ = new anychart.palettes.HatchFills();
     this.hatchFillPalette_.listenSignals(this.paletteInvalidated_, this);
@@ -1164,8 +1175,9 @@ anychart.pieModule.Chart.prototype.isNoData = function() {
 anychart.pieModule.Chart.prototype.center = function(opt_value) {
   if (!this.center_) {
     this.center_ = new anychart.core.ui.Center(this);
-    this.center_.addThemes(this.mainTheme_['center']);
     this.center_.listenSignals(this.pieCenterInvalidated_, this);
+
+    this.setCreated('center', this.center_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2128,7 +2140,8 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   // }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
-    if (this.center().contentLayer) {
+    var center = this.getCreated('center') && this.center();
+    if (center && center.contentLayer) {
       this.center_.clearContent();
       this.center_.contentLayer.parent(this.rootElement);
       this.center_.contentLayer.zIndex(anychart.pieModule.Chart.ZINDEX_CENTER_CONTENT_LAYER);
@@ -2201,8 +2214,8 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
 
     if (this.labels().enabled()) {
       var themePart = this.isOutsideLabels() ?
-          anychart.getFullTheme('pie.outsideLabels') :
-          anychart.getFullTheme('pie.insideLabels');
+          this.getFlatTheme('outsideLabels') :
+          this.getFlatTheme('insideLabels');
       this.labels().setAutoColor(themePart['autoColor']);
       this.labels()['disablePointerEvents'](themePart['disablePointerEvents']);
       if (this.isOutsideLabels()) {
@@ -2351,25 +2364,28 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
-    var realContent = this.center_.realContent;
-    var contentLayer = this.center_.contentLayer;
-    if (anychart.utils.instanceOf(realContent, acgraph.vector.Element)) {
-      var ccbb = realContent.getBounds();
-      this.transformCenterContent(ccbb);
-      contentLayer.clip(null);
-    } else if (anychart.utils.instanceOf(realContent, anychart.core.VisualBase)) {
-      realContent.parentBounds(this.centerContentBounds);
-      realContent.resumeSignalsDispatching(false);
-      realContent.draw();
+    var center = this.getCreated('center') && this.center();
+    if (center) {
+      var realContent = center.realContent;
+      var contentLayer = center.contentLayer;
+      if (anychart.utils.instanceOf(realContent, acgraph.vector.Element)) {
+        var ccbb = realContent.getBounds();
+        this.transformCenterContent(ccbb);
+        contentLayer.clip(null);
+      } else if (anychart.utils.instanceOf(realContent, anychart.core.VisualBase)) {
+        realContent.parentBounds(this.centerContentBounds);
+        realContent.resumeSignalsDispatching(false);
+        realContent.draw();
 
-      contentLayer.setTransformationMatrix(1, 0, 0, 1, 0, 0);
-      contentLayer.clip(acgraph.circle(this.cx, this.cy, this.innerRadiusValue_ + 2));
-    }
+        contentLayer.setTransformationMatrix(1, 0, 0, 1, 0, 0);
+        contentLayer.clip(acgraph.circle(this.cx, this.cy, this.innerRadiusValue_ + 2));
+      }
 
-    if (this.centerContentBg_ && this.innerRadiusValue_) {
-      this.centerContentBg_
-          .centerX(this.cx)
-          .centerY(this.cy);
+      if (this.centerContentBg_ && this.innerRadiusValue_) {
+        this.centerContentBg_
+            .centerX(this.cx)
+            .centerY(this.cy);
+      }
     }
   }
 };
@@ -4569,7 +4585,7 @@ anychart.pieModule.Chart.prototype.onTooltipSignal_ = function(event) {
  * @protected
  */
 anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
-  var legend = this.getCreated('legend');
+  var legend = this.getCreated('legend') && this.legend();
   if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
@@ -4615,8 +4631,12 @@ anychart.pieModule.Chart.prototype.serialize = function() {
   json['data'] = this.data().serialize();
   json['palette'] = this.palette().serialize();
   json['hatchFillPalette'] = this.hatchFillPalette().serialize();
-  json['tooltip'] = this.tooltip().serialize();
-  json['center'] = this.center().serialize();
+
+  if (this.getCreated('tooltip'))
+    json['tooltip'] = this.tooltip().serialize();
+
+  if (this.getCreated('center'))
+    json['center'] = this.center().serialize();
 
   anychart.core.settings.serialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, json, 'Pie');
   json['normal'] = this.normal_.serialize();
@@ -4644,31 +4664,24 @@ anychart.pieModule.Chart.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.pieModule.Chart.base(this, 'setupByJSON', config, opt_default);
+
   this.group(config['group']);
   this.data(config['data']);
 
-  this.palette(config['palette']);
-  this.hatchFillPalette(config['hatchFillPalette']);
-
-  this.center().setupInternal(!!opt_default, config['center']);
-
-  if ('tooltip' in config)
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
-
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
-  this.selected_.setupInternal(!!opt_default, config['selected']);
-
-  if (goog.isDef(config['explode'])) {
-    config = goog.object.clone(config);
-    this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-    delete config['explode'];
-  }
-
-  this.normal_.setupInternal(!!opt_default, config);
-  this.normal_.setupInternal(!!opt_default, config['normal']);
-
-  this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  // this.selected_.setupInternal(!!opt_default, config['selected']);
+  //
+  // if (goog.isDef(config['explode'])) {
+  //   config = goog.object.clone(config);
+  //   this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
+  //   delete config['explode'];
+  // }
+  //
+  // this.normal_.setupInternal(!!opt_default, config);
+  // this.normal_.setupInternal(!!opt_default, config['normal']);
+  //
+  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
 };
 
 
@@ -4884,7 +4897,8 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calcDomain = function(
   this.dropBoundsCache();
 
   var explode = this.explode;
-  var pieCenter = this.pie.center().getPoint();
+  var center = this.pie.getCreated('center') && this.pie.center();
+  var pieCenter = center ? center.getPoint() : this.getCenterCoords();
   var piePxRadius = this.pie.getPixelRadius() + explode;
 
   var cx = pieCenter['x'], cy = pieCenter['y'];

@@ -2589,20 +2589,6 @@ anychart.utils.decomposeArguments = function(namedArguments, opt_options, opt_de
 
 
 /**
- * Copies all the members of a source object to a target object. This method
- * @param {Object} target
- * @param {Object} source
- */
-anychart.utils.mixinRecursive = function(target, source) {
-  for (var x in source) {
-    if (goog.isObject(target[x]) && goog.isObject(source[x]))
-      anychart.utils.mixinRecursive(target[x], source[x]);
-    else
-      target[x] = source[x];
-  }
-};
-
-/**
  * Safe instanceof.
  * @param {*} object
  * @param {*} constructor

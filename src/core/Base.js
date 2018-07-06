@@ -693,7 +693,7 @@ anychart.core.Base.prototype.flattenThemes = function() {
         theme = theme[part];
       }
     }
-    anychart.utils.mixinRecursive(this.flatTheme, theme);
+    goog.mixin(this.flatTheme, theme);
   }
   this.themeSettings = this.flatTheme;
 };
@@ -1227,34 +1227,14 @@ anychart.core.Base.prototype.setupByFlatTheme = function() {
 /**
  *
  * @param {string} stringId
- * @return {anychart.core.Base|undefined}
- */
-anychart.core.Base.prototype.getCreated = function(stringId) {
-  return this.themesMap[stringId].instance;
-};
-
-
-/**
- *
- * @param {string} stringId
- * @param {anychart.core.Base} instance
- */
-anychart.core.Base.prototype.setCreated = function(stringId, instance) {
-  instance.addThemes(this.getFlatTheme(stringId));
-  instance.setupByFlatTheme();
-  this.themesMap[stringId].instance = instance;
-};
-
-
-/**
- *
- * @param {string} stringId
  * @return {boolean|undefined}
  */
-anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
+anychart.core.Base.prototype.getCreated = function(stringId) {
+  // if (stringId == 'titleSeparator')
+  //   debugger
   if (stringId in this.themesMap) {
     if (this.themesMap[stringId].instance)
-      return true;
+      return this.themesMap[stringId].instance;
 
     if (goog.isDef(this.themesMap[stringId].enabled))
       return this.themesMap[stringId].enabled;
@@ -1262,7 +1242,7 @@ anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
     // console.log("check enabled", stringId);
     var th = anychart.getTheme();
     var themes = this.themesMap[stringId].themes || [];
-    themes.push(this.getFlatTheme(stringId));
+    // debugger
     for (var i = themes.length; i--;) {
       var theme = themes[i];
       if (goog.isString(theme)) {
@@ -1281,7 +1261,58 @@ anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
     }
   }
   return void 0;
+  // return this.themesMap[stringId].instance;
 };
+
+
+/**
+ *
+ * @param {string} stringId
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setCreated = function(stringId, instance) {
+  instance.addThemes.apply(instance, this.themesMap[stringId].themes);
+  instance.setupByFlatTheme();
+  this.themesMap[stringId].instance = instance;
+};
+
+
+// /**
+//  *
+//  * @param {string} stringId
+//  * @return {boolean|undefined}
+//  */
+// anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
+//   if (stringId in this.themesMap) {
+//     if (this.themesMap[stringId].instance)
+//       return true;
+//
+//     if (goog.isDef(this.themesMap[stringId].enabled))
+//       return this.themesMap[stringId].enabled;
+//
+//     // console.log("check enabled", stringId);
+//     var th = anychart.getTheme();
+//     var themes = this.themesMap[stringId].themes || [];
+//     themes.push(this.getFlatTheme(stringId));
+//     for (var i = themes.length; i--;) {
+//       var theme = themes[i];
+//       if (goog.isString(theme)) {
+//         var splitPath = theme.split('.');
+//         theme = th;
+//         for (var j = 0; j < splitPath.length; j++) {
+//           var part = splitPath[j];
+//           theme = theme[part];
+//         }
+//       }
+//       if (theme && goog.isDef(theme['enabled'])) {
+//         this.themesMap[stringId].enabled = theme['enabled'];
+//         // console.log("return", this.themesMap[stringId].enabled);
+//         return this.themesMap[stringId].enabled;
+//       }
+//     }
+//   }
+//   return void 0;
+// };
 //endregion
 
 /**

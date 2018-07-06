@@ -73,7 +73,7 @@ acgraph.vector.Stage.prototype.allowCreditsDisabling = false;
 acgraph.vector.Stage.prototype.credits = function(opt_value) {
   if (!this.credits_) {
     this.credits_ = new anychart.core.ui.StageCredits(this, this.allowCreditsDisabling);
-    this.credits_.setup(anychart.getFullTheme('stageCredits'));
+    this.credits_.setup(anychart.getTheme()['stageCredits']);
   }
   if (goog.isDef(opt_value)) {
     this.credits_.setup(opt_value);
@@ -656,7 +656,7 @@ anychart.appendTheme = function(value) {
  * @return {*}
  */
 anychart.getFullTheme = function(root) {
-  // console.log("getFullTheme", root);
+  //console.log("getFullTheme", root);
   root = anychart.utils.toCamelCase(root);
   anychart.performance.start('Theme compilation');
   var i;

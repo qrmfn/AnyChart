@@ -34,10 +34,11 @@ anychart.core.ui.Legend = function() {
 
   this.addThemes('defaultLegend');
 
-  this.themesMap['title'] = {themes: ['defaultTitle']};
-  this.themesMap['background'] = {themes: ['defaultBackground']};
-  this.themesMap['titleSeparator'] = {themes: ['defaultSeparator']};
-  this.themesMap['paginator'] = {themes: ['defaultLegend.paginator']};
+  this.themesMap['title'] = {themes: ['defaultTitle', this.getFlatTheme('title')]};
+  this.themesMap['background'] = {themes: ['defaultBackground', this.getFlatTheme('background')]};
+  this.themesMap['titleSeparator'] = {themes: ['defaultSeparator', this.getFlatTheme('titleSeparator')]};
+  this.themesMap['paginator'] = {themes: ['defaultLegend.paginator', this.getFlatTheme('paginator')]};
+  this.themesMap['tooltip'] = {themes: ['defaultTooltip', this.getFlatTheme('tooltip')]};
 
   /**
    * Drag.
@@ -731,8 +732,8 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
  * @private
  */
 anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  if (tooltip.container()) {
+  var tooltip = this.getCreated('tooltip') && /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  if (tooltip && tooltip.container()) {
     tooltip.draw();
   }
 };
@@ -744,8 +745,8 @@ anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
  * @param {anychart.core.MouseEvent} event Event that initiates tooltip display.
  */
 anychart.core.ui.Legend.prototype.showTooltip = function(event) {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  if (tooltip.enabled()) {
+  var tooltip = this.getCreated('tooltip') && /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  if (tooltip && tooltip.enabled()) {
     var index = event['itemIndex'];
     var item = this.items_[index];
     if (item && event) {
@@ -772,8 +773,9 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
  * @protected
  */
 anychart.core.ui.Legend.prototype.hideTooltip = function() {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  tooltip.hide();
+  var tooltip = this.getCreated('tooltip') &&/** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  if (tooltip)
+    tooltip.hide();
 };
 
 
@@ -1183,9 +1185,9 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
   var paginatorBounds;
   var titleBounds;
 
-  var separator = this.getCreated('titleSeparator');
-  var paginator = this.getCreated('paginator');
-  var title = this.getCreated('title');
+  var separator = this.getCreated('titleSeparator') && this.titleSeparator();
+  var paginator = this.getCreated('paginator') && this.paginator();
+  var title = this.getCreated('title') && this.title();
 
   var paginatorOrientation = paginator && paginator.orientation();
   var paginatorIsHorizontal = paginatorOrientation == anychart.enums.Orientation.BOTTOM || paginatorOrientation == anychart.enums.Orientation.TOP;
@@ -1895,7 +1897,7 @@ anychart.core.ui.Legend.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_BACKGROUND)) {
-    var background = this.getCreated('background');
+    var background = this.getCreated('background') && this.background();
     if (background) {
       background.suspendSignalsDispatching();
       background.parentBounds(this.relativeBoundsWithoutMargin_);
@@ -1907,7 +1909,7 @@ anychart.core.ui.Legend.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_TITLE)) {
-    var title = this.getCreated('title');
+    var title = this.getCreated('title') && this.title();
     if (title) {
       title.suspendSignalsDispatching();
       title.parentBounds(this.relativeBoundsWithoutMarginAndPadding_);
@@ -1921,24 +1923,28 @@ anychart.core.ui.Legend.prototype.draw = function() {
   var boundsWithoutTitle = this.title_ ? this.title_.getRemainingBounds() : this.relativeBoundsWithoutMarginAndPadding_;
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_SEPARATOR)) {
-    var titleSeparator = /** @type {anychart.core.ui.Separator} */(this.titleSeparator());
-    titleSeparator.suspendSignalsDispatching();
-    titleSeparator.parentBounds(boundsWithoutTitle);
-    if (this.enabled()) titleSeparator.container(this.rootElement);
-    titleSeparator.resumeSignalsDispatching(false);
-    titleSeparator.draw();
+    var titleSeparator = this.getCreated('titleSeparator') && /** @type {anychart.core.ui.Separator} */(this.titleSeparator());
+    if (titleSeparator) {
+      titleSeparator.suspendSignalsDispatching();
+      titleSeparator.parentBounds(boundsWithoutTitle);
+      if (this.enabled()) titleSeparator.container(this.rootElement);
+      titleSeparator.resumeSignalsDispatching(false);
+      titleSeparator.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.LEGEND_SEPARATOR);
   }
 
   var boundsWithoutSeparator = this.titleSeparator_ ? this.titleSeparator_.getRemainingBounds() : boundsWithoutTitle;
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_PAGINATOR)) {
-    var paginator = /** @type {anychart.core.ui.Paginator} */(this.paginator());
-    paginator.suspendSignalsDispatching();
-    paginator.parentBounds(boundsWithoutSeparator);
-    if (this.enabled()) paginator.container(this.rootElement);
-    paginator.resumeSignalsDispatching(false);
-    paginator.draw();
+    var paginator = this.getCreated('paginator') && /** @type {anychart.core.ui.Paginator} */(this.paginator());
+    if (paginator) {
+      paginator.suspendSignalsDispatching();
+      paginator.parentBounds(boundsWithoutSeparator);
+      if (this.enabled()) paginator.container(this.rootElement);
+      paginator.resumeSignalsDispatching(false);
+      paginator.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.LEGEND_PAGINATOR);
   }
 
@@ -2141,7 +2147,7 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
       }
     }
 
-    var title = this.getCreated('title');
+    var title = this.getCreated('title') && this.title();
     if (title && title.enabled()) {
       var titleOrientation = title.getOption('orientation') || title.defaultOrientation();
       var titleIsHorizontal = titleOrientation == 'top' || titleOrientation == 'bottom';
@@ -2349,12 +2355,24 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   var json = anychart.core.ui.Legend.base(this, 'serialize');
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
-  json['background'] = this.background().serialize();
-  json['title'] = this.title().serialize();
+
+  if (this.getCreated('background'))
+    json['background'] = this.background().serialize();
+
+  if (this.getCreated('title'))
+    json['title'] = this.title().serialize();
+
   json['titleFormat'] = this.titleFormat();
-  json['titleSeparator'] = this.titleSeparator().serialize();
-  json['paginator'] = this.paginator().serialize();
-  json['tooltip'] = this.tooltip().serialize();
+
+  if (this.getCreated('titleSeparator'))
+    json['titleSeparator'] = this.titleSeparator().serialize();
+
+  if (this.getCreated('paginator'))
+    json['paginator'] = this.paginator().serialize();
+
+  if (this.getCreated('tooltip'))
+    json['tooltip'] = this.tooltip().serialize();
+
   json['itemsLayout'] = this.itemsLayout();
   json['itemsSpacing'] = this.itemsSpacing();
   json['itemsSourceMode'] = this.itemsSourceMode();
@@ -2382,18 +2400,6 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
 
-  if (this.isEnabledByTheme('title'))
-    this.title();
-
-  if (this.isEnabledByTheme('background'))
-    this.background();
-
-  if (this.isEnabledByTheme('paginator'))
-    this.paginator();
-
-  if (this.isEnabledByTheme('titleSeparator'))
-    this.titleSeparator();
-
   if ('padding' in config)
     this.padding(config['padding']);
 
@@ -2401,9 +2407,6 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
     this.margin(config['margin']);
 
   this.titleFormat(config['titleFormat']);
-
-  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
-
   this.itemsLayout(config['itemsLayout']);
   this.itemsSpacing(config['itemsSpacing']);
   this.inverted(config['inverted']);
@@ -2513,7 +2516,7 @@ anychart.standalones.Legend.prototype.onStockPlotSignal_ = function(event) {
     this.suspendSignalsDispatching();
     var plot = /** @type {anychart.stockModule.Plot} */ (event.target);
     var autoText = plot.getLegendAutoText(/** @type {string|Function} */ (this.titleFormat()));
-    var title = this.getCreated('title');
+    var title = this.getCreated('title') && this.title();
     if (title && !goog.isNull(autoText))
       title.autoText(autoText);
     this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS);

@@ -253,7 +253,7 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
       titleText = formatter.call(textInfo, textInfo);
     }
 
-    var title = this.chart.getCreated('title');
+    var title = this.chart.getCreated('title') && this.chart.title();
     if (title && !titleText && title.getOption('text') && title.enabled())
       titleText = title.getOption('text');
 

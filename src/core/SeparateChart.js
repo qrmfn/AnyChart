@@ -28,7 +28,7 @@ anychart.core.SeparateChart = function() {
    */
   this.type_;
 
-  this.themesMap['legend'] = {themes: ['defaultLegend']};
+  this.themesMap['legend'] = {themes: ['defaultLegend', 'chart.legend']};
 };
 goog.inherits(anychart.core.SeparateChart, anychart.core.Chart);
 
@@ -222,7 +222,7 @@ anychart.core.SeparateChart.prototype.drawLegend = function(bounds) {
 anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(totalBounds) {
   var bounds = anychart.core.SeparateChart.base(this, 'calculateContentAreaSpace', totalBounds);
 
-  var legend = this.getCreated('legend');
+  var legend = this.getCreated('legend') && this.legend();
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS)) {
     if (legend && /** @type {anychart.core.ui.Legend} */(legend).positionMode() == anychart.enums.LegendPositionMode.OUTSIDE)
       this.drawLegend(bounds);
@@ -242,7 +242,7 @@ anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(total
  * @param {anychart.math.Rect} bounds .
  */
 anychart.core.SeparateChart.prototype.specialDraw = function(bounds) {
-  var legend = this.getCreated('legend');
+  var legend = this.getCreated('legend') && this.legend();
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS))
     if (legend && /** @type {anychart.core.ui.Legend} */(legend).positionMode() == anychart.enums.LegendPositionMode.INSIDE)
       this.drawLegend(bounds);
@@ -268,18 +268,13 @@ anychart.core.SeparateChart.prototype.needsInteractiveLegendUpdate = function() 
 /** @inheritDoc */
 anychart.core.SeparateChart.prototype.serialize = function() {
   var json = anychart.core.SeparateChart.base(this, 'serialize');
-  json['legend'] = this.legend().serialize();
-  json['interactivity'] = this.interactivity().serialize();
+  if (this.getCreated('legend'))
+    json['legend'] = this.legend().serialize();
+
+  if (this.getCreated('interactivity'))
+    json['interactivity'] = this.interactivity().serialize();
+
   return json;
-};
-
-
-/** @inheritDoc */
-anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
-  if (this.isEnabledByTheme('legend'))
-    this.legend();
-  this.interactivity(config['interactivity']);
 };
 
 
