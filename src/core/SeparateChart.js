@@ -83,8 +83,6 @@ anychart.core.SeparateChart.prototype.legend = function(opt_value) {
     this.registerDisposable(this.legend_);
     this.legend_.listenSignals(this.onLegendSignal_, this);
     this.legend_.setParentEventTarget(this);
-
-    this.setCreated('legend', this.legend_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -222,7 +220,7 @@ anychart.core.SeparateChart.prototype.drawLegend = function(bounds) {
 anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(totalBounds) {
   var bounds = anychart.core.SeparateChart.base(this, 'calculateContentAreaSpace', totalBounds);
 
-  var legend = this.getCreated('legend') && this.legend();
+  var legend = this.getCreated('legend');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS)) {
     if (legend && /** @type {anychart.core.ui.Legend} */(legend).positionMode() == anychart.enums.LegendPositionMode.OUTSIDE)
       this.drawLegend(bounds);

@@ -577,8 +577,6 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.background_.setParentEventTarget(this);
     this.registerDisposable(this.background_);
-
-    this.setCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -613,8 +611,6 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
-
-    this.setCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -652,8 +648,6 @@ anychart.core.ui.Tooltip.prototype.separator = function(opt_value) {
     this.separator_.listenSignals(this.onSeparatorSignal_, this);
     this.separator_.setParentEventTarget(this);
     this.registerDisposable(this.separator_);
-
-    this.setCreated('separator', this.separator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -719,9 +713,9 @@ anychart.core.ui.Tooltip.prototype.draw = function() {
     return this;
 
 
-  var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
-  var title = this.getCreated('title') && this.title();
-  var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
+  var background = this.getCreated('background');
+  var title = this.getCreated('title');
+  var separator = this.getCreated('separator');
   var content = /** @type {anychart.core.ui.Label} */(this.contentInternal());
 
   this.setContainerToTooltip_(this);
@@ -1483,13 +1477,13 @@ anychart.core.ui.Tooltip.prototype.needsForceSignalsDispatching = function(opt_v
 anychart.core.ui.Tooltip.prototype.updateForceInvalidation = function() {
   var forceInvalidation = /** @type {boolean} */ (this.needsForceSignalsDispatching());
 
-  if (this.getCreated('title') && this.title())
+  if (this.getCreated('title'))
     this.title().needsForceSignalsDispatching(forceInvalidation);
 
-  if (this.getCreated('separator') && this.separator())
+  if (this.getCreated('separator'))
     this.separator().needsForceSignalsDispatching(forceInvalidation);
 
-  if (this.getCreated('background') && this.background())
+  if (this.getCreated('background'))
     this.background().needsForceSignalsDispatching(forceInvalidation);
 
   this.padding().needsForceSignalsDispatching(forceInvalidation);
@@ -1562,20 +1556,19 @@ anychart.core.ui.Tooltip.prototype.getRootLayer_ = function() {
     this.registerDisposable(this.rootLayer_);
     this.bindHandlersToGraphics(this.rootLayer_);
 
-    var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
-    var title = this.getCreated('title') && this.title();
-    var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
-    var content = /** @type {anychart.core.ui.Label} */(this.contentInternal());
-
+    var background = this.getCreated('background');
     if (background)
       background.container(this.rootLayer_);
 
+    var title = this.getCreated('title');
     if (title)
       title.container(this.rootLayer_);
 
+    var separator = this.getCreated('separator');
     if (separator)
       separator.container(this.rootLayer_);
 
+    var content = /** @type {anychart.core.ui.Label} */(this.contentInternal());
     content.container(this.rootLayer_);
   }
   return this.rootLayer_;
@@ -2188,17 +2181,20 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
   if (goog.isDef(opt_value)) {
     if (this.parent_ != opt_value) {
       var uid = String(goog.getUid(this));
-      var background = this.getCreated('background') && /** @type {anychart.core.ui.Background} */(this.background());
-      var title = this.getCreated('title') && this.title();
-      var separator = this.getCreated('separator') && /** @type {anychart.core.ui.Separator} */(this.separator());
+      var background = this.getCreated('background');
+      var title = this.getCreated('title');
+      var separator = this.getCreated('separator');
+
       if (goog.isNull(opt_value)) { //removing parent tooltip.
         //this.parent_ is not null here.
         this.parent_.unlistenSignals(this.parentInvalidated_, this);
 
         if (background)
           background.parent(null);
+
         if (title)
           title.parent(null);
+
         if (separator)
           separator.parent(null);
 
@@ -2213,8 +2209,10 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
 
         if (title)
           title.parent(this.parent_.title());
+
         if (separator)
           separator.parent(this.parent_.separator());
+
         if (background)
           background.parent(this.parent_.background());
 

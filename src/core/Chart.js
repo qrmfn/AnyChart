@@ -500,8 +500,6 @@ anychart.core.Chart.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.registerDisposable(this.background_);
-
-    this.setCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -544,8 +542,6 @@ anychart.core.Chart.prototype.title = function(opt_value) {
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.registerDisposable(this.title_);
-
-    this.setCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -804,8 +800,6 @@ anychart.core.Chart.prototype.getStat = function(key) {
 anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
-
-    this.setCreated('tooltip', this.tooltip_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1492,7 +1486,7 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
 
   boundsWithoutMargin = this.margin().tightenBounds(totalBounds);
 
-  var background = this.getCreated('background') && this.background();
+  var background = this.getCreated('background');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_BACKGROUND | anychart.ConsistencyState.BOUNDS)) {
     if (background) {
       background.suspendSignalsDispatching();
@@ -1508,7 +1502,7 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
   boundsWithoutCredits = this.drawCredits(boundsWithoutBackgroundThickness);
   boundsWithoutPadding = this.padding().tightenBounds(boundsWithoutCredits);
 
-  var title = this.getCreated('title') && this.title();
+  var title = this.getCreated('title');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_TITLE | anychart.ConsistencyState.BOUNDS)) {
     if (title) {
       title.suspendSignalsDispatching();
@@ -1613,7 +1607,7 @@ anychart.core.Chart.prototype.drawInternal = function() {
       this.rootElement.parent(/** @type {acgraph.vector.ILayer} */(this.container()));
     }
 
-    var tooltip = this.getCreated('tooltip') && this.tooltip();
+    var tooltip = this.getCreated('tooltip');
     if (tooltip)
       tooltip.containerProvider(this);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
@@ -1652,7 +1646,7 @@ anychart.core.Chart.prototype.drawInternal = function() {
   anychart.performance.end('Chart.drawContent()');
 
   // used for crosshair
-  var background = this.getCreated('background') && this.background();
+  var background = this.getCreated('background');
   if (background) {
     var fill = background.getOption('fill');
     if ((!background.enabled() || !fill || fill == 'none')) {
@@ -2832,8 +2826,6 @@ anychart.core.Chart.prototype.interactivity = function(opt_value) {
   if (!this.interactivity_) {
     this.interactivity_ = this.createInteractivitySettings();
     this.interactivity_.listenSignals(this.onInteractivitySignal, this);
-
-    this.setCreated('interactivity', this.interactivity_);
   }
 
   if (goog.isDef(opt_value)) {

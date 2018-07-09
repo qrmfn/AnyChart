@@ -664,51 +664,7 @@ anychart.core.Base.prototype.getParentState = function() {
 
 
 //endregion
-//region -- Theme boost.
-/**
- * Add themes. Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie') from
- * basic theme to very specific.
- * @param {...(Object|string)} var_args - Themes.
- */
-anychart.core.Base.prototype.addThemes = function(var_args) {
-  for (var i = 0; i < arguments.length; i++) {
-    this.themes_.push(arguments[i]);
-  }
-  this.flattenThemes();
-};
 
-
-/**
- * Flattens themes.
- */
-anychart.core.Base.prototype.flattenThemes = function() {
-  var th = anychart.getTheme();
-  for (var i = 0; i < this.themes_.length; i++) {
-    var theme = this.themes_[i];
-    if (goog.isString(theme)) {
-      var splitPath = theme.split('.');
-      theme = th;
-      for (var j = 0; j < splitPath.length; j++) {
-        var part = splitPath[j];
-        theme = theme[part];
-      }
-    }
-    goog.mixin(this.flatTheme, theme);
-  }
-  this.themeSettings = this.flatTheme;
-};
-
-
-/**
- * @param {string=} opt_root
- * @return {Object}
- */
-anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
-  return goog.isDef(opt_root) ? this.flatTheme[opt_root] : this.flatTheme;
-};
-
-
-//endregion
 /**
  * Whether to dispatch signals even if current consistency state is not effective.
  * @param {boolean=} opt_value - Value to set.
@@ -1210,6 +1166,14 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 };
 
 
+/**
+ * Setup component using flat theme
+ */
+anychart.core.Base.prototype.setupByFlatTheme = function() {
+  this.setupByJSON(this.getFlatTheme());
+};
+
+
 //region --- Theme Map Processing
 //------------------------------------------------------------------------------
 //
@@ -1217,17 +1181,50 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 //
 //------------------------------------------------------------------------------
 /**
- * todo: (chernetsky) Write description
+ * Add themes. Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie') from
+ * basic theme to very specific.
+ * @param {...(Object|string)} var_args - Themes.
  */
-anychart.core.Base.prototype.setupByFlatTheme = function() {
-  this.setupByJSON(this.getFlatTheme());
+anychart.core.Base.prototype.addThemes = function(var_args) {
+  this.themes_.push.apply(this.themes_, arguments);
+  this.flattenThemes();
+};
+
+
+/**
+ * Flattens themes.
+ */
+anychart.core.Base.prototype.flattenThemes = function() {
+  var th = anychart.getTheme();
+  for (var i = 0; i < this.themes_.length; i++) {
+    var theme = this.themes_[i];
+    if (goog.isString(theme)) {
+      var splitPath = theme.split('.');
+      theme = th;
+      for (var j = 0; j < splitPath.length; j++) {
+        var part = splitPath[j];
+        theme = theme[part];
+      }
+    }
+    goog.mixin(this.flatTheme, theme);
+  }
+  this.themeSettings = this.flatTheme;
+};
+
+
+/**
+ * @param {string=} opt_root
+ * @return {Object}
+ */
+anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
+  return goog.isDef(opt_root) ? this.flatTheme[opt_root] : this.flatTheme;
 };
 
 
 /**
  *
  * @param {string} stringId
- * @return {boolean|undefined}
+ * @return {boolean|anychart.core.Base|undefined}
  */
 anychart.core.Base.prototype.getCreated = function(stringId) {
   // if (stringId == 'titleSeparator')
@@ -1255,13 +1252,14 @@ anychart.core.Base.prototype.getCreated = function(stringId) {
       }
       if (theme && goog.isDef(theme['enabled'])) {
         this.themesMap[stringId].enabled = theme['enabled'];
-        // console.log("return", this.themesMap[stringId].enabled);
-        return this.themesMap[stringId].enabled;
+        if (this.themesMap[stringId].enabled) {
+          this.setCreated(stringId, /** @type {anychart.core.Base} */(this[stringId]()));
+        }
+        return this.themesMap[stringId].instance;
       }
     }
   }
   return void 0;
-  // return this.themesMap[stringId].instance;
 };
 
 
@@ -1275,44 +1273,6 @@ anychart.core.Base.prototype.setCreated = function(stringId, instance) {
   instance.setupByFlatTheme();
   this.themesMap[stringId].instance = instance;
 };
-
-
-// /**
-//  *
-//  * @param {string} stringId
-//  * @return {boolean|undefined}
-//  */
-// anychart.core.Base.prototype.isEnabledByTheme = function(stringId) {
-//   if (stringId in this.themesMap) {
-//     if (this.themesMap[stringId].instance)
-//       return true;
-//
-//     if (goog.isDef(this.themesMap[stringId].enabled))
-//       return this.themesMap[stringId].enabled;
-//
-//     // console.log("check enabled", stringId);
-//     var th = anychart.getTheme();
-//     var themes = this.themesMap[stringId].themes || [];
-//     themes.push(this.getFlatTheme(stringId));
-//     for (var i = themes.length; i--;) {
-//       var theme = themes[i];
-//       if (goog.isString(theme)) {
-//         var splitPath = theme.split('.');
-//         theme = th;
-//         for (var j = 0; j < splitPath.length; j++) {
-//           var part = splitPath[j];
-//           theme = theme[part];
-//         }
-//       }
-//       if (theme && goog.isDef(theme['enabled'])) {
-//         this.themesMap[stringId].enabled = theme['enabled'];
-//         // console.log("return", this.themesMap[stringId].enabled);
-//         return this.themesMap[stringId].enabled;
-//       }
-//     }
-//   }
-//   return void 0;
-// };
 //endregion
 
 /**

@@ -576,7 +576,8 @@ anychart.pieModule.Chart.prototype.data = function(opt_value, opt_csvSettings) {
     // handle HTML table data
     if (opt_value) {
       var title = opt_value['title'] || opt_value['caption'];
-      if (title && this.getCreated('title')) this.title(title);
+      if (title && this.getCreated('title'))
+        this.title(title);
       if (opt_value['rows']) opt_value = opt_value['rows'];
     }
 
@@ -800,7 +801,7 @@ anychart.pieModule.Chart.prototype.setupPalette_ = function(cls, opt_cloneFrom) 
  * @return {!(anychart.palettes.HatchFills|anychart.pieModule.Chart)} Return current chart hatch fill palette or itself
  * for chaining call.
  */
-anychart.pieModule.Chart.prototype.hatchFillPalette = function(opt_value) {debugger
+anychart.pieModule.Chart.prototype.hatchFillPalette = function(opt_value) {
   if (!this.hatchFillPalette_) {
     this.hatchFillPalette_ = new anychart.palettes.HatchFills();
     this.hatchFillPalette_.listenSignals(this.paletteInvalidated_, this);
@@ -1176,8 +1177,6 @@ anychart.pieModule.Chart.prototype.center = function(opt_value) {
   if (!this.center_) {
     this.center_ = new anychart.core.ui.Center(this);
     this.center_.listenSignals(this.pieCenterInvalidated_, this);
-
-    this.setCreated('center', this.center_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2140,7 +2139,7 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   // }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
-    var center = this.getCreated('center') && this.center();
+    var center = this.getCreated('center');
     if (center && center.contentLayer) {
       this.center_.clearContent();
       this.center_.contentLayer.parent(this.rootElement);
@@ -2364,7 +2363,7 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
-    var center = this.getCreated('center') && this.center();
+    var center = this.getCreated('center');
     if (center) {
       var realContent = center.realContent;
       var contentLayer = center.contentLayer;
@@ -4585,7 +4584,7 @@ anychart.pieModule.Chart.prototype.onTooltipSignal_ = function(event) {
  * @protected
  */
 anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
-  var legend = this.getCreated('legend') && this.legend();
+  var legend = this.getCreated('legend');
   if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
@@ -4897,7 +4896,7 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calcDomain = function(
   this.dropBoundsCache();
 
   var explode = this.explode;
-  var center = this.pie.getCreated('center') && this.pie.center();
+  var center = this.pie.getCreated('center');
   var pieCenter = center ? center.getPoint() : this.getCenterCoords();
   var piePxRadius = this.pie.getPixelRadius() + explode;
 
