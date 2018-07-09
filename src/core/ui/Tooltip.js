@@ -35,9 +35,9 @@ anychart.core.ui.Tooltip = function(capability) {
 
   this.addThemes('defaultTooltip');
 
-  this.themesMap['background'] = {themes: ['defaultBackground', this.getFlatTheme('background')]};
-  this.themesMap['title'] = {themes: ['defaultTitle', this.getFlatTheme('title')]};
-  this.themesMap['separator'] = {themes: ['defaultSeparator', this.getFlatTheme('separator')]};
+  this.themesMap['background'] = {themes: ['defaultBackground']};
+  this.themesMap['title'] = {themes: ['defaultTitle']};
+  this.themesMap['separator'] = {themes: ['defaultSeparator']};
 
   delete this.themeSettings['enabled'];
 

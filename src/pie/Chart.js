@@ -46,17 +46,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
   this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
 
-  this.themesMap['center'] = {themes: [this.mainTheme_['center']]};
-
-  this.themesMap['legend'].themes.push('pieFunnelPyramidBase.legend');
-  this.themesMap['legend'].themes.push(this.mainTheme_['legend']);
-
-  this.themesMap['interactivity'].themes.push('pieFunnelPyramidBase.interactivity');
-  this.themesMap['interactivity'].themes.push(this.mainTheme_['interactivity']);
-
-  this.themesMap['tooltip'].themes.push('pieFunnelPyramidBase.tooltip');
-  this.themesMap['tooltip'].themes.push(this.mainTheme_['tooltip']);
-
   this.suspendSignalsDispatching();
 
   /**

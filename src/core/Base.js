@@ -1186,8 +1186,20 @@ anychart.core.Base.prototype.setupByFlatTheme = function() {
  * @param {...(Object|string)} var_args - Themes.
  */
 anychart.core.Base.prototype.addThemes = function(var_args) {
-  this.themes_.push.apply(this.themes_, arguments);
+  for (var i = 0; i < arguments.length; i++) {
+    var th = arguments[i];
+    if (th && (!goog.isString(th) || this.themes_.indexOf(th) === -1))
+      this.themes_.push(th);
+  }
   this.flattenThemes();
+};
+
+
+/**
+ * @return {Object}
+ */
+anychart.core.Base.prototype.getThemes = function() {
+  return this.themes_;
 };
 
 
@@ -1202,11 +1214,14 @@ anychart.core.Base.prototype.flattenThemes = function() {
       var splitPath = theme.split('.');
       theme = th;
       for (var j = 0; j < splitPath.length; j++) {
-        var part = splitPath[j];
-        theme = theme[part];
+        if (theme) {
+          var part = splitPath[j];
+          theme = theme[part];
+        }
       }
     }
-    goog.mixin(this.flatTheme, theme);
+    if (theme)
+      goog.mixin(this.flatTheme, theme);
   }
   this.themeSettings = this.flatTheme;
 };
@@ -1223,39 +1238,53 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
 
 /**
  *
- * @param {string} stringId
+ * @param {string} getterName Name of the getter function
  * @return {boolean|anychart.core.Base|undefined}
  */
-anychart.core.Base.prototype.getCreated = function(stringId) {
-  // if (stringId == 'titleSeparator')
+anychart.core.Base.prototype.getCreated = function(getterName) {
+  // if (getterName == 'legend' || getterName == 'paginator')
   //   debugger
-  if (stringId in this.themesMap) {
-    if (this.themesMap[stringId].instance)
-      return this.themesMap[stringId].instance;
+  if (getterName in this.themesMap) {
+    if (this.themesMap[getterName].instance)
+      return this.themesMap[getterName].instance;
 
-    if (goog.isDef(this.themesMap[stringId].enabled))
-      return this.themesMap[stringId].enabled;
+    if (goog.isDef(this.themesMap[getterName].enabled))
+      return this.themesMap[getterName].enabled;
 
-    // console.log("check enabled", stringId);
+    // console.log("check enabled", getterName);
     var th = anychart.getTheme();
-    var themes = this.themesMap[stringId].themes || [];
-    // debugger
+    var themes = this.themesMap[getterName].themes || [];
+
+    // Extend themes map
+    var ownThemes = this.getThemes();
+    for (var k = 0; k < ownThemes.length; k++) {
+      if (ownThemes[k]) {
+        var th2 = goog.isString(ownThemes[k]) ?
+            ownThemes[k] + '.' + getterName :
+            ownThemes[k][getterName];
+        if (th2)
+          themes.push(th2);
+      }
+    }
+
     for (var i = themes.length; i--;) {
       var theme = themes[i];
       if (goog.isString(theme)) {
         var splitPath = theme.split('.');
         theme = th;
         for (var j = 0; j < splitPath.length; j++) {
-          var part = splitPath[j];
-          theme = theme[part];
+          if (theme) {
+            var part = splitPath[j];
+            theme = theme[part];
+          }
         }
       }
       if (theme && goog.isDef(theme['enabled'])) {
-        this.themesMap[stringId].enabled = theme['enabled'];
-        if (this.themesMap[stringId].enabled) {
-          this.setCreated(stringId, /** @type {anychart.core.Base} */(this[stringId]()));
+        this.themesMap[getterName].enabled = theme['enabled'];
+        if (this.themesMap[getterName].enabled) {
+          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
         }
-        return this.themesMap[stringId].instance;
+        return this.themesMap[getterName].instance;
       }
     }
   }
@@ -1267,9 +1296,10 @@ anychart.core.Base.prototype.getCreated = function(stringId) {
  *
  * @param {string} stringId
  * @param {anychart.core.Base} instance
+ * @param {Array} themes
  */
-anychart.core.Base.prototype.setCreated = function(stringId, instance) {
-  instance.addThemes.apply(instance, this.themesMap[stringId].themes);
+anychart.core.Base.prototype.setCreated = function(stringId, instance, themes) {
+  instance.addThemes.apply(instance, themes);
   instance.setupByFlatTheme();
   this.themesMap[stringId].instance = instance;
 };

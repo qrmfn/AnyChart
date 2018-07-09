@@ -56,10 +56,10 @@ anychart.core.Chart = function() {
 
   this.addThemes('chart');
 
-  this.themesMap['title'] = {themes: ['defaultTitle', 'chart.title']};
-  this.themesMap['background'] = {themes: ['defaultBackground', 'chart.background']};
-  this.themesMap['tooltip'] = {themes: ['defaultTooltip', 'chart.tooltip']};
-  this.themesMap['interactivity'] = {themes: ['chart.interactivity']};
+  this.themesMap['title'] = {themes: ['defaultTitle']};
+  this.themesMap['background'] = {themes: ['defaultBackground']};
+  this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
+  this.themesMap['interactivity'] = {themes: []};
 
   /**
    * @type {acgraph.vector.Layer}
@@ -1964,6 +1964,9 @@ anychart.core.Chart.prototype.serialize = function() {
   if (this.getCreated('background'))
     json['background'] = this.background().serialize();
 
+  if (this.getCreated('tooltip'))
+    json['tooltip'] = this.tooltip().serialize();
+
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
   json['a11y'] = this.a11y().serialize();
@@ -1979,7 +1982,6 @@ anychart.core.Chart.prototype.serialize = function() {
   // from VisualBaseWithBounds
   json['bounds'] = this.bounds().serialize();
   json['animation'] = this.animation().serialize();
-  json['tooltip'] = this.tooltip().serialize();
   json['noDataLabel'] = this.noData().label().serialize();
   if (this.contextMenu_) {
     json['contextMenu'] = this.contextMenu()['serialize']();

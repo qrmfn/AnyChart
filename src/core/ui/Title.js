@@ -47,7 +47,7 @@ anychart.core.ui.Title = function() {
 
   this.addThemes('defaultTitle');
 
-  this.themesMap['background'] = {themes: ['defaultBackground', this.getFlatTheme('background')]};
+  this.themesMap['background'] = {themes: ['defaultBackground']};
 
   delete this.themeSettings['enabled'];
 

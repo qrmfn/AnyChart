@@ -33,11 +33,11 @@ anychart.core.ui.Legend = function() {
 
   this.addThemes('defaultLegend');
 
-  this.themesMap['title'] = {themes: ['defaultTitle', this.getFlatTheme('title')]};
-  this.themesMap['background'] = {themes: ['defaultBackground', this.getFlatTheme('background')]};
-  this.themesMap['titleSeparator'] = {themes: ['defaultSeparator', this.getFlatTheme('titleSeparator')]};
-  this.themesMap['paginator'] = {themes: ['defaultLegend.paginator', this.getFlatTheme('paginator')]};
-  this.themesMap['tooltip'] = {themes: ['defaultTooltip', this.getFlatTheme('tooltip')]};
+  this.themesMap['title'] = {themes: ['defaultTitle']};
+  this.themesMap['background'] = {themes: ['defaultBackground']};
+  this.themesMap['titleSeparator'] = {themes: ['defaultSeparator']};
+  this.themesMap['paginator'] = {themes: ['defaultLegend.paginator']};
+  this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
 
   /**
    * Drag.
@@ -1361,12 +1361,17 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
         }
 
         titleBounds = title.getContentBounds();
-        separator['width'](width);
-        separatorBounds = separator.getContentBounds();
+        if (separator) {
+          separator['width'](width);
+          separatorBounds = separator.getContentBounds();
+        }
+
       } else {
         titleBounds = title.getContentBounds();
-        separator['width'](height);
-        separatorBounds = separator.getContentBounds();
+        if (separator) {
+          separator['width'](height);
+          separatorBounds = separator.getContentBounds();
+        }
       }
 
       if (titleIsHorizontal)

@@ -28,7 +28,7 @@ anychart.core.SeparateChart = function() {
    */
   this.type_;
 
-  this.themesMap['legend'] = {themes: ['defaultLegend', 'chart.legend']};
+  this.themesMap['legend'] = {themes: ['defaultLegend']};
 };
 goog.inherits(anychart.core.SeparateChart, anychart.core.Chart);
 
@@ -240,7 +240,7 @@ anychart.core.SeparateChart.prototype.calculateContentAreaSpace = function(total
  * @param {anychart.math.Rect} bounds .
  */
 anychart.core.SeparateChart.prototype.specialDraw = function(bounds) {
-  var legend = this.getCreated('legend') && this.legend();
+  var legend = this.getCreated('legend');
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.BOUNDS))
     if (legend && /** @type {anychart.core.ui.Legend} */(legend).positionMode() == anychart.enums.LegendPositionMode.INSIDE)
       this.drawLegend(bounds);
