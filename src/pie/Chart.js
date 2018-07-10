@@ -2914,13 +2914,14 @@ anychart.pieModule.Chart.prototype.drawSimpleSide_ = function(pathName, cx, cy, 
 //region --- Animation
 /** @inheritDoc */
 anychart.pieModule.Chart.prototype.doAnimation = function() {
-  if (!this.getOption('mode3d') && this.animation().enabled() && this.animation().duration() > 0) {
+  var animation = this.getCreated('animation');
+  if (!this.getOption('mode3d') && animation && animation.enabled() && animation.duration() > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationSerialQueue();
-      var duration = /** @type {number} */(this.animation().duration());
+      var duration = /** @type {number} */(animation.duration());
       var pieDuration = duration * anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO;
       var pieLabelDuration = duration * (1 - anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO);
 
@@ -4657,19 +4658,19 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.data(config['data']);
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
+// debugger
+  this.selected_.setupInternal(!!opt_default, config['selected']);
 
-  // this.selected_.setupInternal(!!opt_default, config['selected']);
-  //
-  // if (goog.isDef(config['explode'])) {
-  //   config = goog.object.clone(config);
-  //   this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-  //   delete config['explode'];
-  // }
-  //
-  // this.normal_.setupInternal(!!opt_default, config);
-  // this.normal_.setupInternal(!!opt_default, config['normal']);
-  //
-  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  if (goog.isDef(config['explode'])) {
+    config = goog.object.clone(config);
+    this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
+    delete config['explode'];
+  }
+
+  this.normal_.setupInternal(!!opt_default, config);
+  this.normal_.setupInternal(!!opt_default, config['normal']);
+
+  this.hovered_.setupInternal(!!opt_default, config['hovered']);
 };
 
 

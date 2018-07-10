@@ -1078,13 +1078,14 @@ anychart.pyramidFunnelModule.Chart.prototype.updateLabelsOnAnimate = function(la
 
 /** @inheritDoc */
 anychart.pyramidFunnelModule.Chart.prototype.doAnimation = function() {
-  if (this.animation().enabled() && this.animation().duration() > 0) {
+  var animation = this.getCreated('animation');
+  if (animation && animation.enabled() && animation.duration() > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationSerialQueue();
-      var duration = /** @type {number} */(this.animation().duration());
+      var duration = /** @type {number} */(animation.duration());
       var pyramidFunnelDuration = duration * anychart.pyramidFunnelModule.Chart.ANIMATION_DURATION_RATIO;
       var pyramidFunnelLabelDuration = duration * (1 - anychart.pyramidFunnelModule.Chart.ANIMATION_DURATION_RATIO);
 
@@ -2904,7 +2905,8 @@ anychart.pyramidFunnelModule.Chart.prototype.onTooltipSignal_ = function(event) 
  * @protected
  */
 anychart.pyramidFunnelModule.Chart.prototype.showTooltip = function(opt_event) {
-  if (opt_event && opt_event['target'] == this.legend()) {
+  var legend = this.getCreated('legend');
+  if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
 

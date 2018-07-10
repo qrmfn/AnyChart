@@ -60,6 +60,8 @@ anychart.core.Chart = function() {
   this.themesMap['background'] = {themes: ['defaultBackground']};
   this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
   this.themesMap['interactivity'] = {themes: []};
+  this.themesMap['animation'] = {themes: []};
+  this.themesMap['a11y'] = {themes: []};
 
   /**
    * @type {acgraph.vector.Layer}
@@ -864,7 +866,7 @@ anychart.core.Chart.prototype.showTooltip_ = function(event) {
       this.listen(goog.events.EventType.MOUSEMOVE, this.updateTooltip);
     }
 
-    var interactivity = this.interactivity();
+    var interactivity = this.getCreated('interactivity', true);
     if (interactivity.hoverMode() == anychart.enums.HoverMode.SINGLE) {
       var points = [];
       if (this.tooltip_.getOption('displayMode') == anychart.enums.TooltipDisplayMode.SINGLE) {
@@ -1376,7 +1378,6 @@ anychart.core.Chart.prototype.onCreditsSignal_ = function(event) {
 anychart.core.Chart.prototype.animation = function(opt_enabledOrJson, opt_duration) {
   if (!this.animation_) {
     this.animation_ = new anychart.core.utils.Animation();
-    this.animation_.addThemes('chart.animation');
     this.animation_.listenSignals(this.onAnimationSignal_, this);
   }
   if (goog.isDef(opt_enabledOrJson)) {
@@ -1438,7 +1439,6 @@ anychart.core.Chart.prototype.createA11yContextProvider = function() {
 anychart.core.Chart.prototype.a11y = function(opt_enabledOrJson) {
   if (!this.a11y_) {
     this.a11y_ = new anychart.core.utils.ChartA11y(this);
-    this.a11y_.addThemes('chart.a11y');
     this.registerDisposable(this.a11y_);
     this.a11y_.listenSignals(this.onA11ySignal_, this);
   }
@@ -1686,7 +1686,9 @@ anychart.core.Chart.prototype.drawInternal = function() {
   this.markConsistent(anychart.ConsistencyState.CHART_ANIMATION);
 
   if (this.hasInvalidationState(anychart.ConsistencyState.A11Y)) {
-    this.a11y().applyA11y();
+    var a11y = this.getCreated('a11y');
+    if (a11y)
+      a11y.applyA11y();
     this.markConsistent(anychart.ConsistencyState.A11Y);
   }
 
@@ -1969,9 +1971,13 @@ anychart.core.Chart.prototype.serialize = function() {
 
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
-  json['a11y'] = this.a11y().serialize();
+
+  if (this.getCreated('a11y'))
+    json['a11y'] = this.a11y().serialize();
+
   if (goog.isDef(this.autoRedraw_))
     json['autoRedraw'] = this.autoRedraw_;
+
   var labels = [];
   for (var i = 0; i < this.chartLabels_.length; i++) {
     if (this.chartLabels_[i])
@@ -1981,7 +1987,10 @@ anychart.core.Chart.prototype.serialize = function() {
     json['chartLabels'] = labels;
   // from VisualBaseWithBounds
   json['bounds'] = this.bounds().serialize();
-  json['animation'] = this.animation().serialize();
+
+  if (this.getCreated('animation'))
+    json['animation'] = this.animation().serialize();
+
   json['noDataLabel'] = this.noData().label().serialize();
   if (this.contextMenu_) {
     json['contextMenu'] = this.contextMenu()['serialize']();
@@ -2029,10 +2038,7 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.height(config['height']);
   this.right(config['right']);
   this.bottom(config['bottom']);
-  this.animation(config['animation']);
   this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
-
-  this.a11y(config['a11y']);
 
   if (goog.isDef(config['contextMenu']))
     this.contextMenu(config['contextMenu']);
@@ -2264,7 +2270,7 @@ anychart.core.Chart.prototype.doAdditionActionsOnMouseOut = goog.nullFunction;
  */
 anychart.core.Chart.prototype.handleMouseOverAndMove = function(event) {
   var series, i, j, len;
-  var interactivity = this.interactivity();
+  var interactivity = this.getCreated('interactivity', true);
 
   var tag = anychart.utils.extractTag(event['domTarget']);
   var index, parent;
@@ -2402,7 +2408,8 @@ anychart.core.Chart.prototype.handleMouseOverAndMove = function(event) {
  * @param {anychart.core.MouseEvent} event Event object.
  */
 anychart.core.Chart.prototype.handleMouseOut = function(event) {
-  var hoverMode = this.interactivity().hoverMode();
+  var interactvity = this.getCreated('interactivity', true);
+  var hoverMode = interactvity.hoverMode();
 
   var tag = anychart.utils.extractTag(event['domTarget']);
   var forbidTooltip = false;
@@ -2497,7 +2504,7 @@ anychart.core.Chart.prototype.handleMouseDown = function(event) {
 anychart.core.Chart.prototype.onMouseDown = function(event) {
   if (this.preventMouseDownInteractivity)
     return;
-  var interactivity = this.interactivity();
+  var interactivity = this.getCreated('interactivity', true);
 
   var seriesStatus, eventSeriesStatus, allSeries, alreadySelectedPoints, i;
   var controlKeyPressed = event.ctrlKey || event.metaKey;
@@ -2855,11 +2862,14 @@ anychart.core.Chart.prototype.createInteractivitySettings = function() {
  * Animation enabled change handler.
  * @protected
  */
-anychart.core.Chart.prototype.onInteractivitySignal = function() {
+anychart.core.Chart.prototype.onInteractivitySignal = function() {debugger
   var series = this.getAllSeries();
   for (var i = series.length; i--;) {
-    if (series[i])
-      series[i].hoverMode(/** @type {anychart.enums.HoverMode} */(this.interactivity().hoverMode()));
+    if (series[i]) {
+      var interactivity = this.getCreated('interactivity', true);
+      series[i].hoverMode(/** @type {anychart.enums.HoverMode} */(interactivity.hoverMode()));
+    }
+
   }
 };
 

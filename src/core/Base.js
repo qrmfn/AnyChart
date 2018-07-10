@@ -1241,9 +1241,10 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
 /**
  *
  * @param {string} getterName Name of the getter function
+ * @param {boolean=} opt_ignoreEnabled Ignore enabled field
  * @return {boolean|anychart.core.Base|undefined}
  */
-anychart.core.Base.prototype.getCreated = function(getterName) {
+anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled) {
   // if (getterName == 'legend' || getterName == 'paginator')
   //   debugger
   if (getterName in this.themesMap) {
@@ -1269,24 +1270,32 @@ anychart.core.Base.prototype.getCreated = function(getterName) {
       }
     }
 
-    for (var i = themes.length; i--;) {
-      var theme = themes[i];
-      if (goog.isString(theme)) {
-        var splitPath = theme.split('.');
-        theme = th;
-        for (var j = 0; j < splitPath.length; j++) {
-          if (theme) {
-            var part = splitPath[j];
-            theme = theme[part];
+    if (opt_ignoreEnabled) {
+      this.themesMap[getterName].enabled = true;
+      this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
+      return this.themesMap[getterName].instance;
+
+    } else {
+      // Check enabled field
+      for (var i = themes.length; i--;) {
+        var theme = themes[i];
+        if (goog.isString(theme)) {
+          var splitPath = theme.split('.');
+          theme = th;
+          for (var j = 0; j < splitPath.length; j++) {
+            if (theme) {
+              var part = splitPath[j];
+              theme = theme[part];
+            }
           }
         }
-      }
-      if (theme && goog.isDef(theme['enabled'])) {
-        this.themesMap[getterName].enabled = theme['enabled'];
-        if (this.themesMap[getterName].enabled) {
-          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
+        if (theme && goog.isDef(theme['enabled'])) {
+          this.themesMap[getterName].enabled = theme['enabled'];
+          if (this.themesMap[getterName].enabled) {
+            this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
+          }
+          return this.themesMap[getterName].instance;
         }
-        return this.themesMap[getterName].instance;
       }
     }
   }
@@ -1302,7 +1311,11 @@ anychart.core.Base.prototype.getCreated = function(getterName) {
  */
 anychart.core.Base.prototype.setCreated = function(stringId, instance, themes) {
   instance.addThemes.apply(instance, themes);
+
+  instance.suspendSignalsDispatching();
   instance.setupByFlatTheme();
+  instance.resumeSignalsDispatching(false);
+
   this.themesMap[stringId].instance = instance;
 };
 //endregion
