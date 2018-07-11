@@ -202,7 +202,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', pieFillNormalizer]
   ];
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL, descriptorsOverride);
-  this.normal_.addThemes('chart.normal', 'pieFunnelPyramidBase.normal', 'pie.normal');
+  // this.normal_.addExtendedThemes(this.getThemes(), 'normal');
+  // this.normal_.setupByFlatTheme();
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
     factory.addThemes('chart.normal.labels', 'pieFunnelPyramidBase.normal.labels', 'pie.normal.labels');
@@ -226,6 +227,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
+  // this.hovered_.addExtendedThemes(this.getThemes(), 'hovered');
+  // this.hovered_.setupByFlatTheme();
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   var selectedDescriptorsMeta = {};
@@ -239,6 +242,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
+  // this.selected_.addExtendedThemes(this.getThemes(), 'selected');
+  // this.selected_.setupByFlatTheme();
   this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   this.resumeSignalsDispatching(false);
@@ -4659,24 +4664,20 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
-  // var th = anychart.getFullTheme('pie');
-  // console.log(th['normal']);
-  // console.log(th['explode']);
-  // console.log(th['hovered']);
+  // TODO: (chernetsky) wait for StatesSettings refactoring
+  var pieConfig = anychart.getFullTheme('pie');
+  this.selected_.setupInternal(!!opt_default, pieConfig['selected']);
 
-//  debugger
-//  this.selected_.setupInternal(!!opt_default, config['selected']);
-//
-//   if (goog.isDef(config['explode'])) {
-//     config = goog.object.clone(config);
-//     this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-//     delete config['explode'];
-//   }
+  if (goog.isDef(pieConfig['explode'])) {
+    pieConfig = goog.object.clone(pieConfig);
+    this.selected_.setupInternal(!!opt_default, {'explode': pieConfig['explode']});
+    delete pieConfig['explode'];
+  }
 
-  // this.normal_.setupInternal(!!opt_default, config);
-  // this.normal_.setupInternal(!!opt_default, config['normal']);
+  this.normal_.setupInternal(!!opt_default, pieConfig);
+  this.normal_.setupInternal(!!opt_default, pieConfig['normal']);
 
-  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  this.hovered_.setupInternal(!!opt_default, pieConfig['hovered']);
 };
 
 

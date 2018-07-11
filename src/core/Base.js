@@ -1172,7 +1172,7 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  * Setup component using flat theme
  */
 anychart.core.Base.prototype.setupByFlatTheme = function() {
-  this.setupByJSON(this.getFlatTheme());
+  this.setupByJSON(this.getFlatTheme(), true);
 };
 
 
@@ -1198,10 +1198,45 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 
 /**
- * @return {Object}
+ * @return {Array.<string|Object>}
  */
 anychart.core.Base.prototype.getThemes = function() {
   return this.themes_;
+};
+
+
+/**
+ *
+ * @param {Array.<string|object>} parentThemes
+ * @param {string} childThemeName
+ */
+anychart.core.Base.prototype.addExtendedThemes = function(parentThemes, childThemeName) {
+  var themes = this.createExtendedThemes(parentThemes, childThemeName);
+  if (themes.length)
+    this.addThemes.apply(this, themes);
+};
+
+
+/**
+ *
+ * @param {Array.<string|Object>} sourceThemes
+ * @param {string} extendThemeName
+ * @return {Array.<string|Object>}
+ */
+anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, extendThemeName) {
+  var resultThemes = [];
+  for (var i = 0; i < sourceThemes.length; i++) {
+    var th = sourceThemes[i];
+    if (th) {
+      if (goog.isString(th)) {
+        resultThemes.push(th + '.' + extendThemeName);
+      } else if (goog.isDef(th[extendThemeName])) {
+        var objClone = goog.object.clone(th[extendThemeName]);
+        resultThemes.push(objClone);
+      }
+    }
+  }
+  return resultThemes;
 };
 
 
@@ -1254,21 +1289,11 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
     if (goog.isDef(this.themesMap[getterName].enabled))
       return this.themesMap[getterName].enabled;
 
-    // console.log("check enabled", getterName);
-    var th = anychart.getTheme();
     var themes = this.themesMap[getterName].themes || [];
 
     // Extend themes map
-    var ownThemes = this.getThemes();
-    for (var k = 0; k < ownThemes.length; k++) {
-      if (ownThemes[k]) {
-        var th2 = goog.isString(ownThemes[k]) ?
-            ownThemes[k] + '.' + getterName :
-            ownThemes[k][getterName];
-        if (th2)
-          themes.push(th2);
-      }
-    }
+    var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
+    themes.push.apply(themes, extendedThemes);
 
     if (opt_ignoreEnabled) {
       this.themesMap[getterName].enabled = true;
@@ -1276,6 +1301,8 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
       return this.themesMap[getterName].instance;
 
     } else {
+      var th = anychart.getTheme();
+
       // Check enabled field
       for (var i = themes.length; i--;) {
         var theme = themes[i];
