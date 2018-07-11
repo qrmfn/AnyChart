@@ -2917,19 +2917,6 @@ anychart.pyramidFunnelModule.Chart.prototype.showTooltip = function(opt_event) {
     // for float
     this.listen(goog.events.EventType.MOUSEMOVE, this.showTooltip);
   }
-  // if (tooltip.isFloating() && opt_event) {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(opt_event['clientX'], opt_event['clientY']));
-  //
-  //   // for float
-  //   this.listen(goog.events.EventType.MOUSEMOVE, this.showTooltip);
-  //
-  // } else {
-  //   tooltip.show(
-  //       formatProvider,
-  //       new goog.math.Coordinate(0, 0));
-  // }
 };
 
 

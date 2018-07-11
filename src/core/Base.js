@@ -1289,9 +1289,8 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
     if (goog.isDef(this.themesMap[getterName].enabled))
       return this.themesMap[getterName].enabled;
 
-    var themes = this.themesMap[getterName].themes || [];
-
     // Extend themes map
+    var themes = this.themesMap[getterName].themes || [];
     var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
     themes.push.apply(themes, extendedThemes);
 

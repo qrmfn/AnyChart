@@ -502,6 +502,8 @@ anychart.core.Chart.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.registerDisposable(this.background_);
+
+    this.getCreated('background', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -544,6 +546,8 @@ anychart.core.Chart.prototype.title = function(opt_value) {
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.registerDisposable(this.title_);
+
+    this.getCreated('title', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -802,6 +806,8 @@ anychart.core.Chart.prototype.getStat = function(key) {
 anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
+
+    this.getCreated('tooltip', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1379,6 +1385,8 @@ anychart.core.Chart.prototype.animation = function(opt_enabledOrJson, opt_durati
   if (!this.animation_) {
     this.animation_ = new anychart.core.utils.Animation();
     this.animation_.listenSignals(this.onAnimationSignal_, this);
+
+    this.getCreated('animation', true);
   }
   if (goog.isDef(opt_enabledOrJson)) {
     this.animation_.setup.apply(this.animation_, arguments);
@@ -1441,6 +1449,8 @@ anychart.core.Chart.prototype.a11y = function(opt_enabledOrJson) {
     this.a11y_ = new anychart.core.utils.ChartA11y(this);
     this.registerDisposable(this.a11y_);
     this.a11y_.listenSignals(this.onA11ySignal_, this);
+
+    this.getCreated('a11y', true);
   }
   if (goog.isDef(opt_enabledOrJson)) {
     this.a11y_.setup.apply(this.a11y_, arguments);
@@ -2835,6 +2845,8 @@ anychart.core.Chart.prototype.interactivity = function(opt_value) {
   if (!this.interactivity_) {
     this.interactivity_ = this.createInteractivitySettings();
     this.interactivity_.listenSignals(this.onInteractivitySignal, this);
+
+    this.getCreated('interactivity', true);
   }
 
   if (goog.isDef(opt_value)) {

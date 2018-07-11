@@ -31,7 +31,7 @@ goog.require('goog.object');
 anychart.core.ui.Legend = function() {
   anychart.core.ui.Legend.base(this, 'constructor');
 
-  this.addThemes('defaultLegend');
+  this.addThemes('defaultFontSettings', 'defaultLegend');
 
   this.themesMap['title'] = {themes: ['defaultTitle']};
   this.themesMap['background'] = {themes: ['defaultBackground']};
@@ -529,6 +529,8 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
+    this.getCreated('background', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -563,6 +565,8 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.registerDisposable(this.title_);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
+
+    this.getCreated('title', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -622,6 +626,8 @@ anychart.core.ui.Legend.prototype.titleSeparator = function(opt_value) {
     this.titleSeparator_ = new anychart.core.ui.Separator();
     this.registerDisposable(this.titleSeparator_);
     this.titleSeparator_.listenSignals(this.titleSeparatorInvalidated_, this);
+
+    this.getCreated('titleSeparator', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -664,6 +670,8 @@ anychart.core.ui.Legend.prototype.paginator = function(opt_value) {
     this.paginator_ = new anychart.core.ui.Paginator();
     this.registerDisposable(this.paginator_);
     this.paginator_.listenSignals(this.paginatorInvalidated_, this);
+
+    this.getCreated('paginator', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -707,6 +715,8 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.registerDisposable(this.tooltip_);
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
+
+    this.getCreated('tooltip', true);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);

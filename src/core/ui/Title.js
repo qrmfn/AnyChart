@@ -45,7 +45,7 @@ goog.require('goog.math.AffineTransform');
 anychart.core.ui.Title = function() {
   anychart.core.ui.Title.base(this, 'constructor');
 
-  this.addThemes('defaultTitle');
+  this.addThemes('defaultFontSettings', 'defaultTitle');
 
   this.themesMap['background'] = {themes: ['defaultBackground']};
 
@@ -471,6 +471,8 @@ anychart.core.ui.Title.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
+    this.getCreated('background', true);
   }
 
   if (goog.isDef(opt_value)) {

@@ -577,6 +577,8 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.background_.setParentEventTarget(this);
     this.registerDisposable(this.background_);
+
+    this.getCreated('background', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -611,6 +613,8 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
+
+    this.getCreated('title', true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -648,6 +652,8 @@ anychart.core.ui.Tooltip.prototype.separator = function(opt_value) {
     this.separator_.listenSignals(this.onSeparatorSignal_, this);
     this.separator_.setParentEventTarget(this);
     this.registerDisposable(this.separator_);
+
+    this.getCreated('separator', true);
   }
 
   if (goog.isDef(opt_value)) {

@@ -206,7 +206,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   // this.normal_.setupByFlatTheme();
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
-    factory.addThemes('chart.normal.labels', 'pieFunnelPyramidBase.normal.labels', 'pie.normal.labels');
+    //factory.addThemes('chart.normal.labels', 'pieFunnelPyramidBase.normal.labels', 'pie.normal.labels');
     factory.listenSignals(this.labelsInvalidated_, this);
     factory.setParentEventTarget(this);
     this.invalidate(anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW);
