@@ -4658,19 +4658,25 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.data(config['data']);
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
-// debugger
-  this.selected_.setupInternal(!!opt_default, config['selected']);
 
-  if (goog.isDef(config['explode'])) {
-    config = goog.object.clone(config);
-    this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-    delete config['explode'];
-  }
+  // var th = anychart.getFullTheme('pie');
+  // console.log(th['normal']);
+  // console.log(th['explode']);
+  // console.log(th['hovered']);
 
-  this.normal_.setupInternal(!!opt_default, config);
-  this.normal_.setupInternal(!!opt_default, config['normal']);
+//  debugger
+//  this.selected_.setupInternal(!!opt_default, config['selected']);
+//
+//   if (goog.isDef(config['explode'])) {
+//     config = goog.object.clone(config);
+//     this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
+//     delete config['explode'];
+//   }
 
-  this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  // this.normal_.setupInternal(!!opt_default, config);
+  // this.normal_.setupInternal(!!opt_default, config['normal']);
+
+  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
 };
 
 
