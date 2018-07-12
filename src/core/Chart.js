@@ -2023,6 +2023,12 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
+  if ('padding' in config)
+    this.padding(config['padding']);
+
+  if ('margin' in config)
+    this.margin(config['margin']);
+
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {
     for (var i = 0; i < labels.length; i++)
