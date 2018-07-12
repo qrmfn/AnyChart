@@ -470,7 +470,7 @@ anychart.core.ui.Title.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
-    this.getCreated('background', true);
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {

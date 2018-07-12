@@ -84,7 +84,7 @@ anychart.core.SeparateChart.prototype.legend = function(opt_value) {
     this.legend_.listenSignals(this.onLegendSignal_, this);
     this.legend_.setParentEventTarget(this);
 
-    this.getCreated('legend', true);
+    this.setupCreated('legend', this.legend_);
   }
 
   if (goog.isDef(opt_value)) {

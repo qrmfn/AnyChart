@@ -491,7 +491,7 @@ anychart.core.defaultTheme.returnStrokeWithThickness = function() {
 anychart.core.defaultTheme.chartA11yTitleFormatter = function() {
   /** @type {anychart.core.Chart} */
   var chart = this['chart'];
-  var title = chart.title();
+  var title = chart.getCreated('title');
   var titleText = title && title.enabled() && title.text() ? title.text() : '';
   var type = chart.getType();
   var typeText = type || 'Anychart ';

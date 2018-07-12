@@ -1295,15 +1295,12 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
     return this.themesMap[getterName].enabled;
 
   // Check if entity is enabled by default theme
-
-  // Extend themes map
-  var themes = this.themesMap[getterName].themes || [];
+  var themes = this.themesMap[getterName].themes ? goog.array.clone(this.themesMap[getterName].themes) : [];
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   themes.push.apply(themes, extendedThemes);
 
   if (opt_ignoreEnabled) {
-    this.themesMap[getterName].enabled = true;
-    this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
+    this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()));
     return this.themesMap[getterName].instance;
 
   } else {
@@ -1321,10 +1318,10 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
         }
       }
       if (theme && goog.isDef(theme['enabled'])) {
-        this.themesMap[getterName].enabled = theme['enabled'];
-        if (this.themesMap[getterName].enabled) {
-          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
-        }
+        if (theme['enabled'])
+          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()));
+        else
+          this.themesMap[getterName].enabled = false;
         return this.themesMap[getterName].instance;
       }
     }
@@ -1334,18 +1331,29 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
 
 /**
  *
- * @param {string} stringId
+ * @param {string} getterName
  * @param {anychart.core.Base} instance
- * @param {Array} themes
  */
-anychart.core.Base.prototype.setCreated = function(stringId, instance, themes) {
-  instance.addThemes.apply(instance, themes);
+anychart.core.Base.prototype.setCreated = function(getterName, instance) {
+  this.setupCreated(getterName, instance);
 
-  instance.suspendSignalsDispatching();
+  this.themesMap[getterName].enabled = true;
+};
+
+
+/**
+ *
+ * @param {string} getterName
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
+  var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
+  instance.addThemes(extendedThemes);
   instance.setupByFlatTheme();
-  instance.resumeSignalsDispatching(false);
 
-  this.themesMap[stringId].instance = instance;
+  if (!goog.isDef(this.themesMap[getterName]))
+    this.themesMap[getterName] = {};
+  this.themesMap[getterName].instance = instance;
 };
 //endregion
 

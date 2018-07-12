@@ -524,7 +524,7 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
-    this.getCreated('background', true);
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -560,7 +560,7 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
 
-    this.getCreated('title', true);
+    this.setupCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -621,7 +621,7 @@ anychart.core.ui.Legend.prototype.titleSeparator = function(opt_value) {
     this.registerDisposable(this.titleSeparator_);
     this.titleSeparator_.listenSignals(this.titleSeparatorInvalidated_, this);
 
-    this.getCreated('titleSeparator', true);
+    this.setupCreated('titleSeparator', this.titleSeparator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -665,7 +665,7 @@ anychart.core.ui.Legend.prototype.paginator = function(opt_value) {
     this.registerDisposable(this.paginator_);
     this.paginator_.listenSignals(this.paginatorInvalidated_, this);
 
-    this.getCreated('paginator', true);
+    this.setupCreated('paginator', this.paginator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -710,7 +710,7 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
 
-    this.getCreated('tooltip', true);
+    this.setupCreated('tooltip', this.tooltip_);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);
