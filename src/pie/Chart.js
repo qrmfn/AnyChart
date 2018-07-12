@@ -43,8 +43,7 @@ goog.require('goog.labs.userAgent.device');
 anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.pieModule.Chart.base(this, 'constructor');
 
-  this.mainTheme_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['pie'];
-  this.addThemes('pieFunnelPyramidBase', this.mainTheme_);
+  this.addThemes('pieFunnelPyramidBase', 'pie');
 
   this.suspendSignalsDispatching();
 
@@ -4670,7 +4669,7 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
   // TODO: (chernetsky) wait for StatesSettings refactoring
-  var pieConfig = anychart.getFullTheme('pie');
+  var pieConfig = /** @type {Object} */(anychart.getFullTheme('pie'));
   this.selected_.setupInternal(!!opt_default, pieConfig['selected']);
 
   if (goog.isDef(pieConfig['explode'])) {
@@ -4899,7 +4898,7 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calcDomain = function(
 
   var explode = this.explode;
   var center = this.pie.getCreated('center');
-  var pieCenter = center ? center.getPoint() : this.getCenterCoords();
+  var pieCenter = center ? center.getPoint() : this.pie.getCenterCoords();
   var piePxRadius = this.pie.getPixelRadius() + explode;
 
   var cx = pieCenter['x'], cy = pieCenter['y'];

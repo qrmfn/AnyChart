@@ -512,7 +512,7 @@ anychart.core.Base = function() {
 
   /**
    *
-   * @type {Array.<Object>}
+   * @type {Array.<Object|string>}
    * @private
    */
   this.themes_ = [];
@@ -1174,7 +1174,7 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  * @param {boolean=} opt_default
  */
 anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
-  this.setupByJSON(this.getFlatTheme(), opt_default);
+  this.setupByJSON(/** @type {!Object} */(this.getFlatTheme()), opt_default);
 };
 
 
@@ -1195,7 +1195,7 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
   } else {
     for (var i = 0; i < arguments.length; i++) {
       var th = arguments[i];
-      if (th && (!goog.isString(th) || this.themes_.indexOf(th) === -1))
+      if (th && (!goog.isString(th) || this.themes_.indexOf(/** @type {string} */(th)) === -1))
         this.themes_.push(th);
     }
     this.flattenThemes();
@@ -1213,7 +1213,7 @@ anychart.core.Base.prototype.getThemes = function() {
 
 /**
  *
- * @param {Array.<string|object>} parentThemes
+ * @param {Array.<string|Object>} parentThemes
  * @param {string} childThemeName
  */
 anychart.core.Base.prototype.addExtendedThemes = function(parentThemes, childThemeName) {
@@ -1266,13 +1266,13 @@ anychart.core.Base.prototype.flattenThemes = function() {
     if (theme)
       goog.mixin(this.flatTheme, theme);
   }
-  this.themeSettings = this.flatTheme;
+  this.themeSettings = /** @type {!Object} */(this.flatTheme);
 };
 
 
 /**
  * @param {string=} opt_root
- * @return {Object}
+ * @return {!Object}
  */
 anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
   return goog.isDef(opt_root) ? this.flatTheme[opt_root] : this.flatTheme;

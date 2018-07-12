@@ -618,7 +618,7 @@ anychart.getTheme = function() {
   if (!anychart.currentThemeCache_) {
     anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
     if (anychart.currentTheme_)
-      goog.mixin(anychart.currentThemeCache_, anychart.currentTheme_);
+      goog.mixin(anychart.currentThemeCache_, /** @type {Object} */(anychart.currentTheme_));
   }
   return anychart.currentThemeCache_;
 };
