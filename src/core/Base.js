@@ -1188,12 +1188,16 @@ anychart.core.Base.prototype.setupByFlatTheme = function() {
  * @param {...(Object|string)} var_args - Themes.
  */
 anychart.core.Base.prototype.addThemes = function(var_args) {
-  for (var i = 0; i < arguments.length; i++) {
-    var th = arguments[i];
-    if (th && (!goog.isString(th) || this.themes_.indexOf(th) === -1))
-      this.themes_.push(th);
+  if (arguments.length == 1 && goog.isArray(arguments[0])) {
+    this.addThemes.apply(this, arguments[0]);
+  } else {
+    for (var i = 0; i < arguments.length; i++) {
+      var th = arguments[i];
+      if (th && (!goog.isString(th) || this.themes_.indexOf(th) === -1))
+        this.themes_.push(th);
+    }
+    this.flattenThemes();
   }
-  this.flattenThemes();
 };
 
 
