@@ -667,6 +667,7 @@ anychart.core.Base.prototype.getParentState = function() {
 
 //endregion
 
+
 /**
  * Whether to dispatch signals even if current consistency state is not effective.
  * @param {boolean=} opt_value - Value to set.
