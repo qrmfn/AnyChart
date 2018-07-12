@@ -18,7 +18,7 @@ goog.require('anychart.utils');
 anychart.core.ui.LegendItem = function() {
   anychart.core.ui.LegendItem.base(this, 'constructor');
 
-  this.addThemes('defaultFontSettings');
+  this.addThemes(anychart.themes.DefaultThemes['legendItem']);
 
   /**
    * LegendItem element.

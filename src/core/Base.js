@@ -1280,52 +1280,50 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
  * @return {boolean|anychart.core.Base|undefined}
  */
 anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled) {
-  // if (getterName == 'legend' || getterName == 'paginator')
-  //   debugger
-  if (getterName in this.themesMap) {
-    if (this.themesMap[getterName].instance)
-      return this.themesMap[getterName].instance;
+  if (!goog.isDef(this.themesMap[getterName]))
+    this.themesMap[getterName] = {themes: anychart.themes.DefaultThemes[getterName]};
 
-    if (goog.isDef(this.themesMap[getterName].enabled))
-      return this.themesMap[getterName].enabled;
+  if (this.themesMap[getterName].instance)
+    return this.themesMap[getterName].instance;
 
-    // Extend themes map
-    var themes = this.themesMap[getterName].themes || [];
-    var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
-    themes.push.apply(themes, extendedThemes);
+  if (goog.isDef(this.themesMap[getterName].enabled))
+    return this.themesMap[getterName].enabled;
 
-    if (opt_ignoreEnabled) {
-      this.themesMap[getterName].enabled = true;
-      this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
-      return this.themesMap[getterName].instance;
+  // Check if entity is enabled by default theme
 
-    } else {
-      var th = anychart.getTheme();
+  // Extend themes map
+  var themes = this.themesMap[getterName].themes || [];
+  var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
+  themes.push.apply(themes, extendedThemes);
 
-      // Check enabled field
-      for (var i = themes.length; i--;) {
-        var theme = themes[i];
-        if (goog.isString(theme)) {
-          var splitPath = theme.split('.');
-          theme = th;
-          for (var j = 0; j < splitPath.length; j++) {
-            if (theme) {
-              var part = splitPath[j];
-              theme = theme[part];
-            }
+  if (opt_ignoreEnabled) {
+    this.themesMap[getterName].enabled = true;
+    this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
+    return this.themesMap[getterName].instance;
+
+  } else {
+    var th = anychart.getTheme();
+    for (var i = themes.length; i--;) {
+      var theme = themes[i];
+      if (goog.isString(theme)) {
+        var splitPath = theme.split('.');
+        theme = th;
+        for (var j = 0; j < splitPath.length; j++) {
+          if (theme) {
+            var part = splitPath[j];
+            theme = theme[part];
           }
         }
-        if (theme && goog.isDef(theme['enabled'])) {
-          this.themesMap[getterName].enabled = theme['enabled'];
-          if (this.themesMap[getterName].enabled) {
-            this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
-          }
-          return this.themesMap[getterName].instance;
+      }
+      if (theme && goog.isDef(theme['enabled'])) {
+        this.themesMap[getterName].enabled = theme['enabled'];
+        if (this.themesMap[getterName].enabled) {
+          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()), themes);
         }
+        return this.themesMap[getterName].instance;
       }
     }
   }
-  return void 0;
 };
 
 

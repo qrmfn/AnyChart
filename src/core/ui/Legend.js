@@ -31,13 +31,7 @@ goog.require('goog.object');
 anychart.core.ui.Legend = function() {
   anychart.core.ui.Legend.base(this, 'constructor');
 
-  this.addThemes('defaultFontSettings', 'defaultLegend');
-
-  this.themesMap['title'] = {themes: ['defaultTitle']};
-  this.themesMap['background'] = {themes: ['defaultBackground']};
-  this.themesMap['titleSeparator'] = {themes: ['defaultSeparator']};
-  this.themesMap['paginator'] = {themes: ['defaultLegend.paginator']};
-  this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
+  this.addThemes(anychart.themes.DefaultThemes['legend']);
 
   /**
    * Drag.

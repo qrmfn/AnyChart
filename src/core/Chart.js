@@ -56,13 +56,6 @@ anychart.core.Chart = function() {
 
   this.addThemes('chart');
 
-  this.themesMap['title'] = {themes: ['defaultTitle']};
-  this.themesMap['background'] = {themes: ['defaultBackground']};
-  this.themesMap['tooltip'] = {themes: ['defaultTooltip']};
-  this.themesMap['interactivity'] = {themes: []};
-  this.themesMap['animation'] = {themes: []};
-  this.themesMap['a11y'] = {themes: []};
-
   /**
    * @type {acgraph.vector.Layer}
    * @protected

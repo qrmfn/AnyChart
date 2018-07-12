@@ -2089,3 +2089,17 @@ anychart.themes.merging.typedEntities_ = {
     typeDescriptor: 'type'
   }
 };
+
+
+/**
+ * @type {Object}
+ */
+anychart.themes.DefaultThemes = {
+  'title': ['defaultFontSettings', 'defaultTitle'],
+  'background': ['defaultBackground'],
+  'legend': ['defaultFontSettings', 'defaultLegend'],
+  'legendItem': ['defaultFontSettings'],
+  'paginator': ['defaultFontSettings'],
+  'separator': ['defaultSeparator'],
+  'tooltip': ['defaultFontSettings', 'defaultTooltip']
+};

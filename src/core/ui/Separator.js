@@ -18,7 +18,7 @@ goog.require('anychart.utils');
 anychart.core.ui.Separator = function() {
   anychart.core.ui.Separator.base(this, 'constructor');
 
-  this.addThemes('defaultSeparator');
+  this.addThemes(anychart.themes.DefaultThemes['separator']);
 
   delete this.themeSettings['enabled'];
 

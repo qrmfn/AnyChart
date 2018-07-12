@@ -33,11 +33,7 @@ goog.require('goog.object');
 anychart.core.ui.Tooltip = function(capability) {
   anychart.core.ui.Tooltip.base(this, 'constructor');
 
-  this.addThemes('defaultTooltip');
-
-  this.themesMap['background'] = {themes: ['defaultBackground']};
-  this.themesMap['title'] = {themes: ['defaultTitle']};
-  this.themesMap['separator'] = {themes: ['defaultSeparator']};
+  this.addThemes(anychart.themes.DefaultThemes['tooltip']);
 
   delete this.themeSettings['enabled'];
 
