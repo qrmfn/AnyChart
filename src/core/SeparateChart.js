@@ -27,8 +27,6 @@ anychart.core.SeparateChart = function() {
    * @private
    */
   this.type_;
-
-  this.themesMap['legend'] = {themes: ['defaultLegend']};
 };
 goog.inherits(anychart.core.SeparateChart, anychart.core.Chart);
 

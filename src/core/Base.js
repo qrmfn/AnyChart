@@ -1171,9 +1171,10 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 
 /**
  * Setup component using flat theme
+ * @param {boolean=} opt_default
  */
-anychart.core.Base.prototype.setupByFlatTheme = function() {
-  this.setupByJSON(this.getFlatTheme()/*, true*/);
+anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
+  this.setupByJSON(this.getFlatTheme(), opt_default);
 };
 
 
@@ -1345,11 +1346,12 @@ anychart.core.Base.prototype.setCreated = function(getterName, instance) {
  *
  * @param {string} getterName
  * @param {anychart.core.Base} instance
+ * @param {boolean=} opt_default
  */
-anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
+anychart.core.Base.prototype.setupCreated = function(getterName, instance, opt_default) {
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   instance.addThemes(extendedThemes);
-  instance.setupByFlatTheme();
+  instance.setupByFlatTheme(opt_default);
 
   if (!goog.isDef(this.themesMap[getterName]))
     this.themesMap[getterName] = {};

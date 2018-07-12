@@ -800,7 +800,7 @@ anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
 
-    this.setupCreated('tooltip', this.tooltip_);
+    this.setupCreated('tooltip', this.tooltip_, true);
   }
 
   if (goog.isDef(opt_value)) {

@@ -1171,6 +1171,8 @@ anychart.pieModule.Chart.prototype.center = function(opt_value) {
   if (!this.center_) {
     this.center_ = new anychart.core.ui.Center(this);
     this.center_.listenSignals(this.pieCenterInvalidated_, this);
+
+    this.setupCreated('center', this.center_, true);
   }
 
   if (goog.isDef(opt_value)) {
@@ -4559,6 +4561,9 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   this.registerDisposable(tooltip);
   tooltip.chart(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
+
+  this.setupCreated('tooltip', tooltip, true);
+
   return tooltip;
 };
 
