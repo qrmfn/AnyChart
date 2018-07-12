@@ -1173,7 +1173,7 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  * Setup component using flat theme
  */
 anychart.core.Base.prototype.setupByFlatTheme = function() {
-  this.setupByJSON(this.getFlatTheme()/*, true*/);
+  this.setupByJSON(this.getFlatTheme(), true);
 };
 
 
