@@ -43,8 +43,29 @@ anychart.core.utils.A11y = function(chart) {
    * @private
    */
   this.parentA11y_ = null;
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['enabled', 0, anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REAPPLICATION],
+    ['titleFormat', 0, anychart.Signal.NEEDS_REAPPLICATION]
+  ]);
 };
 goog.inherits(anychart.core.utils.A11y, anychart.core.Base);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.utils.A11y.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'enabled', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.asIsNormalizer]
+  ]);
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.utils.A11y, anychart.core.utils.A11y.PROPERTY_DESCRIPTORS);
 
 
 /**
@@ -54,42 +75,6 @@ goog.inherits(anychart.core.utils.A11y, anychart.core.Base);
 anychart.core.utils.A11y.prototype.SUPPORTED_SIGNALS = anychart.core.Base.prototype.SUPPORTED_SIGNALS |
     anychart.Signal.NEEDS_REAPPLICATION |
     anychart.Signal.BOUNDS_CHANGED; //Note: literally this signal here means that a11y is enabled or disabled.
-
-
-/**
- * Turns on animations.
- * @param {boolean=} opt_value
- * @return {boolean|anychart.core.utils.A11y}
- */
-anychart.core.utils.A11y.prototype.enabled = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.enabled_ != opt_value) {
-      this.enabled_ = opt_value;
-      this.dispatchSignal(anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REAPPLICATION);
-    }
-    return this;
-  } else {
-    return this.enabled_;
-  }
-};
-
-
-/**
- * Function to format title text.
- * @param {(Function|string)=} opt_value - Function to format content text.
- * @return {Function|string|anychart.core.utils.A11y} Function to format content text or itself for method chaining.
- */
-anychart.core.utils.A11y.prototype.titleFormat = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.titleFormat_ != opt_value) {
-      this.titleFormat_ = opt_value;
-      this.dispatchSignal(anychart.Signal.NEEDS_REAPPLICATION);
-    }
-    return this;
-  } else {
-    return this.titleFormat_;
-  }
-};
 
 
 /**
@@ -117,7 +102,7 @@ anychart.core.utils.A11y.prototype.parentA11y = function(opt_value) {
  * @private
  */
 anychart.core.utils.A11y.prototype.onParentEnabled_ = function(event) {
-  if (event.hasSignal(anychart.Signal.BOUNDS_CHANGED)) this.enabled(/** @type {boolean} */ (this.parentA11y_.enabled()));
+  if (event.hasSignal(anychart.Signal.BOUNDS_CHANGED)) this.setOption('enabled', /** @type {boolean} */ (this.parentA11y_.getOption('enabled')));
 };
 
 
@@ -147,17 +132,8 @@ anychart.core.utils.A11y.prototype.createTextInfo = goog.abstractMethod;
 /** @inheritDoc */
 anychart.core.utils.A11y.prototype.serialize = function() {
   var json = anychart.core.utils.A11y.base(this, 'serialize');
-  json['enabled'] = this.enabled_;
 
-  if (goog.isFunction(this.titleFormat())) {
-    anychart.core.reporting.warning(
-        anychart.enums.WarningCode.CANT_SERIALIZE_FUNCTION,
-        null,
-        ['A11y titleFormat']
-    );
-  } else if (this.titleFormat_) {
-    json['titleFormat'] = this.titleFormat_;
-  }
+  anychart.core.settings.serialize(this, anychart.core.utils.A11y.PROPERTY_DESCRIPTORS, json);
 
   return json;
 };
@@ -167,10 +143,10 @@ anychart.core.utils.A11y.prototype.serialize = function() {
 anychart.core.utils.A11y.prototype.setupSpecial = function(isDefault, var_args) {
   var arg0 = arguments[1];
   if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    this.enabled(!!arg0);
+    this.setOption('enabled', !!arg0);
     return true;
   } else if (goog.isFunction(arg0)) {
-    this.titleFormat(arg0);
+    this.setOption('titleFormat', arg0);
     return true;
   }
 
@@ -181,8 +157,8 @@ anychart.core.utils.A11y.prototype.setupSpecial = function(isDefault, var_args) 
 /** @inheritDoc */
 anychart.core.utils.A11y.prototype.setupByJSON = function(json, opt_default) {
   anychart.core.utils.A11y.base(this, 'setupByJSON', json, opt_default);
-  this.enabled('enabled' in json ? json['enabled'] : true);
-  this.titleFormat(json['titleFormat']);
+
+  anychart.core.settings.deserialize(this, anychart.core.utils.A11y.PROPERTY_DESCRIPTORS, json, opt_default);
 };
 
 
@@ -242,7 +218,7 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
   goog.dom.removeNode(this.relatedHtmlTable_);
   this.relatedHtmlTable_ = null;
 
-  if (this.enabled()) {
+  if (/** @type {boolean} */(this.getOption('enabled'))) {
     var titleText;
     var textInfo = this.createTextInfo();
 
@@ -352,9 +328,9 @@ anychart.core.utils.SeriesA11y.prototype.applyA11y = function() {
   var titleText = null;
   var role = null;
   var layer = /** @type {acgraph.vector.Layer} */ (this.series_.getRootLayer() || this.forceLayer_);
-  if (this.enabled() && this.titleFormat()) {
+  if (this.enabled() && /** @type {Function|string} */(this.getOption('titleFormat'))) {
     var textInfo = this.createTextInfo();
-    var formatter = this.titleFormat();
+    var formatter = /** @type {Function|string} */(this.getOption('titleFormat'));
     if (goog.isString(formatter))
       formatter = anychart.core.utils.TokenParser.getInstance().getFormat(formatter);
     titleText = formatter.call(textInfo, textInfo);
@@ -389,11 +365,13 @@ anychart.core.utils.SeriesA11y.prototype.disposeInternal = function() {
 //exports
 (function() {
   var proto = anychart.core.utils.ChartA11y.prototype;
-  proto['enabled'] = proto.enabled;
-  proto['titleFormat'] = proto.titleFormat;
+  // auto generated
+  // proto['enabled'] = proto.enabled;
+  // proto['titleFormat'] = proto.titleFormat;
   proto['mode'] = proto.mode;
   proto = anychart.core.utils.SeriesA11y.prototype;
-  proto['enabled'] = proto.enabled;
-  proto['titleFormat'] = proto.titleFormat;
+  // auto generated
+  // proto['enabled'] = proto.enabled;
+  // proto['titleFormat'] = proto.titleFormat;
 })();
 
