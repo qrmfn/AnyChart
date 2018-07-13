@@ -4641,20 +4641,6 @@ anychart.pieModule.Chart.prototype.serialize = function() {
   json['hovered'] = this.hovered_.serialize();
   json['selected'] = this.selected_.serialize();
 
-  // The values of group() function can be function or null or 'none'. So we don't serialize it anyway.
-  //if (goog.isFunction(this['group'])) {
-  //  if (goog.isFunction(this.group())) {
-  //    anychart.core.reporting.warning(
-  //        anychart.enums.WarningCode.CANT_SERIALIZE_FUNCTION,
-  //        null,
-  //        ['Pie group']
-  //    );
-  //  } else {
-  //    json['group'] = this.group();
-  //  }
-  //}
-
-
   return {'chart': json};
 };
 
@@ -4665,6 +4651,14 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   this.group(config['group']);
   this.data(config['data']);
+
+  // this.palette(config['palette']);
+  // this.hatchFillPalette(config['hatchFillPalette']);
+  //
+  // this.center().setupInternal(!!opt_default, config['center']);
+  //
+  // if ('tooltip' in config)
+  //   this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 

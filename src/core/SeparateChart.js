@@ -276,6 +276,15 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 };
 
 
+/** @inheritDoc */
+anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
+
+  // this.legend(config['legend']);
+  // this.interactivity(config['interactivity']);
+};
+
+
 //exports
 (function() {
   var proto = anychart.core.SeparateChart.prototype;

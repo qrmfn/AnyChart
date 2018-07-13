@@ -2399,6 +2399,16 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
 
+  // if ('title' in config)
+  //   this.title(config['title']);
+  //
+  // if ('background' in config)
+  //   this.background(config['background']);
+
+  // this.titleSeparator(config['titleSeparator']);
+  // this.paginator(config['paginator']);
+  // this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+
   if ('padding' in config)
     this.padding(config['padding']);
 

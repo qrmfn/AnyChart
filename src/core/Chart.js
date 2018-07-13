@@ -1980,7 +1980,6 @@ anychart.core.Chart.prototype.serialize = function() {
 
   if (goog.isDef(this.autoRedraw_))
     json['autoRedraw'] = this.autoRedraw_;
-
   var labels = [];
   for (var i = 0; i < this.chartLabels_.length; i++) {
     if (this.chartLabels_[i])
@@ -2022,6 +2021,12 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
+
+  // if ('title' in config)
+  //   this.title(config['title']);
+  //
+  // if ('background' in config)
+  //   this.background(config['background']);
 
   if ('padding' in config)
     this.padding(config['padding']);
