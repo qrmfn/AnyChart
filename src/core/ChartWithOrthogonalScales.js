@@ -1806,13 +1806,13 @@ anychart.core.ChartWithOrthogonalScales.prototype.distributeClusters = function(
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.ChartWithOrthogonalScales.prototype.doAnimation = function() {
-  if (this.animation().enabled() && this.animation().duration() > 0) {
+  if (this.animation().enabled() && /** @type {number} */(this.animation().getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationParallelQueue();
-      var duration = /** @type {number} */(this.animation().duration());
+      var duration = /** @type {number} */(this.animation().getOption('duration'));
       for (var i = 0; i < this.seriesList.length; i++) {
         var series = this.seriesList[i];
         if (series.enabled() && !series.rendering().needsCustomPointDrawer()) {

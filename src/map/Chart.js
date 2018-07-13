@@ -3021,7 +3021,8 @@ anychart.mapModule.Chart.prototype.calculate = function() {
       }
 
       if ((this.crsMapAnimation && this.crsMapAnimation.isStopped()) || !this.crsMapAnimation) {
-        var isAnimate = this.crsAnimation_ && this.crsAnimation_.enabled() && this.crsAnimation_.duration() > 0 && !initInternalGeoData && changeProjection;
+        var isAnimate = this.crsAnimation_ && /** @type {boolean} */(this.crsAnimation_.getOption('enabled')) &&
+            /** @type {number} */(this.crsAnimation_.getOption('duration')) > 0 && !initInternalGeoData && changeProjection;
         if (isAnimate) {
           tx.curProj = new anychart.mapModule.projections.TwinProjection(
               /** @type {anychart.mapModule.projections.Base} */(currentProjection),
@@ -3031,7 +3032,7 @@ anychart.mapModule.Chart.prototype.calculate = function() {
               /** @type {!Array.<anychart.mapModule.geom.Point|anychart.mapModule.geom.Line|anychart.mapModule.geom.Polygon|anychart.mapModule.geom.Collection>} */(geoData),
               sourceProjection,
               tx,
-              /** @type {number} */(this.crsAnimation_.duration()),
+              /** @type {number} */(this.crsAnimation_.getOption('duration')),
               this != this.getCurrentScene());
           this.crsMapAnimation.listenOnce(goog.fx.Transition.EventType.END,
               /**
