@@ -99,6 +99,8 @@ anychart.core.ChartWithSeries = function() {
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['defaultSeriesType', 0, 0],
+    ['maxBubbleSize', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REAPPLICATION, 0, this.invalidateSizeBasedSeries],
+    ['minBubbleSize', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateSizeBasedSeries],
     ['pointWidth', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateWidthBasedSeries],
     ['maxPointWidth', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateWidthBasedSeries],
     ['minPointLength', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.resetSeriesStack],
@@ -225,6 +227,8 @@ anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS = (function() {
   }
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'defaultSeriesType', seriesTypeNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxBubbleSize', anychart.utils.normalizeNumberOrPercent],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'minBubbleSize', anychart.utils.normalizeNumberOrPercent],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'pointWidth', anychart.utils.normalizeNumberOrPercent],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxPointWidth', anychart.utils.normalizeNumberOrPercent],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'minPointLength', anychart.utils.normalizeNumberOrPercent],
@@ -582,17 +586,17 @@ anychart.core.ChartWithSeries.prototype.allowLegendCategoriesMode = function() {
  * @param {(number|string)=} opt_value
  * @return {number|string|anychart.core.ChartWithSeries}
  */
-anychart.core.ChartWithSeries.prototype.maxBubbleSize = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.maxBubbleSize_ != opt_value) {
-      this.maxBubbleSize_ = opt_value;
-      this.invalidateSizeBasedSeries();
-      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.maxBubbleSize_;
-};
+////anychart.core.ChartWithSeries.prototype.maxBubbleSize = function(opt_value) {
+//  if (goog.isDef(opt_value)) {
+//    if (this.maxBubbleSize_ != opt_value) {
+//      this.maxBubbleSize_ = opt_value;
+//      this.invalidateSizeBasedSeries();
+//      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
+//    }
+//    return this;
+//  }
+//  return this.maxBubbleSize_;
+//};
 
 
 /**
@@ -600,17 +604,17 @@ anychart.core.ChartWithSeries.prototype.maxBubbleSize = function(opt_value) {
  * @param {(number|string)=} opt_value
  * @return {number|string|anychart.core.ChartWithSeries}
  */
-anychart.core.ChartWithSeries.prototype.minBubbleSize = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.minBubbleSize_ != opt_value) {
-      this.minBubbleSize_ = opt_value;
-      this.invalidateSizeBasedSeries();
-      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.minBubbleSize_;
-};
+//anychart.core.ChartWithSeries.prototype.minBubbleSize = function(opt_value) {
+//  if (goog.isDef(opt_value)) {
+//    if (this.minBubbleSize_ != opt_value) {
+//      this.minBubbleSize_ = opt_value;
+//      this.invalidateSizeBasedSeries();
+//      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
+//    }
+//    return this;
+//  }
+//  return this.minBubbleSize_;
+//};
 
 
 /**
@@ -921,7 +925,7 @@ anychart.core.ChartWithSeries.prototype.calcBubbleSizes = function() {
   }
   for (i = this.seriesList.length; i--;) {
     if (this.seriesList[i].isSizeBased()) {
-      this.seriesList[i].setAutoSizeScale(minMax[0], minMax[1], this.minBubbleSize_, this.maxBubbleSize_);
+      this.seriesList[i].setAutoSizeScale(minMax[0], minMax[1], this.getOption('minBubbleSize'), this.getOption('maxBubbleSize'));
     }
   }
 };
@@ -1367,8 +1371,8 @@ anychart.core.ChartWithSeries.prototype.serialize = function() {
   var json = anychart.core.ChartWithSeries.base(this, 'serialize');
 
   anychart.core.settings.serialize(this, anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS, json);
-  json['minBubbleSize'] = this.minBubbleSize();
-  json['maxBubbleSize'] = this.maxBubbleSize();
+  //json['minBubbleSize'] = this.minBubbleSize();
+  //json['maxBubbleSize'] = this.maxBubbleSize();
   json['palette'] = this.palette().serialize();
   json['markerPalette'] = this.markerPalette().serialize();
   json['hatchFillPalette'] = this.hatchFillPalette().serialize();

@@ -485,9 +485,10 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.CARTESIAN] = anychart.cartesian
   // auto generated from ChartWithOrthogonalScales
   // proto['barsPadding'] = proto.barsPadding;
   // proto['barGroupsPadding'] = proto.barGroupsPadding;
+  // proto['maxBubbleSize'] = proto.maxBubbleSize;
+  // proto['minBubbleSize'] = proto.minBubbleSize;
+
   proto['crosshair'] = proto.crosshair;
-  proto['maxBubbleSize'] = proto.maxBubbleSize;
-  proto['minBubbleSize'] = proto.minBubbleSize;
   proto['xGrid'] = proto.xGrid;
   proto['yGrid'] = proto.yGrid;
   proto['xMinorGrid'] = proto.xMinorGrid;
