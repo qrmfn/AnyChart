@@ -40,7 +40,7 @@ anychart.core.utils.Interactivity = function(parent) {
    * @type {number}
    * @private
    */
-  this.spotRadius_;
+  //this.spotRadius_;
 
   /**
    * @type {boolean}
@@ -59,8 +59,33 @@ anychart.core.utils.Interactivity = function(parent) {
    * @private
    */
   this.zoomOnMouseWheel_;
+
+  /**
+   * Descriptors meta.
+   * @type {!Object.<string, anychart.core.settings.PropertyDescriptorMeta>}
+   */
+  this.descriptorsMeta = {};
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['spotRadius', 0, 0]
+  ]);
 };
 goog.inherits(anychart.core.utils.Interactivity, anychart.core.Base);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.utils.Interactivity.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'spotRadius', anychart.utils.normalizeToNaturalNumber]
+  ]);
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.utils.Interactivity, anychart.core.utils.Interactivity.PROPERTY_DESCRIPTORS);
 
 
 /**
@@ -141,16 +166,16 @@ anychart.core.utils.Interactivity.prototype.selectionMode = function(opt_value) 
  * @param {number=} opt_value Spot radius.
  * @return {anychart.core.utils.Interactivity|number} .
  */
-anychart.core.utils.Interactivity.prototype.spotRadius = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.utils.toNumber(opt_value);
-    if (opt_value != this.spotRadius_) {
-      this.spotRadius_ = opt_value;
-    }
-    return this;
-  }
-  return /** @type {number}*/(this.spotRadius_);
-};
+//anychart.core.utils.Interactivity.prototype.spotRadius = function(opt_value) {
+//  if (goog.isDef(opt_value)) {
+//    opt_value = anychart.utils.toNumber(opt_value);
+//    if (opt_value != this.spotRadius_) {
+//      this.spotRadius_ = opt_value;
+//    }
+//    return this;
+//  }
+//  return /** @type {number}*/(this.spotRadius_);
+//};
 
 
 /**
@@ -199,7 +224,7 @@ anychart.core.utils.Interactivity.prototype.setupByJSON = function(config, opt_d
   //this.zoomOnMouseWheel(config['zoomOnMouseWheel']);
   this.hoverMode(config['hoverMode']);
   this.selectionMode(config['selectionMode']);
-  this.spotRadius(config['spotRadius']);
+  //this.spotRadius(config['spotRadius']);
   this.allowMultiSeriesSelection(config['allowMultiSeriesSelection']);
   this.multiSelectOnClick(config['multiSelectOnClick']);
   this.unselectOnClickOutOfPoint(config['unselectOnClickOutOfPoint']);
@@ -218,7 +243,7 @@ anychart.core.utils.Interactivity.prototype.serialize = function() {
   //json['zoomOnMouseWheel'] = this.zoomOnMouseWheel();
   json['hoverMode'] = this.hoverMode();
   json['selectionMode'] = this.selectionMode();
-  json['spotRadius'] = this.spotRadius();
+  //json['spotRadius'] = this.spotRadius();
   json['allowMultiSeriesSelection'] = this.allowMultiSeriesSelection();
   json['multiSelectOnClick'] = this.multiSelectOnClick();
   json['unselectOnClickOutOfPoint'] = this.unselectOnClickOutOfPoint();
@@ -237,5 +262,6 @@ anychart.core.utils.Interactivity.prototype.serialize = function() {
   proto['unselectOnClickOutOfPoint'] = proto.unselectOnClickOutOfPoint;
   proto['hoverMode'] = proto.hoverMode;
   proto['selectionMode'] = proto.selectionMode;
-  proto['spotRadius'] = proto.spotRadius;
+  // auto generated
+  // proto['spotRadius'] = proto.spotRadius;
 })();

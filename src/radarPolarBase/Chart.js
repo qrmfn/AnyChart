@@ -624,7 +624,7 @@ anychart.radarPolarBaseModule.Chart.prototype.getSeriesStatus = function(event) 
   var dx, dy, angle;
 
   if (interactivity.hoverMode() == anychart.enums.HoverMode.BY_SPOT) {
-    var spotRadius = interactivity.spotRadius();
+    var spotRadius = /** @type {number} */(interactivity.getOption('spotRadius'));
     for (i = 0, len = this.seriesList.length; i < len; i++) {
       series = this.seriesList[i];
       if (series.enabled()) {

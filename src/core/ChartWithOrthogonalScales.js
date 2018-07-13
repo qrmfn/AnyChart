@@ -2135,7 +2135,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getSeriesStatus = function(eve
   var i, len, series, names;
 
   if (interactivity.hoverMode() == anychart.enums.HoverMode.BY_SPOT) {
-    var spotRadius = interactivity.spotRadius();
+    var spotRadius = /** @type {number} */(interactivity.getOption('spotRadius'));
     var minRatio, maxRatio;
     if (this.isVerticalInternal) {
       minRatio = (rangeY - (y - spotRadius - minY)) / rangeY;
