@@ -37,12 +37,6 @@ anychart.core.utils.Interactivity = function(parent) {
   this.allowMultiSeriesSelection_;
 
   /**
-   * @type {number}
-   * @private
-   */
-  //this.spotRadius_;
-
-  /**
    * @type {boolean}
    * @private
    */
@@ -218,13 +212,13 @@ anychart.core.utils.Interactivity.prototype.zoomOnMouseWheel = function(opt_valu
 anychart.core.utils.Interactivity.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.utils.Interactivity.base(this, 'setupByJSON', config, opt_default);
 
+  anychart.core.settings.deserialize(this, anychart.core.utils.Interactivity.PROPERTY_DESCRIPTORS, config, opt_default);
   this.parent_.suspendSignalsDispatching();
   //TODO(AntonKagakin): uncomment this line when zoom will be implemented in chart
   //TODO(AntonKagakin): and remove it from map and stock interactivity class
   //this.zoomOnMouseWheel(config['zoomOnMouseWheel']);
   this.hoverMode(config['hoverMode']);
   this.selectionMode(config['selectionMode']);
-  //this.spotRadius(config['spotRadius']);
   this.allowMultiSeriesSelection(config['allowMultiSeriesSelection']);
   this.multiSelectOnClick(config['multiSelectOnClick']);
   this.unselectOnClickOutOfPoint(config['unselectOnClickOutOfPoint']);
@@ -238,12 +232,13 @@ anychart.core.utils.Interactivity.prototype.setupByJSON = function(config, opt_d
  */
 anychart.core.utils.Interactivity.prototype.serialize = function() {
   var json = {};
+
+  anychart.core.settings.serialize(this, anychart.core.utils.Interactivity.PROPERTY_DESCRIPTORS, json);
   //TODO(AntonKagakin): uncomment this line when zoom will be implemented in chart
   //TODO(AntonKagakin): and remove it from map and stock interactivity class
   //json['zoomOnMouseWheel'] = this.zoomOnMouseWheel();
   json['hoverMode'] = this.hoverMode();
   json['selectionMode'] = this.selectionMode();
-  //json['spotRadius'] = this.spotRadius();
   json['allowMultiSeriesSelection'] = this.allowMultiSeriesSelection();
   json['multiSelectOnClick'] = this.multiSelectOnClick();
   json['unselectOnClickOutOfPoint'] = this.unselectOnClickOutOfPoint();
