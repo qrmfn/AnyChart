@@ -965,10 +965,10 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
       maxHeight = padding.tightenHeight(margin.tightenHeight(parentHeight));
     }
   } else {
-    var width_ = /** @type {number|string} */this.getOption('width');
-    var height_ = /** @type {number|string} */this.getOption('height');
-    var maxWidth_ = /** @type {number|string} */this.getOption('maxWidth');
-    var maxHeight_ = /** @type {number|string} */this.getOption('maxHeight');
+    var width_ = /** @type {number|string} */(this.getOption('width'));
+    var height_ = /** @type {number|string} */(this.getOption('height'));
+    var maxWidth_ = /** @type {number|string} */(this.getOption('maxWidth'));
+    var maxHeight_ = /** @type {number|string} */(this.getOption('maxHeight'));
     if (goog.isNumber(width_) && !isNaN(width_)) {
       fullWidth = width_;
       maxWidth = padding.tightenWidth(width_);
@@ -1127,8 +1127,8 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     var contentAreaWidth = Math.min(fullAreaWidth, maxWidth);
     var contentAreaHeight = Math.min(fullAreaHeight, maxHeight);
 
-    width_ = margin.widenWidth(padding.widenWidth(contentAreaWidth));
-    height_ = margin.widenHeight(padding.widenHeight(contentAreaHeight));
+    width = margin.widenWidth(padding.widenWidth(contentAreaWidth));
+    height = margin.widenHeight(padding.widenHeight(contentAreaHeight));
 
     if (title.enabled()) {
       var titleWidth = titleBounds.width;
