@@ -2106,7 +2106,7 @@ anychart.core.ui.Legend.prototype.makePointEvent_ = function(event) {
       return null;
   }
 
-  itemIndex = /** @type {boolean} */(this.getOptioin('inverted')) ? this.items_.length - 1 - itemIndex : itemIndex;
+  itemIndex = /** @type {boolean} */(this.getOption('inverted')) ? this.items_.length - 1 - itemIndex : itemIndex;
 
   var itemSource = null;
   var itemIndexInSource = NaN;
