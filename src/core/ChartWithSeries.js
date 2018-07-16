@@ -567,40 +567,6 @@ anychart.core.ChartWithSeries.prototype.allowLegendCategoriesMode = function() {
 //  Series specific settings
 //
 //----------------------------------------------------------------------------------------------------------------------
-/**
- * Sets max size for all bubbles on the charts.
- * @param {(number|string)=} opt_value
- * @return {number|string|anychart.core.ChartWithSeries}
- */
-////anychart.core.ChartWithSeries.prototype.maxBubbleSize = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.maxBubbleSize_ != opt_value) {
-//      this.maxBubbleSize_ = opt_value;
-//      this.invalidateSizeBasedSeries();
-//      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  }
-//  return this.maxBubbleSize_;
-//};
-
-
-/**
- * Sets min size for all bubbles on the charts.
- * @param {(number|string)=} opt_value
- * @return {number|string|anychart.core.ChartWithSeries}
- */
-//anychart.core.ChartWithSeries.prototype.minBubbleSize = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.minBubbleSize_ != opt_value) {
-//      this.minBubbleSize_ = opt_value;
-//      this.invalidateSizeBasedSeries();
-//      this.invalidate(anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  }
-//  return this.minBubbleSize_;
-//};
 
 
 /**
