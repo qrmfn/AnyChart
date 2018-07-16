@@ -31,12 +31,6 @@ anychart.core.utils.A11y = function(chart) {
   this.enabled_ = true;
 
   /**
-   * @type {Function|string}
-   * @private
-   */
-  this.titleFormat_ = '';
-
-  /**
    * Parent a11y.
    * We listen it to enable/disable current a11y by enabling/disabling parent a11y.
    * @type {anychart.core.utils.A11y}
@@ -222,8 +216,8 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
     var titleText;
     var textInfo = this.createTextInfo();
 
-    if (this.titleFormat_) {
-      var formatter = this.titleFormat_;
+    if (this.getOption('titleFormat')) {
+      var formatter = this.getOption('titleFormat');
       if (goog.isString(formatter))
         formatter = anychart.core.utils.TokenParser.getInstance().getFormat(formatter);
       titleText = formatter.call(textInfo, textInfo);
