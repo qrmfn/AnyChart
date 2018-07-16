@@ -55,7 +55,7 @@ anychart.core.utils.A11y.PROPERTY_DESCRIPTORS = (function() {
 
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'enabled', anychart.core.settings.booleanNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.asIsNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.stringOrFunctionNormalizer]
   ]);
   return map;
 })();
