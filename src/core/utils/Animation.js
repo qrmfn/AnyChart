@@ -68,15 +68,15 @@ anychart.core.utils.Animation.prototype.setupByJSON = function(json, opt_default
 anychart.core.utils.Animation.prototype.setupSpecial = function(isDefault, var_args) {
   var arg0 = arguments[1];
   if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    this.setOption('enabled', !!arg0);
+    this['enabled'](!!arg0);
     var arg1 = arguments[2];
     if (goog.isDef(arg1)) this.setOption('duration', arg1);
     return true;
   }
 
   if (!isNaN(+arg0)) {
-    this.setOption('enabled', true);
-    this.setOption('duration', +arg0);
+    this['enabled'](true);
+    this['duration'](+arg0);
     return true;
   }
 

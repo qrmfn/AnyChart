@@ -1806,7 +1806,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.distributeClusters = function(
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.ChartWithOrthogonalScales.prototype.doAnimation = function() {
-  if (this.animation().enabled() && /** @type {number} */(this.animation().getOption('duration')) > 0) {
+  if (this.animation().getOption('enabled') && /** @type {number} */(this.animation().getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
