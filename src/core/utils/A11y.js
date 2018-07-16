@@ -102,7 +102,7 @@ anychart.core.utils.A11y.prototype.parentA11y = function(opt_value) {
  * @private
  */
 anychart.core.utils.A11y.prototype.onParentEnabled_ = function(event) {
-  if (event.hasSignal(anychart.Signal.BOUNDS_CHANGED)) this.setOption('enabled', /** @type {boolean} */ (this.parentA11y_.getOption('enabled')));
+  if (event.hasSignal(anychart.Signal.BOUNDS_CHANGED)) this['enabled'](/** @type {boolean} */ (this.parentA11y_.getOption('enabled')));
 };
 
 
@@ -143,10 +143,10 @@ anychart.core.utils.A11y.prototype.serialize = function() {
 anychart.core.utils.A11y.prototype.setupSpecial = function(isDefault, var_args) {
   var arg0 = arguments[1];
   if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    this.setOption('enabled', !!arg0);
+    this['enabled'](!!arg0);
     return true;
   } else if (goog.isFunction(arg0)) {
-    this.setOption('titleFormat', arg0);
+    this['titleFormat'](arg0);
     return true;
   }
 
@@ -328,7 +328,7 @@ anychart.core.utils.SeriesA11y.prototype.applyA11y = function() {
   var titleText = null;
   var role = null;
   var layer = /** @type {acgraph.vector.Layer} */ (this.series_.getRootLayer() || this.forceLayer_);
-  if (this.enabled() && /** @type {Function|string} */(this.getOption('titleFormat'))) {
+  if (/** @type {boolean} */(this.getOption('enabled')) && /** @type {Function|string} */(this.getOption('titleFormat'))) {
     var textInfo = this.createTextInfo();
     var formatter = /** @type {Function|string} */(this.getOption('titleFormat'));
     if (goog.isString(formatter))
