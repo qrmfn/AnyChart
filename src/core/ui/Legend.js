@@ -934,41 +934,43 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
 
   var width, height, fullWidth, fullHeight, left = 0, top = 0;
 
+  var width_ = /** @type {number|string} */(this.getOption('width'));
+  var height_ = /** @type {number|string} */(this.getOption('height'));
+  var maxWidth_ = /** @type {number|string} */(this.getOption('maxWidth'));
+  var maxHeight_ = /** @type {number|string} */(this.getOption('maxHeight'));
+
   var maxWidth, maxHeight;
   if (parentBounds) {
     parentWidth = parentBounds.width;
     parentHeight = parentBounds.height;
-    if (goog.isDefAndNotNull(this.getOption('width'))) {
-      var wiredWidth = anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('width')), parentWidth);
-      var dynamicWidth = goog.isDefAndNotNull(this.getOption('maxWidth')) ?
-          anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('maxWidth')), parentWidth) :
+    if (goog.isDefAndNotNull(width_)) {
+      var wiredWidth = anychart.utils.normalizeSize(/** @type {number|string} */(width_), parentWidth);
+      var dynamicWidth = goog.isDefAndNotNull(maxWidth_) ?
+          anychart.utils.normalizeSize(/** @type {number|string} */(maxWidth_), parentWidth) :
           parentWidth;
 
       fullWidth = Math.min(parentWidth, wiredWidth, dynamicWidth);
       maxWidth = padding.tightenWidth(margin.tightenWidth(fullWidth));
-    } else if (goog.isDefAndNotNull(this.getOption('maxWidth'))) {
-      maxWidth = padding.tightenWidth(margin.tightenWidth(anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('maxWidth')), parentWidth)));
+    } else if (goog.isDefAndNotNull(maxWidth_)) {
+      maxWidth = padding.tightenWidth(margin.tightenWidth(anychart.utils.normalizeSize(/** @type {number|string} */(maxWidth_), parentWidth)));
     } else {
       maxWidth = padding.tightenWidth(margin.tightenWidth(parentWidth));
     }
     if (goog.isDefAndNotNull(this.height_)) {
-      var wiredHeight = anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('height')), parentHeight);
-      var dynamicHeight = goog.isDefAndNotNull(this.getOption('maxHeight')) ?
-          anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('maxHeight')), parentHeight) :
+      var wiredHeight = anychart.utils.normalizeSize(/** @type {number|string} */(height_), parentHeight);
+      var dynamicHeight = goog.isDefAndNotNull(maxHeight_) ?
+          anychart.utils.normalizeSize(/** @type {number|string} */(maxHeight_), parentHeight) :
           parentHeight;
 
       fullHeight = Math.min(parentHeight, wiredHeight, dynamicHeight);
       maxHeight = padding.tightenHeight(margin.tightenHeight(fullHeight));
-    } else if (goog.isDefAndNotNull(this.getOption('maxHeight'))) {
-      maxHeight = padding.tightenHeight(margin.tightenHeight(anychart.utils.normalizeSize(/** @type {number|string} */(this.getOption('maxHeight')), parentHeight)));
+    } else if (goog.isDefAndNotNull(maxHeight_)) {
+      maxHeight = padding.tightenHeight(margin.tightenHeight(anychart.utils.normalizeSize(/** @type {number|string} */(maxHeight_), parentHeight)));
     } else {
       maxHeight = padding.tightenHeight(margin.tightenHeight(parentHeight));
     }
   } else {
-    var width_ = /** @type {number|string} */(this.getOption('width'));
-    var height_ = /** @type {number|string} */(this.getOption('height'));
-    var maxWidth_ = /** @type {number|string} */(this.getOption('maxWidth'));
-    var maxHeight_ = /** @type {number|string} */(this.getOption('maxHeight'));
+
     if (goog.isNumber(width_) && !isNaN(width_)) {
       fullWidth = width_;
       maxWidth = padding.tightenWidth(width_);
