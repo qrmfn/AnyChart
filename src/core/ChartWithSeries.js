@@ -85,7 +85,7 @@ anychart.core.ChartWithSeries = function() {
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['defaultSeriesType', 0, 0],
-    ['maxBubbleSize', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REAPPLICATION, 0, this.invalidateSizeBasedSeries],
+    ['maxBubbleSize', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateSizeBasedSeries],
     ['minBubbleSize', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateSizeBasedSeries],
     ['pointWidth', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateWidthBasedSeries],
     ['maxPointWidth', anychart.ConsistencyState.SERIES_CHART_SERIES, anychart.Signal.NEEDS_REDRAW, 0, this.invalidateWidthBasedSeries],
