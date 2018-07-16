@@ -5288,9 +5288,8 @@ anychart.mapModule.Chart.prototype.disposeInternal = function() {
   proto['removeAllSeries'] = proto.removeAllSeries;
   // auto from ChartWithSeries
   // proto['defaultSeriesType'] = proto.defaultSeriesType;
-  //bubble
-  proto['maxBubbleSize'] = proto.maxBubbleSize;
-  proto['minBubbleSize'] = proto.minBubbleSize;
+  // proto['maxBubbleSize'] = proto.maxBubbleSize;
+  // proto['minBubbleSize'] = proto.minBubbleSize;
   //ui
   proto['colorRange'] = proto.colorRange;
   proto['callout'] = proto.callout;

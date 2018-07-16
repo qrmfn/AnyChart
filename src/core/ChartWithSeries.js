@@ -50,20 +50,6 @@ anychart.core.ChartWithSeries = function() {
   this.hatchFillPalette_ = null;
 
   /**
-   * Max size for all bubbles on the chart.
-   * @type {string|number}
-   * @private
-   */
-  this.maxBubbleSize_;
-
-  /**
-   * Min size for all bubbles on the chart.
-   * @type {string|number}
-   * @private
-   */
-  this.minBubbleSize_;
-
-  /**
    * Cache of chart data bounds.
    * @type {anychart.math.Rect}
    * @protected
@@ -227,8 +213,8 @@ anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS = (function() {
   }
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'defaultSeriesType', seriesTypeNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxBubbleSize', anychart.utils.normalizeNumberOrPercent],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'minBubbleSize', anychart.utils.normalizeNumberOrPercent],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxBubbleSize', anychart.core.settings.numberOrStringNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'minBubbleSize', anychart.core.settings.numberOrStringNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'pointWidth', anychart.utils.normalizeNumberOrPercent],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxPointWidth', anychart.utils.normalizeNumberOrPercent],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'minPointLength', anychart.utils.normalizeNumberOrPercent],
@@ -925,7 +911,7 @@ anychart.core.ChartWithSeries.prototype.calcBubbleSizes = function() {
   }
   for (i = this.seriesList.length; i--;) {
     if (this.seriesList[i].isSizeBased()) {
-      this.seriesList[i].setAutoSizeScale(minMax[0], minMax[1], this.getOption('minBubbleSize'), this.getOption('maxBubbleSize'));
+      this.seriesList[i].setAutoSizeScale(minMax[0], minMax[1], /** @type {number|string} */(this.getOption('minBubbleSize')), /** @type {number|string} */(this.getOption('maxBubbleSize')));
     }
   }
 };
