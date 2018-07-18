@@ -763,6 +763,8 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
   var colCount = 1;
   var fullWidthExpand = 0;
   var fullHeightExpand = 0;
+  var itemsLayout = /** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout'));
+  var itemsSpacing = /** @type {number} */(this.getOption('itemsSpacing'));
 
   for (var i = 0, len = this.items_.length; i < len; i++) {
     if (i in this.notEnabledItems_)
@@ -770,7 +772,6 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
 
     var bounds = this.items_[i].getPixelBounds();
 
-    var itemsSpacing = /** @type {number} */(this.getOption('itemsSpacing'));
 
     width = bounds.width;
     fullWidth += width + itemsSpacing;
@@ -781,7 +782,7 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
     maxHeight = Math.max(maxHeight, height);
 
 
-    if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
+    if (itemsLayout == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
       if (rowWidth + width > widthLimit) {
         fullWidthExpand = Math.max(fullWidthExpand, rowWidth);
         fullHeightExpand += rowHeight;
@@ -793,7 +794,7 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
         rowWidth += width + itemsSpacing;
         rowHeight = Math.max(rowHeight, height + itemsSpacing);
       }
-    } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
+    } else if (itemsLayout == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
       if (colHeight + height > heightLimit) {
         fullHeightExpand = Math.max(fullHeightExpand, colHeight);
         fullWidthExpand += colWidth;
@@ -826,15 +827,15 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
   this.colCount_ = colCount;
   this.rowCount_ = rowCount;
 
-  if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.VERTICAL) {
+  if (itemsLayout == anychart.enums.LegendLayout.VERTICAL) {
     return anychart.math.rect(0, 0, Math.max(0, maxWidth), Math.max(0, fullHeight));
-  } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.HORIZONTAL) {
+  } else if (itemsLayout == anychart.enums.LegendLayout.HORIZONTAL) {
     return anychart.math.rect(0, 0, Math.max(0, fullWidth), Math.max(0, maxHeight));
-  } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
+  } else if (itemsLayout == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
     fullWidthExpand += colWidth - itemsSpacing;
     fullHeightExpand = Math.max(fullHeightExpand, colHeight) - itemsSpacing;
     return anychart.math.rect(0, 0, Math.max(0, fullWidthExpand), Math.max(0, fullHeightExpand));
-  } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
+  } else if (itemsLayout == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
     fullWidthExpand = Math.max(fullWidthExpand, rowWidth) - itemsSpacing;
     fullHeightExpand += rowHeight - itemsSpacing;
     return anychart.math.rect(0, 0, Math.max(0, fullWidthExpand), Math.max(0, fullHeightExpand));
