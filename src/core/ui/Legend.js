@@ -283,25 +283,6 @@ anychart.core.ui.Legend.prototype.itemsSource = function(opt_value) {
 
 
 /**
- * Getter/setter for items source mode.
- * @param {(anychart.enums.LegendItemsSourceMode|string)=} opt_value Items source mode.
- * @return {anychart.enums.LegendItemsSourceMode|anychart.core.ui.Legend} Items source mode or self for chaining.
- */
-anychart.core.ui.Legend.prototype.itemsSourceMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeLegendItemsSourceMode(opt_value);
-    if (this.itemsSourceMode_ != opt_value) {
-      this.itemsSourceMode_ = opt_value;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS,
-          anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.itemsSourceMode_;
-};
-
-
-/**
  * Getter/setter for items formatter
  * @param {function(Array.<anychart.core.ui.Legend.LegendItemProvider>):Array.<anychart.core.ui.Legend.LegendItemProvider>=} opt_value Formatter function.
  * @return {(function(Array.<anychart.core.ui.Legend.LegendItemProvider>):Array.<anychart.core.ui.Legend.LegendItemProvider>|anychart.core.ui.Legend)} Formatter function or self for chaining.
@@ -1037,20 +1018,22 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     paginator.parentBounds(null);
     paginatorBounds = paginator.getPixelBoundsInternal(1);
 
-    if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.HORIZONTAL) {
+    var itemsLayout = /** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout'));
+
+    if (itemsLayout == anychart.enums.LegendLayout.HORIZONTAL) {
       if (contentWidth > itemsAreaWidth && this.items_ && this.items_.length > 1) {
         paginator.autoEnabled(true);
       } else {
         paginator.autoEnabled(false);
       }
-    } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
+    } else if (itemsLayout == anychart.enums.LegendLayout.VERTICAL_EXPANDABLE) {
       if (contentWidth > itemsAreaWidth && this.colCount_ > 1) {
         paginator.autoEnabled(true);
       } else {
         paginator.autoEnabled(false);
       }
-    } else if (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.VERTICAL ||
-        /** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout')) == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
+    } else if (itemsLayout == anychart.enums.LegendLayout.VERTICAL ||
+        itemsLayout == anychart.enums.LegendLayout.HORIZONTAL_EXPANDABLE) {
       if (contentHeight > maxHeightForPaginator && this.items_ && this.items_.length > 1) {
         paginator.autoEnabled(true);
       } else {
@@ -1395,7 +1378,7 @@ anychart.core.ui.Legend.prototype.createItemsFromSource_ = function() {
         var format = /** @type {Function|string} */(this.getOption('itemsFormat'));
         if (goog.isString(format))
           format = anychart.core.utils.TokenParser.getInstance().getFormat(format);
-        items = goog.array.concat(items, source.createLegendItemsProvider(this.itemsSourceMode_, format));
+        items = goog.array.concat(items, source.createLegendItemsProvider(this.getOption('itemsSourceMode'), format));
       }
     }
     return items;
@@ -1793,9 +1776,10 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
     var items = this.distributedItems_[pageNumber];
     var item, itemBounds;
     var itemsSpacing = /** @type {number} */(this.getOption('itemsSpacing'));
+    var itemsLayout = /** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout'));
 
     if (items) {
-      switch (/** @type {anychart.enums.LegendLayout} */(this.getOption('itemsLayout'))) {
+      switch (itemsLayout) {
         case anychart.enums.LegendLayout.HORIZONTAL:
           for (i = 0; i < items.length; i++) {
             item = items[i];
@@ -2062,7 +2046,7 @@ anychart.core.ui.Legend.prototype.makePointEvent_ = function(event) {
       var source = /** @type {anychart.core.SeparateChart|anychart.stockModule.Plot} */ (this.itemsSourceInternal[i]);
       if (goog.getUid(source) == item.sourceUid() &&
           goog.isFunction(source.legendItemCanInteractInMode) &&
-          source.legendItemCanInteractInMode(this.itemsSourceMode_)) {
+          source.legendItemCanInteractInMode(/** @type {anychart.enums.LegendItemsSourceMode} */(this.getOption('itemsSourceMode')))) {
         itemSource = source;
         itemIndexInSource = item.sourceKey();
         break;
@@ -2095,7 +2079,6 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   json['titleSeparator'] = this.titleSeparator().serialize();
   json['paginator'] = this.paginator().serialize();
   json['tooltip'] = this.tooltip().serialize();
-  json['itemsSourceMode'] = this.itemsSourceMode();
   if (goog.isDef(this.items()))
     json['items'] = this.items();
   json['iconTextSpacing'] = this.iconTextSpacing();
@@ -2129,7 +2112,6 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
 
   this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
-  this.itemsSourceMode(config['itemsSourceMode']);
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
   this.iconTextSpacing(config['iconTextSpacing']);
@@ -2278,7 +2260,6 @@ anychart.standalones.legend = function() {
   var proto = anychart.core.ui.Legend.prototype;
   proto['items'] = proto.items;
   proto['itemsFormatter'] = proto.itemsFormatter;
-  proto['itemsSourceMode'] = proto.itemsSourceMode;
   proto['hoverCursor'] = proto.hoverCursor;
   proto['iconTextSpacing'] = proto.iconTextSpacing;
   proto['margin'] = proto.margin;
@@ -2306,6 +2287,7 @@ anychart.standalones.legend = function() {
   // proto['itemsFormat'] = proto.itemsFormat;
   // proto['titleFormat'] = proto.titleFormat;
   // proto['itemsSpacing'] = proto.itemsSpacing;
+  // proto['itemsSourceMode'] = proto.itemsSourceMode;
 
   proto = anychart.standalones.Legend.prototype;
   goog.exportSymbol('anychart.standalones.legend', anychart.standalones.legend);
