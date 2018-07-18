@@ -46,13 +46,6 @@ anychart.core.ui.Legend = function() {
   this.positionMode_;
 
   /**
-   * Spacing between icon and text in legend item.
-   * @type {number}
-   * @private
-   */
-  this.iconTextSpacing_ = NaN;
-
-  /**
    * Wrapped legend items.
    * @type {Array.<anychart.core.ui.LegendItem>}
    * @private
@@ -78,13 +71,6 @@ anychart.core.ui.Legend = function() {
    * @private
    */
   this.recreateItems_ = true;
-
-  /**
-   * Hover cursor setting.
-   * @type {?anychart.enums.Cursor}
-   * @private
-   */
-  this.hoverCursor_;
 
   this.invalidate(anychart.ConsistencyState.ALL);
 
@@ -120,7 +106,21 @@ anychart.core.ui.Legend = function() {
           anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REDRAW],
     ['itemsSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['itemsSourceMode', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS,
-          anychart.Signal.NEEDS_REDRAW]
+          anychart.Signal.NEEDS_REDRAW],
+    ['hoverCursor', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, function() {
+      if (goog.isDefAndNotNull(this.items_)) {
+        for (var i = 0, len = this.items_.length; i < len; i++) {
+          this.items_[i].hoverCursor(this.hoverCursor_);
+        }
+      }
+    }],
+    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {
+      if (goog.isDefAndNotNull(this.items_)) {
+        for (var i = 0, len = this.items_.length; i < len; i++) {
+          this.items_[i].iconTextSpacing(this.iconTextSpacing_);
+        }
+      }
+    }]
   ]);
 };
 goog.inherits(anychart.core.ui.Legend, anychart.core.Text);
@@ -156,7 +156,9 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsFormat', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSpacing', anychart.core.settings.numberNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSourceMode', anychart.enums.normalizeLegendItemsSourceMode]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSourceMode', anychart.enums.normalizeLegendItemsSourceMode],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'hoverCursor', anychart.enums.normalizeCursor],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', anychart.core.settings.numberNormalizer]
   ]);
   return map;
 })();
@@ -197,31 +199,6 @@ anychart.core.ui.Legend.prototype.SUPPORTED_CONSISTENCY_STATES =
  * }}
  */
 anychart.core.ui.Legend.LegendItemProvider;
-
-
-//endregion
-//region --- Settings
-/**
- * Getter/Setter for hover cursor setting.
- * @param {(string|anychart.enums.Cursor)=} opt_value hover cursor setting.
- * @return {(anychart.enums.Cursor|anychart.core.ui.Legend)} Hover cursor setting or self for chaining.
- */
-anychart.core.ui.Legend.prototype.hoverCursor = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeCursor(opt_value);
-    if (this.hoverCursor_ != opt_value) {
-      this.hoverCursor_ = opt_value;
-      if (goog.isDefAndNotNull(this.items_)) {
-        for (var i = 0, len = this.items_.length; i < len; i++) {
-          this.items_[i].hoverCursor(this.hoverCursor_);
-        }
-      }
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-      return this;
-    }
-  }
-  return this.hoverCursor_;
-};
 
 
 /**
@@ -297,29 +274,6 @@ anychart.core.ui.Legend.prototype.itemsFormatter = function(opt_value) {
     return this;
   }
   return this.itemsFormatter_;
-};
-
-
-/**
- * Getter/setter for iconTextSpacing.
- * @param {(string|number)=} opt_value Spacing setting.
- * @return {(number|anychart.core.ui.Legend)} Spacing setting or self for method chaining.
- */
-anychart.core.ui.Legend.prototype.iconTextSpacing = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = !anychart.utils.isNaN(opt_value) ? +opt_value : 5;
-    if (this.iconTextSpacing_ != opt_value) {
-      this.iconTextSpacing_ = opt_value;
-      if (goog.isDefAndNotNull(this.items_)) {
-        for (var i = 0, len = this.items_.length; i < len; i++) {
-          this.items_[i].iconTextSpacing(this.iconTextSpacing_);
-        }
-      }
-      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.iconTextSpacing_;
 };
 
 
@@ -1403,9 +1357,9 @@ anychart.core.ui.Legend.prototype.prepareItems_ = function(items) {
     if (isNaN(items[i]['iconSize']))
       items[i]['iconSize'] = /** @type {number} */(this.getOption('iconSize'));
     config = {
-      'iconTextSpacing': this.iconTextSpacing_,
+      'iconTextSpacing': /** @type {number} */(this.getOption('iconTextSpacing')),
       'iconSize': /** @type {number} */(this.getOption('iconSize')),
-      'hoverCursor': this.hoverCursor_
+      'hoverCursor': /** @type {anychart.enums.Cursor} */(this.getOption('hoverCursor'))
     };
     goog.object.extend(config, textSettings, items[i]);
     itemList.push(config);
@@ -2081,10 +2035,8 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   json['tooltip'] = this.tooltip().serialize();
   if (goog.isDef(this.items()))
     json['items'] = this.items();
-  json['iconTextSpacing'] = this.iconTextSpacing();
   json['position'] = this.position();
   json['positionMode'] = this.positionMode();
-  json['hoverCursor'] = this.hoverCursor();
   return json;
 };
 
@@ -2114,10 +2066,8 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
-  this.iconTextSpacing(config['iconTextSpacing']);
   this.position(config['position']);
   this.positionMode(config['positionMode']);
-  this.hoverCursor(config['hoverCursor']);
 };
 
 
@@ -2260,8 +2210,6 @@ anychart.standalones.legend = function() {
   var proto = anychart.core.ui.Legend.prototype;
   proto['items'] = proto.items;
   proto['itemsFormatter'] = proto.itemsFormatter;
-  proto['hoverCursor'] = proto.hoverCursor;
-  proto['iconTextSpacing'] = proto.iconTextSpacing;
   proto['margin'] = proto.margin;
   proto['padding'] = proto.padding;
   proto['background'] = proto.background;
@@ -2288,6 +2236,8 @@ anychart.standalones.legend = function() {
   // proto['titleFormat'] = proto.titleFormat;
   // proto['itemsSpacing'] = proto.itemsSpacing;
   // proto['itemsSourceMode'] = proto.itemsSourceMode;
+  // proto['hoverCursor'] = proto.hoverCursor;
+  // proto['iconTextSpacing'] = proto.iconTextSpacing;
 
   proto = anychart.standalones.Legend.prototype;
   goog.exportSymbol('anychart.standalones.legend', anychart.standalones.legend);
