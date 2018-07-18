@@ -80,25 +80,11 @@ anychart.core.ui.Legend = function() {
   this.drawedPage_ = NaN;
 
   /**
-   * Legend items text formatter.
-   * @type {?(Function|string)}
-   * @private
-   */
-  this.itemsFormat_ = null;
-
-  /**
    * Flag that shows what we need: true - create items, false - update them.
    * @type {boolean}
    * @private
    */
   this.recreateItems_ = true;
-
-  /**
-   * Title text formatter. If set, overrides the title text.
-   * @type {?(Function|string)}
-   * @private
-   */
-  this.titleFormat_ = null;
 
   /**
    * Hover cursor setting.
@@ -134,7 +120,11 @@ anychart.core.ui.Legend = function() {
     //['positionMode', 0, anychart.Signal.BOUNDS_CHANGED],//nontrivial
     ['align', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {this.dragged = false;}],
-    ['drag', anychart.ConsistencyState.LEGEND_DRAG, anychart.Signal.NEEDS_REDRAW]
+    ['drag', anychart.ConsistencyState.LEGEND_DRAG, anychart.Signal.NEEDS_REDRAW],
+    ['itemsFormat', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS,
+          anychart.Signal.NEEDS_REDRAW],
+    ['titleFormat', anychart.ConsistencyState.LEGEND_TITLE | anychart.ConsistencyState.BOUNDS,
+          anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REDRAW]
   ]);
 };
 goog.inherits(anychart.core.ui.Legend, anychart.core.Text);
@@ -163,7 +153,9 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
     //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'position'], //nontrivial
     //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'positionMode', 0, anychart.Signal.BOUNDS_CHANGED],//nontrivial
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'align', anychart.enums.normalizeAlign],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drag', anychart.core.settings.booleanNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drag', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsFormat', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.asIsNormalizer]
   ]);
   return map;
 })();
@@ -323,24 +315,6 @@ anychart.core.ui.Legend.prototype.itemsFormatter = function(opt_value) {
     return this;
   }
   return this.itemsFormatter_;
-};
-
-
-/**
- * Getter/setter for items text formatter.
- * @param {(string|Function)=} opt_value Items text formatter function.
- * @return {(Function|string|anychart.core.ui.Legend)} Items text formatter function or self for chaining.
- */
-anychart.core.ui.Legend.prototype.itemsFormat = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.itemsFormat_ != opt_value) {
-      this.itemsFormat_ = opt_value;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS,
-          anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.itemsFormat_;
 };
 
 
@@ -517,24 +491,6 @@ anychart.core.ui.Legend.prototype.titleInvalidated_ = function(event) {
   }
   // If there are no signals, the !state and nothing happens.
   this.invalidate(state, signal);
-};
-
-
-/**
- * If set, formats title. Currently supported in Stock only.
- * @param {?(Function|string)=} opt_value
- * @return {Function|string|anychart.core.ui.Legend}
- */
-anychart.core.ui.Legend.prototype.titleFormat = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.titleFormat_ != opt_value) {
-      this.titleFormat_ = opt_value;
-      this.invalidate(anychart.ConsistencyState.LEGEND_TITLE | anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.titleFormat_;
 };
 
 
@@ -1449,7 +1405,7 @@ anychart.core.ui.Legend.prototype.createItemsFromSource_ = function() {
     for (var i = 0; i < this.itemsSourceInternal.length; i++) {
       source = /** @type {anychart.core.SeparateChart|anychart.stockModule.Plot} */ (this.itemsSourceInternal[i]);
       if (!goog.isNull(source) && goog.isFunction(source.createLegendItemsProvider)) {
-        var format = this.itemsFormat_;
+        var format = /** @type {Function|string} */(this.getOption('itemsFormat'));
         if (goog.isString(format))
           format = anychart.core.utils.TokenParser.getInstance().getFormat(format);
         items = goog.array.concat(items, source.createLegendItemsProvider(this.itemsSourceMode_, format));
@@ -2148,14 +2104,11 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   json['padding'] = this.padding().serialize();
   json['background'] = this.background().serialize();
   json['title'] = this.title().serialize();
-  json['titleFormat'] = this.titleFormat();
   json['titleSeparator'] = this.titleSeparator().serialize();
   json['paginator'] = this.paginator().serialize();
   json['tooltip'] = this.tooltip().serialize();
   json['itemsSpacing'] = this.itemsSpacing();
   json['itemsSourceMode'] = this.itemsSourceMode();
-  if (goog.isString(this.itemsFormat()))
-    json['itemsFormat'] = this.itemsFormat();
   if (goog.isDef(this.items()))
     json['items'] = this.items();
   json['iconTextSpacing'] = this.iconTextSpacing();
@@ -2184,7 +2137,6 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('margin' in config)
     this.margin(config['margin']);
 
-  this.titleFormat(config['titleFormat']);
   this.titleSeparator(config['titleSeparator']);
   this.paginator(config['paginator']);
 
@@ -2193,7 +2145,6 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   this.itemsSpacing(config['itemsSpacing']);
   this.itemsSourceMode(config['itemsSourceMode']);
   this.items(config['items']);
-  this.itemsFormat(config['itemsFormat']);
   this.itemsFormatter(config['itemsFormatter']);
   this.iconTextSpacing(config['iconTextSpacing']);
   this.position(config['position']);
@@ -2289,7 +2240,7 @@ anychart.standalones.Legend.prototype.onStockPlotSignal_ = function(event) {
   if (event.hasSignal(anychart.Signal.NEED_UPDATE_LEGEND)) {
     this.suspendSignalsDispatching();
     var plot = /** @type {anychart.stockModule.Plot} */ (event.target);
-    var autoText = plot.getLegendAutoText(/** @type {string|Function} */ (this.titleFormat()));
+    var autoText = plot.getLegendAutoText(/** @type {string|Function} */ (this.getOption('titleFormat')));
     if (!goog.isNull(autoText))
       this.title().autoText(autoText);
     this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS);
@@ -2342,7 +2293,6 @@ anychart.standalones.legend = function() {
   proto['itemsSpacing'] = proto.itemsSpacing;
   proto['items'] = proto.items;
   proto['itemsFormatter'] = proto.itemsFormatter;
-  proto['itemsFormat'] = proto.itemsFormat;
   proto['itemsSourceMode'] = proto.itemsSourceMode;
   proto['hoverCursor'] = proto.hoverCursor;
   proto['iconTextSpacing'] = proto.iconTextSpacing;
@@ -2350,7 +2300,6 @@ anychart.standalones.legend = function() {
   proto['padding'] = proto.padding;
   proto['background'] = proto.background;
   proto['title'] = proto.title;
-  proto['titleFormat'] = proto.titleFormat;
   proto['titleSeparator'] = proto.titleSeparator;
   proto['paginator'] = proto.paginator;
   proto['tooltip'] = proto.tooltip;
@@ -2369,6 +2318,8 @@ anychart.standalones.legend = function() {
   // proto['maxHeight'] = proto.maxHeight;
   // proto['align'] = proto.align;
   // proto['drag'] = proto.drag;
+  // proto['itemsFormat'] = proto.itemsFormat;
+  // proto['titleFormat'] = proto.titleFormat;
 
   proto = anychart.standalones.Legend.prototype;
   goog.exportSymbol('anychart.standalones.legend', anychart.standalones.legend);

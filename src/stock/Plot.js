@@ -2242,7 +2242,7 @@ anychart.stockModule.Plot.prototype.updateLegend_ = function(opt_seriesBounds, o
   if (opt_seriesBounds) {
     legend.parentBounds(opt_seriesBounds);
   }
-  var autoText = this.getLegendAutoText(/** @type {string|Function} */ (legend.titleFormat()), opt_titleValue, opt_rawValue);
+  var autoText = this.getLegendAutoText(/** @type {string|Function} */ (legend.getOption('titleFormat')), opt_titleValue, opt_rawValue);
   if (!goog.isNull(autoText))
     legend.title().autoText(autoText);
   if (!legend.itemsSource())
