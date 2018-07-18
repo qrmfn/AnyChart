@@ -912,7 +912,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     } else {
       maxWidth = padding.tightenWidth(margin.tightenWidth(parentWidth));
     }
-    if (goog.isDefAndNotNull(this.height_)) {
+    if (goog.isDefAndNotNull(height_)) {
       var wiredHeight = anychart.utils.normalizeSize(/** @type {number|string} */(height_), parentHeight);
       var dynamicHeight = goog.isDefAndNotNull(maxHeight_) ?
           anychart.utils.normalizeSize(/** @type {number|string} */(maxHeight_), parentHeight) :
@@ -2193,8 +2193,8 @@ anychart.core.makeStandalone(anychart.standalones.Legend, anychart.core.ui.Legen
  */
 anychart.standalones.Legend.prototype.dependsOnContainerSize = function() {
   //TODO(AntonKagakin): should be reworked to getOption
-  var width = this.width();
-  var height = this.height();
+  var width = this.getOption('width');
+  var height = this.getOption('height');
   return anychart.utils.isPercent(width) || anychart.utils.isPercent(height) || goog.isNull(width) || goog.isNull(height);
 };
 
