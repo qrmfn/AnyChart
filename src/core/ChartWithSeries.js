@@ -472,7 +472,7 @@ anychart.core.ChartWithSeries.prototype.seriesInvalidated = function(event) {
   }
   if (event.hasSignal(anychart.Signal.DATA_CHANGED)) {
     state |= anychart.ConsistencyState.CHART_LABELS;
-    if (this.legend().itemsSourceMode() == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
+    if (/** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode')) == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
       // CHART_LABELS invalidation for no data label.
       state |= anychart.ConsistencyState.CHART_LEGEND;
     }

@@ -4879,7 +4879,7 @@ anychart.mapModule.Chart.prototype.legendItemCanInteractInMode = function(mode) 
 anychart.mapModule.Chart.prototype.legendItemClick = function(item, event) {
   var meta = /** @type {Object} */(item.meta());
   var series;
-  var sourceMode = this.legend().itemsSourceMode();
+  var sourceMode = /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode'));
   if (sourceMode == anychart.enums.LegendItemsSourceMode.DEFAULT) {
     var sourceKey = item.sourceKey();
     series = this.getSeries(/** @type {number} */ (sourceKey));
@@ -4929,7 +4929,7 @@ anychart.mapModule.Chart.prototype.legendItemOver = function(item, event) {
   var meta = /** @type {Object} */(item.meta());
   var series;
 
-  var sourceMode = this.legend().itemsSourceMode();
+  var sourceMode = /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode'));
   if (sourceMode == anychart.enums.LegendItemsSourceMode.DEFAULT) {
     var sourceKey = item.sourceKey();
     if (item && !goog.isDefAndNotNull(sourceKey) && !isNaN(sourceKey))
@@ -4982,7 +4982,7 @@ anychart.mapModule.Chart.prototype.legendItemOut = function(item, event) {
   var meta = /** @type {Object} */(item.meta());
   var series;
 
-  var sourceMode = this.legend().itemsSourceMode();
+  var sourceMode = /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode'));
   if (sourceMode == anychart.enums.LegendItemsSourceMode.DEFAULT) {
     var sourceKey = item.sourceKey();
     if (item && !goog.isDefAndNotNull(sourceKey) && !isNaN(sourceKey))
