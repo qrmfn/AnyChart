@@ -32,20 +32,6 @@ anychart.core.ui.Legend = function() {
   anychart.core.ui.Legend.base(this, 'constructor');
 
   /**
-   * Position of the legend.
-   * @type {anychart.enums.Orientation}
-   * @private
-   */
-  this.position_;
-
-  /**
-   * Position mode of the legend.
-   * @type {anychart.enums.LegendPositionMode}
-   * @private
-   */
-  this.positionMode_;
-
-  /**
    * Wrapped legend items.
    * @type {Array.<anychart.core.ui.LegendItem>}
    * @private
@@ -95,8 +81,22 @@ anychart.core.ui.Legend = function() {
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['maxHeight', anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.LEGEND_BACKGROUND,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    //['position', anychart.ConsistencyState.BOUNDS], //nontrivial
-    //['positionMode', 0, anychart.Signal.BOUNDS_CHANGED],//nontrivial
+    ['position', 0, 0, 0, function() {
+      this.dragged = false;
+      var signal = anychart.Signal.NEEDS_REDRAW;
+      if (this.getOption('positionMode') == anychart.enums.LegendPositionMode.OUTSIDE)
+        signal |= anychart.Signal.BOUNDS_CHANGED;
+      this.invalidate(anychart.ConsistencyState.BOUNDS, signal);
+    }],
+    ['positionMode', 0, 0, 0, function() {
+      this.dragged = false;
+      if (this.getOption('drag')) {
+        this.invalidate(anychart.ConsistencyState.LEGEND_DRAG,
+            anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+      } else {
+        this.dispatchSignal(anychart.Signal.BOUNDS_CHANGED);
+      }
+    }],
     ['align', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {this.dragged = false;}],
     ['drag', anychart.ConsistencyState.LEGEND_DRAG, anychart.Signal.NEEDS_REDRAW],
@@ -149,8 +149,8 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'height', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxWidth', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxHeight', anychart.core.settings.asIsNormalizer],
-    //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'position'], //nontrivial
-    //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'positionMode', 0, anychart.Signal.BOUNDS_CHANGED],//nontrivial
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'position', anychart.enums.normalizeOrientation],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'positionMode', anychart.enums.normalizeLegendPositionMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'align', anychart.enums.normalizeAlign],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drag', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsFormat', anychart.core.settings.asIsNormalizer],
@@ -568,56 +568,6 @@ anychart.core.ui.Legend.prototype.hideTooltip = function() {
 };
 
 
-/**
- * Getter/setter for position.
- * @param {(anychart.enums.Orientation|string)=} opt_value Legend position.
- * @return {(anychart.enums.Orientation|anychart.core.ui.Legend)} Legend position or self for method chaining.
- */
-anychart.core.ui.Legend.prototype.position = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeOrientation(opt_value);
-    if (this.position_ != opt_value) {
-      this.position_ = opt_value;
-      this.dragged = false;
-
-      var signal = anychart.Signal.NEEDS_REDRAW;
-      if (this.positionMode_ == anychart.enums.LegendPositionMode.OUTSIDE)
-        signal |= anychart.Signal.BOUNDS_CHANGED;
-
-      this.invalidate(anychart.ConsistencyState.BOUNDS, signal);
-    }
-    return this;
-  } else {
-    return this.position_;
-  }
-};
-
-
-/**
- * Getter/setter for position mode.
- * @param {(anychart.enums.LegendPositionMode|string)=} opt_value Legend position mode.
- * @return {(anychart.enums.LegendPositionMode|anychart.core.ui.Legend)} Legend position mode or self for method chaining.
- */
-anychart.core.ui.Legend.prototype.positionMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeLegendPositionMode(opt_value);
-    if (this.positionMode_ != opt_value) {
-      this.positionMode_ = opt_value;
-      this.dragged = false;
-      if (this.getOption('drag')) {
-        this.invalidate(anychart.ConsistencyState.LEGEND_DRAG,
-            anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-      } else {
-        this.dispatchSignal(anychart.Signal.BOUNDS_CHANGED);
-      }
-    }
-    return this;
-  } else {
-    return this.positionMode_;
-  }
-};
-
-
 //endregion
 //region --- Bounds
 /** @inheritDoc */
@@ -633,13 +583,13 @@ anychart.core.ui.Legend.prototype.parentBounds = function(opt_boundsOrLeft, opt_
 anychart.core.ui.Legend.prototype.getRemainingBounds = function() {
   /** @type {!anychart.math.Rect} */
   var parentBounds = /** @type {anychart.math.Rect} */(this.parentBounds()) || anychart.math.rect(0, 0, 0, 0);
-  if (!this.enabled() || this.positionMode_ == anychart.enums.LegendPositionMode.INSIDE)
+  if (!this.enabled() || this.getOption('positionMode') == anychart.enums.LegendPositionMode.INSIDE)
     return parentBounds;
 
   if (!this.pixelBounds_ || this.hasInvalidationState(anychart.ConsistencyState.BOUNDS))
     this.calculateBounds_();
 
-  switch (this.position_) {
+  switch (this.getOption('position')) {
     case anychart.enums.Orientation.TOP:
       parentBounds.top += this.pixelBounds_.height;
       parentBounds.height -= this.pixelBounds_.height;
@@ -1125,7 +1075,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     if (parentBounds) {
       left = parentBounds.getLeft();
       top = parentBounds.getTop();
-      switch (this.position_) {
+      switch (this.getOption('position')) {
         case anychart.enums.Orientation.LEFT:
         case anychart.enums.Orientation.RIGHT:
           switch (/** @type {anychart.enums.Align} */(this.getOption('align'))) {
@@ -1151,7 +1101,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
           }
           break;
       }
-      switch (this.position_) {
+      switch (this.getOption('position')) {
         case anychart.enums.Orientation.RIGHT:
           left = parentBounds.getRight() - fullWidth;
           break;
@@ -1677,7 +1627,7 @@ anychart.core.ui.Legend.prototype.draw = function() {
     if (this.getOption('drag')) {
       var diff;
       drag = this.margin().tightenBounds(
-          /** @type {!anychart.math.Rect} */(this.positionMode_ == anychart.enums.LegendPositionMode.INSIDE ?
+          /** @type {!anychart.math.Rect} */(this.getOption('positionMode') == anychart.enums.LegendPositionMode.INSIDE ?
               this.parentBounds() :
               (diff = this.parentBounds().difference(this.getRemainingBounds())).length ? diff[0] : anychart.math.rect(0, 0, 0, 0)));
 
@@ -2035,8 +1985,6 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   json['tooltip'] = this.tooltip().serialize();
   if (goog.isDef(this.items()))
     json['items'] = this.items();
-  json['position'] = this.position();
-  json['positionMode'] = this.positionMode();
   return json;
 };
 
@@ -2066,8 +2014,6 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
-  this.position(config['position']);
-  this.positionMode(config['positionMode']);
 };
 
 
@@ -2217,8 +2163,6 @@ anychart.standalones.legend = function() {
   proto['titleSeparator'] = proto.titleSeparator;
   proto['paginator'] = proto.paginator;
   proto['tooltip'] = proto.tooltip;
-  proto['position'] = proto.position;
-  proto['positionMode'] = proto.positionMode;
   proto['getRemainingBounds'] = proto.getRemainingBounds;
   proto['getPixelBounds'] = proto.getPixelBounds;
 
@@ -2238,6 +2182,8 @@ anychart.standalones.legend = function() {
   // proto['itemsSourceMode'] = proto.itemsSourceMode;
   // proto['hoverCursor'] = proto.hoverCursor;
   // proto['iconTextSpacing'] = proto.iconTextSpacing;
+  // proto['position'] = proto.position;
+  // proto['positionMode'] = proto.positionMode;
 
   proto = anychart.standalones.Legend.prototype;
   goog.exportSymbol('anychart.standalones.legend', anychart.standalones.legend);

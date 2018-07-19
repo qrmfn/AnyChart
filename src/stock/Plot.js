@@ -2125,7 +2125,7 @@ anychart.stockModule.Plot.prototype.ensureBoundsDistributed_ = function() {
     }
 
     var legend = /** @type {anychart.core.ui.Legend} */(this.legend());
-    if (legend.positionMode() == anychart.enums.LegendPositionMode.OUTSIDE) {
+    if (legend.getOption('positionMode') == anychart.enums.LegendPositionMode.OUTSIDE) {
       this.updateLegend_(seriesBounds, legendTitleDate);
       // we need forced dispatch signal here to update standalone legend on series enable/disable
       // we do not worry about it because only standalone legend listens this signal
@@ -2171,7 +2171,7 @@ anychart.stockModule.Plot.prototype.ensureBoundsDistributed_ = function() {
       seriesBounds = this.xAxis_.getRemainingBounds();
     }
 
-    if (legend.positionMode() == anychart.enums.LegendPositionMode.INSIDE) {
+    if (legend.getOption('positionMode') == anychart.enums.LegendPositionMode.INSIDE) {
       this.updateLegend_(seriesBounds, legendTitleDate);
       // we need forced dispatch signal here to update standalone legend on series enable/disable
       // we do not worry about it because only standalone legend listens this signal
