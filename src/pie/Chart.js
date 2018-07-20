@@ -2905,7 +2905,7 @@ anychart.pieModule.Chart.prototype.drawSimpleSide_ = function(pathName, cx, cy, 
 //region --- Animation
 /** @inheritDoc */
 anychart.pieModule.Chart.prototype.doAnimation = function() {
-  if (!this.getOption('mode3d') && this.animation().enabled() && /** @type {number} */(this.animation().getOption('duration')) > 0) {
+  if (!this.getOption('mode3d') && this.animation().getOption('enabled') && /** @type {number} */(this.animation().getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
