@@ -19,34 +19,10 @@ anychart.core.utils.Interactivity = function(parent) {
   this.parent_ = parent;
 
   /**
-   * @type {anychart.enums.HoverMode}
-   * @private
-   */
-  this.hoverMode_;
-
-  /**
-   * @type {anychart.enums.SelectionMode}
-   * @private
-   */
-  this.selectionMode_;
-
-  /**
    * @type {boolean}
    * @private
    */
   this.allowMultiSeriesSelection_;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.unselectOnClickOutOfPoint_;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.multiSelectOnClick_;
 
   /**
    * @type {boolean}
@@ -61,7 +37,11 @@ anychart.core.utils.Interactivity = function(parent) {
   this.descriptorsMeta = {};
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
-    ['spotRadius', 0, 0]
+    ['spotRadius', 0, 0],
+    ['multiSelectOnClick', 0, 0],
+    ['unselectOnClickOutOfPoint', 0, 0],
+    ['hoverMode', 0, anychart.Signal.NEEDS_REAPPLICATION],
+    ['selectionMode', 0, 0]
   ]);
 };
 goog.inherits(anychart.core.utils.Interactivity, anychart.core.Base);
@@ -75,7 +55,11 @@ anychart.core.utils.Interactivity.PROPERTY_DESCRIPTORS = (function() {
   var map = {};
 
   anychart.core.settings.createDescriptors(map, [
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'spotRadius', anychart.utils.normalizeToNaturalNumber]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'spotRadius', anychart.utils.normalizeToNaturalNumber],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'multiSelectOnClick', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'unselectOnClickOutOfPoint', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'hoverMode', anychart.enums.normalizeHoverMode],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'selectionMode', anychart.enums.normalizeSelectMode]
   ]);
   return map;
 })();
@@ -87,89 +71,6 @@ anychart.core.settings.populate(anychart.core.utils.Interactivity, anychart.core
  * @type {number}
  */
 anychart.core.utils.Interactivity.prototype.SUPPORTED_SIGNALS = anychart.Signal.NEEDS_REAPPLICATION;
-
-
-/**
- *
- * @param {boolean=} opt_value .
- * @return {anychart.core.utils.Interactivity|boolean}
- */
-anychart.core.utils.Interactivity.prototype.multiSelectOnClick = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = !!opt_value;
-    if (opt_value != this.multiSelectOnClick_) {
-      this.multiSelectOnClick_ = opt_value;
-    }
-    return this;
-  }
-  return /** @type {boolean} */(this.multiSelectOnClick_);
-};
-
-
-/**
- *
- * @param {boolean=} opt_value .
- * @return {anychart.core.utils.Interactivity|boolean}
- */
-anychart.core.utils.Interactivity.prototype.unselectOnClickOutOfPoint = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = !!opt_value;
-    if (opt_value != this.unselectOnClickOutOfPoint_) {
-      this.unselectOnClickOutOfPoint_ = opt_value;
-    }
-    return this;
-  }
-  return /** @type {boolean} */(this.unselectOnClickOutOfPoint_);
-};
-
-
-/**
- * @param {(anychart.enums.HoverMode|string)=} opt_value Hover mode.
- * @return {anychart.core.utils.Interactivity|anychart.enums.HoverMode} .
- */
-anychart.core.utils.Interactivity.prototype.hoverMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeHoverMode(opt_value);
-    if (opt_value != this.hoverMode_) {
-      this.hoverMode_ = opt_value;
-      this.dispatchSignal(anychart.Signal.NEEDS_REAPPLICATION);
-    }
-    return this;
-  }
-  return /** @type {anychart.enums.HoverMode}*/(this.hoverMode_);
-};
-
-
-/**
- * @param {(anychart.enums.SelectionMode|string)=} opt_value Selection mode.
- * @return {anychart.core.utils.Interactivity|anychart.enums.SelectionMode} .
- */
-anychart.core.utils.Interactivity.prototype.selectionMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeSelectMode(opt_value);
-    if (opt_value != this.selectionMode_) {
-      this.selectionMode_ = opt_value;
-    }
-    return this;
-  }
-  return /** @type {anychart.enums.SelectionMode}*/(this.selectionMode_);
-};
-
-
-/**
- * @param {number=} opt_value Spot radius.
- * @return {anychart.core.utils.Interactivity|number} .
- */
-//anychart.core.utils.Interactivity.prototype.spotRadius = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    opt_value = anychart.utils.toNumber(opt_value);
-//    if (opt_value != this.spotRadius_) {
-//      this.spotRadius_ = opt_value;
-//    }
-//    return this;
-//  }
-//  return /** @type {number}*/(this.spotRadius_);
-//};
 
 
 /**
@@ -217,11 +118,7 @@ anychart.core.utils.Interactivity.prototype.setupByJSON = function(config, opt_d
   //TODO(AntonKagakin): uncomment this line when zoom will be implemented in chart
   //TODO(AntonKagakin): and remove it from map and stock interactivity class
   //this.zoomOnMouseWheel(config['zoomOnMouseWheel']);
-  this.hoverMode(config['hoverMode']);
-  this.selectionMode(config['selectionMode']);
   this.allowMultiSeriesSelection(config['allowMultiSeriesSelection']);
-  this.multiSelectOnClick(config['multiSelectOnClick']);
-  this.unselectOnClickOutOfPoint(config['unselectOnClickOutOfPoint']);
   this.parent_.resumeSignalsDispatching(true);
 };
 
@@ -237,11 +134,7 @@ anychart.core.utils.Interactivity.prototype.serialize = function() {
   //TODO(AntonKagakin): uncomment this line when zoom will be implemented in chart
   //TODO(AntonKagakin): and remove it from map and stock interactivity class
   //json['zoomOnMouseWheel'] = this.zoomOnMouseWheel();
-  json['hoverMode'] = this.hoverMode();
-  json['selectionMode'] = this.selectionMode();
   json['allowMultiSeriesSelection'] = this.allowMultiSeriesSelection();
-  json['multiSelectOnClick'] = this.multiSelectOnClick();
-  json['unselectOnClickOutOfPoint'] = this.unselectOnClickOutOfPoint();
   return json;
 };
 
@@ -253,10 +146,10 @@ anychart.core.utils.Interactivity.prototype.serialize = function() {
   //TODO(AntonKagakin): uncomment this line when zoom will be implemented in chart
   //TODO(AntonKagakin): also remove export from map and stock interactivity class
   //proto['zoomOnMouseWheel'] = proto.zoomOnMouseWheel;
-  proto['multiSelectOnClick'] = proto.multiSelectOnClick;
-  proto['unselectOnClickOutOfPoint'] = proto.unselectOnClickOutOfPoint;
-  proto['hoverMode'] = proto.hoverMode;
-  proto['selectionMode'] = proto.selectionMode;
   // auto generated
   // proto['spotRadius'] = proto.spotRadius;
+  // proto['multiSelectOnClick'] = proto.multiSelectOnClick;
+  // proto['unselectOnClickOutOfPoint'] = proto.unselectOnClickOutOfPoint;
+  // proto['hoverMode'] = proto.hoverMode;
+  // proto['selectionMode'] = proto.selectionMode;
 })();
