@@ -32,12 +32,10 @@ anychart.core.utils.Animation.PROPERTY_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
 
-  var durationNormalizer = function(newValue) {
-    var durationOwn = this.getOption('duration');
-    var durationTheme = this.getThemeOption('duration');
-    var duration = goog.isNumber(durationOwn) ? durationOwn : durationTheme;
-    var value = anychart.utils.normalizeToNaturalNumber(newValue, duration, true);
-    return value;
+  var durationNormalizer = function(val) {
+    var normalized = anychart.utils.normalizeToNaturalNumber(val, null);
+    return goog.isNull(val) ? this.getThemeOption('duration') :
+        (goog.isNull(normalized) ? this.getOption('duration') : normalized);
   };
 
   anychart.core.settings.createDescriptors(map, [
