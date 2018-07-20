@@ -10,12 +10,6 @@ goog.require('anychart.core.Base');
 anychart.core.utils.Animation = function() {
   anychart.core.utils.Animation.base(this, 'constructor');
 
-  /**
-   * Descriptors meta.
-   * @type {!Object.<string, anychart.core.settings.PropertyDescriptorMeta>}
-   */
-  this.descriptorsMeta = {};
-
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['enabled', 0, anychart.Signal.NEEDS_REAPPLICATION],
     ['duration', 0, anychart.Signal.NEEDS_REAPPLICATION]
@@ -38,9 +32,17 @@ anychart.core.utils.Animation.PROPERTY_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
 
+  var durationNormalizer = function(newValue) {
+    var durationOwn = this.getOption('duration');
+    var durationTheme = this.getThemeOption('duration');
+    var duration = goog.isNumber(durationOwn) ? durationOwn : durationTheme;
+    var value = anychart.utils.normalizeToNaturalNumber(newValue, duration, true);
+    return value;
+  };
+
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'enabled', anychart.core.settings.booleanNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'duration', anychart.utils.normalizeToNaturalNumber]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'duration', durationNormalizer]
   ]);
 
   return map;
@@ -70,7 +72,7 @@ anychart.core.utils.Animation.prototype.setupSpecial = function(isDefault, var_a
   if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
     this['enabled'](!!arg0);
     var arg1 = arguments[2];
-    if (goog.isDef(arg1)) this.setOption('duration', arg1);
+    if (goog.isDef(arg1)) this['duration'](arg1);
     return true;
   }
 
@@ -87,6 +89,7 @@ anychart.core.utils.Animation.prototype.setupSpecial = function(isDefault, var_a
 //exports
 (function() {
   var proto = anychart.core.utils.Animation.prototype;
-  proto['enabled'] = proto.enabled;
-  proto['duration'] = proto.duration;
+  // auto generated
+  //proto['enabled'] = proto.enabled;
+  //proto['duration'] = proto.duration;
 })();
