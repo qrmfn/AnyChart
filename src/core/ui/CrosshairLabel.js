@@ -207,4 +207,5 @@ anychart.core.ui.CrosshairLabel.prototype.setupByJSON = function(config, opt_def
   proto['padding'] = proto.padding;
   // auto generated
   // proto['axisIndex'] = proto.axisIndex;
+  // proto['format'] = proto.format;
 })();
