@@ -60,7 +60,7 @@ anychart.core.ui.CrosshairLabel.DESCRIPTORS = (function() {
 
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'format', anychart.core.settings.stringOrFunctionNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'axisIndex', anychart.core.settings.numberOrNullNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'axisIndex', anychart.core.settings.asIsNormalizer]
   ]);
 
   return map;
