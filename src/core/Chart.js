@@ -2824,7 +2824,7 @@ anychart.core.Chart.prototype.interactivity = function(opt_value) {
     if (goog.isObject(opt_value))
       this.interactivity_.setup(opt_value);
     else
-      this.interactivity_.hoverMode(opt_value);
+      this.interactivity_['hoverMode'](opt_value);
     return this;
   }
   return this.interactivity_;

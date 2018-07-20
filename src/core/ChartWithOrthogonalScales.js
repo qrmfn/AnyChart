@@ -2197,7 +2197,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getSeriesStatus = function(eve
           });
       }
     }
-  } else if (this.interactivity().hoverMode() == anychart.enums.HoverMode.BY_X) {
+  } else if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.BY_X) {
     points = this.getByXInfo(clientX, clientY);
   }
 

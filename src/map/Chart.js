@@ -1122,7 +1122,7 @@ anychart.mapModule.Chart.prototype.onMouseDown = function(event) {
  */
 anychart.mapModule.Chart.prototype.handleMouseOut = function(event) {
   var scene = this.getCurrentScene();
-  var hoverMode = scene.interactivity().hoverMode();
+  var hoverMode = /** @type {anychart.enums.HoverMode} */(scene.interactivity().getOption('hoverMode'));
 
   var tag = anychart.utils.extractTag(event['domTarget']);
   var forbidTooltip = false;
@@ -1358,7 +1358,7 @@ anychart.mapModule.Chart.prototype.getSeriesStatus = function(event) {
           });
       }
     }
-  } else if (this.interactivity().hoverMode() == anychart.enums.HoverMode.BY_X) {
+  } else if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.BY_X) {
     //not working yet. coming soon.
   }
 
@@ -4906,7 +4906,7 @@ anychart.mapModule.Chart.prototype.legendItemClick = function(item, event) {
         }
       }
 
-      if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+      if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
         event.points_ = {
           series: series,
           points: points
@@ -4954,7 +4954,7 @@ anychart.mapModule.Chart.prototype.legendItemOver = function(item, event) {
 
       var tag = anychart.utils.extractTag(event['domTarget']);
       if (tag) {
-        if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+        if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
           tag.points_ = {
             series: series,
             points: points
@@ -4991,7 +4991,7 @@ anychart.mapModule.Chart.prototype.legendItemOut = function(item, event) {
     if (series)
       series.unhover();
   } else if (sourceMode == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
-    if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+    if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
       var tag = anychart.utils.extractTag(event['domTarget']);
       if (tag)
         tag.series = meta.series;

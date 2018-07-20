@@ -657,7 +657,7 @@ anychart.radarPolarBaseModule.Chart.prototype.getSeriesStatus = function(event) 
           });
       }
     }
-  } else if (this.interactivity().hoverMode() == anychart.enums.HoverMode.BY_X) {
+  } else if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.BY_X) {
     dx = x - cx;
     dy = y - cy;
     angle = Math.PI / 2 + Math.atan2(dy, -dx) + goog.math.toRadians(/** @type {number} */ (this.getOption('startAngle')));

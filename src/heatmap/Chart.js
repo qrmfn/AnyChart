@@ -413,7 +413,7 @@ anychart.heatmapModule.Chart.prototype.legendItemClick = function(item, event) {
 
       var tag = anychart.utils.extractTag(event['domTarget']);
       if (tag) {
-        if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+        if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
           tag.points_ = {
             series: series,
             points: points
@@ -455,7 +455,7 @@ anychart.heatmapModule.Chart.prototype.legendItemOver = function(item, event) {
 
       var tag = anychart.utils.extractTag(event['domTarget']);
       if (tag) {
-        if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+        if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
           tag.points_ = {
             series: series,
             points: points
@@ -480,7 +480,7 @@ anychart.heatmapModule.Chart.prototype.legendItemOut = function(item, event) {
 
   var sourceMode = /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode'));
   if (sourceMode == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
-    if (this.interactivity().hoverMode() == anychart.enums.HoverMode.SINGLE) {
+    if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
       var tag = anychart.utils.extractTag(event['domTarget']);
       if (tag)
         tag.series = meta.series;

@@ -917,7 +917,7 @@ anychart.vennModule.Chart.prototype.getStartValueForAppearanceReduction = goog.n
  * @return {anychart.vennModule.Chart|anychart.enums.HoverMode} .
  */
 anychart.vennModule.Chart.prototype.hoverMode = function(opt_value) {
-  return /** @type {anychart.enums.HoverMode} */ (this.interactivity().hoverMode(opt_value));
+  return /** @type {anychart.enums.HoverMode} */ (this.interactivity()['hoverMode'](opt_value));
 };
 
 
