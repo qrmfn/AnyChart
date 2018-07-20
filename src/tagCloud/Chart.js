@@ -774,10 +774,10 @@ anychart.tagCloudModule.Chart.prototype.hoverMode = function(opt_value) {
  */
 anychart.tagCloudModule.Chart.prototype.selectionMode = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    this.interactivity().selectionMode(opt_value);
+    this.interactivity()['selectionMode'](opt_value);
     return this;
   } else {
-    return /** @type {anychart.enums.SelectionMode} */(this.interactivity().selectionMode());
+    return /** @type {anychart.enums.SelectionMode} */(this.interactivity().getOption('selectionMode'));
   }
 };
 

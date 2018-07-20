@@ -1067,7 +1067,7 @@ anychart.mapModule.Chart.prototype.handleMouseDown = function(event) {
 /** @inheritDoc */
 anychart.mapModule.Chart.prototype.onMouseDown = function(event) {
   var interactivity = this.interactivity();
-  if (interactivity.selectionMode() == anychart.enums.SelectionMode.DRILL_DOWN) {
+  if (interactivity.getOption('selectionMode') == anychart.enums.SelectionMode.DRILL_DOWN) {
     var drillDownMap = this.getCurrentScene().drillDownMap();
     if (drillDownMap) {
       var tag = anychart.utils.extractTag(event['domTarget']);
