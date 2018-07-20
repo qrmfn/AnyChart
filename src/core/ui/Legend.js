@@ -62,17 +62,54 @@ anychart.core.ui.Legend = function() {
 
   this.bindHandlersToComponent(this, this.handleMouseOver_, this.handleMouseOut_, null, this.handleMouseMove_, null, this.handleMouseClick_);
 
+  var iconSizeBeforeInvalidationHook = function() {
+    if (goog.isDefAndNotNull(this.items_)) {
+      for (var i = 0, len = this.items_.length; i < len; i++) {
+        this.items_[i].iconSize(this.getOption('iconSize'));
+      }
+    }
+  };
+
+  var positionBeforeInvalidationHook = function() {
+    this.dragged = false;
+    var signal = anychart.Signal.NEEDS_REDRAW;
+    if (this.getOption('positionMode') == anychart.enums.LegendPositionMode.OUTSIDE)
+      signal |= anychart.Signal.BOUNDS_CHANGED;
+    this.invalidate(anychart.ConsistencyState.BOUNDS, signal);
+  };
+
+  var positionModeBeforeInvalidationHook = function() {
+    this.dragged = false;
+    if (this.getOption('drag')) {
+      this.invalidate(anychart.ConsistencyState.LEGEND_DRAG,
+          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+    } else {
+      this.dispatchSignal(anychart.Signal.BOUNDS_CHANGED);
+    }
+  };
+
+  var hoverCursorBeforeInvalidationHook = function() {
+    if (goog.isDefAndNotNull(this.items_)) {
+      for (var i = 0, len = this.items_.length; i < len; i++) {
+        this.items_[i].hoverCursor(this.hoverCursor_);
+      }
+    }
+  };
+
+  var iconTextSpacingBeforeInvalidationHook = function() {
+    if (goog.isDefAndNotNull(this.items_)) {
+      for (var i = 0, len = this.items_.length; i < len; i++) {
+        this.items_[i].iconTextSpacing(this.iconTextSpacing_);
+      }
+    }
+  };
+
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['inverted', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
     ['itemsLayout', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['iconSize', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {
-      if (goog.isDefAndNotNull(this.items_)) {
-        for (var i = 0, len = this.items_.length; i < len; i++) {
-          this.items_[i].iconSize(this.getOption('iconSize'));
-        }
-      }
-    }],
+    ['iconSize', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED,
+          0, iconSizeBeforeInvalidationHook],
     ['width', anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.LEGEND_BACKGROUND,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['height', anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.LEGEND_BACKGROUND,
@@ -81,22 +118,8 @@ anychart.core.ui.Legend = function() {
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['maxHeight', anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.LEGEND_BACKGROUND,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['position', 0, 0, 0, function() {
-      this.dragged = false;
-      var signal = anychart.Signal.NEEDS_REDRAW;
-      if (this.getOption('positionMode') == anychart.enums.LegendPositionMode.OUTSIDE)
-        signal |= anychart.Signal.BOUNDS_CHANGED;
-      this.invalidate(anychart.ConsistencyState.BOUNDS, signal);
-    }],
-    ['positionMode', 0, 0, 0, function() {
-      this.dragged = false;
-      if (this.getOption('drag')) {
-        this.invalidate(anychart.ConsistencyState.LEGEND_DRAG,
-            anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-      } else {
-        this.dispatchSignal(anychart.Signal.BOUNDS_CHANGED);
-      }
-    }],
+    ['position', 0, 0, 0, positionBeforeInvalidationHook],
+    ['positionMode', 0, 0, 0, positionModeBeforeInvalidationHook],
     ['align', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {this.dragged = false;}],
     ['drag', anychart.ConsistencyState.LEGEND_DRAG, anychart.Signal.NEEDS_REDRAW],
@@ -107,20 +130,10 @@ anychart.core.ui.Legend = function() {
     ['itemsSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['itemsSourceMode', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS,
           anychart.Signal.NEEDS_REDRAW],
-    ['hoverCursor', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, function() {
-      if (goog.isDefAndNotNull(this.items_)) {
-        for (var i = 0, len = this.items_.length; i < len; i++) {
-          this.items_[i].hoverCursor(this.hoverCursor_);
-        }
-      }
-    }],
-    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {
-      if (goog.isDefAndNotNull(this.items_)) {
-        for (var i = 0, len = this.items_.length; i < len; i++) {
-          this.items_[i].iconTextSpacing(this.iconTextSpacing_);
-        }
-      }
-    }]
+    ['hoverCursor', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW,
+          0, hoverCursorBeforeInvalidationHook],
+    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED,
+          0, iconTextSpacingBeforeInvalidationHook]
   ]);
 };
 goog.inherits(anychart.core.ui.Legend, anychart.core.Text);
@@ -1073,12 +1086,14 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     }
   } else {
     if (parentBounds) {
+      var position = /** @type {anychart.enums.Orientation} */(this.getOption('position'));
+      var align = /** @type {anychart.enums.Align} */(this.getOption('align'));
       left = parentBounds.getLeft();
       top = parentBounds.getTop();
-      switch (this.getOption('position')) {
+      switch (position) {
         case anychart.enums.Orientation.LEFT:
         case anychart.enums.Orientation.RIGHT:
-          switch (/** @type {anychart.enums.Align} */(this.getOption('align'))) {
+          switch (align) {
             case anychart.enums.Align.CENTER:
               top = top + (parentHeight - fullHeight) / 2;
               break;
@@ -1090,7 +1105,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
           break;
         case anychart.enums.Orientation.TOP:
         case anychart.enums.Orientation.BOTTOM:
-          switch (/** @type {anychart.enums.Align} */(this.getOption('align'))) {
+          switch (align) {
             case anychart.enums.Align.CENTER:
               left = left + (parentWidth - fullWidth) / 2;
               break;
@@ -1101,7 +1116,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
           }
           break;
       }
-      switch (this.getOption('position')) {
+      switch (position) {
         case anychart.enums.Orientation.RIGHT:
           left = parentBounds.getRight() - fullWidth;
           break;
@@ -2056,7 +2071,6 @@ anychart.core.makeStandalone(anychart.standalones.Legend, anychart.core.ui.Legen
  * @return {boolean} Is one of the bounds settings set in percent.
  */
 anychart.standalones.Legend.prototype.dependsOnContainerSize = function() {
-  //TODO(AntonKagakin): should be reworked to getOption
   var width = this.getOption('width');
   var height = this.getOption('height');
   return anychart.utils.isPercent(width) || anychart.utils.isPercent(height) || goog.isNull(width) || goog.isNull(height);
