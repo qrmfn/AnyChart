@@ -1321,8 +1321,6 @@ anychart.core.ChartWithSeries.prototype.serialize = function() {
   var json = anychart.core.ChartWithSeries.base(this, 'serialize');
 
   anychart.core.settings.serialize(this, anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS, json);
-  //json['minBubbleSize'] = this.minBubbleSize();
-  //json['maxBubbleSize'] = this.maxBubbleSize();
   json['palette'] = this.palette().serialize();
   json['markerPalette'] = this.markerPalette().serialize();
   json['hatchFillPalette'] = this.hatchFillPalette().serialize();
