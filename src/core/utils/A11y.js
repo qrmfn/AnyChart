@@ -25,12 +25,6 @@ anychart.core.utils.A11y = function(chart) {
   this.chart = chart;
 
   /**
-   * @type {boolean}
-   * @private
-   */
-  this.enabled_ = true;
-
-  /**
    * Parent a11y.
    * We listen it to enable/disable current a11y by enabling/disabling parent a11y.
    * @type {anychart.core.utils.A11y}
@@ -126,9 +120,7 @@ anychart.core.utils.A11y.prototype.createTextInfo = goog.abstractMethod;
 /** @inheritDoc */
 anychart.core.utils.A11y.prototype.serialize = function() {
   var json = anychart.core.utils.A11y.base(this, 'serialize');
-
   anychart.core.settings.serialize(this, anychart.core.utils.A11y.PROPERTY_DESCRIPTORS, json);
-
   return json;
 };
 
@@ -183,16 +175,26 @@ anychart.core.utils.A11y.prototype.disposeInternal = function() {
 anychart.core.utils.ChartA11y = function(chart) {
   anychart.core.utils.ChartA11y.base(this, 'constructor', chart);
 
-  /**
-   * A11y mode.
-   * @type {anychart.enums.A11yMode}
-   * @private
-   */
-  this.mode_ = anychart.enums.A11yMode.CHART_ELEMENTS;
-
   this.relatedHtmlTable_ = null;
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['mode', 0, anychart.Signal.NEEDS_REAPPLICATION]
+  ]);
 };
 goog.inherits(anychart.core.utils.ChartA11y, anychart.core.utils.A11y);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.utils.ChartA11y.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+
+  anychart.core.settings.createDescriptor(map, anychart.enums.PropertyHandlerType.SINGLE_ARG, 'mode', anychart.enums.normalizeA11yMode);
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.utils.ChartA11y, anychart.core.utils.ChartA11y.PROPERTY_DESCRIPTORS);
 
 
 /** @inheritDoc */
@@ -227,7 +229,7 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
     if (!titleText && title.getOption('text') && title.enabled())
       titleText = title.getOption('text');
 
-    if (this.mode_ == anychart.enums.A11yMode.DATA_TABLE) {
+    if (this.getOption('mode') == anychart.enums.A11yMode.DATA_TABLE) {
       this.relatedHtmlTable_ = /** @type {Element} */ (this.chart.toA11yTable(/** @type {string} */ (titleText)));
       var containerDiv = /** @type {Element} */ (this.chart.container().container());
       if (containerDiv)
@@ -241,28 +243,10 @@ anychart.core.utils.ChartA11y.prototype.applyA11y = function() {
 };
 
 
-/**
- * Gets/sets a11y mode.
- * @param {anychart.enums.A11yMode=} opt_value - Value to be set.
- * @return {anychart.enums.A11yMode|anychart.core.utils.ChartA11y} - Current value or itself for method chaining.
- */
-anychart.core.utils.ChartA11y.prototype.mode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    var normalized = /** @type {anychart.enums.A11yMode} */ (anychart.enums.normalizeA11yMode(opt_value));
-    if (this.mode_ != normalized) {
-      this.mode_ = normalized;
-      this.dispatchSignal(anychart.Signal.NEEDS_REAPPLICATION);
-    }
-    return this;
-  }
-  return this.mode_;
-};
-
-
 /** @inheritDoc */
 anychart.core.utils.ChartA11y.prototype.serialize = function() {
   var json = anychart.core.utils.ChartA11y.base(this, 'serialize');
-  json['mode'] = this.mode_;
+  anychart.core.settings.serialize(this, anychart.core.utils.ChartA11y.PROPERTY_DESCRIPTORS, json);
   return json;
 };
 
@@ -270,7 +254,8 @@ anychart.core.utils.ChartA11y.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.core.utils.ChartA11y.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.utils.ChartA11y.base(this, 'setupByJSON', config, opt_default);
-  this.mode(config['mode']);
+
+  anychart.core.settings.deserialize(this, anychart.core.utils.ChartA11y.PROPERTY_DESCRIPTORS, config);
 };
 
 
@@ -362,7 +347,7 @@ anychart.core.utils.SeriesA11y.prototype.disposeInternal = function() {
   // auto generated
   // proto['enabled'] = proto.enabled;
   // proto['titleFormat'] = proto.titleFormat;
-  proto['mode'] = proto.mode;
+  // proto['mode'] = proto.mode;
   proto = anychart.core.utils.SeriesA11y.prototype;
   // auto generated
   // proto['enabled'] = proto.enabled;
