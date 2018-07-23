@@ -187,7 +187,6 @@ anychart.core.ui.CrosshairLabel.prototype.drawLabel = function() {
 anychart.core.ui.CrosshairLabel.prototype.serialize = function() {
   var json = anychart.core.ui.CrosshairLabel.base(this, 'serialize');
   anychart.core.settings.serialize(this, anychart.core.ui.CrosshairLabel.DESCRIPTORS, json, 'Crosshair Label');
-  json['axisIndex'] = this.axisIndex_;
   return json;
 };
 
