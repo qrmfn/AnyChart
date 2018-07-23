@@ -118,8 +118,8 @@ anychart.core.ui.Legend = function() {
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['maxHeight', anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.LEGEND_BACKGROUND,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['position', 0, 0, 0, positionBeforeInvalidationHook],
-    ['positionMode', 0, 0, 0, positionModeBeforeInvalidationHook],
+    ['position', 0, 0, 0, positionBeforeInvalidationHook], // signals\states are in beforeInvalidationHook
+    ['positionMode', 0, 0, 0, positionModeBeforeInvalidationHook], // signals\states are in beforeInvalidationHook
     ['align', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {this.dragged = false;}],
     ['drag', anychart.ConsistencyState.LEGEND_DRAG, anychart.Signal.NEEDS_REDRAW],
@@ -154,10 +154,17 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
 
+  var spacingNormalizer = function(field) {
+    return function(val) {
+      var normalized = anychart.core.settings.numberNormalizer(val);
+      return goog.isNull(val) ? this.getThemeOption(field) :
+          (isNaN(normalized) ? this.getOption(field) : normalized);
+    };
+  };
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'inverted', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsLayout', anychart.enums.normalizeLegendLayout],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconSize', anychart.core.settings.numberNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconSize', anychart.utils.toNumber],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'width', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'height', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxWidth', anychart.core.settings.asIsNormalizer],
@@ -168,10 +175,10 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drag', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsFormat', anychart.core.settings.asIsNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'titleFormat', anychart.core.settings.asIsNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSpacing', anychart.core.settings.numberNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSpacing', spacingNormalizer('itemsSpacing')],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsSourceMode', anychart.enums.normalizeLegendItemsSourceMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'hoverCursor', anychart.enums.normalizeCursor],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', anychart.core.settings.numberNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', spacingNormalizer('iconTextSpacing')]
   ]);
   return map;
 })();
@@ -671,7 +678,6 @@ anychart.core.ui.Legend.prototype.calculateContentBounds_ = function(widthLimit,
 
     var bounds = this.items_[i].getPixelBounds();
 
-
     width = bounds.width;
     fullWidth += width + itemsSpacing;
     maxWidth = Math.max(maxWidth, width);
@@ -810,7 +816,6 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
       maxHeight = padding.tightenHeight(margin.tightenHeight(parentHeight));
     }
   } else {
-
     if (goog.isNumber(width_) && !isNaN(width_)) {
       fullWidth = width_;
       maxWidth = padding.tightenWidth(width_);
