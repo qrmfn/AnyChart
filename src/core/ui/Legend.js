@@ -156,11 +156,16 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
 
   var spacingNormalizer = function(field) {
     return function(val) {
-      var normalized = parseFloat(val);
+      var normalized;
+      if (field == 'itemsSpacing')
+        normalized = parseFloat(val);
+      else
+        normalized = anychart.core.settings.numberNormalizer(val); // iconTextSpacing needs numberNormalizer
       return goog.isNull(val) ? this.getThemeOption(field) :
           (isNaN(normalized) ? this.getOption(field) : normalized);
     };
   };
+
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'inverted', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'itemsLayout', anychart.enums.normalizeLegendLayout],
