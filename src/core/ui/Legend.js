@@ -156,7 +156,7 @@ anychart.core.ui.Legend.PROPERTY_DESCRIPTORS = (function() {
 
   var spacingNormalizer = function(field) {
     return function(val) {
-      var normalized = anychart.core.settings.numberNormalizer(val);
+      var normalized = parseFloat(val);
       return goog.isNull(val) ? this.getThemeOption(field) :
           (isNaN(normalized) ? this.getOption(field) : normalized);
     };
