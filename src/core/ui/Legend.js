@@ -99,7 +99,7 @@ anychart.core.ui.Legend = function() {
   var iconTextSpacingBeforeInvalidationHook = function() {
     if (goog.isDefAndNotNull(this.items_)) {
       for (var i = 0, len = this.items_.length; i < len; i++) {
-        this.items_[i].iconTextSpacing(this.iconTextSpacing_);
+        this.items_[i]['iconTextSpacing'](this.iconTextSpacing_);
       }
     }
   };
@@ -567,7 +567,7 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
     if (item && event) {
       var values = {
         'value': {value: item.text(), type: anychart.enums.TokenType.STRING},
-        'iconType': {value: item.iconType(), type: anychart.enums.TokenType.STRING},
+        'iconType': {value: item.getOption('iconType'), type: anychart.enums.TokenType.STRING},
         'iconStroke': {value: item.iconStroke(), type: anychart.enums.TokenType.UNKNOWN},
         'iconFill': {value: item.iconFill(), type: anychart.enums.TokenType.UNKNOWN},
         'iconHatchFill': {value: item.iconHatchFill(), type: anychart.enums.TokenType.UNKNOWN},
