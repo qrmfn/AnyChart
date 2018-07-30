@@ -4656,11 +4656,11 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   // this.palette(config['palette']);
   // this.hatchFillPalette(config['hatchFillPalette']);
-  //
-  // this.center().setupInternal(!!opt_default, config['center']);
-  //
-  // if ('tooltip' in config)
-  //   this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+
+  this.center().setupInternal(!!opt_default, config['center']);
+
+  if ('tooltip' in config)
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
