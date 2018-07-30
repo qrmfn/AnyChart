@@ -2022,11 +2022,11 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('defaultLabelSettings' in config)
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
-  // if ('title' in config)
-  //   this.title(config['title']);
-  //
-  // if ('background' in config)
-  //   this.background(config['background']);
+  if ('title' in config)
+    this.title(config['title']);
+
+  if ('background' in config)
+    this.background(config['background']);
 
   if ('padding' in config)
     this.padding(config['padding']);
@@ -2052,7 +2052,13 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.height(config['height']);
   this.right(config['right']);
   this.bottom(config['bottom']);
+  this.animation(config['animation']);
   this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
+
+  if ('tooltip' in config)
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+
+  this.a11y(config['a11y']);
 
   if (goog.isDef(config['contextMenu']))
     this.contextMenu(config['contextMenu']);

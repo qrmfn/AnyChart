@@ -1164,8 +1164,8 @@ anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
     anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
   }
 
-  // if ('background' in config)
-  //   this.background(config['background']);
+  if ('background' in config)
+    this.background(config['background']);
 
   if ('padding' in config)
     this.padding(config['padding']);
