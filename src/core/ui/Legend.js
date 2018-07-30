@@ -2052,10 +2052,22 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
+anychart.core.ui.Legend.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Legend.base(this, 'setupByJSONInternal', config, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.core.ui.Legend.PROPERTY_DESCRIPTORS, config, opt_default);
+
+  if ('padding' in config)
+    this.padding(config['padding']);
+
+  if ('margin' in config)
+    this.margin(config['margin']);
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
 
   if ('title' in config)
     this.title(config['title']);
@@ -2063,16 +2075,14 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('background' in config)
     this.background(config['background']);
 
-  if ('padding' in config)
-    this.padding(config['padding']);
+  if ('titleSeparator' in config)
+    this.titleSeparator(config['titleSeparator']);
 
-  if ('margin' in config)
-    this.margin(config['margin']);
+  if ('paginator' in config)
+    this.paginator(config['paginator']);
 
-  this.titleSeparator(config['titleSeparator']);
-  this.paginator(config['paginator']);
-
-  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+  if ('tooltip' in config)
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);

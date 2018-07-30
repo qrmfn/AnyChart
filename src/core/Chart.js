@@ -2012,6 +2012,18 @@ anychart.core.Chart.prototype.serialize = function() {
 
 
 /** @inheritDoc */
+anychart.core.Chart.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.Chart.base(this, 'setupByJSONInternal', config, opt_default);
+
+  if ('padding' in config)
+    this.padding(config['padding']);
+
+  if ('margin' in config)
+    this.margin(config['margin']);
+};
+
+
+/** @inheritDoc */
 anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   //Set this before another manipulations.
   if ('autoRedraw' in config)
@@ -2027,12 +2039,6 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   if ('background' in config)
     this.background(config['background']);
-
-  if ('padding' in config)
-    this.padding(config['padding']);
-
-  if ('margin' in config)
-    this.margin(config['margin']);
 
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {

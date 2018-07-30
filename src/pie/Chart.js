@@ -4648,19 +4648,8 @@ anychart.pieModule.Chart.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
-  anychart.pieModule.Chart.base(this, 'setupByJSON', config, opt_default);
-
-  this.group(config['group']);
-  this.data(config['data']);
-
-  // this.palette(config['palette']);
-  // this.hatchFillPalette(config['hatchFillPalette']);
-
-  this.center().setupInternal(!!opt_default, config['center']);
-
-  if ('tooltip' in config)
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+anychart.pieModule.Chart.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.pieModule.Chart.base(this, 'setupByJSONInternal', config, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
@@ -4678,6 +4667,23 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.normal_.setupInternal(!!opt_default, pieConfig['normal']);
 
   this.hovered_.setupInternal(!!opt_default, pieConfig['hovered']);
+};
+
+/** @inheritDoc */
+anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
+  anychart.pieModule.Chart.base(this, 'setupByJSON', config, opt_default);
+
+  this.group(config['group']);
+  this.data(config['data']);
+
+  this.palette(config['palette']);
+  this.hatchFillPalette(config['hatchFillPalette']);
+
+  if ('center' in config)
+    this.center().setupInternal(!!opt_default, config['center']);
+
+  if ('tooltip' in config)
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 };
 
 

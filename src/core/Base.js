@@ -1147,13 +1147,24 @@ anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
   return this;
 };
 
+/**
+ * Setups current instance using passed JSON object.
+ * Called in constructor functions.
+ * @param {!Object} json .
+ * @param {boolean=} opt_default Identifies that we should setup defaults.
+ */
+anychart.core.Base.prototype.setupByJSONInternal = function(json, opt_default) {
+};
+
 
 /**
  * Setups current instance using passed JSON object.
+ * Called when using api.
  * @param {!Object} json .
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
+  this.setupByJSONInternal(json, opt_default);
 };
 
 
