@@ -1717,8 +1717,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1733,8 +1733,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1757,8 +1757,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1782,8 +1782,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
