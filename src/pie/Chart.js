@@ -2923,13 +2923,13 @@ anychart.pieModule.Chart.prototype.drawSimpleSide_ = function(pathName, cx, cy, 
 /** @inheritDoc */
 anychart.pieModule.Chart.prototype.doAnimation = function() {
   var animation = this.getCreated('animation');
-  if (!this.getOption('mode3d') && animation && animation.enabled() && animation.duration() > 0) {
+  if (!this.getOption('mode3d') && animation && animation.getOption('enabled') && /** @type {number} */(animation.getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationSerialQueue();
-      var duration = /** @type {number} */(animation.duration());
+      var duration = /** @type {number} */(animation.getOption('duration'));
       var pieDuration = duration * anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO;
       var pieLabelDuration = duration * (1 - anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO);
 

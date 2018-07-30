@@ -270,7 +270,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.xScale = function(opt_value) {
       if (!dispatch) {
         var state = anychart.ConsistencyState.SCALE_CHART_SCALE_MAPS;
         if (this.allowLegendCategoriesMode() &&
-            this.legend().itemsSourceMode() == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
+          /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode')) == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
           state |= anychart.ConsistencyState.CHART_LEGEND;
         }
         state |= this.getScaleAdditionalInvalidationState();
@@ -301,7 +301,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.xScaleInvalidated = function(e
         anychart.ConsistencyState.SCALE_CHART_Y_SCALES |
         anychart.ConsistencyState.SCALE_CHART_SCALE_MAPS;
     if (this.allowLegendCategoriesMode() &&
-        this.legend().itemsSourceMode() == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
+      /** @type {anychart.enums.LegendItemsSourceMode} */(this.legend().getOption('itemsSourceMode')) == anychart.enums.LegendItemsSourceMode.CATEGORIES) {
       state |= anychart.ConsistencyState.CHART_LEGEND;
     }
     this.invalidate(state, anychart.Signal.NEEDS_REDRAW);
@@ -1807,13 +1807,13 @@ anychart.core.ChartWithOrthogonalScales.prototype.distributeClusters = function(
 /** @inheritDoc */
 anychart.core.ChartWithOrthogonalScales.prototype.doAnimation = function() {
   var animation = this.getCreated('animation');
-  if (animation && animation.enabled() && animation.duration() > 0) {
+  if (animation && animation.getOption('enabled') && /** @type {number} */(animation.getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationParallelQueue();
-      var duration = /** @type {number} */(animation.duration());
+      var duration = /** @type {number} */(animation.getOption('duration'));
       for (var i = 0; i < this.seriesList.length; i++) {
         var series = this.seriesList[i];
         if (series.enabled() && !series.rendering().needsCustomPointDrawer()) {
@@ -2135,8 +2135,8 @@ anychart.core.ChartWithOrthogonalScales.prototype.getSeriesStatus = function(eve
   var interactivity = this.interactivity();
   var i, len, series, names;
 
-  if (interactivity.hoverMode() == anychart.enums.HoverMode.BY_SPOT) {
-    var spotRadius = interactivity.spotRadius();
+  if (interactivity.getOption('hoverMode') == anychart.enums.HoverMode.BY_SPOT) {
+    var spotRadius = /** @type {number} */(interactivity.getOption('spotRadius'));
     var minRatio, maxRatio;
     if (this.isVerticalInternal) {
       minRatio = (rangeY - (y - spotRadius - minY)) / rangeY;
@@ -2198,7 +2198,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getSeriesStatus = function(eve
           });
       }
     }
-  } else if (this.interactivity().hoverMode() == anychart.enums.HoverMode.BY_X) {
+  } else if (this.interactivity().getOption('hoverMode') == anychart.enums.HoverMode.BY_X) {
     points = this.getByXInfo(clientX, clientY);
   }
 
