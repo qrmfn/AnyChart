@@ -847,7 +847,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
   var paginator = /** @type {anychart.core.ui.Paginator} */(this.paginator());
   var title = /** @type {anychart.core.ui.Title} */(this.title());
 
-  var paginatorOrientation = paginator.orientation();
+  var paginatorOrientation = paginator.getOption('orientation');
   var paginatorIsHorizontal = paginatorOrientation == anychart.enums.Orientation.BOTTOM || paginatorOrientation == anychart.enums.Orientation.TOP;
   var titleOrientation = title.getOption('orientation') || title.defaultOrientation();
   var titleIsHorizontal = titleOrientation == anychart.enums.Orientation.BOTTOM || titleOrientation == anychart.enums.Orientation.TOP;
@@ -1008,7 +1008,8 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
             if (separatorBounds && separatorIsHorizontal) {
               accHeight += separatorBounds.height;
             }
-            if (paginator.orientation() == anychart.enums.Orientation.TOP || paginator.orientation() == anychart.enums.Orientation.BOTTOM) {
+            var paginatorOrientation = paginator.getOption('orientation');
+            if (paginatorOrientation == anychart.enums.Orientation.TOP || paginatorOrientation == anychart.enums.Orientation.BOTTOM) {
               accHeight += paginatorBounds.height;
             }
 
