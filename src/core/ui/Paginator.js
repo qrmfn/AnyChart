@@ -835,6 +835,8 @@ anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_ = function(path, buttonBounds) {
 /** @inheritDoc */
 anychart.core.ui.Paginator.prototype.serialize = function() {
   var json = anychart.core.ui.Paginator.base(this, 'serialize');
+
+  anychart.core.settings.serialize(this, anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS, json);
   json['background'] = this.background().serialize();
   json['padding'] = this.padding().serialize();
   json['margin'] = this.margin().serialize();
@@ -848,6 +850,7 @@ anychart.core.ui.Paginator.prototype.serialize = function() {
 anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Paginator.base(this, 'setupByJSON', config, opt_default);
 
+  anychart.core.settings.deserialize(this, anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS, config, opt_default);
   if ('background' in config)
     this.background(config['background']);
 
