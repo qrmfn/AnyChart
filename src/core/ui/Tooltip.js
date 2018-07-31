@@ -374,7 +374,6 @@ anychart.core.ui.Tooltip.prototype.hideDelay = function(opt_value) {
   }
 };
 
-
 /**
  * Getter/Setter for the full text appearance settings.
  * @param {(Object|string)=} opt_objectOrName - Settings object or settings name or nothing to get complete object.
@@ -2389,5 +2388,28 @@ anychart.core.ui.Tooltip.prototype.disposeInternal = function() {
   proto['hide'] = proto.hide;
   proto['hideDelay'] = proto.hideDelay;
   proto['textSettings'] = proto.textSettings;
+  // auto generated
+  // proto['useHtml'] = proto.useHtml;
+  // proto['width'] = proto.width;
+  // proto['height'] = proto.height;
+  // proto['titleFormat'] = proto.titleFormat;
+  // proto['format'] = proto.format;
+  // proto['unionFormat'] = proto.unionFormat;
+  // proto['valuePrefix'] = proto.valuePrefix;
+  // proto['valuePostfix'] = proto.valuePostfix;
+  // proto['position'] = proto.position;
+  // proto['anchor'] = proto.anchor;
+  // proto['offsetX'] = proto.offsetX;
+  // proto['offsetY'] = proto.offsetY;
+  // proto['allowLeaveScreen'] = proto.allowLeaveScreen;
+  // proto['allowLeaveChart'] = proto.allowLeaveChart;
+  // proto['allowLeaveStage'] = proto.allowLeaveStage;
+  // proto['displayMode'] = proto.displayMode;
+  // proto['positionMode'] = proto.positionMode;
+  // proto['onDomReady'] = proto.onDomReady;
+  // proto['onBeforeTitleChange'] = proto.onBeforeTitleChange;
+  // proto['onTitleChanged'] = proto.onTitleChanged;
+  // proto['onBeforeContentChange'] = proto.onBeforeContentChange;
+  // proto['onContentChanged'] = proto.onContentChanged
 })();
 //endregion
