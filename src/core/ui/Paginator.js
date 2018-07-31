@@ -109,12 +109,22 @@ anychart.core.ui.Paginator = function() {
 
   this['layout']('horizontal');
 
+  var layoutBeforeInvalidationHook = function() {
+    if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
+      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
+      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
+    } else {
+      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
+      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
+    }
+  };
+
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['text', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['orientation', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['layout', anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
+          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, layoutBeforeInvalidationHook]
     //['currentPage', 0, 0] // invalidation in beforeInvalidationHook, returns value + 1 O_O
   ]);
 };
@@ -128,16 +138,7 @@ anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
 
-  var layoutBeforeInvalidationHook = function() {
-    if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
-      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
-      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
-    } else {
-      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
-      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
-    }
-  };
-  anychart.core.settings.createDescriptors(map, [
+ anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'orientation', anychart.enums.normalizeOrientation],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'layout', anychart.enums.normalizeLayout]
   ]);
