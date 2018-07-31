@@ -129,7 +129,7 @@ anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS = (function() {
   var map = {};
 
   var layoutBeforeInvalidationHook = function() {
-    if (this.layout_ == anychart.enums.Layout.HORIZONTAL) {
+    if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
       this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
       this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
     } else {
@@ -169,18 +169,18 @@ anychart.core.ui.Paginator.prototype.SUPPORTED_CONSISTENCY_STATES =
  * @param {(anychart.enums.Orientation|string)=} opt_value .
  * @return {!anychart.core.ui.Paginator|anychart.enums.Orientation} .
  */
-anychart.core.ui.Paginator.prototype.orientation = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeOrientation(opt_value);
-    if (this.orientation_ != opt_value) {
-      this.orientation_ = opt_value;
-      this.invalidate(anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.orientation_;
-};
+//anychart.core.ui.Paginator.prototype.orientation = function(opt_value) {
+//  if (goog.isDef(opt_value)) {
+//    opt_value = anychart.enums.normalizeOrientation(opt_value);
+//    if (this.orientation_ != opt_value) {
+//      this.orientation_ = opt_value;
+//      this.invalidate(anychart.ConsistencyState.BOUNDS,
+//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//    }
+//    return this;
+//  }
+//  return this.orientation_;
+//};
 
 
 /**
@@ -281,25 +281,25 @@ anychart.core.ui.Paginator.prototype.backgroundInvalidated_ = function(event) {
  * @param {(string|anychart.enums.Layout)=} opt_value Layout value.
  * @return {(anychart.core.ui.Paginator|anychart.enums.Layout)} Current layout or self for chaining.
  */
-anychart.core.ui.Paginator.prototype.layout = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.enums.normalizeLayout(opt_value);
-    if (this.layout_ != opt_value) {
-      this.layout_ = opt_value;
-      if (this.layout_ == anychart.enums.Layout.HORIZONTAL) {
-        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
-        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
-      } else {
-        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
-        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
-      }
-      this.invalidate(anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.layout_;
-};
+//anychart.core.ui.Paginator.prototype.layout = function(opt_value) {
+//  if (goog.isDef(opt_value)) {
+//    opt_value = anychart.enums.normalizeLayout(opt_value);
+//    if (this.layout_ != opt_value) {
+//      this.layout_ = opt_value;
+//      if (this.layout_ == anychart.enums.Layout.HORIZONTAL) {
+//        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
+//        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
+//      } else {
+//        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
+//        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
+//      }
+//      this.invalidate(anychart.ConsistencyState.BOUNDS,
+//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//    }
+//    return this;
+//  }
+//  return this.layout_;
+//};
 
 
 /**
@@ -528,7 +528,7 @@ anychart.core.ui.Paginator.prototype.draw = function() {
     textY = this.actualTop_ + padTop + (availHeight - textBounds.height) / 2;
     textX = this.actualLeft_ + padLeft + (availWidth - textBounds.width) / 2;
 
-    switch (this.layout_) {
+    switch (this.getOption('layout')) {
       case anychart.enums.Layout.HORIZONTAL:
         prevButtonY = nextButtonY = textY;
         prevButtonX = textX - this.spacing_ - buttonSize;
@@ -579,7 +579,7 @@ anychart.core.ui.Paginator.prototype.draw = function() {
 anychart.core.ui.Paginator.prototype.measureMaxDimensions_ = function(opt_pageCount) {
   if (!this.boundsCache_) this.boundsCache_ = {};
   var pageCount = goog.isDef(opt_pageCount) ? opt_pageCount : this.pageCount_;
-  var cacheIndex = pageCount + this.layout_.substr(0, 1);
+  var cacheIndex = pageCount + this.getOption('layout').substr(0, 1);
   if (!this.boundsCache_[cacheIndex]) {
     var measureText = acgraph.text();
     measureText.attr('aria-hidden', 'true');
@@ -593,7 +593,7 @@ anychart.core.ui.Paginator.prototype.measureMaxDimensions_ = function(opt_pageCo
     var maxWidth;
     var maxHeight;
 
-    if (this.layout_ == anychart.enums.Layout.HORIZONTAL) {
+    if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
       maxWidth = buttonSize * 2 + this.spacing_ * 2 + bounds.width;
       maxHeight = bounds.height;
     } else {
