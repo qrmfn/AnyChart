@@ -72,14 +72,23 @@ anychart.core.ui.LegendItem = function() {
     'fontColor': '#999'
   };
 
+
+  var xYBeforeInvalidationHook = function() {
+    this.dropPixelBounds();
+  };
+
+  var iconTypeBeforeInvalidationHook = function() {
+    this.redrawIcon_ = true;
+  };
+
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['text', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['x', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['y', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
-    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
+    ['x', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
+    ['y', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
+    ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
+    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
+    ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
+    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook]
   ]);
 
   this.applyDefaults();
@@ -107,21 +116,13 @@ anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS = (function(){
       return val;
   };
 
-  var xYBeforeInvalidationHook = function() {
-    this.dropPixelBounds();
-  };
-
-  var iconTypeBeforeInvalidationHook = function() {
-    this.redrawIcon_ = true;
-  };
-
   anychart.core.settings.createDescriptors(map, [
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'x', anychart.core.settings.asIsNormalizer, 0, xYBeforeInvalidationHook],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'y', anychart.core.settings.asIsNormalizer, 0, xYBeforeInvalidationHook],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconType', iconTypeNormalizer, 0, iconTypeBeforeInvalidationHook],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', iconTextSpacingNormalizer, xYBeforeInvalidationHook],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxWidth', anychart.core.settings.asIsNormalizer, 0, xYBeforeInvalidationHook],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxHeight', anychart.core.settings.asIsNormalizer, 0, xYBeforeInvalidationHook]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'x', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'y', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconType', iconTypeNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', iconTextSpacingNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxWidth', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxHeight', anychart.core.settings.asIsNormalizer]
   ]);
   return map;
 })();
