@@ -1091,14 +1091,6 @@ anychart.core.ui.Title.prototype.clear = function() {
 
 //endregion
 //region -- Serialization
-/**
- * Sets default settings.
- * @param {!Object} config
- */
-anychart.core.ui.Title.prototype.setThemeSettings = function(config) {
-  anychart.core.settings.copy(this.themeSettings, this.TEXT_DESCRIPTORS, config);
-  anychart.core.settings.copy(this.themeSettings, this.SIMPLE_PROPS_DESCRIPTORS, config);
-};
 
 
 /** @inheritDoc */
@@ -1154,24 +1146,26 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 
 
 /** @inheritDoc */
+anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Title.base(this, 'setupByJSONInternal', config, opt_default);
+
+  anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config, opt_default);
+  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+};
+
+
+/** @inheritDoc */
 anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  } else {
-    anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config);
-    anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  }
-
   if ('background' in config)
-    this.background(config['background']);
+    this.background().setupInternal(!!opt_default, config['background']);
 
   if ('padding' in config)
-    this.padding(config['padding']);
+    this.padding().setupInternal(!!opt_default, config['padding']);
 
   if ('margin' in config)
-    this.margin(config['margin']);
+    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 

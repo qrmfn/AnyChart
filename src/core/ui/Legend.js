@@ -542,7 +542,7 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
 
-    this.setupCreated('tooltip', this.tooltip_, true);
+    this.setupCreated('tooltip', this.tooltip_);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);

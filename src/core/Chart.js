@@ -800,7 +800,7 @@ anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
 
-    this.setupCreated('tooltip', this.tooltip_, true);
+    this.setupCreated('tooltip', this.tooltip_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2061,17 +2061,19 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.right(config['right']);
   this.bottom(config['bottom']);
   this.animation(config['animation']);
-  this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
+  this.noData().label(config['noDataLabel']);
 
   if ('tooltip' in config)
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+    this.tooltip(config['tooltip']);
 
-  this.a11y(config['a11y']);
+  if ('a11y' in config)
+    this.a11y(config['a11y']);
 
   if (goog.isDef(config['contextMenu']))
     this.contextMenu(config['contextMenu']);
 
-  this.credits(config['credits']);
+  if ('credits' in config)
+    this.credits(config['credits']);
 
   if (config['exports'])
     this.exports(config['exports']);

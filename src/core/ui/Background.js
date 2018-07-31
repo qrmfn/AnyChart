@@ -694,6 +694,10 @@ anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt
   anychart.core.ui.Background.base(this, 'setupByJSONInternal', config, opt_default);
 
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+
+  if (opt_default) {
+    this.setThemeSettings(config);
+  }
 };
 
 
@@ -701,9 +705,7 @@ anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt
 anychart.core.ui.Background.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Background.base(this, 'setupByJSON', config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  } else {
+  if (!opt_default) {
     this.corners(config['corners']);
   }
 };

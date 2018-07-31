@@ -574,7 +574,7 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.background_.setParentEventTarget(this);
     this.registerDisposable(this.background_);
 
-    this.setupCreated('background', this.background_, true);
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -610,7 +610,7 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
 
-    this.setupCreated('title', this.title_, true);
+    this.setupCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -649,7 +649,7 @@ anychart.core.ui.Tooltip.prototype.separator = function(opt_value) {
     this.separator_.setParentEventTarget(this);
     this.registerDisposable(this.separator_);
 
-    this.setupCreated('separator', this.separator_, true);
+    this.setupCreated('separator', this.separator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2409,15 +2409,6 @@ anychart.core.ui.Tooltip.prototype.getHighPriorityResolutionChain = function() {
 //  Serialization / Deserialization / Disposing
 //
 //----------------------------------------------------------------------------------------------------------------------
-/**
- * Sets theme settings.
- * @param {!Object} config
- */
-anychart.core.ui.Tooltip.prototype.setThemeSettings = function(config) {
-  anychart.core.settings.copy(this.themeSettings, this.TEXT_PROPERTY_DESCRIPTORS, config);
-  anychart.core.settings.copy(this.themeSettings, this.TOOLTIP_SIMPLE_DESCRIPTORS, config);
-};
-
 
 /** @inheritDoc */
 anychart.core.ui.Tooltip.prototype.serialize = function() {
@@ -2453,20 +2444,30 @@ anychart.core.ui.Tooltip.prototype.serialize = function() {
 
 
 /** @inheritDoc */
+anychart.core.ui.Tooltip.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Tooltip.base(this, 'setupByJSONInternal', config, opt_default);
+
+  anychart.core.settings.deserialize(this, this.TEXT_PROPERTY_DESCRIPTORS, config, opt_default);
+  anychart.core.settings.deserialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, config, opt_default);
+};
+
+
+/** @inheritDoc */
 anychart.core.ui.Tooltip.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Tooltip.base(this, 'setupByJSON', config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  } else {
-    anychart.core.settings.deserialize(this, this.TEXT_PROPERTY_DESCRIPTORS, config);
-    anychart.core.settings.deserialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, config);
-  }
+  if ('title' in config)
+    this.title(config['title']);
 
-  this.title().setupInternal(!!opt_default, config['title']);
-  this.separator().setupInternal(!!opt_default, config['separator']);
-  this.background().setupInternal(!!opt_default, config['background']);
-  this.padding().setupInternal(!!opt_default, config['padding']);
+  if ('separator' in config)
+    this.separator(config['separator']);
+
+  if ('background' in config)
+    this.background(config['background']);
+
+  if ('padding' in config)
+    this.padding(config['padding']);
+
   this.hideDelay(config['hideDelay']);
 
   var contentConfig = config['contentInternal'] || {};

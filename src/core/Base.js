@@ -1185,7 +1185,7 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  * @param {boolean=} opt_default
  */
 anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
-  this.setupByJSON(/** @type {!Object} */(this.getFlatTheme()), opt_default);
+  this.setupByJSONInternal(/** @type {!Object} */(this.getFlatTheme()), opt_default);
 };
 
 
@@ -1347,7 +1347,7 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
  * @param {anychart.core.Base} instance
  */
 anychart.core.Base.prototype.setCreated = function(getterName, instance) {
-  this.setupCreated(getterName, instance, true);
+  this.setupCreated(getterName, instance);
 
   this.themesMap[getterName].enabled = true;
 };
@@ -1357,12 +1357,11 @@ anychart.core.Base.prototype.setCreated = function(getterName, instance) {
  *
  * @param {string} getterName
  * @param {anychart.core.Base} instance
- * @param {boolean=} opt_default
  */
-anychart.core.Base.prototype.setupCreated = function(getterName, instance, opt_default) {
+anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   instance.addThemes(extendedThemes);
-  instance.setupByFlatTheme(opt_default);
+  instance.setupByFlatTheme(true);
 
   if (!goog.isDef(this.themesMap[getterName]))
     this.themesMap[getterName] = {};
