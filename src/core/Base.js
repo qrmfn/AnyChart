@@ -1347,7 +1347,7 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
  * @param {anychart.core.Base} instance
  */
 anychart.core.Base.prototype.setCreated = function(getterName, instance) {
-  this.setupCreated(getterName, instance);
+  this.setupCreated(getterName, instance, true);
 
   this.themesMap[getterName].enabled = true;
 };
