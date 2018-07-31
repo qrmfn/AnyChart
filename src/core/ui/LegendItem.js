@@ -1342,6 +1342,7 @@ anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default
   anychart.core.ui.LegendItem.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS, config, opt_default);
+  anychart.core.settings.deserialize(this, anychart.core.Text.TEXT_DESCRIPTORS, config, opt_default);
   this.iconEnabled(config['iconEnabled']);
   //this.iconType(config['iconType']);
   this.iconStroke(config['iconStroke']);
@@ -1351,7 +1352,7 @@ anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default
   this.iconMarkerFill(config['iconMarkerFill']);
   this.iconMarkerStroke(config['iconMarkerStroke']);
   //this.iconTextSpacing(config['iconTextSpacing']);
-  this.text(config['text']);
+  //this.text(config['text']);
   this.disabled(config['disabled']);
   this.sourceUid(config['sourceUid']);
   this.sourceKey(config['sourceKey']);
