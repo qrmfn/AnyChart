@@ -1166,7 +1166,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.disabled_ = false;
 
-  this.setOption('iconType', anychart.enums.LegendItemIconType.SQUARE);
+  this['iconType'](anychart.enums.LegendItemIconType.SQUARE);
 
   /**
    * Legend item icon fill.
@@ -1210,7 +1210,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.iconMarkerStroke_ = 'none';
 
-  this.setOption('iconTextSpacing', 5);
+  this['iconTextSpacing'](5);
 
 };
 
@@ -1340,6 +1340,8 @@ anychart.core.ui.LegendItem.prototype.setItemIndexToLayer = function(index) {
 /** @inheritDoc */
 anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.LegendItem.base(this, 'setupByJSON', config, opt_default);
+
+  anychart.core.settings.deserialize(this, anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS, config, opt_default);
   this.iconEnabled(config['iconEnabled']);
   //this.iconType(config['iconType']);
   this.iconStroke(config['iconStroke']);
