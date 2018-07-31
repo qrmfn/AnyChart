@@ -1008,7 +1008,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
             if (separatorBounds && separatorIsHorizontal) {
               accHeight += separatorBounds.height;
             }
-            var paginatorOrientation = paginator.getOption('orientation');
+            //var paginatorOrientation = paginator.getOption('orientation');
             if (paginatorOrientation == anychart.enums.Orientation.TOP || paginatorOrientation == anychart.enums.Orientation.BOTTOM) {
               accHeight += paginatorBounds.height;
             }
