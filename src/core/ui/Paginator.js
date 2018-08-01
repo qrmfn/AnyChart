@@ -63,13 +63,6 @@ anychart.core.ui.Paginator = function() {
   this.pageCount_;
 
   /**
-   * Layout of the items in the paginator.
-   * @type {anychart.enums.Layout}
-   * @private
-   */
-  this.layout_;
-
-  /**
    * Paginator previous button.
    * @type {anychart.core.ui.Button}
    * @private
@@ -107,8 +100,7 @@ anychart.core.ui.Paginator = function() {
   this.registerDisposable(this.nextButton_);
   this.nextButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.nextButton_);
 
-  this['layout']('horizontal');
-
+  //TODO(AntonKagakin): create customDrawers flag, to avoid custom layout drawing bug.
   var layoutBeforeInvalidationHook = function() {
     if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
       this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
@@ -125,7 +117,6 @@ anychart.core.ui.Paginator = function() {
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['layout', anychart.ConsistencyState.BOUNDS,
           anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, layoutBeforeInvalidationHook]
-    //['currentPage', 0, 0] // invalidation in beforeInvalidationHook, returns value + 1 O_O
   ]);
 };
 goog.inherits(anychart.core.ui.Paginator, anychart.core.Text);
@@ -163,25 +154,6 @@ anychart.core.ui.Paginator.prototype.SUPPORTED_SIGNALS = anychart.core.Text.prot
 anychart.core.ui.Paginator.prototype.SUPPORTED_CONSISTENCY_STATES =
     anychart.core.Text.prototype.SUPPORTED_CONSISTENCY_STATES |
     anychart.ConsistencyState.PAGINATOR_BACKGROUND;
-
-
-/**
- * Orientation of the paginator.
- * @param {(anychart.enums.Orientation|string)=} opt_value .
- * @return {!anychart.core.ui.Paginator|anychart.enums.Orientation} .
- */
-//anychart.core.ui.Paginator.prototype.orientation = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    opt_value = anychart.enums.normalizeOrientation(opt_value);
-//    if (this.orientation_ != opt_value) {
-//      this.orientation_ = opt_value;
-//      this.invalidate(anychart.ConsistencyState.BOUNDS,
-//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.orientation_;
-//};
 
 
 /**
@@ -274,33 +246,6 @@ anychart.core.ui.Paginator.prototype.backgroundInvalidated_ = function(event) {
     this.invalidate(anychart.ConsistencyState.PAGINATOR_BACKGROUND, anychart.Signal.NEEDS_REDRAW);
   }
 };
-
-
-/**
- * Getter/setter for layout.
- * TODO(AntonKagakin): create customDrawers flag, to avoid custom layout drawing bug.
- * @param {(string|anychart.enums.Layout)=} opt_value Layout value.
- * @return {(anychart.core.ui.Paginator|anychart.enums.Layout)} Current layout or self for chaining.
- */
-//anychart.core.ui.Paginator.prototype.layout = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    opt_value = anychart.enums.normalizeLayout(opt_value);
-//    if (this.layout_ != opt_value) {
-//      this.layout_ = opt_value;
-//      if (this.layout_ == anychart.enums.Layout.HORIZONTAL) {
-//        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
-//        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
-//      } else {
-//        this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
-//        this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
-//      }
-//      this.invalidate(anychart.ConsistencyState.BOUNDS,
-//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.layout_;
-//};
 
 
 /**
@@ -841,8 +786,6 @@ anychart.core.ui.Paginator.prototype.serialize = function() {
   json['background'] = this.background().serialize();
   json['padding'] = this.padding().serialize();
   json['margin'] = this.margin().serialize();
-  //json['orientation'] = this.orientation();
-  //json['layout'] = this.layout();
   return json;
 };
 
@@ -860,9 +803,6 @@ anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default)
 
   if ('margin' in config)
     this.margin(config['margin']);
-
-  //this.orientation(config['orientation']);
-  //this.layout(config['layout']);
 };
 
 

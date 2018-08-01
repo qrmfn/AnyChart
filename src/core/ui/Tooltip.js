@@ -374,6 +374,7 @@ anychart.core.ui.Tooltip.prototype.hideDelay = function(opt_value) {
   }
 };
 
+
 /**
  * Getter/Setter for the full text appearance settings.
  * @param {(Object|string)=} opt_objectOrName - Settings object or settings name or nothing to get complete object.

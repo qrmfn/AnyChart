@@ -58,9 +58,6 @@ goog.mixin(goog.global['anychart']['themes']['defaultTheme'], {
             }
           }
         }
-      },
-      'legendItem': {
-        'iconType': 'square'
       }
     },
     'legend': {

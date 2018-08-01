@@ -99,7 +99,7 @@ anychart.core.ui.Legend = function() {
   var iconTextSpacingBeforeInvalidationHook = function() {
     if (goog.isDefAndNotNull(this.items_)) {
       for (var i = 0, len = this.items_.length; i < len; i++) {
-        this.items_[i]['iconTextSpacing'](this.iconTextSpacing_);
+        this.items_[i]['iconTextSpacing'](this.getOption('iconTextSpacing'));
       }
     }
   };
@@ -1008,7 +1008,6 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
             if (separatorBounds && separatorIsHorizontal) {
               accHeight += separatorBounds.height;
             }
-            //var paginatorOrientation = paginator.getOption('orientation');
             if (paginatorOrientation == anychart.enums.Orientation.TOP || paginatorOrientation == anychart.enums.Orientation.BOTTOM) {
               accHeight += paginatorBounds.height;
             }

@@ -73,7 +73,7 @@ anychart.core.ui.LegendItem = function() {
   };
 
 
-  var xYBeforeInvalidationHook = function() {
+  var dropPixelBoundsBeforeInvalidationHook = function() {
     this.dropPixelBounds();
   };
 
@@ -83,12 +83,12 @@ anychart.core.ui.LegendItem = function() {
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['text', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['x', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
-    ['y', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
+    ['x', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
+    ['y', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
     ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
-    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
-    ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook],
-    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, xYBeforeInvalidationHook]
+    ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
+    ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
+    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook]
   ]);
 
   this.applyDefaults();
@@ -147,49 +147,6 @@ anychart.core.ui.LegendItem.prototype.SUPPORTED_CONSISTENCY_STATES =
     anychart.core.Text.prototype.SUPPORTED_CONSISTENCY_STATES; //ENABLED CONTAINER Z_INDEX APPEARANCE BOUNDS
 
 
-//endregion
-//region --- Settings (API)
-//----------------------------------------------------------------------------------------------------------------------
-//
-//  LegendItem API.
-//
-//----------------------------------------------------------------------------------------------------------------------
-/**
- * Getter/setter for X coordinate of legend item.
- * @param {(number|string)=} opt_value New x coordinate.
- * @return {(number|string|anychart.core.ui.LegendItem)} X coordinate or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.x = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.x_ != opt_value) {
-//      this.x_ = opt_value;
-//      this.dropPixelBounds();
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.x_;
-//};
-
-
-/**
- * Getter/setter for Y coordinate of legend item.
- * @param {(number|string)=} opt_value New y coordinate.
- * @return {(number|string|anychart.core.ui.LegendItem)} Y coordinate or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.y = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.y_ != opt_value) {
-//      this.y_ = opt_value;
-//      this.dropPixelBounds();
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.y_;
-//};
-
-
 /**
  * Getter/setter for iconEnabled setting
  * @param {boolean=} opt_value Whether to show item icon or not.
@@ -227,26 +184,6 @@ anychart.core.ui.LegendItem.prototype.disabled = function(opt_value) {
   }
   return this.disabled_;
 };
-
-
-/**
- * Getter/setter for icon type.
- * @param {(string|function(acgraph.vector.Path, number))=} opt_value Icon type or custom drawer function.
- * @return {(string|function(acgraph.vector.Path, number)|anychart.core.ui.LegendItem)} icon type or drawer function or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.iconType = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (goog.isString(opt_value))
-//      opt_value = anychart.enums.normalizeLegendItemIconType(opt_value);
-//    if (this.iconType_ != opt_value) {
-//      this.iconType_ = opt_value;
-//      this.redrawIcon_ = true;
-//      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  }
-//  return this.iconType_;
-//};
 
 
 /**
@@ -396,25 +333,6 @@ anychart.core.ui.LegendItem.prototype.iconMarkerStroke = function(opt_strokeOrFi
 
 
 /**
- * Getter/setter for iconTextSpacing setting.
- * @param {number=} opt_value Value of spacing between icon and text.
- * @return {(anychart.core.ui.LegendItem|number)} Spacing between icon and text or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.iconTextSpacing = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    opt_value = !anychart.utils.isNaN(opt_value) ? +opt_value : 5;
-//    if (this.iconTextSpacing_ != opt_value) {
-//      this.iconTextSpacing_ = opt_value;
-//      this.dropPixelBounds();
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.iconTextSpacing_;
-//};
-
-
-/**
  * Getter/setter for legend item source uid.
  * @param {number=} opt_value source uid.
  * @return {(number|anychart.core.ui.LegendItem)} Source uid or self for chaining.
@@ -468,42 +386,6 @@ anychart.core.ui.LegendItem.prototype.hoverCursor = function(opt_value) {
   }
   return this.hoverCursor_;
 };
-
-
-/**
- * Getter/setter for max width of legend item.
- * @param {(number|string)=} opt_value Max width setting.
- * @return {(number|string|anychart.core.ui.LegendItem)} Max width or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.maxWidth = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.maxWidth_ != opt_value) {
-//      this.maxWidth_ = opt_value;
-//      this.dropPixelBounds();
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.maxWidth_;
-//};
-
-
-/**
- * Getter/setter for max height of legend item.
- * @param {(number|string)=} opt_value Max height setting.
- * @return {(number|string|anychart.core.ui.LegendItem)} Max height or self for method chaining.
- */
-//anychart.core.ui.LegendItem.prototype.maxHeight = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    if (this.maxHeight_ != opt_value) {
-//      this.maxHeight_ = opt_value;
-//      this.dropPixelBounds();
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.maxHeight_;
-//};
 
 
 /**
@@ -1166,7 +1048,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.disabled_ = false;
 
-  this['iconType'](anychart.enums.LegendItemIconType.SQUARE);
+  this['iconType'](this.getThemeOption('iconType'));
 
   /**
    * Legend item icon fill.
@@ -1210,7 +1092,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.iconMarkerStroke_ = 'none';
 
-  this['iconTextSpacing'](5);
+  this['iconTextSpacing'](this.getThemeOption('iconTextSpacing'));
 
 };
 
@@ -1230,8 +1112,8 @@ anychart.core.ui.LegendItem.prototype.clear = function() {
   this.sourceUid(NaN);
   this.sourceKey(NaN);
   this.meta(null);
-  //delete this.maxWidth_;
-  //delete this.maxHeight_;
+  this.setOption('maxWidth', null);
+  this.setOption('maxHeight', null);
   this.remove();
   this.invalidate(anychart.ConsistencyState.ALL);
   this.resumeSignalsDispatching(false);
@@ -1344,22 +1226,17 @@ anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default
   anychart.core.settings.deserialize(this, anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS, config, opt_default);
   anychart.core.settings.deserialize(this, anychart.core.Text.TEXT_DESCRIPTORS, config, opt_default);
   this.iconEnabled(config['iconEnabled']);
-  //this.iconType(config['iconType']);
   this.iconStroke(config['iconStroke']);
   this.iconFill(config['iconFill']);
   this.iconHatchFill(config['iconHatchFill']);
   this.iconMarkerType(config['iconMarkerType']);
   this.iconMarkerFill(config['iconMarkerFill']);
   this.iconMarkerStroke(config['iconMarkerStroke']);
-  //this.iconTextSpacing(config['iconTextSpacing']);
-  //this.text(config['text']);
   this.disabled(config['disabled']);
   this.sourceUid(config['sourceUid']);
   this.sourceKey(config['sourceKey']);
   this.meta(config['meta']);
   this.hoverCursor(config['hoverCursor']);
-  //this.maxWidth(config['maxWidth']);
-  //this.maxHeight(config['maxHeight']);
   this.iconSize(config['iconSize']);
 };
 
