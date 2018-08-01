@@ -34,7 +34,7 @@ anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS = (function() {
   var map = {};
 
   anychart.core.settings.createDescriptor(map, anychart.enums.PropertyHandlerType.SINGLE_ARG,
-      'property', anychart.enums.normalizeChartScrollerPosition);
+      'position', anychart.enums.normalizeChartScrollerPosition);
   return map;
 })();
 anychart.core.settings.populate(anychart.core.ui.ChartScroller, anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS);
