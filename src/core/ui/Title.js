@@ -1165,7 +1165,7 @@ anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
   if ('background' in config)
-    this.background().setupInternal(!!opt_default, config['background']);
+    this.background(config['background']);
 };
 
 

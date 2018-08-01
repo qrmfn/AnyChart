@@ -203,11 +203,9 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', pieFillNormalizer]
   ];
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL, descriptorsOverride);
-  // this.normal_.addExtendedThemes(this.getThemes(), 'normal');
-  // this.normal_.setupByFlatTheme();
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
-    //factory.addThemes('chart.normal.labels', 'pieFunnelPyramidBase.normal.labels', 'pie.normal.labels');
+    // factory.addExtendedThemes(this.getThemes(), 'normal.labels');
     factory.listenSignals(this.labelsInvalidated_, this);
     factory.setParentEventTarget(this);
     this.invalidate(anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW);
@@ -228,8 +226,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  // this.hovered_.addExtendedThemes(this.getThemes(), 'hovered');
-  // this.hovered_.setupByFlatTheme();
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   var selectedDescriptorsMeta = {};
@@ -4708,20 +4704,28 @@ anychart.pieModule.Chart.prototype.setupByJSONInternal = function(config, opt_de
 
   anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
-  // TODO: (chernetsky) wait for StatesSettings refactoring
-  var pieConfig = /** @type {Object} */(anychart.getFullTheme('pie'));
-  this.selected_.setupInternal(!!opt_default, pieConfig['selected']);
+  // this.normal_.setupInternal(!!opt_default, config);
+  // this.normal_.setupInternal(!!opt_default, config['normal']);
 
-  if (goog.isDef(pieConfig['explode'])) {
-    pieConfig = goog.object.clone(pieConfig);
-    this.selected_.setupInternal(!!opt_default, {'explode': pieConfig['explode']});
-    delete pieConfig['explode'];
-  }
+  this.normal_.addThemes(this.getFlatTheme());
+  this.normal_.addExtendedThemes(this.getThemes(), 'normal');
+  this.setupCreated('normal', this.normal_);
 
-  this.normal_.setupInternal(!!opt_default, pieConfig);
-  this.normal_.setupInternal(!!opt_default, pieConfig['normal']);
+  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  this.hovered_.addExtendedThemes(this.getThemes(), 'hovered');
+  this.setupCreated('hovered', this.hovered_);
 
-  this.hovered_.setupInternal(!!opt_default, pieConfig['hovered']);
+  // this.selected_.setupInternal(!!opt_default, config['selected']);
+  this.selected_.addExtendedThemes(this.getThemes(), 'selected');
+  this.setupCreated('selected', this.selected_);
+
+
+  // todo: not processed yet
+  // if (goog.isDef(config['explode'])) {
+  //   config = goog.object.clone(config);
+  //   this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
+  //   delete config['explode'];
+  // }
 };
 
 /** @inheritDoc */

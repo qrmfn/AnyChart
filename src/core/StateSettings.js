@@ -136,9 +136,7 @@ anychart.core.StateSettings.OUTLINE_AFTER_INIT_CALLBACK = 'outlineAfterInitCallb
  * @return {anychart.core.ui.LabelsFactory}
  */
 anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
-  var l = new anychart.core.ui.LabelsFactory();
-  // l.addThemes('defaultLabelFactory');
-  return l;
+  return new anychart.core.ui.LabelsFactory();
 };
 
 
@@ -148,9 +146,7 @@ anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
  * @return {anychart.core.ui.CircularLabelsFactory}
  */
 anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR = function() {
-  var l = new anychart.core.ui.CircularLabelsFactory();
-  // l.addThemes('defaultLabelFactory');
-  return l;
+  return new anychart.core.ui.CircularLabelsFactory();
 };
 
 
@@ -417,6 +413,7 @@ anychart.core.StateSettings.prototype.labels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.labels_ = labelsFactoryConstructor();
     this.labels_.supportsEnabledSuspension = false;
+    this.setupCreated('labels', this.labels_);
     afterInitCallback.call(this.stateHolder, this.labels_);
   }
 
@@ -441,6 +438,7 @@ anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.minLabels_ = labelsFactoryConstructor();
     this.minLabels_.supportsEnabledSuspension = false;
+    this.setupCreated('minLabels', this.minLabels_);
     afterInitCallback.call(this.stateHolder, this.minLabels_);
     this.minLabels_.markConsistent(anychart.ConsistencyState.ALL);
   }
@@ -466,6 +464,7 @@ anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.maxLabels_ = labelsFactoryConstructor();
     this.maxLabels_.supportsEnabledSuspension = false;
+    this.setupCreated('maxLabels', this.maxLabels_);
     afterInitCallback.call(this.stateHolder, this.maxLabels_);
     this.maxLabels_.markConsistent(anychart.ConsistencyState.ALL);
   }
@@ -489,6 +488,7 @@ anychart.core.StateSettings.prototype.headers = function(opt_value) {
   if (!this.headers_) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.HEADERS_AFTER_INIT_CALLBACK)) || anychart.core.StateSettings.DEFAULT_HEADERS_AFTER_INIT_CALLBACK;
     this.headers_ = new anychart.core.ui.LabelsFactory();
+    this.setupCreated('headers', this.headers_);
     afterInitCallback.call(this.stateHolder, this.headers_);
   }
 
@@ -521,6 +521,7 @@ anychart.core.StateSettings.prototype.lowerLabels = function(opt_value) {
   if (!this.lowerLabels_) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LOWER_LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.lowerLabels_ = new anychart.core.ui.LabelsFactory();
+    this.setupCreated('lowerLabels', this.lowerLabels_);
     afterInitCallback.call(this.stateHolder, this.lowerLabels_);
   }
 
@@ -732,8 +733,9 @@ anychart.core.StateSettings.prototype.setEnabledTrue = function(config) {
 
 
 /** @inheritDoc */
-anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.StateSettings.base(this, 'setupByJSON', config, opt_default);
+anychart.core.StateSettings.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.StateSettings.base(this, 'setupByJSONInternal', config, opt_default);
+
   anychart.core.settings.deserialize(this, this.PROPERTY_DESCRIPTORS, config, opt_default);
 
   if (goog.isDef(this.descriptorsMeta['labels'])) {
@@ -789,6 +791,13 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
     this.background().setupInternal(!!opt_default, config['background']);
     this.background().markConsistent(anychart.ConsistencyState.ALL);
   }
+};
+
+
+/** @inheritDoc */
+anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.StateSettings.base(this, 'setupByJSON', config, opt_default);
+
 };
 
 

@@ -630,14 +630,6 @@ anychart.core.ui.Background.prototype.getRemainingBounds = function() {
 
 //endregion
 //region -- Serialize, deserialize, dispose
-/**
- * Sets default settings.
- * @param {!Object} config
- */
-anychart.core.ui.Background.prototype.setThemeSettings = function(config) {
-  anychart.core.settings.copy(this.themeSettings, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  if ('corners' in config) this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
-};
 
 
 /** @inheritDoc */
@@ -695,9 +687,8 @@ anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt
 
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  }
+  if (opt_default && 'corners' in config)
+    this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
 };
 
 
