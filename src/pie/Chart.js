@@ -4740,7 +4740,7 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   // this.hatchFillPalette(config['hatchFillPalette']);
 
   if ('center' in config)
-    this.center(config['center']);
+    this.center().setupInternal(!!opt_default, config['center']);
 
   if ('tooltip' in config)
     this.tooltip(config['tooltip']);

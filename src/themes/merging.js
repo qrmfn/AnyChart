@@ -2102,5 +2102,6 @@ anychart.themes.DefaultThemes = {
   'paginator': ['defaultFontSettings'],
   'separator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
-  'labelsFactory': ['defaultLabelFactory']
+  'labelsFactory': ['defaultLabelFactory'],
+  'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base']
 };

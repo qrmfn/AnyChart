@@ -2037,10 +2037,10 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
   if ('title' in config)
-    this.title(config['title']);
+    this.title().setupInternal(!!opt_default, config['title']);
 
   if ('background' in config)
-    this.background(config['background']);
+    this.background().setupInternal(!!opt_default, config['background']);
 
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {
@@ -2064,16 +2064,16 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.noData().label(config['noDataLabel']);
 
   if ('tooltip' in config)
-    this.tooltip(config['tooltip']);
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   if ('a11y' in config)
-    this.a11y(config['a11y']);
+    this.a11y().setupInternal(!!opt_default, config['a11y']);
 
   if (goog.isDef(config['contextMenu']))
     this.contextMenu(config['contextMenu']);
 
   if ('credits' in config)
-    this.credits(config['credits']);
+    this.credits().setupInternal(!!opt_default, config['credits']);
 
   if (config['exports'])
     this.exports(config['exports']);
