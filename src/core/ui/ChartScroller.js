@@ -63,7 +63,7 @@ anychart.core.settings.populate(anychart.core.ui.ChartScroller, anychart.core.ui
 /** @inheritDoc */
 anychart.core.ui.ChartScroller.prototype.serialize = function() {
   var json = anychart.core.ui.ChartScroller.base(this, 'serialize');
-  anychart.core.settings.serialize(this, anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS, json)
+  anychart.core.settings.serialize(this, anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS, json);
   return json;
 };
 
