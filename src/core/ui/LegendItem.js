@@ -1048,7 +1048,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.disabled_ = false;
 
-  this['iconType'](this.getThemeOption('iconType'));
+  this['iconType'](anychart.enums.LegendItemIconType.SQUARE);
 
   /**
    * Legend item icon fill.
@@ -1092,7 +1092,7 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
    */
   this.iconMarkerStroke_ = 'none';
 
-  this['iconTextSpacing'](this.getThemeOption('iconTextSpacing'));
+  this['iconTextSpacing'](5);
 
 };
 
