@@ -584,10 +584,10 @@ anychart.core.ui.Separator.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Separator.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.ui.Separator.base(this, 'setupByJSON', config, opt_default);
+anychart.core.ui.Separator.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Separator.base(this, 'setupByJSONInternal', config, opt_default);
 
-  anychart.core.settings.deserialize(this, this.SIMPLE_SEPARATOR_DESCRIPTORS, config);
+  anychart.core.settings.deserialize(this, this.SIMPLE_SEPARATOR_DESCRIPTORS, config, opt_default);
 
   this.margin().setupInternal(!!opt_default, config['margin']);
 };

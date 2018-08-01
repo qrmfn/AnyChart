@@ -2018,10 +2018,10 @@ anychart.core.Chart.prototype.setupByJSONInternal = function(config, opt_default
   anychart.core.settings.deserialize(this, anychart.core.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
 
   if ('padding' in config)
-    this.padding(config['padding']);
+    this.padding().setupInternal(!!opt_default, config['padding']);
 
   if ('margin' in config)
-    this.margin(config['margin']);
+    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 

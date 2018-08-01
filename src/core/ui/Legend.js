@@ -2058,10 +2058,10 @@ anychart.core.ui.Legend.prototype.setupByJSONInternal = function(config, opt_def
   anychart.core.settings.deserialize(this, anychart.core.ui.Legend.PROPERTY_DESCRIPTORS, config, opt_default);
 
   if ('padding' in config)
-    this.padding(config['padding']);
+    this.padding().setupInternal(!!opt_default, config['padding']);
 
   if ('margin' in config)
-    this.margin(config['margin']);
+    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 
@@ -2082,7 +2082,7 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
     this.paginator(config['paginator']);
 
   if ('tooltip' in config)
-    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+    this.tooltip(config['tooltip']);
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);

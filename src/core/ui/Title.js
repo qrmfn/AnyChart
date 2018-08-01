@@ -1151,6 +1151,12 @@ anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_defa
 
   anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config, opt_default);
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+
+  if ('padding' in config)
+    this.padding().setupInternal(!!opt_default, config['padding']);
+
+  if ('margin' in config)
+    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 
@@ -1160,12 +1166,6 @@ anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
 
   if ('background' in config)
     this.background().setupInternal(!!opt_default, config['background']);
-
-  if ('padding' in config)
-    this.padding().setupInternal(!!opt_default, config['padding']);
-
-  if ('margin' in config)
-    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 

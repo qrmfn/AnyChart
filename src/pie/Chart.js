@@ -4615,7 +4615,7 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   this.registerDisposable(tooltip);
   tooltip.chart(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
-debugger
+
   this.setupCreated('tooltip', tooltip);
 
   return tooltip;
@@ -4642,14 +4642,16 @@ anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
   if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  var formatProvider = this.createFormatProvider();
   if (opt_event) {
-    tooltip.suspendSignalsDispatching();
-    tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
-    tooltip.resumeSignalsDispatching(false);
-    this.listen(goog.labs.userAgent.device.isDesktop() ?
-        goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
+    var tooltip = this.getCreated('tooltip');
+    if (tooltip) {
+      var formatProvider = this.createFormatProvider();
+      tooltip.suspendSignalsDispatching();
+      tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
+      tooltip.resumeSignalsDispatching(false);
+      this.listen(goog.labs.userAgent.device.isDesktop() ?
+          goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
+    }
   }
 };
 
@@ -4737,7 +4739,7 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.center(config['center']);
 
   if ('tooltip' in config)
-    this.tooltip()(config['tooltip']);
+    this.tooltip(config['tooltip']);
 };
 
 
