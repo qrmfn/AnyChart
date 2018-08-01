@@ -1104,8 +1104,8 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
 anychart.core.ui.LegendItem.prototype.clear = function() {
   this.suspendSignalsDispatching();
   this.dropPixelBounds();
-  this.applyDefaults();
   this.ownSettings = {};
+  this.applyDefaults();
   this.resolutionChainCache(null);
   this.prevSourceKey = this.sourceKey();
   this.prevSourceUid = this.sourceUid();
