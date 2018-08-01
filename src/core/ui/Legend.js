@@ -566,7 +566,7 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
     var item = this.items_[index];
     if (item && event) {
       var values = {
-        'value': {value: item.text(), type: anychart.enums.TokenType.STRING},
+        'value': {value: item.getOption('text'), type: anychart.enums.TokenType.STRING},
         'iconType': {value: item.getOption('iconType'), type: anychart.enums.TokenType.STRING},
         'iconStroke': {value: item.iconStroke(), type: anychart.enums.TokenType.UNKNOWN},
         'iconFill': {value: item.iconFill(), type: anychart.enums.TokenType.UNKNOWN},

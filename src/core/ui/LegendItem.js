@@ -1283,7 +1283,7 @@ anychart.core.ui.LegendItem.prototype.disposeInternal = function() {
   proto['getWidth'] = proto.getWidth;
   proto['getHeight'] = proto.getHeight;
   proto['draw'] = proto.draw;
-  // auto from Text
+  // auto from anychart.core.Text
   // proto['text'] = proto.text;
 })();
 //endregion

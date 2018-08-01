@@ -820,4 +820,6 @@ anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default)
   proto['margin'] = proto.margin;
   proto['currentPage'] = proto.currentPage;
   proto['getPagesCount'] = proto.getPagesCount;
+  // auto from anychart.core.Text
+  // proto['text'] = proto.text;
 })();
