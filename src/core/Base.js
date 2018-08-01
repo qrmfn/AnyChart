@@ -1294,9 +1294,10 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
  *
  * @param {string} getterName Name of the getter function
  * @param {boolean=} opt_ignoreEnabled Ignore enabled field
+ * @param {Function=} opt_getterFunction
  * @return {boolean|anychart.core.Base|undefined}
  */
-anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled) {
+anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled, opt_getterFunction) {
   if (!goog.isDef(this.themesMap[getterName]))
     this.themesMap[getterName] = {themes: anychart.themes.DefaultThemes[getterName]};
 
@@ -1311,8 +1312,10 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   themes.push.apply(themes, extendedThemes);
 
+  opt_getterFunction = goog.isFunction(opt_getterFunction) ? opt_getterFunction : this[getterName];
+
   if (opt_ignoreEnabled) {
-    this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()));
+    this.setCreated(getterName, /** @type {anychart.core.Base} */(opt_getterFunction.call(this)));
     return this.themesMap[getterName].instance;
 
   } else {
@@ -1331,7 +1334,7 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
       }
       if (theme && goog.isDef(theme['enabled'])) {
         if (theme['enabled'])
-          this.setCreated(getterName, /** @type {anychart.core.Base} */(this[getterName]()));
+          this.setCreated(getterName, /** @type {anychart.core.Base} */(opt_getterFunction.call(this)));
         else
           this.themesMap[getterName].enabled = false;
         return this.themesMap[getterName].instance;

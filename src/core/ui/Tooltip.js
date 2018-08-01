@@ -718,7 +718,7 @@ anychart.core.ui.Tooltip.prototype.draw = function() {
   var background = this.getCreated('background');
   var title = this.getCreated('title');
   var separator = this.getCreated('separator');
-  var content = this.getCreated('contentInternal');
+  var content = this.getCreated('contentInternal', false, this.contentInternal);
 
   this.setContainerToTooltip_(this);
 
@@ -1138,7 +1138,7 @@ anychart.core.ui.Tooltip.prototype.showAsUnion_ = function(points, clientX, clie
     if (tooltipTitle)
       tooltipTitle.autoText(this.getFormattedTitle(unionContextProvider));
 
-    var tootlipContent = this.tooltipInUse_.getCreated('contentInternal');
+    var tootlipContent = this.tooltipInUse_.getCreated('contentInternal', false, this.contentInternal);
     if (tootlipContent)
       tootlipContent.text(this.getFormattedContent_(unionContextProvider, true));
 
@@ -1185,7 +1185,7 @@ anychart.core.ui.Tooltip.prototype.showSeparatedChildren_ = function(points, cli
     if (tooltipTitle)
       tooltipTitle.autoText(tooltip.getFormattedTitle(contextProvider));
 
-    var tooltipContent = tooltip.getCreated('contentInternal');
+    var tooltipContent = tooltip.getCreated('contentInternal', false, this.contentInternal);
     if (tooltipContent)
       tooltipContent.text(tooltip.getFormattedContent_(contextProvider));
 
@@ -1297,7 +1297,7 @@ anychart.core.ui.Tooltip.prototype.showFloat = function(clientX, clientY, opt_co
     if (title)
       title.autoText(this.getFormattedTitle(opt_contextProvider));
 
-    var content = this.getCreated('contentInternal');
+    var content = this.getCreated('contentInternal', false, this.contentInternal);
     if (content)
       content['text'](this.getFormattedContent_(opt_contextProvider));
   }
@@ -1549,7 +1549,7 @@ anychart.core.ui.Tooltip.prototype.getContentBounds = function() {
  */
 anychart.core.ui.Tooltip.prototype.applyTextSettings = function() {
   if (this.hasInvalidationState(anychart.ConsistencyState.TOOLTIP_CONTENT)) {
-    var content = this.getCreated('contentInternal');
+    var content = this.getCreated('contentInternal', false, this.contentInternal);
     if (content) {
       content.suspendSignalsDispatching();
       for (var key in this.TEXT_PROPERTY_DESCRIPTORS) {
@@ -1597,7 +1597,7 @@ anychart.core.ui.Tooltip.prototype.getRootLayer_ = function() {
     if (separator)
       separator.container(this.rootLayer_);
 
-    var content = this.getCreated('contentInternal');
+    var content = this.getCreated('contentInternal', false, this.contentInternal);
     if (content)
       content.container(this.rootLayer_);
   }
@@ -1678,7 +1678,7 @@ anychart.core.ui.Tooltip.prototype.calculateContentBounds_ = function() {
   if (this.getOption('useHtml')) {
     this.contentBounds_ = this.htmlTooltip.getBounds();
   } else if (!this.contentBounds_) {
-    var content = this.getCreated('contentInternal');
+    var content = this.getCreated('contentInternal', false, this.contentInternal);
     if (content) {
       content.suspendSignalsDispatching();
       this.applyTextSettings();
@@ -1765,7 +1765,7 @@ anychart.core.ui.Tooltip.prototype.calculateContentBounds_ = function() {
       }
 
       if (content && content.enabled()) {
-        var parentContent = this.parent_ ? this.parent_.getCreated('contentInternal') : null;
+        var parentContent = this.parent_ ? this.parent_.getCreated('contentInternal', false, this.contentInternal) : null;
         var parentContentWidth = parentContent ? parentContent.width() : void 0;
         var parentContentHeight = parentContent ? parentContent.height() : void 0;
 
@@ -2223,7 +2223,7 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
       var background = this.getCreated('background');
       var title = this.getCreated('title');
       var separator = this.getCreated('separator');
-      var content = this.getCreated('contentInternal');
+      var content = this.getCreated('contentInternal', false, this.contentInternal);
 
       if (goog.isNull(opt_value)) { //removing parent tooltip.
         //this.parent_ is not null here.
