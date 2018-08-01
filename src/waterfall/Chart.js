@@ -326,7 +326,8 @@ anychart.waterfallModule.Chart.prototype.createLegendItemsProvider = function(so
           'iconEnabled': true,
           'iconFill': /** @type {acgraph.vector.Fill} */ (risingFill),
           'sourceUid': goog.getUid(this),
-          'sourceKey': legendItemKey++
+          'sourceKey': legendItemKey++,
+          'iconType': anychart.enums.LegendItemIconType.SQUARE
         });
       } else {
         this.keyToSeriesMap_[seen[risingFillHash]].series.push(series);
@@ -346,7 +347,8 @@ anychart.waterfallModule.Chart.prototype.createLegendItemsProvider = function(so
           'iconEnabled': true,
           'iconFill': /** @type {acgraph.vector.Fill} */ (fallingFill),
           'sourceUid': goog.getUid(this),
-          'sourceKey': legendItemKey++
+          'sourceKey': legendItemKey++,
+          'iconType': anychart.enums.LegendItemIconType.SQUARE
         });
       } else {
         this.keyToSeriesMap_[seen[fallingFillHash]].series.push(series);
@@ -366,7 +368,8 @@ anychart.waterfallModule.Chart.prototype.createLegendItemsProvider = function(so
           'iconEnabled': true,
           'iconFill': /** @type {acgraph.vector.Fill} */ (totalFill),
           'sourceUid': goog.getUid(this),
-          'sourceKey': legendItemKey++
+          'sourceKey': legendItemKey++,
+          'iconType': anychart.enums.LegendItemIconType.SQUARE
         });
       } else {
         this.keyToSeriesMap_[seen[totalFillHash]].series.push(series);
