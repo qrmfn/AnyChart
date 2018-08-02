@@ -269,7 +269,7 @@ anychart.core.SeparateChart.prototype.serialize = function() {
   if (this.getCreated('legend'))
     json['legend'] = this.legend().serialize();
 
-  if (this.getCreated('interactivity'))
+  if (this.getCreated('interactivity', false, this.interactivity))
     json['interactivity'] = this.interactivity().serialize();
 
   return json;

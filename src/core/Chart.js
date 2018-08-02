@@ -865,7 +865,7 @@ anychart.core.Chart.prototype.showTooltip_ = function(event) {
       this.listen(goog.events.EventType.MOUSEMOVE, this.updateTooltip);
     }
 
-    var interactivity = this.getCreated('interactivity', true);
+    var interactivity = this.getCreated('interactivity', true, this.interactivity);
     if (interactivity.getOption('hoverMode') == anychart.enums.HoverMode.SINGLE) {
       var points = [];
       if (this.tooltip_.getOption('displayMode') == anychart.enums.TooltipDisplayMode.SINGLE) {
@@ -2298,7 +2298,7 @@ anychart.core.Chart.prototype.doAdditionActionsOnMouseOut = goog.nullFunction;
  */
 anychart.core.Chart.prototype.handleMouseOverAndMove = function(event) {
   var series, i, j, len;
-  var interactivity = this.getCreated('interactivity', true);
+  var interactivity = this.getCreated('interactivity', true, this.interactivity);
 
   var tag = anychart.utils.extractTag(event['domTarget']);
   var index, parent;
@@ -2436,7 +2436,7 @@ anychart.core.Chart.prototype.handleMouseOverAndMove = function(event) {
  * @param {anychart.core.MouseEvent} event Event object.
  */
 anychart.core.Chart.prototype.handleMouseOut = function(event) {
-  var interactvity = this.getCreated('interactivity', true);
+  var interactvity = this.getCreated('interactivity', true, this.interactivity);
   var hoverMode = interactvity.getOption('hoverMode');
 
   var tag = anychart.utils.extractTag(event['domTarget']);
@@ -2532,7 +2532,7 @@ anychart.core.Chart.prototype.handleMouseDown = function(event) {
 anychart.core.Chart.prototype.onMouseDown = function(event) {
   if (this.preventMouseDownInteractivity)
     return;
-  var interactivity = this.getCreated('interactivity', true);
+  var interactivity = this.getCreated('interactivity', true, this.interactivity);
 
   var seriesStatus, eventSeriesStatus, allSeries, alreadySelectedPoints, i;
   var controlKeyPressed = event.ctrlKey || event.metaKey;
@@ -2896,7 +2896,7 @@ anychart.core.Chart.prototype.onInteractivitySignal = function() {
   var series = this.getAllSeries();
   for (var i = series.length; i--;) {
     if (series[i]) {
-      var interactivity = this.getCreated('interactivity', true);
+      var interactivity = this.getCreated('interactivity', true, this.interactivity);
       series[i].hoverMode(/** @type {anychart.enums.HoverMode} */(interactivity.getOption('hoverMode')));
     }
   }
