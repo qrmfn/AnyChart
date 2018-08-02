@@ -49,6 +49,8 @@ goog.require('goog.math');
 anychart.core.series.Base = function(chart, plot, type, config) {
   anychart.core.series.Base.base(this, 'constructor');
 
+  this.addThemes(anychart.themes.DefaultThemes['seriesBase']);
+
   /**
    * Chart reference.
    * @type {!anychart.core.IChart}
@@ -1834,6 +1836,8 @@ anychart.core.series.Base.prototype.tooltip = function(opt_value) {
       var parent = /** @type {anychart.core.ui.Tooltip} */ (chart.tooltip());
       this.tooltipInternal.parent(parent);
       this.tooltipInternal.chart(chart);
+
+      this.setupCreated('tooltip', this.tooltipInternal);
     }
   }
   if (goog.isDef(opt_value)) {

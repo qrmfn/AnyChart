@@ -714,7 +714,6 @@ anychart.core.ui.Tooltip.prototype.draw = function() {
   } else if (!this.checkDrawingNeeded())
     return this;
 
-
   var background = this.getCreated('background');
   var title = this.getCreated('title');
   var separator = this.getCreated('separator');
@@ -1049,7 +1048,21 @@ anychart.core.ui.Tooltip.prototype.showAsUnion_ = function(points, clientX, clie
   if (this.check(anychart.core.ui.Tooltip.Capabilities.CAN_CHANGE_DISPLAY_MODE |
           anychart.core.ui.Tooltip.Capabilities.CAN_CHANGE_POSITION_MODE)) {
 
-    this.tooltipInUse_ = hoveredSeries ? /** @type {anychart.core.ui.Tooltip} */ (hoveredSeries.tooltip()) : this;
+    if (hoveredSeries) {
+      this.tooltipInUse_ = /** @type {anychart.core.ui.Tooltip} */ (hoveredSeries.tooltip());
+
+      var title = this.getCreated('title');
+      if (title) {
+        this.tooltipInUse_.title(title.getFlatTheme());
+      }
+
+      var separator = this.getCreated('separator');
+      if (separator) {
+        this.tooltipInUse_.separator(separator.getFlatTheme());
+      }
+
+    } else
+      this.tooltipInUse_ = this;
 
     this.hideChildTooltips_([this.tooltipInUse_]);
 
