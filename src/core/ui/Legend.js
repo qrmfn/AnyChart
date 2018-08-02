@@ -541,6 +541,8 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.registerDisposable(this.tooltip_);
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
+
+    this.setupCreated('tooltip', this.tooltip_);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);
@@ -557,8 +559,8 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
  * @private
  */
 anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  if (tooltip.container()) {
+  var tooltip = this.getCreated('tooltip');
+  if (tooltip && tooltip.container()) {
     tooltip.draw();
   }
 };
@@ -570,8 +572,8 @@ anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
  * @param {anychart.core.MouseEvent} event Event that initiates tooltip display.
  */
 anychart.core.ui.Legend.prototype.showTooltip = function(event) {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  if (tooltip.enabled()) {
+  var tooltip = this.getCreated('tooltip');
+  if (tooltip && tooltip.enabled()) {
     var index = event['itemIndex'];
     var item = this.items_[index];
     if (item && event) {
@@ -598,8 +600,9 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
  * @protected
  */
 anychart.core.ui.Legend.prototype.hideTooltip = function() {
-  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
-  tooltip.hide();
+  var tooltip = this.getCreated('tooltip');
+  if (tooltip)
+    tooltip.hide();
 };
 
 
@@ -2078,7 +2081,8 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('paginator' in config)
     this.paginator(config['paginator']);
 
-  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+  if ('tooltip' in config)
+    this.tooltip(config['tooltip']);
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
