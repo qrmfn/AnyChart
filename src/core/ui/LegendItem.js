@@ -77,7 +77,7 @@ anychart.core.ui.LegendItem = function() {
     this.dropPixelBounds();
   };
 
-  var iconTypeBeforeInvalidationHook = function() {
+  var setRedrawIconBeforeInvalidationHook = function() {
     this.redrawIcon_ = true;
   };
 
@@ -85,13 +85,13 @@ anychart.core.ui.LegendItem = function() {
     ['text', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['x', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
     ['y', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
-    ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
+    ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, setRedrawIconBeforeInvalidationHook],
     ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
     ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
     ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
-    ['iconFill', anychart.ConsistencyState.APPEARANCE | anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
-    ['iconStroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
-    ['iconHatchFill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook]
+    ['iconFill', anychart.ConsistencyState.APPEARANCE | anychart.Signal.NEEDS_REDRAW, 0, setRedrawIconBeforeInvalidationHook],
+    ['iconStroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, setRedrawIconBeforeInvalidationHook],
+    ['iconHatchFill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, setRedrawIconBeforeInvalidationHook]
   ]);
 
   this.applyDefaults();
