@@ -2078,8 +2078,7 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('paginator' in config)
     this.paginator(config['paginator']);
 
-  if ('tooltip' in config)
-    this.tooltip(config['tooltip']);
+  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
