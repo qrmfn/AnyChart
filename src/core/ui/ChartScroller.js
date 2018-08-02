@@ -40,26 +40,6 @@ anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS = (function() {
 anychart.core.settings.populate(anychart.core.ui.ChartScroller, anychart.core.ui.ChartScroller.PROPERTY_DESCRIPTORS);
 
 
-/**
- * Position getter/setter.
- * @param {anychart.enums.ChartScrollerPosition=} opt_value
- * @return {anychart.enums.ChartScrollerPosition|anychart.core.ui.ChartScroller}
- */
-//anychart.core.ui.ChartScroller.prototype.position = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    /** @type {anychart.enums.ChartScrollerPosition} */
-//    var value = anychart.enums.normalizeChartScrollerPosition(opt_value);
-//    if (value != this.position_) {
-//      this.position_ = value;
-//      this.invalidate(anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.APPEARANCE,
-//          anychart.Signal.BOUNDS_CHANGED | anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  }
-//  return this.position_;
-//};
-
-
 /** @inheritDoc */
 anychart.core.ui.ChartScroller.prototype.serialize = function() {
   var json = anychart.core.ui.ChartScroller.base(this, 'serialize');
