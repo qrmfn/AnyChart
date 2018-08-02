@@ -568,9 +568,9 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
       var values = {
         'value': {value: item.getOption('text'), type: anychart.enums.TokenType.STRING},
         'iconType': {value: item.getOption('iconType'), type: anychart.enums.TokenType.STRING},
-        'iconStroke': {value: item.iconStroke(), type: anychart.enums.TokenType.UNKNOWN},
-        'iconFill': {value: item.iconFill(), type: anychart.enums.TokenType.UNKNOWN},
-        'iconHatchFill': {value: item.iconHatchFill(), type: anychart.enums.TokenType.UNKNOWN},
+        'iconStroke': {value: item.getOption('iconStroke'), type: anychart.enums.TokenType.UNKNOWN},
+        'iconFill': {value: item.getOption('iconFill'), type: anychart.enums.TokenType.UNKNOWN},
+        'iconHatchFill': {value: item.getOption('iconHatchFill'), type: anychart.enums.TokenType.UNKNOWN},
         'iconMarkerType': {value: item.iconMarkerType(), type: anychart.enums.TokenType.STRING},
         'iconMarkerStroke': {value: item.iconMarkerStroke(), type: anychart.enums.TokenType.UNKNOWN},
         'iconMarkerFill': {value: item.iconMarkerFill(), type: anychart.enums.TokenType.UNKNOWN},

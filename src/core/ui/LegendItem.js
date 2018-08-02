@@ -88,7 +88,10 @@ anychart.core.ui.LegendItem = function() {
     ['iconType', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
     ['iconTextSpacing', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
     ['maxWidth', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
-    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook]
+    ['maxHeight', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, dropPixelBoundsBeforeInvalidationHook],
+    ['iconFill', anychart.ConsistencyState.APPEARANCE | anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
+    ['iconStroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook],
+    ['iconHatchFill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW, 0, iconTypeBeforeInvalidationHook]
   ]);
 
   this.applyDefaults();
@@ -122,7 +125,10 @@ anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS = (function(){
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconType', iconTypeNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'iconTextSpacing', iconTextSpacingNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxWidth', anychart.core.settings.asIsNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxHeight', anychart.core.settings.asIsNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'maxHeight', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'iconFill', anychart.core.settings.fillNormalizer],
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'iconStroke', anychart.core.settings.strokeNormalizer],
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'iconHatchFill', anychart.core.settings.hatchFillNormalizer]
   ]);
   return map;
 })();
@@ -183,78 +189,6 @@ anychart.core.ui.LegendItem.prototype.disabled = function(opt_value) {
     return this;
   }
   return this.disabled_;
-};
-
-
-/**
- * Getter/setter for legend item icon fill setting.
- * @param {(!acgraph.vector.Fill|!Array.<(acgraph.vector.GradientKey|string)>|null)=} opt_fillOrColorOrKeys .
- * @param {number=} opt_opacityOrAngleOrCx .
- * @param {(number|boolean|!anychart.math.Rect|!{left:number,top:number,width:number,height:number})=} opt_modeOrCy .
- * @param {(number|!anychart.math.Rect|!{left:number,top:number,width:number,height:number}|null)=} opt_opacityOrMode .
- * @param {number=} opt_opacity .
- * @param {number=} opt_fx .
- * @param {number=} opt_fy .
- * @return {acgraph.vector.Fill|anychart.core.ui.LegendItem} .
- */
-anychart.core.ui.LegendItem.prototype.iconFill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
-  if (goog.isDef(opt_fillOrColorOrKeys)) {
-    var fill = acgraph.vector.normalizeFill.apply(null, arguments);
-    if (fill != this.iconFill_) {
-      this.iconFill_ = fill;
-      this.redrawIcon_ = true;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.iconFill_;
-};
-
-
-/**
- * Getter/setter for legend item icon stroke setting.
- * @param {(acgraph.vector.Stroke|acgraph.vector.ColoredFill|string|null)=} opt_strokeOrFill Fill settings
- *    or stroke settings.
- * @param {number=} opt_thickness [1] Line thickness.
- * @param {string=} opt_dashpattern Controls the pattern of dashes and gaps used to stroke paths.
- * @param {acgraph.vector.StrokeLineJoin=} opt_lineJoin Line joint style.
- * @param {acgraph.vector.StrokeLineCap=} opt_lineCap Line cap style.
- * @return {anychart.core.ui.LegendItem|acgraph.vector.Stroke} .
- */
-anychart.core.ui.LegendItem.prototype.iconStroke = function(opt_strokeOrFill, opt_thickness, opt_dashpattern, opt_lineJoin, opt_lineCap) {
-  if (goog.isDef(opt_strokeOrFill)) {
-    var stroke = acgraph.vector.normalizeStroke.apply(null, arguments);
-    if (stroke != this.iconStroke_) {
-      this.iconStroke_ = stroke;
-      this.redrawIcon_ = true;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.iconStroke_;
-};
-
-
-/**
- * Getter/setter for iconHatchFill.
- * @param {(acgraph.vector.PatternFill|acgraph.vector.HatchFill|acgraph.vector.HatchFill.HatchFillType|
- * string)=} opt_patternFillOrTypeOrState PatternFill or HatchFill instance or type of hatch fill.
- * @param {string=} opt_color Color.
- * @param {number=} opt_thickness Thickness.
- * @param {number=} opt_size Pattern size.
- * @return {acgraph.vector.PatternFill|anychart.core.ui.LegendItem} Hatch fill.
- */
-anychart.core.ui.LegendItem.prototype.iconHatchFill = function(opt_patternFillOrTypeOrState, opt_color, opt_thickness, opt_size) {
-  if (goog.isDef(opt_patternFillOrTypeOrState)) {
-    var hatchFill = acgraph.vector.normalizeHatchFill.apply(null, arguments);
-    if (hatchFill != this.iconHatchFill_) {
-      this.iconHatchFill_ = hatchFill;
-      this.redrawIcon_ = true;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return /** @type {acgraph.vector.PatternFill} */ (this.iconHatchFill_);
 };
 
 
@@ -736,7 +670,7 @@ anychart.core.ui.LegendItem.prototype.draw = function() {
   // if it is not changed - nothing will happen
   this.layer_.cursor(/** @type {acgraph.vector.Cursor} */(this.hoverCursor()));
 
-  var needHatch = goog.isDef(this.iconHatchFill_) && (!anychart.utils.isNone(this.iconHatchFill_) && !this.hatch_);
+  var needHatch = goog.isDef(this.getOption('iconHatchFill')) && (!anychart.utils.isNone(this.getOption('iconHatchFill')) && !this.hatch_);
   if (needHatch) {
     /**
      * Legend icon hatchFill path.
@@ -928,7 +862,7 @@ anychart.core.ui.LegendItem.prototype.calculateBounds_ = function() {
   var parentWidth, parentHeight;
   /** @type {anychart.math.Rect} */
   var textBounds = this.textElement_.getBounds();
-  var strokeThickness = acgraph.vector.getThickness(this.iconStroke_);
+  var strokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(this.getOption('iconStroke')));
   var iconSize = this.iconSize_ + strokeThickness;
 
   if (parentBounds) {
@@ -1050,26 +984,9 @@ anychart.core.ui.LegendItem.prototype.applyDefaults = function() {
 
   this['iconType'](anychart.enums.LegendItemIconType.SQUARE);
 
-  /**
-   * Legend item icon fill.
-   * @type {acgraph.vector.Fill}
-   * @private
-   */
-  this.iconFill_ = 'black';
-
-  /**
-   * Legend item icon stroke.
-   * @type {acgraph.vector.Stroke}
-   * @private
-   */
-  this.iconStroke_ = 'none';
-
-  /**
-   * Legend item icon hatch fill.
-   * @type {?(acgraph.vector.PatternFill|acgraph.vector.HatchFill.HatchFillType|string)}
-   * @private
-   */
-  this.iconHatchFill_ = null;
+  this['iconFill']('black');
+  this['iconStroke']('none');
+  this['iconHatchFill'](null);
 
   /**
    * Legend item icon marker type
@@ -1133,9 +1050,9 @@ anychart.core.ui.LegendItem.prototype.getIconStroke_ = function(hover) {
     return this.disabledState_['iconStroke'];
   else {
     var iconType = this.getOption('iconType');
-    if (anychart.utils.isNone(this.iconStroke_) && (iconType in this.nonNullableStrokes_))
+    if (anychart.utils.isNone(this.getOption('iconStroke')) && (iconType in this.nonNullableStrokes_))
       return this.nonNullableStrokes_[iconType];
-    return /** @type {acgraph.vector.Stroke} */ (hover ? anychart.color.lighten(this.iconStroke_) : this.iconStroke_);
+    return /** @type {acgraph.vector.Stroke} */ (hover ? anychart.color.lighten(/** @type {acgraph.vector.Stroke} */(this.getOption('iconStroke'))) : this.getOption('iconStroke'));
   }
 };
 
@@ -1152,7 +1069,7 @@ anychart.core.ui.LegendItem.prototype.getIconFill_ = function(hover) {
   else if (this.disabled_)
     return this.disabledState_['iconFill'];
   else
-    return (hover ? anychart.color.lighten(this.iconFill_) : this.iconFill_);
+    return /** @type {acgraph.vector.Fill} */(hover ? anychart.color.lighten(/** @type {acgraph.vector.Fill} */(this.getOption('iconFill'))) : this.getOption('iconFill'));
 };
 
 
@@ -1166,7 +1083,7 @@ anychart.core.ui.LegendItem.prototype.getIconHatchFill_ = function(hover) {
   if (this.disabled_)
     return this.disabledState_['iconHatchFill'];
   else
-    return this.iconHatchFill_;
+    return /** @type {acgraph.vector.PatternFill} */(this.getOption('iconHatchFill'));
 };
 
 
@@ -1226,9 +1143,6 @@ anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default
   anychart.core.settings.deserialize(this, anychart.core.ui.LegendItem.PROPERTY_DESCRIPTORS, config, opt_default);
   anychart.core.settings.deserialize(this, anychart.core.Text.TEXT_DESCRIPTORS, config, opt_default);
   this.iconEnabled(config['iconEnabled']);
-  this.iconStroke(config['iconStroke']);
-  this.iconFill(config['iconFill']);
-  this.iconHatchFill(config['iconHatchFill']);
   this.iconMarkerType(config['iconMarkerType']);
   this.iconMarkerFill(config['iconMarkerFill']);
   this.iconMarkerStroke(config['iconMarkerStroke']);
@@ -1275,9 +1189,9 @@ anychart.core.ui.LegendItem.prototype.disposeInternal = function() {
   // proto['iconTextSpacing'] = proto.iconTextSpacing;
   // proto['maxWidth'] = proto.maxWidth;
   // proto['maxHeight'] = proto.maxHeight;
-  proto['iconFill'] = proto.iconFill;
-  proto['iconStroke'] = proto.iconStroke;
-  proto['iconHatchFill'] = proto.iconHatchFill;
+  // proto['iconFill'] = proto.iconFill;
+  // proto['iconStroke'] = proto.iconStroke;
+  // proto['iconHatchFill'] = proto.iconHatchFill;
   proto['getTextElement'] = proto.getTextElement;
   proto['getContentBounds'] = proto.getContentBounds;
   proto['getWidth'] = proto.getWidth;
