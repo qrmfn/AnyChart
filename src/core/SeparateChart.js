@@ -277,7 +277,7 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('legend' in config)
+  if ('legend' in config && this.getCreated('legend'))
     this.legend().setupInternal(!!opt_default, config['legend']);
 
   this.interactivity(config['interactivity']);
