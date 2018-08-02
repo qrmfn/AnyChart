@@ -45,6 +45,8 @@ goog.require('goog.math.AffineTransform');
 anychart.core.ui.Title = function() {
   anychart.core.ui.Title.base(this, 'constructor');
 
+  this.addThemes(anychart.themes.DefaultThemes['title']);
+
   delete this.themeSettings['enabled'];
 
   /**
@@ -467,6 +469,8 @@ anychart.core.ui.Title.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1087,14 +1091,6 @@ anychart.core.ui.Title.prototype.clear = function() {
 
 //endregion
 //region -- Serialization
-/**
- * Sets default settings.
- * @param {!Object} config
- */
-anychart.core.ui.Title.prototype.setThemeSettings = function(config) {
-  anychart.core.settings.copy(this.themeSettings, this.TEXT_DESCRIPTORS, config);
-  anychart.core.settings.copy(this.themeSettings, this.SIMPLE_PROPS_DESCRIPTORS, config);
-};
 
 
 /** @inheritDoc */
@@ -1150,24 +1146,26 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 
 
 /** @inheritDoc */
+anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Title.base(this, 'setupByJSONInternal', config, opt_default);
+
+  anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config, opt_default);
+  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+
+  if ('padding' in config)
+    this.padding().setupInternal(!!opt_default, config['padding']);
+
+  if ('margin' in config)
+    this.margin().setupInternal(!!opt_default, config['margin']);
+};
+
+
+/** @inheritDoc */
 anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  } else {
-    anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config);
-    anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  }
-
   if ('background' in config)
     this.background(config['background']);
-
-  if ('padding' in config)
-    this.padding(config['padding']);
-
-  if ('margin' in config)
-    this.margin(config['margin']);
 };
 
 

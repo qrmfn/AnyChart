@@ -26,6 +26,8 @@ goog.require('goog.array');
 anychart.core.ui.Background = function() {
   anychart.core.ui.Background.base(this, 'constructor');
 
+  this.addThemes(anychart.themes.DefaultThemes['background']);
+
   delete this.themeSettings['enabled'];
 
   /**
@@ -628,14 +630,6 @@ anychart.core.ui.Background.prototype.getRemainingBounds = function() {
 
 //endregion
 //region -- Serialize, deserialize, dispose
-/**
- * Sets default settings.
- * @param {!Object} config
- */
-anychart.core.ui.Background.prototype.setThemeSettings = function(config) {
-  anychart.core.settings.copy(this.themeSettings, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  if ('corners' in config) this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
-};
 
 
 /** @inheritDoc */
@@ -688,13 +682,21 @@ anychart.core.ui.Background.prototype.setupSpecial = function(isDefault, var_arg
 
 
 /** @inheritDoc */
+anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Background.base(this, 'setupByJSONInternal', config, opt_default);
+
+  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+
+  if (opt_default && 'corners' in config)
+    this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
+};
+
+
+/** @inheritDoc */
 anychart.core.ui.Background.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Background.base(this, 'setupByJSON', config, opt_default);
 
-  if (opt_default) {
-    this.setThemeSettings(config);
-  } else {
-    anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
+  if (!opt_default) {
     this.corners(config['corners']);
   }
 };

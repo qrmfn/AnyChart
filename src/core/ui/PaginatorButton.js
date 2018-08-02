@@ -70,5 +70,6 @@ anychart.core.ui.PaginatorButton.prototype.drawBackground = function(fill, strok
 
 /** @inheritDoc */
 anychart.core.ui.PaginatorButton.prototype.initStateSettings = function() {
-  this.stateSettings_ = anychart.getFullTheme('defaultLegend.paginator.buttonsSettings');
+  var th = anychart.getTheme();
+  this.stateSettings_ = th['defaultLegend']['paginator']['buttonsSettings'];
 };

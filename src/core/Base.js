@@ -511,6 +511,25 @@ anychart.core.Base = function() {
   this.needsForceSignalsDispatching_ = false;
 
   /**
+   *
+   * @type {Array.<Object|string>}
+   * @private
+   */
+  this.themes_ = [];
+
+  /**
+   *
+   * @type {Object}
+   * @private
+   */
+  this.flatTheme = {};
+
+  /**
+   * @type {Object}
+   */
+  this.themesMap = {};
+
+  /**
    * Consistency storage map.
    * Please see type definition for more information.
    * @type {anychart.ConsistencyStorage}
@@ -1128,13 +1147,24 @@ anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
   return this;
 };
 
+/**
+ * Setups current instance using passed JSON object.
+ * Called in constructor functions.
+ * @param {!Object} json .
+ * @param {boolean=} opt_default Identifies that we should setup defaults.
+ */
+anychart.core.Base.prototype.setupByJSONInternal = function(json, opt_default) {
+};
+
 
 /**
  * Setups current instance using passed JSON object.
+ * Called when using api.
  * @param {!Object} json .
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
+  this.setupByJSONInternal(json, opt_default);
 };
 
 
@@ -1149,6 +1179,198 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
   return false;
 };
 
+
+/**
+ * Setup component using flat theme
+ * @param {boolean=} opt_default
+ */
+anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
+  this.setupByJSONInternal(/** @type {!Object} */(this.getFlatTheme()), opt_default);
+};
+
+
+//region --- Theme Map Processing
+//------------------------------------------------------------------------------
+//
+//  Theme Map Processing
+//
+//------------------------------------------------------------------------------
+/**
+ * Add themes. Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie') from
+ * basic theme to very specific.
+ * @param {...(Object|string)} var_args - Themes.
+ */
+anychart.core.Base.prototype.addThemes = function(var_args) {
+  if (arguments.length == 1 && goog.isArray(arguments[0])) {
+    this.addThemes.apply(this, arguments[0]);
+  } else {
+    for (var i = 0; i < arguments.length; i++) {
+      var th = arguments[i];
+      if (th && (!goog.isString(th) || this.themes_.indexOf(/** @type {string} */(th)) === -1))
+        this.themes_.push(th);
+    }
+    this.flattenThemes();
+  }
+};
+
+
+/**
+ * @return {Array.<string|Object>}
+ */
+anychart.core.Base.prototype.getThemes = function() {
+  return this.themes_;
+};
+
+
+/**
+ *
+ * @param {Array.<string|Object>} parentThemes
+ * @param {string} childThemeName
+ */
+anychart.core.Base.prototype.addExtendedThemes = function(parentThemes, childThemeName) {
+  var themes = this.createExtendedThemes(parentThemes, childThemeName);
+  if (themes.length)
+    this.addThemes.apply(this, themes);
+};
+
+
+/**
+ *
+ * @param {Array.<string|Object>} sourceThemes
+ * @param {string} extendThemeName
+ * @return {Array.<string|Object>}
+ */
+anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, extendThemeName) {
+  var resultThemes = [];
+  for (var i = 0; i < sourceThemes.length; i++) {
+    var th = sourceThemes[i];
+    if (th) {
+      if (goog.isString(th)) {
+        resultThemes.push(th + '.' + extendThemeName);
+      } else if (goog.isDef(th[extendThemeName])) {
+        var objClone = goog.object.clone(th[extendThemeName]);
+        resultThemes.push(objClone);
+      }
+    }
+  }
+  return resultThemes;
+};
+
+
+/**
+ * Flattens themes.
+ */
+anychart.core.Base.prototype.flattenThemes = function() {
+  var th = anychart.getTheme();
+  for (var i = 0; i < this.themes_.length; i++) {
+    var theme = this.themes_[i];
+    if (goog.isString(theme)) {
+      var splitPath = theme.split('.');
+      theme = th;
+      for (var j = 0; j < splitPath.length; j++) {
+        if (theme) {
+          var part = splitPath[j];
+          theme = theme[part];
+        }
+      }
+    }
+    if (theme)
+      goog.mixin(this.flatTheme, theme);
+  }
+  this.themeSettings = /** @type {!Object} */(this.flatTheme);
+};
+
+
+/**
+ * @param {string=} opt_root
+ * @return {!Object}
+ */
+anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
+  return goog.isDef(opt_root) ? this.flatTheme[opt_root] : this.flatTheme;
+};
+
+
+/**
+ *
+ * @param {string} getterName Name of the getter function
+ * @param {boolean=} opt_ignoreEnabled Ignore enabled field
+ * @param {Function=} opt_getterFunction
+ * @return {boolean|anychart.core.Base|undefined}
+ */
+anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled, opt_getterFunction) {
+  if (!goog.isDef(this.themesMap[getterName]))
+    this.themesMap[getterName] = {themes: anychart.themes.DefaultThemes[getterName]};
+
+  if (this.themesMap[getterName].instance)
+    return this.themesMap[getterName].instance;
+
+  if (goog.isDef(this.themesMap[getterName].enabled))
+    return this.themesMap[getterName].enabled;
+
+  // Check if entity is enabled by default theme
+  var themes = this.themesMap[getterName].themes ? goog.array.clone(this.themesMap[getterName].themes) : [];
+  var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
+  themes.push.apply(themes, extendedThemes);
+
+  opt_getterFunction = goog.isFunction(opt_getterFunction) ? opt_getterFunction : this[getterName];
+
+  if (opt_ignoreEnabled) {
+    this.setCreated(getterName, /** @type {anychart.core.Base} */(opt_getterFunction.call(this)));
+    return this.themesMap[getterName].instance;
+
+  } else {
+    var th = anychart.getTheme();
+    for (var i = themes.length; i--;) {
+      var theme = themes[i];
+      if (goog.isString(theme)) {
+        var splitPath = theme.split('.');
+        theme = th;
+        for (var j = 0; j < splitPath.length; j++) {
+          if (theme) {
+            var part = splitPath[j];
+            theme = theme[part];
+          }
+        }
+      }
+      if (theme && goog.isDef(theme['enabled'])) {
+        if (theme['enabled'])
+          this.setCreated(getterName, /** @type {anychart.core.Base} */(opt_getterFunction.call(this)));
+        else
+          this.themesMap[getterName].enabled = false;
+        return this.themesMap[getterName].instance;
+      }
+    }
+  }
+};
+
+
+/**
+ *
+ * @param {string} getterName
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setCreated = function(getterName, instance) {
+  this.setupCreated(getterName, instance);
+
+  this.themesMap[getterName].enabled = true;
+};
+
+
+/**
+ *
+ * @param {string} getterName
+ * @param {anychart.core.Base} instance
+ */
+anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
+  var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
+  instance.addThemes(extendedThemes);
+  instance.setupByFlatTheme(true);
+
+  if (!goog.isDef(this.themesMap[getterName]))
+    this.themesMap[getterName] = {};
+  this.themesMap[getterName].instance = instance;
+};
+//endregion
 
 /**
  * Dispatches external event with a timeout to detach it from the other code execution frame.

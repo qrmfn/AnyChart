@@ -73,7 +73,7 @@ acgraph.vector.Stage.prototype.allowCreditsDisabling = false;
 acgraph.vector.Stage.prototype.credits = function(opt_value) {
   if (!this.credits_) {
     this.credits_ = new anychart.core.ui.StageCredits(this, this.allowCreditsDisabling);
-    this.credits_.setup(anychart.getFullTheme('stageCredits'));
+    this.credits_.setup(anychart.getTheme()['stageCredits']);
   }
   if (goog.isDef(opt_value)) {
     this.credits_.setup(opt_value);
@@ -558,6 +558,23 @@ anychart.isValidKey = function() {
 //
 //----------------------------------------------------------------------------------------------------------------------
 /**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * TODO (A.Kudryavtsev): Should replace useless multiple themes like anychart.themes_ .
+ * @type {?(string|Object)}
+ * @private
+ */
+anychart.currentTheme_ = null;
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * @type {?Object}
+ * @private
+ */
+anychart.currentThemeCache_ = null;
+
+
+/**
  * Array of themes that will be applied for anychart globally.
  * @type {Array<string|Object>}
  * @private
@@ -579,6 +596,32 @@ anychart.themeClones_ = [];
  * @private
  */
 anychart.mergedThemeClones_ = [];
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * @param {Object|string} value - New theme. TODO (A.Kudryavtsev): Describe.
+ */
+anychart.setTheme = function(value) {
+  anychart.currentTheme_ = goog.isString(value) ?
+      anychart.window['anychart']['themes'][value] :
+      value;
+};
+
+
+/**
+ * TODO (A.Kudryavtsev): Performance boost.
+ * TODO (A.Kudryavtsev): Describe.
+ * @return {Object}
+ */
+anychart.getTheme = function() {
+  if (!anychart.currentThemeCache_) {
+    anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
+    if (anychart.currentTheme_)
+      goog.mixin(anychart.currentThemeCache_, /** @type {Object} */(anychart.currentTheme_));
+  }
+  return anychart.currentThemeCache_;
+};
 
 
 /**
@@ -613,6 +656,7 @@ anychart.appendTheme = function(value) {
  * @return {*}
  */
 anychart.getFullTheme = function(root) {
+  //console.log("getFullTheme", root);
   root = anychart.utils.toCamelCase(root);
   anychart.performance.start('Theme compilation');
   var i;

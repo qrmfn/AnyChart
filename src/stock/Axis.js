@@ -136,7 +136,7 @@ anychart.stockModule.Axis.prototype.height = function(opt_value) {
 anychart.stockModule.Axis.prototype.background = function(opt_value) {
   if (!this.background_) {
     this.background_ = new anychart.core.ui.Background();
-    this.background_.setThemeSettings(/** @type {!Object} */(anychart.getFullTheme('defaultBackground')));
+    // this.background_.setThemeSettings(/** @type {!Object} */(anychart.getFullTheme('defaultBackground')));
     this.background_.listenSignals(this.backgroundInvalidated_, this);
   }
   if (goog.isDef(opt_value)) {
