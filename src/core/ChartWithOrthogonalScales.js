@@ -18,6 +18,8 @@ goog.require('goog.array');
 anychart.core.ChartWithOrthogonalScales = function(categorizeData) {
   anychart.core.ChartWithOrthogonalScales.base(this, 'constructor');
 
+  this.addThemes('heatMap');
+
   /**
    * If true, all default chart elements layout is swapped.
    * @type {boolean}
