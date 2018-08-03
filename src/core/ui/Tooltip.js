@@ -607,6 +607,8 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
+
+    this.setupCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2424,7 +2426,9 @@ anychart.core.ui.Tooltip.prototype.setupByJSON = function(config, opt_default) {
     anychart.core.settings.deserialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, config);
   }
 
-  this.title().setupInternal(!!opt_default, config['title']);
+  if ('title' in config && this.getCreated('title'))
+    this.title().setupInternal(!!opt_default, config['title']);
+
   this.separator().setupInternal(!!opt_default, config['separator']);
   this.background().setupInternal(!!opt_default, config['background']);
   this.padding().setupInternal(!!opt_default, config['padding']);
