@@ -500,7 +500,6 @@ anychart.core.ui.Legend.prototype.paginator = function(opt_value) {
     this.registerDisposable(this.paginator_);
     this.paginator_.listenSignals(this.paginatorInvalidated_, this);
 
-    this.paginator_.addThemes(anychart.themes.DefaultThemes['paginator']);
     this.setupCreated('paginator', this.paginator_);
   }
 

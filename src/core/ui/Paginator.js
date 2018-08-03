@@ -19,6 +19,8 @@ goog.require('anychart.math.Rect');
 anychart.core.ui.Paginator = function() {
   anychart.core.ui.Paginator.base(this, 'constructor');
 
+  this.addThemes(anychart.themes.DefaultThemes['paginator']);
+
   /**
    * TODO(AntonKagakin): make it able to set?
    * Spacing between text and buttons.
@@ -87,6 +89,8 @@ anychart.core.ui.Paginator = function() {
   this.currentPage(1);
 
   this.previousButton_ = new anychart.core.ui.PaginatorButton();
+  // this.previousButton_.addThemes(this.getThemes()['buttonsSettings']);
+  // this.previousButton_.setupByFlatTheme(true);
   this.previousButton_.padding(null);
   this.previousButton_.enabled(true);
   this.previousButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
@@ -94,6 +98,8 @@ anychart.core.ui.Paginator = function() {
   this.previousButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.previousButton_);
 
   this.nextButton_ = new anychart.core.ui.PaginatorButton();
+  // this.nextButton_.addThemes(this.getThemes());
+  // this.nextButton_.setupByFlatTheme(true);
   this.nextButton_.padding(null);
   this.nextButton_.enabled(true);
   this.nextButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
@@ -225,6 +231,8 @@ anychart.core.ui.Paginator.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -328,7 +336,10 @@ anychart.core.ui.Paginator.prototype.createTextString_ = function() {
  * @inheritDoc
  */
 anychart.core.ui.Paginator.prototype.remove = function() {
-  this.background().remove();
+  var background = this.getCreated('background');
+  if (background)
+    background.remove();
+
   if (this.previousButton_) {
     this.previousButton_.remove();
     this.previousButton_.invalidate(anychart.ConsistencyState.CONTAINER);
@@ -413,14 +424,18 @@ anychart.core.ui.Paginator.prototype.draw = function() {
     this.registerDisposable(this.text_);
   }
 
-  this.background().suspendSignalsDispatching();
+  var background = this.getCreated('backgrouns');
+  if (background)
+    background.suspendSignalsDispatching();
 
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
     this.calculatePaginatorBounds_();
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.CONTAINER)) {
-    this.background().container(container).draw();
+    if (background)
+      background.container(container).draw();
+
     if (this.previousButton_) this.previousButton_.container(container);
     if (this.text_) this.text_.parent(container);
     if (this.nextButton_) this.nextButton_.container(container);
@@ -428,14 +443,17 @@ anychart.core.ui.Paginator.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.PAGINATOR_BACKGROUND)) {
-    this.background_.parentBounds(this.actualLeft_, this.actualTop_, this.backgroundWidth_, this.backgroundHeight_);
-    this.background_.draw();
+    if (background) {
+      background.parentBounds(this.actualLeft_, this.actualTop_, this.backgroundWidth_, this.backgroundHeight_);
+      background.draw();
+    }
     this.markConsistent(anychart.ConsistencyState.PAGINATOR_BACKGROUND);
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.Z_INDEX)) {
     var zIndex = /** @type {number} */ (this.zIndex());
-    if (this.background_) this.background_.zIndex(zIndex);
+    if (background)
+      background.zIndex(zIndex);
     if (this.previousButton_) this.previousButton_.zIndex(zIndex);
     if (this.text_) this.text_.zIndex(zIndex);
     if (this.nextButton_) this.nextButton_.zIndex(zIndex);
@@ -509,7 +527,8 @@ anychart.core.ui.Paginator.prototype.draw = function() {
     this.markConsistent(anychart.ConsistencyState.BOUNDS);
   }
 
-  this.background().resumeSignalsDispatching(false);
+  if (background)
+    background.resumeSignalsDispatching(false);
 
   if (manualSuspend) stage.resume();
   return this;
@@ -791,18 +810,24 @@ anychart.core.ui.Paginator.prototype.serialize = function() {
 
 
 /** @inheritDoc */
+anychart.core.ui.Paginator.prototype.setupByJSONInternal = function(config, opt_default) {
+  anychart.core.ui.Paginator.base(this, 'setupByJSONInternal', config, opt_default);
+
+  anychart.core.settings.deserialize(this, anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS, config, opt_default);
+
+  if ('padding' in config)
+    this.padding().setupInternal(!!opt_default, config['padding']);
+
+  if ('margin' in config)
+    this.margin().setupInternal(!!opt_default, config['margin']);
+};
+
+/** @inheritDoc */
 anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Paginator.base(this, 'setupByJSON', config, opt_default);
 
-  anychart.core.settings.deserialize(this, anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS, config, opt_default);
   if ('background' in config)
     this.background(config['background']);
-
-  if ('padding' in config)
-    this.padding(config['padding']);
-
-  if ('margin' in config)
-    this.margin(config['margin']);
 };
 
 
