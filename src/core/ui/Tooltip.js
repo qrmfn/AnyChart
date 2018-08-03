@@ -33,6 +33,8 @@ goog.require('goog.object');
 anychart.core.ui.Tooltip = function(capability) {
   anychart.core.ui.Tooltip.base(this, 'constructor');
 
+  this.addThemes(anychart.themes.DefaultThemes['tooltip']);
+
   delete this.themeSettings['enabled'];
 
   /**
