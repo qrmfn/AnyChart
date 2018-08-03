@@ -374,6 +374,7 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
+    this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 
@@ -410,6 +411,7 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
 
+    this.title_.addThemes(anychart.themes.DefaultThemes['title']);
     this.setupCreated('title', this.title_);
   }
 
@@ -453,6 +455,7 @@ anychart.core.ui.Legend.prototype.titleSeparator = function(opt_value) {
     this.registerDisposable(this.titleSeparator_);
     this.titleSeparator_.listenSignals(this.titleSeparatorInvalidated_, this);
 
+    this.titleSeparator_.addThemes(anychart.themes.DefaultThemes['separator']);
     this.setupCreated('titleSeparator', this.titleSeparator_);
   }
 
@@ -497,6 +500,7 @@ anychart.core.ui.Legend.prototype.paginator = function(opt_value) {
     this.registerDisposable(this.paginator_);
     this.paginator_.listenSignals(this.paginatorInvalidated_, this);
 
+    this.paginator_.addThemes(anychart.themes.DefaultThemes['paginator']);
     this.setupCreated('paginator', this.paginator_);
   }
 

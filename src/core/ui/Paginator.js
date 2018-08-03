@@ -19,8 +19,6 @@ goog.require('anychart.math.Rect');
 anychart.core.ui.Paginator = function() {
   anychart.core.ui.Paginator.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['paginator']);
-
   /**
    * TODO(AntonKagakin): make it able to set?
    * Spacing between text and buttons.

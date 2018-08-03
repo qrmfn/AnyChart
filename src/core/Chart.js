@@ -496,6 +496,7 @@ anychart.core.Chart.prototype.background = function(opt_value) {
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.registerDisposable(this.background_);
 
+    this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 
@@ -540,6 +541,7 @@ anychart.core.Chart.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.registerDisposable(this.title_);
 
+    this.title_.addThemes(anychart.themes.DefaultThemes['title']);
     this.setupCreated('title', this.title_);
   }
 

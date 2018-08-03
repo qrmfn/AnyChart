@@ -33,8 +33,6 @@ goog.require('goog.object');
 anychart.core.ui.Tooltip = function(capability) {
   anychart.core.ui.Tooltip.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['tooltip']);
-
   delete this.themeSettings['enabled'];
 
   /**
@@ -608,7 +606,8 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
 
-    this.setupCreated('title', this.title_);
+    // this.title_.addThemes(anychart.themes.DefaultThemes['title']);
+    // this.setupCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2426,7 +2425,7 @@ anychart.core.ui.Tooltip.prototype.setupByJSON = function(config, opt_default) {
     anychart.core.settings.deserialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, config);
   }
 
-  if ('title' in config && this.getCreated('title'))
+  //if ('title' in config && this.getCreated('title'))
     this.title().setupInternal(!!opt_default, config['title']);
 
   this.separator().setupInternal(!!opt_default, config['separator']);
