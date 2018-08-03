@@ -73,7 +73,7 @@ acgraph.vector.Stage.prototype.allowCreditsDisabling = false;
 acgraph.vector.Stage.prototype.credits = function(opt_value) {
   if (!this.credits_) {
     this.credits_ = new anychart.core.ui.StageCredits(this, this.allowCreditsDisabling);
-    this.credits_.setup(anychart.getTheme()['stageCredits']);
+    this.credits_.setup(anychart.getFullTheme('stageCredits'));
   }
   if (goog.isDef(opt_value)) {
     this.credits_.setup(opt_value);
