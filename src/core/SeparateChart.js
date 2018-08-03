@@ -82,6 +82,9 @@ anychart.core.SeparateChart.prototype.legend = function(opt_value) {
     this.legend_.listenSignals(this.onLegendSignal_, this);
     this.legend_.setParentEventTarget(this);
 
+    // todo: remove this when tooltip is refactored
+    this.legend_.addThemes(this.legendThemeChache_);
+
     this.setupCreated('legend', this.legend_);
   }
 
@@ -277,8 +280,14 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('legend' in config && this.getCreated('legend'))
-    this.legend().setupInternal(!!opt_default, config['legend']);
+  if ('legend' in config) {
+    if (this.getCreated('legend'))
+      this.legend().setupInternal(!!opt_default, config['legend']);
+    else {
+      // todo: remove this when tooltip is refactored
+      this.legendThemeChache_ = config['legend'];
+    }
+  }
 
   this.interactivity(config['interactivity']);
 };

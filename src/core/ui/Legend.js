@@ -2063,6 +2063,9 @@ anychart.core.ui.Legend.prototype.setupByJSONInternal = function(config, opt_def
 
   if ('margin' in config)
     this.margin().setupInternal(!!opt_default, config['margin']);
+
+  // todo: remove this when tooltip is refactored
+  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 };
 
 
