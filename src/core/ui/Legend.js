@@ -1482,7 +1482,12 @@ anychart.core.ui.Legend.prototype.clearItems = function() {
  * @return {anychart.core.ui.LegendItem}
  */
 anychart.core.ui.Legend.prototype.createItem = function() {
-  return new anychart.core.ui.LegendItem();
+  // todo: Should be removed after descriptors refactoring
+  var legendItem = new anychart.core.ui.LegendItem();
+  legendItem.addThemes(this.getThemes());
+  legendItem.setupByFlatTheme(true);
+
+  return legendItem;
 };
 
 
