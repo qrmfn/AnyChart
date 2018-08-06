@@ -89,8 +89,6 @@ anychart.core.ui.Paginator = function() {
   this.currentPage(1);
 
   this.previousButton_ = new anychart.core.ui.PaginatorButton();
-  // this.previousButton_.addThemes(this.getThemes()['buttonsSettings']);
-  // this.previousButton_.setupByFlatTheme(true);
   this.previousButton_.padding(null);
   this.previousButton_.enabled(true);
   this.previousButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
@@ -98,8 +96,6 @@ anychart.core.ui.Paginator = function() {
   this.previousButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.previousButton_);
 
   this.nextButton_ = new anychart.core.ui.PaginatorButton();
-  // this.nextButton_.addThemes(this.getThemes());
-  // this.nextButton_.setupByFlatTheme(true);
   this.nextButton_.padding(null);
   this.nextButton_.enabled(true);
   this.nextButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
@@ -235,6 +231,7 @@ anychart.core.ui.Paginator.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
+    this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 

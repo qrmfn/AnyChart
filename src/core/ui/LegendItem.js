@@ -1139,12 +1139,6 @@ anychart.core.ui.LegendItem.prototype.setItemIndexToLayer = function(index) {
 //endregion
 //region --- Setup and Dispose
 /** @inheritDoc */
-anychart.core.ui.LegendItem.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.LegendItem.base(this, 'setupByJSONInternal', config, opt_default);
-
-};
-
-/** @inheritDoc */
 anychart.core.ui.LegendItem.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.LegendItem.base(this, 'setupByJSON', config, opt_default);
 
