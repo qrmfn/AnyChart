@@ -38,7 +38,7 @@ anychart.pyramidFunnelModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.pyramidFunnelModule.Chart.base(this, 'constructor');
   this.suspendSignalsDispatching();
 
-  this.addThemes('funnel');
+  this.addThemes('pieFunnelPyramidBase', 'funnel');
 
   /**
    * @type {anychart.palettes.HatchFills}
