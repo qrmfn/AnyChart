@@ -107,15 +107,18 @@ anychart.core.ui.Paginator = function() {
   this.nextButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.nextButton_);
 
   //TODO(AntonKagakin): create customDrawers flag, to avoid custom layout drawing bug.
+  var self = this;
   var layoutBeforeInvalidationHook = function() {
     if (this.getOption('layout') == anychart.enums.Layout.HORIZONTAL) {
-      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
-      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
+      self.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
+      self.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
     } else {
-      this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
-      this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
+      self.previousButton_.buttonDrawer(anychart.core.ui.Paginator.UP_ARROW_DRAWER_);
+      self.nextButton_.buttonDrawer(anychart.core.ui.Paginator.DOWN_ARROW_DRAWER_);
     }
   };
+  this.previousButton_.buttonDrawer(anychart.core.ui.Paginator.LEFT_ARROW_DRAWER_);
+  this.nextButton_.buttonDrawer(anychart.core.ui.Paginator.RIGHT_ARROW_DRAWER_);
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['text', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
@@ -821,6 +824,7 @@ anychart.core.ui.Paginator.prototype.setupByJSONInternal = function(config, opt_
   if ('margin' in config)
     this.margin().setupInternal(!!opt_default, config['margin']);
 };
+
 
 /** @inheritDoc */
 anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default) {
