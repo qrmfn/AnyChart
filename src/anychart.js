@@ -603,11 +603,11 @@ anychart.mergedThemeClones_ = [];
  */
 anychart.getTheme = function() {
   if (!anychart.currentThemeCache_) {
-    if (this.themes_.length) {
-      anychart.currentThemeCache_ = anychart.utils.recursiveClone(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]);
+    if (anychart.themes_.length) {
+      anychart.currentThemeCache_ = /** @type {Object} */(anychart.utils.recursiveClone(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]));
 
-      for (var i = 0; i < this.themes_.length; i++) {
-        var th = goog.isString(this.themes_[i]) ? anychart.window['anychart']['themes'][this.themes_[i]] : this.themes_[i];
+      for (var i = 0; i < anychart.themes_.length; i++) {
+        var th = goog.isString(anychart.themes_[i]) ? anychart.window['anychart']['themes'][anychart.themes_[i]] : anychart.themes_[i];
         anychart.currentThemeCache_ = anychart.utils.recursiveMerge(anychart.currentThemeCache_, th);
       }
 
