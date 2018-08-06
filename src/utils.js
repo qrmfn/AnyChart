@@ -1041,6 +1041,27 @@ anychart.utils.recursiveClone = function(obj) {
 
 
 /**
+ * Recursively merges objects
+ * @param {Object} obj1
+ * @param {Object} obj2
+ * @return {Object}
+ */
+anychart.utils.recursiveMerge = function(obj1, obj2) {
+  var res = obj1;
+  for (var key in obj2) {
+    if (obj1.hasOwnProperty(key)) {
+      if (goog.isObject(res[key]) && goog.isObject(obj2[key]) && !goog.isArray(res[key])) {
+        res[key] = anychart.utils.recursiveMerge(res[key], obj2[key]);
+      } else
+        res[key] = obj2[key];
+    }
+  }
+
+  return res;
+};
+
+
+/**
  * Create and fills an array or object with value.
  * @param {Object|number} fieldsOrLength
  * @param {*} value

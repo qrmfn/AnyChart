@@ -599,26 +599,20 @@ anychart.mergedThemeClones_ = [];
 
 
 /**
- * TODO (A.Kudryavtsev): Performance boost.
- * @param {Object|string} value - New theme. TODO (A.Kudryavtsev): Describe.
- */
-anychart.setTheme = function(value) {
-  anychart.currentTheme_ = goog.isString(value) ?
-      anychart.window['anychart']['themes'][value] :
-      value;
-};
-
-
-/**
- * TODO (A.Kudryavtsev): Performance boost.
- * TODO (A.Kudryavtsev): Describe.
  * @return {Object}
  */
 anychart.getTheme = function() {
   if (!anychart.currentThemeCache_) {
-    anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
-    if (anychart.currentTheme_)
-      goog.mixin(anychart.currentThemeCache_, /** @type {Object} */(anychart.currentTheme_));
+    if (this.themes_.length) {
+      anychart.currentThemeCache_ = anychart.utils.recursiveClone(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]);
+
+      for (var i = 0; i < this.themes_.length; i++) {
+        var th = goog.isString(this.themes_[i]) ? anychart.window['anychart']['themes'][this.themes_[i]] : this.themes_[i];
+        anychart.currentThemeCache_ = anychart.utils.recursiveMerge(anychart.currentThemeCache_, th);
+      }
+
+    } else
+      anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
   }
   return anychart.currentThemeCache_;
 };
@@ -635,6 +629,8 @@ anychart.theme = function(opt_value) {
     anychart.themeClones_.length = 0;
     anychart.mergedThemeClones_.length = 0;
     anychart.themes.merging.clearCache();
+
+    anychart.currentThemeCache_ = null;
   }
   return anychart.themes_;
 };
@@ -646,6 +642,8 @@ anychart.theme = function(opt_value) {
  */
 anychart.appendTheme = function(value) {
   anychart.themes_.push(value);
+
+  anychart.currentThemeCache_ = null;
 };
 
 
