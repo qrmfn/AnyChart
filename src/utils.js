@@ -1042,6 +1042,7 @@ anychart.utils.recursiveClone = function(obj) {
 
 /**
  * Recursively merges objects
+ *
  * @param {Object} obj1
  * @param {Object} obj2
  * @return {Object}

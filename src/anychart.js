@@ -599,6 +599,8 @@ anychart.mergedThemeClones_ = [];
 
 
 /**
+ * Returns current global default theme
+ *
  * @return {Object}
  */
 anychart.getTheme = function() {

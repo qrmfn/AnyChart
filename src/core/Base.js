@@ -1241,7 +1241,7 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 
 /**
- * Returns current instance themes chain.
+ * Returns themes chain of current instance.
  *
  * @return {Array.<string|Object>}
  */
@@ -1308,8 +1308,10 @@ anychart.core.Base.prototype.flattenThemes = function() {
 
 
 /**
- * @param {string=} opt_root
- * @return {!Object}
+ * Returns flat theme
+ *
+ * @param {string=} opt_root Sub-theme name
+ * @return {!Object} json object
  */
 anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
   return goog.isDef(opt_root) ? this.flatTheme_[opt_root] : this.flatTheme_;
@@ -1317,6 +1319,11 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
 
 
 /**
+ * Special getter for inner usage to get any child entity, that can be get by api getters.
+ * Should be used instead of using api getters for performance purpose.
+ *
+ * Checks if entity instance is enabled by theme and should be created, creates instance by calling it's api getter and returns this instance.
+ * Otherwise returns false.
  *
  * @param {string} getterName Name of the getter function
  * @param {boolean=} opt_ignoreEnabled Ignore enabled field
@@ -1369,9 +1376,10 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
 
 
 /**
+ * Creates instance of child entity by calling its api getter.
  *
- * @param {string} getterName
- * @param {Function=} opt_getterFunction
+ * @param {string} getterName Name of the getter function
+ * @param {Function=} opt_getterFunction Getter function if getter is not exported
  */
 anychart.core.Base.prototype.setCreated = function(getterName, opt_getterFunction) {
   this.createdMap_[getterName].enabled = true;
@@ -1386,9 +1394,10 @@ anychart.core.Base.prototype.setCreated = function(getterName, opt_getterFunctio
 
 
 /**
+ * Setups created instance of child entity and updates this.createdMap_[getterName]
  *
- * @param {string} getterName
- * @param {anychart.core.Base} instance
+ * @param {string} getterName Name of the getter that creates instance of child entity
+ * @param {anychart.core.Base} instance Child entity instance
  */
 anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);

@@ -2092,6 +2092,8 @@ anychart.themes.merging.typedEntities_ = {
 
 
 /**
+ * Default themes map for child entities that are using in lazy setup system
+ *
  * @type {Object}
  */
 anychart.themes.DefaultThemes = {
