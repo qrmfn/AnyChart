@@ -1482,7 +1482,7 @@ anychart.core.ui.Legend.prototype.clearItems = function() {
  */
 anychart.core.ui.Legend.prototype.createItem = function() {
   var item = new anychart.core.ui.LegendItem();
-  this.setupCreated('legendItem_', item);
+  item.setupByFlatTheme(true);
   item.setupByJSON(this.getFlatTheme());
   return item;
 };
