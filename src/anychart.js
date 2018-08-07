@@ -603,7 +603,8 @@ anychart.mergedThemeClones_ = [];
  */
 anychart.getTheme = function() {
   if (!anychart.currentThemeCache_) {
-    if (anychart.themes_.length) {
+    if (anychart.themes_.length) {debugger
+      // todo: (chernetsky) Yes, recursiveClone so far...
       anychart.currentThemeCache_ = /** @type {Object} */(anychart.utils.recursiveClone(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]));
 
       for (var i = 0; i < anychart.themes_.length; i++) {
