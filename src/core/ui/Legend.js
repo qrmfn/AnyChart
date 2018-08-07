@@ -1481,7 +1481,10 @@ anychart.core.ui.Legend.prototype.clearItems = function() {
  * @return {anychart.core.ui.LegendItem}
  */
 anychart.core.ui.Legend.prototype.createItem = function() {
-  return new anychart.core.ui.LegendItem();
+  var item = new anychart.core.ui.LegendItem();
+  this.setupCreated('legendItem_', item);
+  item.setupByJSON(this.getFlatTheme());
+  return item;
 };
 
 
