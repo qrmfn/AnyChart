@@ -1482,8 +1482,8 @@ anychart.core.ui.Legend.prototype.clearItems = function() {
  */
 anychart.core.ui.Legend.prototype.createItem = function() {
   var item = new anychart.core.ui.LegendItem();
+  item.addThemes(this.getFlatTheme(), 'defaultFontSettings');
   item.setupByFlatTheme(true);
-  item.setupByJSON(this.getFlatTheme());
   return item;
 };
 
