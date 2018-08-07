@@ -521,13 +521,6 @@ anychart.core.Base = function() {
    */
   this.themes_ = [];
 
-  /**
-   * JSON theme object flat merged (not recursively) from themes from this.themes_
-   * 
-   * @type {Object}
-   * @private
-   */
-  this.flatTheme_ = {};
 
   /**
    * Map for all getter instances states in format:
@@ -1208,7 +1201,7 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
-  this.setupByJSONInternal(/** @type {!Object} */(this.getFlatTheme()), opt_default);
+  this.setupByJSONInternal(/** @type {!Object} */(this.getThemeSettings()), opt_default);
 };
 
 
@@ -1288,6 +1281,7 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
  */
 anychart.core.Base.prototype.flattenThemes = function() {
   var th = anychart.getTheme();
+  var flatTheme = {};
   for (var i = 0; i < this.themes_.length; i++) {
     var theme = this.themes_[i];
     if (goog.isString(theme)) {
@@ -1301,9 +1295,9 @@ anychart.core.Base.prototype.flattenThemes = function() {
       }
     }
     if (theme)
-      goog.mixin(this.flatTheme_, theme);
+      goog.mixin(flatTheme, theme);
   }
-  this.themeSettings = /** @type {!Object} */(this.flatTheme_);
+  this.themeSettings = flatTheme;
 };
 
 
@@ -1313,8 +1307,8 @@ anychart.core.Base.prototype.flattenThemes = function() {
  * @param {string=} opt_root Sub-theme name
  * @return {!Object} json object
  */
-anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
-  return goog.isDef(opt_root) ? this.flatTheme_[opt_root] : this.flatTheme_;
+anychart.core.Base.prototype.getThemeSettings = function(opt_root) {
+  return goog.isDef(opt_root) ? this.themeSettings[opt_root] : this.themeSettings;
 };
 
 

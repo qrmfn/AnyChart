@@ -22,9 +22,6 @@ goog.require('anychart.pieModule.Chart');
 anychart.pie = function(opt_data, opt_csvSettings) {
   var chart = new anychart.pieModule.Chart(opt_data, opt_csvSettings);
   chart.setupInternal(true, anychart.getFullTheme('pie'));
-
-  // chart.setupByJSONInternal(chart.getFlatTheme(), true);
-
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.PIE] = anychart.pie;
