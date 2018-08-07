@@ -511,23 +511,40 @@ anychart.core.Base = function() {
   this.needsForceSignalsDispatching_ = false;
 
   /**
-   *
+   * Themes chain for current instances in order from less specific to more specific.
+   * 
+   * Can contain strings (names in defaultTheme objects, for example 'title' or 'chart.title')
+   * of theme objects.
+   * 
    * @type {Array.<Object|string>}
    * @private
    */
   this.themes_ = [];
 
   /**
+   * JSON theme object flat merged (not recursively) from themes from this.themes_
+   * 
+   * @type {Object}
+   * @private
+   */
+  this.flatTheme_ = {};
+
+  /**
+   * Map for all getter instances states in format:
+   * {
+   *   'getterName1': {
+   *     'themes': ['theme1', 'theme2'],
+   *     'enabled': boolean,
+   *     'instance': null|anychart.core.Base
+   *   }
+   * }
+   *
+   * This map is used to check if instance should be created or it already exists.
    *
    * @type {Object}
    * @private
    */
-  this.flatTheme = {};
-
-  /**
-   * @type {Object}
-   */
-  this.themesMap = {};
+  this.createdMap_ = {};
 
   /**
    * Consistency storage map.
@@ -1149,8 +1166,10 @@ anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
 
 /**
  * Setups current instance using passed JSON object.
- * Called in constructor functions.
- * @param {!Object} json .
+ * Called anyway when instance created.
+ * Should be used only for mandatory initialization calls.
+ *
+ * @param {!Object} json Json settings object
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByJSONInternal = function(json, opt_default) {
@@ -1159,8 +1178,11 @@ anychart.core.Base.prototype.setupByJSONInternal = function(json, opt_default) {
 
 /**
  * Setups current instance using passed JSON object.
- * Called when using api.
- * @param {!Object} json .
+ *
+ * Called only when user api is using.
+ * Should be used for non mandatory initialization calls, for example creation child entities.
+ *
+ * @param {!Object} json Json settings object
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
@@ -1181,8 +1203,9 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 
 
 /**
- * Setup component using flat theme
- * @param {boolean=} opt_default
+ * Setups current instance using its own flat theme.
+ *
+ * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
   this.setupByJSONInternal(/** @type {!Object} */(this.getFlatTheme()), opt_default);
@@ -1196,9 +1219,12 @@ anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
 //
 //------------------------------------------------------------------------------
 /**
- * Add themes. Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie') from
- * basic theme to very specific.
- * @param {...(Object|string)} var_args - Themes.
+ * Add theme or multiple themes to instance themes chain.
+ *
+ * Must be ordered like this.addThemes('chartDefault', 'pieDefault', 'myCustomPie')
+ * from basic (less specific) theme to very specific.
+ *
+ * @param {...(Object|string)} var_args Themes as string names (keys) from defaultTheme object, or json settings objects.
  */
 anychart.core.Base.prototype.addThemes = function(var_args) {
   if (arguments.length == 1 && goog.isArray(arguments[0])) {
@@ -1215,6 +1241,8 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 
 /**
+ * Returns current instance themes chain.
+ *
  * @return {Array.<string|Object>}
  */
 anychart.core.Base.prototype.getThemes = function() {
@@ -1223,22 +1251,20 @@ anychart.core.Base.prototype.getThemes = function() {
 
 
 /**
+ * Creates array withe themes that are sub-themes of parent's themes.
  *
- * @param {Array.<string|Object>} parentThemes
- * @param {string} childThemeName
- */
-anychart.core.Base.prototype.addExtendedThemes = function(parentThemes, childThemeName) {
-  var themes = this.createExtendedThemes(parentThemes, childThemeName);
-  if (themes.length)
-    this.addThemes.apply(this, themes);
-};
-
-
-/**
+ * Example:
+ * calling this.addExtendedThemes(['chart', 'pieFunnelBase', 'pie'], 'title')
+ * will add such themes ['chart.title', 'pieFunnelBase.title', 'pie.title']
  *
- * @param {Array.<string|Object>} sourceThemes
- * @param {string} extendThemeName
- * @return {Array.<string|Object>}
+ * This works with objects too.
+ *
+ * calling this.addExtendedThemes([{'a': 'A', 'title': {'fontColor': 'red'}}], 'title')
+ * will add such themes [{'fontColor': 'red'}]
+ *
+ * @param {Array.<string|Object>} sourceThemes Parent themes to be used as base themes
+ * @param {string} extendThemeName Sub-theme name
+ * @return {Array.<string|Object>} Extended themes
  */
 anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, extendThemeName) {
   var resultThemes = [];
@@ -1258,7 +1284,7 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
 
 
 /**
- * Flattens themes.
+ * Creates simply merged (not recursively) json setting object from instance themes chain
  */
 anychart.core.Base.prototype.flattenThemes = function() {
   var th = anychart.getTheme();
@@ -1275,9 +1301,9 @@ anychart.core.Base.prototype.flattenThemes = function() {
       }
     }
     if (theme)
-      goog.mixin(this.flatTheme, theme);
+      goog.mixin(this.flatTheme_, theme);
   }
-  this.themeSettings = /** @type {!Object} */(this.flatTheme);
+  this.themeSettings = /** @type {!Object} */(this.flatTheme_);
 };
 
 
@@ -1286,7 +1312,7 @@ anychart.core.Base.prototype.flattenThemes = function() {
  * @return {!Object}
  */
 anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
-  return goog.isDef(opt_root) ? this.flatTheme[opt_root] : this.flatTheme;
+  return goog.isDef(opt_root) ? this.flatTheme_[opt_root] : this.flatTheme_;
 };
 
 
@@ -1298,23 +1324,23 @@ anychart.core.Base.prototype.getFlatTheme = function(opt_root) {
  * @return {boolean|anychart.core.Base|undefined}
  */
 anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled, opt_getterFunction) {
-  if (!goog.isDef(this.themesMap[getterName]))
-    this.themesMap[getterName] = {themes: anychart.themes.DefaultThemes[getterName]};
+  if (!goog.isDef(this.createdMap_[getterName]))
+    this.createdMap_[getterName] = {themes: anychart.themes.DefaultThemes[getterName]};
 
-  if (this.themesMap[getterName].instance)
-    return this.themesMap[getterName].instance;
+  if (this.createdMap_[getterName].instance)
+    return this.createdMap_[getterName].instance;
 
-  if (goog.isDef(this.themesMap[getterName].enabled))
-    return this.themesMap[getterName].enabled;
+  if (goog.isDef(this.createdMap_[getterName].enabled))
+    return this.createdMap_[getterName].enabled;
 
   // Check if entity is enabled by default theme
-  var themes = this.themesMap[getterName].themes ? goog.array.clone(this.themesMap[getterName].themes) : [];
+  var themes = this.createdMap_[getterName].themes ? goog.array.clone(this.createdMap_[getterName].themes) : [];
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   themes.push.apply(themes, extendedThemes);
 
   if (opt_ignoreEnabled) {
     this.setCreated(getterName, opt_getterFunction);
-    return this.themesMap[getterName].instance;
+    return this.createdMap_[getterName].instance;
 
   } else {
     var th = anychart.getTheme();
@@ -1334,8 +1360,8 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
         if (theme['enabled'])
           this.setCreated(getterName, opt_getterFunction);
         else
-          this.themesMap[getterName].enabled = false;
-        return this.themesMap[getterName].instance;
+          this.createdMap_[getterName].enabled = false;
+        return this.createdMap_[getterName].instance;
       }
     }
   }
@@ -1348,12 +1374,12 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
  * @param {Function=} opt_getterFunction
  */
 anychart.core.Base.prototype.setCreated = function(getterName, opt_getterFunction) {
-  this.themesMap[getterName].enabled = true;
+  this.createdMap_[getterName].enabled = true;
 
   opt_getterFunction = goog.isFunction(opt_getterFunction) ? opt_getterFunction : this[getterName];
   var instance = /** @type {anychart.core.Base} */(opt_getterFunction.call(this));
 
-  if (!this.themesMap[getterName].instance) {
+  if (!this.createdMap_[getterName].instance) {
     this.setupCreated(getterName, instance);
   }
 };
@@ -1369,9 +1395,9 @@ anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
   instance.addThemes(extendedThemes);
   instance.setupByFlatTheme(true);
 
-  if (!goog.isDef(this.themesMap[getterName]))
-    this.themesMap[getterName] = {};
-  this.themesMap[getterName].instance = instance;
+  if (!goog.isDef(this.createdMap_[getterName]))
+    this.createdMap_[getterName] = {};
+  this.createdMap_[getterName].instance = instance;
 };
 //endregion
 
