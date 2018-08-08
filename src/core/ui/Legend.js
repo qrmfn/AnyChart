@@ -541,6 +541,9 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.tooltip_ = new anychart.core.ui.Tooltip(0);
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
+
+    this.tooltip_.addThemes(anychart.themes.DefaultThemes['tooltip']);
+    this.setupCreated('tooltip', this.tooltip_);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);
@@ -1480,7 +1483,6 @@ anychart.core.ui.Legend.prototype.clearItems = function() {
 anychart.core.ui.Legend.prototype.createItem = function() {
   var item = new anychart.core.ui.LegendItem();
   item.addThemes(this.getThemeSettings(), 'defaultFontSettings');
-  item.setupByFlatTheme(true);
   return item;
 };
 
@@ -2047,15 +2049,6 @@ anychart.core.ui.Legend.prototype.serialize = function() {
   if (goog.isDef(this.items()))
     json['items'] = this.items();
   return json;
-};
-
-
-/** @inheritDoc */
-anychart.core.ui.Legend.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Legend.base(this, 'setupByJSONInternal', config, opt_default);
-
-  // todo: remove this when tooltip is refactored
-  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 };
 
 

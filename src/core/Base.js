@@ -1157,29 +1157,13 @@ anychart.core.Base.prototype.setupInternal = function(isDefault, var_args) {
   return this;
 };
 
-/**
- * Setups current instance using passed JSON object.
- * Called anyway when instance created.
- * Should be used only for mandatory initialization calls.
- *
- * @param {!Object} json Json settings object
- * @param {boolean=} opt_default Identifies that we should setup defaults.
- */
-anychart.core.Base.prototype.setupByJSONInternal = function(json, opt_default) {
-};
-
 
 /**
  * Setups current instance using passed JSON object.
- *
- * Called only when user api is using.
- * Should be used for non mandatory initialization calls, for example creation child entities.
- *
- * @param {!Object} json Json settings object
+ * @param {!Object} json .
  * @param {boolean=} opt_default Identifies that we should setup defaults.
  */
 anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
-  this.setupByJSONInternal(json, opt_default);
 };
 
 
@@ -1192,16 +1176,6 @@ anychart.core.Base.prototype.setupByJSON = function(json, opt_default) {
  */
 anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
   return false;
-};
-
-
-/**
- * Setups current instance using its own flat theme.
- *
- * @param {boolean=} opt_default Identifies that we should setup defaults.
- */
-anychart.core.Base.prototype.setupByFlatTheme = function(opt_default) {
-  this.setupByJSONInternal(/** @type {!Object} */(this.getThemeSettings()), opt_default);
 };
 
 
@@ -1397,7 +1371,6 @@ anychart.core.Base.prototype.setCreated = function(getterName, opt_getterFunctio
 anychart.core.Base.prototype.setupCreated = function(getterName, instance) {
   var extendedThemes = this.createExtendedThemes(this.getThemes(), getterName);
   instance.addThemes(extendedThemes);
-  instance.setupByFlatTheme(true);
 
   if (!goog.isDef(this.createdMap_[getterName]))
     this.createdMap_[getterName] = {};
