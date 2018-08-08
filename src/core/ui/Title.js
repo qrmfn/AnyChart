@@ -45,6 +45,8 @@ goog.require('goog.math.AffineTransform');
 anychart.core.ui.Title = function() {
   anychart.core.ui.Title.base(this, 'constructor');
 
+  //this.addThemes(anychart.themes.DefaultThemes['title']);
+
   delete this.themeSettings['enabled'];
 
   /**
@@ -1144,21 +1146,6 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 };
 
 
-// /** @inheritDoc */
-// anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_default) {
-//   anychart.core.ui.Title.base(this, 'setupByJSONInternal', config, opt_default);
-//
-//   // anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config, opt_default);
-//   // anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
-//
-//   // if ('padding' in config)
-//   //   this.padding().setupInternal(!!opt_default, config['padding']);
-//   //
-//   // if ('margin' in config)
-//   //   this.margin().setupInternal(!!opt_default, config['margin']);
-// };
-
-
 /** @inheritDoc */
 anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
@@ -1179,7 +1166,17 @@ anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
 
 /** @inheritDoc */
 anychart.core.ui.Title.prototype.disposeInternal = function() {
-  goog.disposeAll([this.background_, this.margin_, this.padding_, this.layer_]);
+  goog.disposeAll(
+      this.background_,
+      this.margin_,
+      this.padding_,
+      this.layer_
+  );
+
+  this.background_ = null;
+  this.margin_ = null;
+  this.padding_ = null;
+  this.layer_ = null;
 
   anychart.core.ui.Title.base(this, 'disposeInternal');
 };

@@ -92,14 +92,12 @@ anychart.core.ui.Paginator = function() {
   this.previousButton_.padding(null);
   this.previousButton_.enabled(true);
   this.previousButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
-  this.registerDisposable(this.previousButton_);
   this.previousButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.previousButton_);
 
   this.nextButton_ = new anychart.core.ui.PaginatorButton();
   this.nextButton_.padding(null);
   this.nextButton_.enabled(true);
   this.nextButton_.setOnClickListener(goog.bind(anychart.core.ui.Paginator.onClick_, this));
-  this.registerDisposable(this.nextButton_);
   this.nextButton_.listenSignals(anychart.core.ui.Paginator.buttonInvalidated_, this.nextButton_);
 
   //TODO(AntonKagakin): create customDrawers flag, to avoid custom layout drawing bug.
@@ -173,8 +171,9 @@ anychart.core.ui.Paginator.prototype.SUPPORTED_CONSISTENCY_STATES =
 anychart.core.ui.Paginator.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.padding_) {
     this.padding_ = new anychart.core.utils.Padding();
-    this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.boundsInvalidated_, this);
+
+    this.setupCreated('padding', this.padding_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.padding_.setup.apply(this.padding_, arguments);
@@ -196,8 +195,9 @@ anychart.core.ui.Paginator.prototype.padding = function(opt_spaceOrTopOrTopAndBo
 anychart.core.ui.Paginator.prototype.margin = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.margin_) {
     this.margin_ = new anychart.core.utils.Margin();
-    this.registerDisposable(this.margin_);
     this.margin_.listenSignals(this.boundsInvalidated_, this);
+
+    this.setupCreated('margin', this.margin_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.margin_.setup.apply(this.margin_, arguments);
@@ -228,7 +228,6 @@ anychart.core.ui.Paginator.prototype.boundsInvalidated_ = function(event) {
 anychart.core.ui.Paginator.prototype.background = function(opt_value) {
   if (!this.background_) {
     this.background_ = new anychart.core.ui.Background();
-    this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
     this.background_.addThemes(anychart.themes.DefaultThemes['background']);
@@ -421,7 +420,6 @@ anychart.core.ui.Paginator.prototype.draw = function() {
   if (isInitial = !this.text_) {
     this.text_ = acgraph.text();
     this.text_.attr('aria-hidden', 'true');
-    this.registerDisposable(this.text_);
   }
 
   var background = this.getCreated('backgrouns');
@@ -810,8 +808,8 @@ anychart.core.ui.Paginator.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Paginator.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Paginator.base(this, 'setupByJSONInternal', config, opt_default);
+anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.ui.Paginator.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.core.ui.Paginator.PROPERTY_DESCRIPTORS, config, opt_default);
 
@@ -820,17 +818,32 @@ anychart.core.ui.Paginator.prototype.setupByJSONInternal = function(config, opt_
 
   if ('margin' in config)
     this.margin().setupInternal(!!opt_default, config['margin']);
+
+  if ('background' in config)
+    this.background().setupInternal(!!opt_default, config['background']);
 };
 
 
 /** @inheritDoc */
-anychart.core.ui.Paginator.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.ui.Paginator.base(this, 'setupByJSON', config, opt_default);
+anychart.core.ui.Paginator.prototype.disposeInternal = function() {
+  goog.disposeAll(
+      this.previousButton_,
+      this.nextButton_,
+      this.padding_,
+      this.margin_,
+      this.background_,
+      this.text_
+  );
 
-  if ('background' in config)
-    this.background(config['background']);
+  this.previousButton_ = null;
+  this.nextButton_ = null;
+  this.padding_ = null;
+  this.margin_ = null;
+  this.background_ = null;
+  this.text_ = null;
+
+  anychart.core.ui.Paginator.base(this, 'disposeInternal');
 };
-
 
 //proto['pageCount'] = proto.pageCount;
 //proto['draw'] = proto.draw;
