@@ -203,6 +203,9 @@ anychart.core.ui.Background.prototype.corners = function(opt_value) {
     }
     return this;
   } else {
+    if ('corners' in this.themeSettings && !goog.isArray(this.themeSettings['corners']))
+      this.themeSettings['corners'] = this.cornersFormatter_(this.themeSettings['corners']);
+
     return /** @type {Array.<number|string>} */(this.getOption('corners'));
   }
 };
@@ -678,15 +681,6 @@ anychart.core.ui.Background.prototype.setupSpecial = function(isDefault, var_arg
     return true;
   }
   return false;
-};
-
-
-/** @inheritDoc */
-anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Background.base(this, 'setupByJSONInternal', config, opt_default);
-
-  if (opt_default && 'corners' in config)
-    this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
 };
 
 
