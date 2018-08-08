@@ -1277,7 +1277,8 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
 
 
 /**
- * Creates simply merged (not recursively) json setting object from instance themes chain
+ * Creates simply merged (not recursively) json setting object
+ * from instance themes chain and saves it as themeSettings
  */
 anychart.core.Base.prototype.flattenThemes = function() {
   var th = anychart.getTheme();
