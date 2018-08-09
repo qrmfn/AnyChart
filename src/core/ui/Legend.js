@@ -375,7 +375,7 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
-    this.background_.addThemes(anychart.themes.DefaultThemes['background']);
+    // this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 

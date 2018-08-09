@@ -496,7 +496,7 @@ anychart.core.Chart.prototype.background = function(opt_value) {
     this.background_.listenSignals(this.backgroundInvalidated_, this);
     this.registerDisposable(this.background_);
 
-    this.background_.addThemes(anychart.themes.DefaultThemes['background']);
+    // this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 
