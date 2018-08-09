@@ -45,7 +45,7 @@ goog.require('goog.math.AffineTransform');
 anychart.core.ui.Title = function() {
   anychart.core.ui.Title.base(this, 'constructor');
 
-  //this.addThemes(anychart.themes.DefaultThemes['title']);
+  this.addThemes(anychart.themes.DefaultThemes['title']);
 
   delete this.themeSettings['enabled'];
 

@@ -411,7 +411,7 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
 
-    this.title_.addThemes(anychart.themes.DefaultThemes['title']);
+    // this.title_.addThemes(anychart.themes.DefaultThemes['title']);
     this.setupCreated('title', this.title_);
   }
 
