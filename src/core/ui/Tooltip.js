@@ -495,6 +495,9 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.onTitleSignal_, this);
     this.title_.setParentEventTarget(this);
     this.registerDisposable(this.title_);
+
+    // todo: (chernetsky) Remove this when tooltip is refactored
+    this.title_.resetThemeSettings();
   }
 
   if (goog.isDef(opt_value)) {

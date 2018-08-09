@@ -1288,6 +1288,14 @@ anychart.core.Base.prototype.getThemeSettings = function(opt_root) {
 
 
 /**
+ * todo: Temporary method for themes optimization and lazy setup refactoring sake. Remove when it's done.
+ */
+anychart.core.Base.prototype.resetThemeSettings = function() {
+  this.themeSettings = {};
+};
+
+
+/**
  * Special getter for inner usage to get any child entity, that can be get by api getters.
  * Should be used instead of using api getters for performance purpose.
  *
