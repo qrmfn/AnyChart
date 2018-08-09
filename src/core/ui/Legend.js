@@ -454,7 +454,6 @@ anychart.core.ui.Legend.prototype.titleSeparator = function(opt_value) {
     this.titleSeparator_ = new anychart.core.ui.Separator();
     this.titleSeparator_.listenSignals(this.titleSeparatorInvalidated_, this);
 
-    this.titleSeparator_.addThemes(anychart.themes.DefaultThemes['separator']);
     this.setupCreated('titleSeparator', this.titleSeparator_);
   }
 
