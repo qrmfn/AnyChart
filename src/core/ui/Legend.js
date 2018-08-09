@@ -544,6 +544,9 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
 
     this.tooltip_.addThemes(anychart.themes.DefaultThemes['tooltip']);
     this.setupCreated('tooltip', this.tooltip_);
+
+    // todo: (chernetsky) remove this when tooltip refactored
+    this.tooltip_.setupInternal(true, this.tooltip_.getThemeSettings());
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);
