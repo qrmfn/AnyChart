@@ -558,28 +558,19 @@ anychart.isValidKey = function() {
 //
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * TODO (A.Kudryavtsev): Performance boost.
- * TODO (A.Kudryavtsev): Should replace useless multiple themes like anychart.themes_ .
- * @type {?(string|Object)}
- * @private
- */
-anychart.currentTheme_ = null;
-
-
-/**
- * TODO (A.Kudryavtsev): Performance boost.
- * @type {?Object}
- * @private
- */
-anychart.currentThemeCache_ = null;
-
-
-/**
- * Array of themes that will be applied for anychart globally.
- * @type {Array<string|Object>}
+ * Final array of themes json objects that will be applied for anychart globally.
+ * @type {Array.<Object>}
  * @private
  */
 anychart.themes_ = [];
+
+
+/**
+ * Array of addinional themes that will be applied for anychart globally.
+ * @type {Array<string|Object>}
+ * @private
+ */
+anychart.additionalThemes_ = [];
 
 
 /**
@@ -599,25 +590,19 @@ anychart.mergedThemeClones_ = [];
 
 
 /**
- * Returns current global default theme
+ * Returns current global themes array
  *
- * @return {Object}
+ * @return {Array.<Object>}
  */
-anychart.getTheme = function() {
-  if (!anychart.currentThemeCache_) {
-    if (anychart.themes_.length) {
-      // todo: (chernetsky) Yes, recursiveClone so far...
-      anychart.currentThemeCache_ = /** @type {Object} */(anychart.utils.recursiveClone(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]));
+anychart.getThemes = function() {
+  if (!anychart.themes_.length) {
+    anychart.themes_ = [anychart.window['anychart']['themes'][anychart.DEFAULT_THEME] || {}];
 
-      for (var i = 0; i < anychart.themes_.length; i++) {
-        var th = goog.isString(anychart.themes_[i]) ? anychart.window['anychart']['themes'][anychart.themes_[i]] : anychart.themes_[i];
-        anychart.currentThemeCache_ = anychart.utils.recursiveMerge(anychart.currentThemeCache_, th);
-      }
-
-    } else
-      anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
+    if (anychart.additionalThemes_.length)
+      anychart.themes_ = goog.array.concat(anychart.themes_, anychart.additionalThemes_);
   }
-  return anychart.currentThemeCache_;
+
+  return anychart.themes_;
 };
 
 
@@ -628,14 +613,23 @@ anychart.getTheme = function() {
  */
 anychart.theme = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    anychart.themes_ = opt_value ? (goog.isArray(opt_value) ? opt_value : [opt_value]) : [];
+    anychart.additionalThemes_.length = 0;
+
+    if (opt_value) {
+      if (goog.isArray(opt_value)) {
+        for (var i = 0; i < opt_value.length; i++) {
+          anychart.appendTheme(opt_value);
+        }
+      } else
+        anychart.appendTheme(opt_value);
+    }
+
+    anychart.themes_.length = 0;
     anychart.themeClones_.length = 0;
     anychart.mergedThemeClones_.length = 0;
     anychart.themes.merging.clearCache();
-
-    anychart.currentThemeCache_ = null;
   }
-  return anychart.themes_;
+  return anychart.additionalThemes_;
 };
 
 
@@ -644,9 +638,10 @@ anychart.theme = function(opt_value) {
  * @param {string|Object} value
  */
 anychart.appendTheme = function(value) {
-  anychart.themes_.push(value);
+  var clone = anychart.utils.recursiveClone(goog.isString(value) ? anychart.window['anychart']['themes'][value] : value);
+  anychart.additionalThemes_.push(clone);
 
-  anychart.currentThemeCache_ = null;
+  anychart.themes_.length = 0;
 };
 
 
@@ -664,8 +659,8 @@ anychart.getFullTheme = function(root) {
     anychart.themeClones_.push(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME] || {});
     anychart.mergedThemeClones_.push(anychart.themeClones_[0]);
   }
-  for (i = anychart.themeClones_.length - 1; i < anychart.themes_.length; i++) {
-    var themeToMerge = anychart.themes_[i];
+  for (i = anychart.themeClones_.length - 1; i < anychart.additionalThemes_.length; i++) {
+    var themeToMerge = anychart.additionalThemes_[i];
     var clone = anychart.utils.recursiveClone(goog.isString(themeToMerge) ? anychart.window['anychart']['themes'][themeToMerge] : themeToMerge);
     anychart.themeClones_.push(goog.isObject(clone) ? clone : {});
     anychart.mergedThemeClones_.push({});

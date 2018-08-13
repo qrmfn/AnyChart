@@ -1255,21 +1255,26 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
  * from instance themes chain and saves it as themeSettings
  */
 anychart.core.Base.prototype.flattenThemes = function() {
-  var th = anychart.getTheme();
   var flatTheme = {};
+  var baseThemes = anychart.getThemes();
+
   for (var i = 0; i < this.themes_.length; i++) {
     var theme = this.themes_[i];
     if (goog.isString(theme)) {
       var splitPath = theme.split('.');
-      theme = th;
-      for (var j = 0; j < splitPath.length; j++) {
-        if (theme) {
-          var part = splitPath[j];
-          theme = theme[part];
+
+      for (var t = 0; t < baseThemes.length; t++) {
+        theme = baseThemes[t];
+        for (var j = 0; j < splitPath.length; j++) {
+          if (theme) {
+            var part = splitPath[j];
+            theme = theme[part];
+          }
         }
+        if (theme)
+          goog.mixin(flatTheme, theme);
       }
-    }
-    if (theme)
+    } else if (goog.isObject(theme))
       goog.mixin(flatTheme, theme);
   }
   this.themeSettings = flatTheme;
@@ -1327,25 +1332,27 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
     return this.createdMap_[getterName].instance;
 
   } else {
-    var th = anychart.getTheme();
+    var baseThemes = anychart.getThemes();
     for (var i = themes.length; i--;) {
       var theme = themes[i];
       if (goog.isString(theme)) {
         var splitPath = theme.split('.');
-        theme = th;
-        for (var j = 0; j < splitPath.length; j++) {
-          if (theme) {
-            var part = splitPath[j];
-            theme = theme[part];
+        for (var t = baseThemes.length; t--;) {
+          theme = baseThemes[t];
+          for (var j = 0; j < splitPath.length; j++) {
+            if (theme) {
+              var part = splitPath[j];
+              theme = theme[part];
+            }
+          }
+          if (theme && goog.isDef(theme['enabled'])) {
+            if (theme['enabled'])
+              this.setCreated(getterName, opt_getterFunction);
+            else
+              this.createdMap_[getterName].enabled = false;
+            return this.createdMap_[getterName].instance;
           }
         }
-      }
-      if (theme && goog.isDef(theme['enabled'])) {
-        if (theme['enabled'])
-          this.setCreated(getterName, opt_getterFunction);
-        else
-          this.createdMap_[getterName].enabled = false;
-        return this.createdMap_[getterName].instance;
       }
     }
   }

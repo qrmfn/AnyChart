@@ -2107,5 +2107,6 @@ anychart.themes.DefaultThemes = {
   'labelsFactory': ['defaultLabelFactory'],
   'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
   'seriesBase': ['chart.defaultSeriesSettings'],
-  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base']
+  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
+  'axis': ['defaultAxis']
 };
