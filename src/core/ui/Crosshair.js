@@ -392,7 +392,8 @@ anychart.core.ui.Crosshair.prototype.xLabel = function(opt_indexOrValue, opt_val
   var label = this.xLabels_[index];
   if (!label) {
     label = new anychart.core.ui.CrosshairLabel();
-    label.setupInternal(true, this.defaultLabelSettings());
+    label.addThemes('defaultCrosshairLabel', this.defaultLabelSettings());
+
     this.xLabels_[index] = label;
     this.propagateParentalRelationship(label, index, true);
     label.listenSignals(this.labelInvalidated, this);
@@ -425,7 +426,8 @@ anychart.core.ui.Crosshair.prototype.yLabel = function(opt_indexOrValue, opt_val
   var label = this.yLabels_[index];
   if (!label) {
     label = new anychart.core.ui.CrosshairLabel();
-    label.setupInternal(true, this.defaultLabelSettings());
+    label.addThemes('defaultCrosshairLabel', this.defaultLabelSettings());
+
     this.yLabels_[index] = label;
     this.propagateParentalRelationship(label, index, false);
     label.listenSignals(this.labelInvalidated, this);
