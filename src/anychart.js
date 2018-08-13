@@ -618,7 +618,7 @@ anychart.theme = function(opt_value) {
     if (opt_value) {
       if (goog.isArray(opt_value)) {
         for (var i = 0; i < opt_value.length; i++) {
-          anychart.appendTheme(opt_value);
+          anychart.appendTheme(opt_value[i]);
         }
       } else
         anychart.appendTheme(opt_value);
