@@ -2108,5 +2108,6 @@ anychart.themes.DefaultThemes = {
   'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
   'seriesBase': ['chart.defaultSeriesSettings'],
   'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
-  'axis': ['defaultAxis']
+  'axis': ['defaultAxis'],
+  'map.axisSettings': ['map.axesSettings']
 };
