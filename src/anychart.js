@@ -567,7 +567,7 @@ anychart.themes_ = [];
 
 /**
  * Array of addinional themes that will be applied for anychart globally.
- * @type {Array<string|Object>}
+ * @type {Array.<Object>}
  * @private
  */
 anychart.additionalThemes_ = [];
@@ -638,8 +638,8 @@ anychart.theme = function(opt_value) {
  * @param {string|Object} value
  */
 anychart.appendTheme = function(value) {
-  var clone = anychart.utils.recursiveClone(goog.isString(value) ? anychart.window['anychart']['themes'][value] : value);
-  anychart.additionalThemes_.push(clone);
+  var clone = goog.isString(value) ? anychart.utils.recursiveClone(/** @type {Object} */(anychart.window['anychart']['themes'][value])) : value;
+  anychart.additionalThemes_.push(/** @type {Object} */(clone));
 
   anychart.themes_.length = 0;
 };
