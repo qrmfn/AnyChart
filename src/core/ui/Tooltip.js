@@ -463,7 +463,7 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
 
     // todo: (chernetsky) Remove this when tooltip is refactored
-    this.background_.resetThemeSettings();
+    this.background_.themeSettings = {};
   }
 
   if (goog.isDef(opt_value)) {
@@ -500,7 +500,7 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.registerDisposable(this.title_);
 
     // todo: (chernetsky) Remove this when tooltip is refactored
-    this.title_.resetThemeSettings();
+    this.title_.themeSettings = {};
   }
 
   if (goog.isDef(opt_value)) {

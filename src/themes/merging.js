@@ -2103,6 +2103,7 @@ anychart.themes.DefaultThemes = {
   'legendItem': ['defaultFontSettings'],
   'paginator': ['defaultFontSettings'],
   'separator': ['defaultSeparator'],
+  'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
   'labelsFactory': ['defaultLabelFactory'],
   'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
