@@ -84,7 +84,8 @@ goog.provide('anychart.themes.dark_blue');
       'fontSize': 12,
       'title': {
         'align': 'center',
-        'fontSize': 14
+        'fontSize': 14,
+        'fontColor': '#90a4ae'
       },
       'padding': {'top': 10, 'right': 15, 'bottom': 10, 'left': 15},
       'separator': {

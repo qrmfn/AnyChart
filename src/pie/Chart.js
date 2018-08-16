@@ -2095,8 +2095,8 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   //   this.tooltip().container(/** @type {acgraph.vector.ILayer} */(this.container()));
   // }
 
+  var center = this.getCreated('center');
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
-    var center = this.getCreated('center');
     if (center && center.contentLayer) {
       this.center_.clearContent();
       this.center_.contentLayer.parent(this.rootElement);
@@ -2325,7 +2325,6 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
-    var center = this.getCreated('center');
     if (center) {
       var realContent = center.realContent;
       var contentLayer = center.contentLayer;
@@ -4619,8 +4618,11 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   var tooltip = new anychart.core.ui.Tooltip(0);
   this.registerDisposable(tooltip);
   tooltip.chart(this);
+  tooltip.containerProvider(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
 
+  // todo: (chernetsky) Update this when tooltip is refactored
+  tooltip.addThemes('defaultFontSettings', 'defaultTooltip');
   this.setupCreated('tooltip', tooltip);
 
   return tooltip;
@@ -4647,16 +4649,14 @@ anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
   if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
+  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  var formatProvider = this.createFormatProvider();
   if (opt_event) {
-    var tooltip = this.getCreated('tooltip');
-    if (tooltip) {
-      var formatProvider = this.createFormatProvider();
-      tooltip.suspendSignalsDispatching();
-      tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
-      tooltip.resumeSignalsDispatching(false);
-      this.listen(goog.labs.userAgent.device.isDesktop() ?
-          goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
-    }
+    tooltip.suspendSignalsDispatching();
+    tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
+    tooltip.resumeSignalsDispatching(false);
+    this.listen(goog.labs.userAgent.device.isDesktop() ?
+        goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
   }
 };
 

@@ -802,7 +802,6 @@ anychart.core.Chart.prototype.getStat = function(key) {
 anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
-
     this.setupCreated('tooltip', this.tooltip_);
   }
 
@@ -824,6 +823,7 @@ anychart.core.Chart.prototype.createTooltip = function() {
   var tooltip = new anychart.core.ui.Tooltip(anychart.core.ui.Tooltip.Capabilities.ANY);
   this.registerDisposable(tooltip);
   tooltip.chart(this);
+  tooltip.containerProvider(this);
 
   if (this.supportsBaseHighlight())
     this.listen(anychart.enums.EventType.POINTS_HOVER, this.showTooltip_, true);
@@ -1381,7 +1381,6 @@ anychart.core.Chart.prototype.animation = function(opt_enabledOrJson, opt_durati
   if (!this.animation_) {
     this.animation_ = new anychart.core.utils.Animation();
     this.animation_.listenSignals(this.onAnimationSignal_, this);
-
     this.setupCreated('animation', this.animation_);
   }
   if (goog.isDef(opt_enabledOrJson)) {
@@ -1445,7 +1444,6 @@ anychart.core.Chart.prototype.a11y = function(opt_enabledOrJson) {
     this.a11y_ = new anychart.core.utils.ChartA11y(this);
     this.registerDisposable(this.a11y_);
     this.a11y_.listenSignals(this.onA11ySignal_, this);
-
     this.setupCreated('a11y', this.a11y_);
   }
   if (goog.isDef(opt_enabledOrJson)) {
@@ -1613,9 +1611,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
       this.rootElement.parent(/** @type {acgraph.vector.ILayer} */(this.container()));
     }
 
-    var tooltip = this.getCreated('tooltip');
-    if (tooltip)
-      tooltip.containerProvider(this);
+    // todo: (chernetsky) Обсудить!
+    //this.tooltip().containerProvider(this);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
   }
 
@@ -1722,9 +1719,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
     anychart.core.reporting.info(msg);
   }
 
-  // To avoid interactivity creation before draw
-  // if (this.supportsBaseHighlight())
-  //   this.onInteractivitySignal();
+  if (this.supportsBaseHighlight())
+    this.onInteractivitySignal();
 
   anychart.performance.end('Chart.draw()');
 };
