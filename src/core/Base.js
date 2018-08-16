@@ -1247,6 +1247,9 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
       }
     }
   }
+  if (resultThemes.length == 0)
+    resultThemes.push(extendThemeName);
+
   return resultThemes;
 };
 

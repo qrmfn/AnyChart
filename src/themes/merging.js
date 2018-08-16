@@ -2105,7 +2105,7 @@ anychart.themes.DefaultThemes = {
   'separator': ['defaultSeparator'],
   'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
-  'labelsFactory': ['defaultLabelFactory'],
+  'labelsFactory': ['defaultFontSettings', 'defaultLabelFactory'],
   'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
   'seriesBase': ['chart.defaultSeriesSettings'],
   'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
