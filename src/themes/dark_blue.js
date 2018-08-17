@@ -212,6 +212,11 @@ goog.provide('anychart.themes.dark_blue');
       'outsideLabels': {'autoColor': '#b0bec5'},
       'insideLabels': {'autoColor': '#212121'}
     },
+    'pie': {
+      'selected': {
+        'stroke': '1.5 #878f96'
+      }
+    },
     'map': {
       'unboundRegions': {'enabled': true, 'fill': '#455a64', 'stroke': '#546e7a'},
       'defaultSeriesSettings': {
