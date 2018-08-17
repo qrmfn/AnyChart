@@ -22,6 +22,8 @@ anychart.core.ui.PaginatorButton = function() {
   this.buttonDrawer_ = goog.nullFunction;
 
   this.supportedStates(anychart.core.ui.Button.State.CHECKED, false);
+
+  this.initStateSettings();
 };
 goog.inherits(anychart.core.ui.PaginatorButton, anychart.core.ui.Button);
 
