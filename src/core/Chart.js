@@ -1683,11 +1683,13 @@ anychart.core.Chart.prototype.drawInternal = function() {
       }
     }
 
-    noDataLabel.suspendSignalsDispatching();
-    noDataLabel.container(this.rootElement);
-    this.setLabelSettings(noDataLabel, this.contentBounds);
-    noDataLabel.draw();
-    noDataLabel.resumeSignalsDispatching(false);
+    if (noDataLabel) {
+      noDataLabel.suspendSignalsDispatching();
+      noDataLabel.container(this.rootElement);
+      this.setLabelSettings(noDataLabel, this.contentBounds);
+      noDataLabel.draw();
+      noDataLabel.resumeSignalsDispatching(false);
+    }
 
     this.markConsistent(anychart.ConsistencyState.CHART_LABELS);
   }
