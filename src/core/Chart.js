@@ -1568,8 +1568,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
 
   this.suspendSignalsDispatching();
 
-  var noDataLabel = /** @type {anychart.core.ui.Label} */ (this.noData().label());
-  if (this.supportsNoData()) {
+  var noDataLabel = /** @type {anychart.core.ui.Label} */ (this.noData().getCreated('label'));
+  if (noDataLabel && this.supportsNoData()) {
     var noData = this.isNoData();
     // checking for root layer to avoid dispatching on the first draw
     var doDispatch = noDataLabel['visible']() !== noData && this.rootElement;
@@ -1992,7 +1992,8 @@ anychart.core.Chart.prototype.serialize = function() {
   if (this.getCreated('animation'))
     json['animation'] = this.animation().serialize();
 
-  json['noDataLabel'] = this.noData().label().serialize();
+  if(this.noData().getCreated('label'))
+    json['noDataLabel'] = this.noData().label().serialize();
 
   if (this.contextMenu_) {
     json['contextMenu'] = this.contextMenu()['serialize']();
@@ -2053,7 +2054,9 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.right(config['right']);
   this.bottom(config['bottom']);
   this.animation(config['animation']);
-  this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
+
+  if ('noDataLabel' in config)
+    this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
 
   if ('tooltip' in config)
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
