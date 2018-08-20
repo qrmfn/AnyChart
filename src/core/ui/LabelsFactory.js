@@ -34,8 +34,6 @@ anychart.core.ui.LabelsFactory = function() {
 
   delete this.themeSettings['enabled'];
 
-  this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
-
   /**
    * Labels layer.
    * @type {acgraph.vector.Layer}

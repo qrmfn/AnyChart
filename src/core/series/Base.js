@@ -1837,7 +1837,7 @@ anychart.core.series.Base.prototype.tooltip = function(opt_value) {
       this.tooltipInternal.parent(parent);
       this.tooltipInternal.chart(chart);
 
-      this.setupCreated('tooltip', this.tooltipInternal);
+      //this.setupCreated('tooltip', this.tooltipInternal);
     }
   }
   if (goog.isDef(opt_value)) {

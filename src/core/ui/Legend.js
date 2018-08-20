@@ -375,7 +375,6 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
-    // this.background_.addThemes(anychart.themes.DefaultThemes['background']);
     this.setupCreated('background', this.background_);
   }
 
@@ -411,7 +410,6 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
 
-    // this.title_.addThemes(anychart.themes.DefaultThemes['title']);
     this.setupCreated('title', this.title_);
   }
 
@@ -2072,8 +2070,11 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('background' in config)
     this.background().setupInternal(!!opt_default, config['background']);
 
-  this.titleSeparator(config['titleSeparator']);
-  this.paginator(config['paginator']);
+  if ('titleSeparator' in config)
+    this.titleSeparator().setupInternal(!!opt_default, config['titleSeparator']);
+
+  if ('paginator' in config)
+    this.paginator().setupInternal(!!opt_default, config['paginator']);
 
   this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
