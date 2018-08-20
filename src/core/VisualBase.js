@@ -952,25 +952,15 @@ anychart.core.VisualBase.prototype.setupSpecial = function(isDefault, var_args) 
 
 
 /** @inheritDoc */
-anychart.core.VisualBase.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.VisualBase.base(this, 'setupByJSONInternal', config, opt_default);
-
-  if (opt_default) {
-    if ('enabled' in config)
-      this.themeSettings['enabled'] = config['enabled'];
-
-    if ('zIndex' in config)
-      this.themeSettings['zIndex'] = config['zIndex'];
-  }
-};
-
-/** @inheritDoc */
 anychart.core.VisualBase.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.VisualBase.base(this, 'setupByJSON', config, opt_default);
 
-  if (!opt_default) {
+  if (opt_default) {
+    if ('enabled' in config) this.themeSettings['enabled'] = config['enabled'];
+    if ('zIndex' in config) this.themeSettings['zIndex'] = config['zIndex'];
+  } else {
     var enabled = config['enabled'];
-    this.enabled(goog.isDefAndNotNull(enabled) ? enabled : !goog.isDef(enabled) ? true : void 0);
+    this.enabled(goog.isDefAndNotNull(enabled) ? enabled : !goog.isDef(enabled) ? true : undefined);
     this.zIndex(config['zIndex']);
   }
 };

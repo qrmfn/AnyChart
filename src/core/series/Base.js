@@ -49,7 +49,7 @@ goog.require('goog.math');
 anychart.core.series.Base = function(chart, plot, type, config) {
   anychart.core.series.Base.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['seriesBase']);
+  //this.addThemes(anychart.themes.DefaultThemes['seriesBase']);
 
   /**
    * Chart reference.

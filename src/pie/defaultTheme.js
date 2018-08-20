@@ -38,9 +38,6 @@ goog.mixin(goog.global['anychart']['themes']['defaultTheme'], {
       }
     },
     'hovered': {
-      'labels': {
-        'format': anychart.core.defaultTheme.PERCENT_VALUE_TOKEN + '%'
-      },
       'explode': 0,
       'outline': {
         'enabled': null,
@@ -51,9 +48,6 @@ goog.mixin(goog.global['anychart']['themes']['defaultTheme'], {
       }
     },
     'selected': {
-      'labels': {
-        'format': anychart.core.defaultTheme.PERCENT_VALUE_TOKEN + '%'
-      },
       'explode': '5%',
       'fill': anychart.core.defaultTheme.returnSourceColor,
       'stroke': 'none',

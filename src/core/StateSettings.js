@@ -739,9 +739,8 @@ anychart.core.StateSettings.prototype.setEnabledTrue = function(config) {
 
 
 /** @inheritDoc */
-anychart.core.StateSettings.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.StateSettings.base(this, 'setupByJSONInternal', config, opt_default);
-
+anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.StateSettings.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, this.PROPERTY_DESCRIPTORS, config, opt_default);
 
   if (goog.isDef(this.descriptorsMeta['labels'])) {
@@ -797,13 +796,6 @@ anychart.core.StateSettings.prototype.setupByJSONInternal = function(config, opt
     this.background().setupInternal(!!opt_default, config['background']);
     this.background().markConsistent(anychart.ConsistencyState.ALL);
   }
-};
-
-
-/** @inheritDoc */
-anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.StateSettings.base(this, 'setupByJSON', config, opt_default);
-
 };
 
 
