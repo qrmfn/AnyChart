@@ -203,6 +203,9 @@ anychart.core.ui.Background.prototype.corners = function(opt_value) {
     }
     return this;
   } else {
+    if ('corners' in this.themeSettings && !goog.isArray(this.themeSettings['corners']))
+      this.themeSettings['corners'] = this.cornersFormatter_(this.themeSettings['corners']);
+
     return /** @type {Array.<number|string>} */(this.getOption('corners'));
   }
 };
@@ -682,49 +685,30 @@ anychart.core.ui.Background.prototype.setupSpecial = function(isDefault, var_arg
 
 
 /** @inheritDoc */
-anychart.core.ui.Background.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Background.base(this, 'setupByJSONInternal', config, opt_default);
-
-  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
-
-  if (opt_default && 'corners' in config)
-    this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
-};
-
-
-/** @inheritDoc */
 anychart.core.ui.Background.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Background.base(this, 'setupByJSON', config, opt_default);
 
-  if (!opt_default) {
-    this.corners(config['corners']);
-  }
+  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+
+  if (opt_default) {
+    if ('corners' in config)
+      this.themeSettings['corners'] = this.cornersFormatter_(config['corners']);
+  } else
+      this.corners(config['corners']);
 };
 
 
 /** @inheritDoc */
 anychart.core.ui.Background.prototype.disposeInternal = function() {
-  if (this.strokePath_) {
-    goog.dispose(this.strokePath_);
-    this.strokePath_ = null;
-  }
+  goog.disposeAll(
+      this.strokePath_,
+      this.strokePaths_,
+      this.fillPath_
+  );
 
-  if (this.strokePaths_) {
-    goog.disposeAll(this.strokePaths_);
-    this.strokePaths_ = null;
-  }
-
-  if (this.fillPath_) {
-    goog.dispose(this.fillPath_);
-    this.fillPath_ = null;
-  }
-
-  // delete this.fill_;
-  // delete this.stroke_;
-  // delete this.cornerType_;
-  // if (this.corners_)
-  //   this.corners_.length = 0;
-  // delete this.corners_;
+  this.strokePath_ = null;
+  this.strokePaths_ = null;
+  this.fillPath_ = null;
 
   anychart.core.ui.Background.base(this, 'disposeInternal');
 };

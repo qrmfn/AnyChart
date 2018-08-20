@@ -30,6 +30,8 @@ goog.require('anychart.sparklineModule.series.Base');
 anychart.sparklineModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.sparklineModule.Chart.base(this, 'constructor');
 
+  this.addThemes('sparkline');
+
   this.getCsvExportRow = this.getCsvExportRowScatter;
 
   /**

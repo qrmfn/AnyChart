@@ -73,7 +73,8 @@ acgraph.vector.Stage.prototype.allowCreditsDisabling = false;
 acgraph.vector.Stage.prototype.credits = function(opt_value) {
   if (!this.credits_) {
     this.credits_ = new anychart.core.ui.StageCredits(this, this.allowCreditsDisabling);
-    this.credits_.setup(anychart.getTheme()['stageCredits']);
+    // this.credits_.setup(anychart.getFullTheme('stageCredits'));
+    this.credits_.setup(anychart.getThemes()[0]['stageCredits']);
   }
   if (goog.isDef(opt_value)) {
     this.credits_.setup(opt_value);
@@ -558,28 +559,19 @@ anychart.isValidKey = function() {
 //
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * TODO (A.Kudryavtsev): Performance boost.
- * TODO (A.Kudryavtsev): Should replace useless multiple themes like anychart.themes_ .
- * @type {?(string|Object)}
- * @private
- */
-anychart.currentTheme_ = null;
-
-
-/**
- * TODO (A.Kudryavtsev): Performance boost.
- * @type {?Object}
- * @private
- */
-anychart.currentThemeCache_ = null;
-
-
-/**
- * Array of themes that will be applied for anychart globally.
- * @type {Array<string|Object>}
+ * Final array of themes json objects that will be applied for anychart globally.
+ * @type {Array.<Object>}
  * @private
  */
 anychart.themes_ = [];
+
+
+/**
+ * Array of addinional themes that will be applied for anychart globally.
+ * @type {Array.<Object>}
+ * @private
+ */
+anychart.additionalThemes_ = [];
 
 
 /**
@@ -599,28 +591,19 @@ anychart.mergedThemeClones_ = [];
 
 
 /**
- * TODO (A.Kudryavtsev): Performance boost.
- * @param {Object|string} value - New theme. TODO (A.Kudryavtsev): Describe.
+ * Returns current global themes array
+ *
+ * @return {Array.<Object>}
  */
-anychart.setTheme = function(value) {
-  anychart.currentTheme_ = goog.isString(value) ?
-      anychart.window['anychart']['themes'][value] :
-      value;
-};
+anychart.getThemes = function() {
+  if (!anychart.themes_.length) {
+    anychart.themes_ = [anychart.window['anychart']['themes'][anychart.DEFAULT_THEME] || {}];
 
-
-/**
- * TODO (A.Kudryavtsev): Performance boost.
- * TODO (A.Kudryavtsev): Describe.
- * @return {Object}
- */
-anychart.getTheme = function() {
-  if (!anychart.currentThemeCache_) {
-    anychart.currentThemeCache_ = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME];
-    if (anychart.currentTheme_)
-      goog.mixin(anychart.currentThemeCache_, /** @type {Object} */(anychart.currentTheme_));
+    if (anychart.additionalThemes_.length)
+      anychart.themes_ = goog.array.concat(anychart.themes_, anychart.additionalThemes_);
   }
-  return anychart.currentThemeCache_;
+
+  return anychart.themes_;
 };
 
 
@@ -631,12 +614,23 @@ anychart.getTheme = function() {
  */
 anychart.theme = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    anychart.themes_ = opt_value ? (goog.isArray(opt_value) ? opt_value : [opt_value]) : [];
+    anychart.additionalThemes_.length = 0;
+
+    if (opt_value) {
+      if (goog.isArray(opt_value)) {
+        for (var i = 0; i < opt_value.length; i++) {
+          anychart.appendTheme(opt_value[i]);
+        }
+      } else
+        anychart.appendTheme(opt_value);
+    }
+
+    anychart.themes_.length = 0;
     anychart.themeClones_.length = 0;
     anychart.mergedThemeClones_.length = 0;
     anychart.themes.merging.clearCache();
   }
-  return anychart.themes_;
+  return anychart.additionalThemes_;
 };
 
 
@@ -645,7 +639,10 @@ anychart.theme = function(opt_value) {
  * @param {string|Object} value
  */
 anychart.appendTheme = function(value) {
-  anychart.themes_.push(value);
+  var clone = goog.isString(value) ? anychart.utils.recursiveClone(/** @type {Object} */(anychart.window['anychart']['themes'][value])) : value;
+  anychart.additionalThemes_.push(/** @type {Object} */(clone));
+
+  anychart.themes_.length = 0;
 };
 
 
@@ -656,7 +653,7 @@ anychart.appendTheme = function(value) {
  * @return {*}
  */
 anychart.getFullTheme = function(root) {
-  //console.log("getFullTheme", root);
+  //debugger
   root = anychart.utils.toCamelCase(root);
   anychart.performance.start('Theme compilation');
   var i;
@@ -664,8 +661,8 @@ anychart.getFullTheme = function(root) {
     anychart.themeClones_.push(anychart.window['anychart']['themes'][anychart.DEFAULT_THEME] || {});
     anychart.mergedThemeClones_.push(anychart.themeClones_[0]);
   }
-  for (i = anychart.themeClones_.length - 1; i < anychart.themes_.length; i++) {
-    var themeToMerge = anychart.themes_[i];
+  for (i = anychart.themeClones_.length - 1; i < anychart.additionalThemes_.length; i++) {
+    var themeToMerge = anychart.additionalThemes_[i];
     var clone = anychart.utils.recursiveClone(goog.isString(themeToMerge) ? anychart.window['anychart']['themes'][themeToMerge] : themeToMerge);
     anychart.themeClones_.push(goog.isObject(clone) ? clone : {});
     anychart.mergedThemeClones_.push({});

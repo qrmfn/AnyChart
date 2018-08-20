@@ -29,6 +29,9 @@ goog.require('goog.math.Coordinate');
 anychart.core.ui.LabelsFactory = function() {
   this.suspendSignalsDispatching();
   anychart.core.ui.LabelsFactory.base(this, 'constructor');
+
+  this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
+
   delete this.themeSettings['enabled'];
 
   this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
@@ -303,6 +306,8 @@ anychart.core.ui.LabelsFactory.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.markConsistent(anychart.ConsistencyState.ALL);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
+
+    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -341,6 +346,8 @@ anychart.core.ui.LabelsFactory.prototype.padding = function(opt_spaceOrTopOrTopA
   if (!this.padding_) {
     this.padding_ = new anychart.core.utils.Padding();
     this.padding_.listenSignals(this.paddingInvalidated_, this);
+
+    this.setupCreated('padding', this.padding_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.padding_.setup.apply(this.padding_, arguments);
@@ -841,8 +848,10 @@ anychart.core.ui.LabelsFactory.prototype.getDimension = function(formatProviderO
     measureLabel.applyTextSettings.call(this, textElement, false);
     measureLabel.applyTextSettings(textElement, false);
   }
-  if (!(anychart.utils.instanceOf(padding, anychart.core.utils.Padding)))
+  if (!(anychart.utils.instanceOf(padding, anychart.core.utils.Padding))) {
     padding = new anychart.core.utils.Padding(/** @type {(string|number|Array.<number|string>|{top:(number|string),left:(number|string),bottom:(number|string),right:(number|string)})} */(padding));
+    this.setupCreated('padding', padding);
+  }
 
   //we should ask text element about bounds only after text format and text settings are applied
 

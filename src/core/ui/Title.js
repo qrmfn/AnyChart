@@ -45,9 +45,9 @@ goog.require('goog.math.AffineTransform');
 anychart.core.ui.Title = function() {
   anychart.core.ui.Title.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['title']);
-
   delete this.themeSettings['enabled'];
+
+  this.addThemes(anychart.themes.DefaultThemes['title']);
 
   /**
    * Text element.
@@ -467,7 +467,6 @@ anychart.core.ui.Title.prototype.isStockPlotTitle = function(opt_value) {
 anychart.core.ui.Title.prototype.background = function(opt_value) {
   if (!this.background_) {
     this.background_ = new anychart.core.ui.Background();
-    this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
 
     this.setupCreated('background', this.background_);
@@ -518,8 +517,9 @@ anychart.core.ui.Title.prototype.setAutoHeight = function(height) {
 anychart.core.ui.Title.prototype.margin = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.margin_) {
     this.margin_ = new anychart.core.utils.Margin();
-    this.registerDisposable(this.margin_);
     this.margin_.listenSignals(this.boundsInvalidated_, this);
+
+    this.setupCreated('margin', this.margin_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.margin_.setup.apply(this.margin_, arguments);
@@ -540,8 +540,9 @@ anychart.core.ui.Title.prototype.margin = function(opt_spaceOrTopOrTopAndBottom,
 anychart.core.ui.Title.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.padding_) {
     this.padding_ = new anychart.core.utils.Padding();
-    this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.boundsInvalidated_, this);
+
+    this.setupCreated('padding', this.padding_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.padding_.setup.apply(this.padding_, arguments);
@@ -649,7 +650,6 @@ anychart.core.ui.Title.prototype.initDom_ = function() {
     this.text_ = this.layer_.text();
     this.text_.zIndex(.1);
     this.text_.attr('aria-hidden', 'true');
-    this.registerDisposable(this.layer_);
     this.bindHandlersToGraphics(this.layer_);
   }
   return isInitial;
@@ -1146,8 +1146,8 @@ anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
 
 
 /** @inheritDoc */
-anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Title.base(this, 'setupByJSONInternal', config, opt_default);
+anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
+  anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, this.TEXT_DESCRIPTORS, config, opt_default);
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
@@ -1157,18 +1157,28 @@ anychart.core.ui.Title.prototype.setupByJSONInternal = function(config, opt_defa
 
   if ('margin' in config)
     this.margin().setupInternal(!!opt_default, config['margin']);
+
+  if ('background' in config)
+    this.background().setupInternal(!!opt_default, config['background']);
 };
 
 
 /** @inheritDoc */
-anychart.core.ui.Title.prototype.setupByJSON = function(config, opt_default) {
-  anychart.core.ui.Title.base(this, 'setupByJSON', config, opt_default);
+anychart.core.ui.Title.prototype.disposeInternal = function() {
+  goog.disposeAll(
+      this.background_,
+      this.margin_,
+      this.padding_,
+      this.layer_
+  );
 
-  if ('background' in config)
-    this.background(config['background']);
+  this.background_ = null;
+  this.margin_ = null;
+  this.padding_ = null;
+  this.layer_ = null;
+
+  anychart.core.ui.Title.base(this, 'disposeInternal');
 };
-
-
 
 //endregion
 //region --- Standalone

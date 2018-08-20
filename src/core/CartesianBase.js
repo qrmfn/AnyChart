@@ -21,7 +21,7 @@ goog.require('anychart.enums');
 anychart.core.CartesianBase = function(opt_categorizeData) {
   anychart.core.CartesianBase.base(this, 'constructor', goog.isDef(opt_categorizeData) ? opt_categorizeData : true);
 
-  this.addThemes(anychart.themes.DefaultThemes['cartesianBase']);
+  this.addThemes('cartesianBase');
 
   /**
    * Zoom settings.

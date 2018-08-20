@@ -22,6 +22,8 @@ goog.require('goog.array');
 anychart.palettes.DistinctColors = function() {
   anychart.palettes.DistinctColors.base(this, 'constructor');
 
+  this.addThemes('palette');
+
   /**
    * Color palette colors list.
    * @type {Array.<acgraph.vector.Fill>}
@@ -91,8 +93,7 @@ anychart.palettes.DistinctColors.prototype.items = function(opt_value, var_args)
  * @param {boolean=} opt_doNotDispatch Define, should dispatch invalidation event after default settings will be restored.
  */
 anychart.palettes.DistinctColors.prototype.restoreDefaults = function(opt_doNotDispatch) {
-  var th = anychart.getTheme();
-  this.colors_ = goog.array.clone(/** @type {Array} */(th['palette']['items']));
+  this.colors_ = goog.array.clone(/** @type {Array} */(this.themeSettings['items']));
   if (opt_doNotDispatch) this.dispatchSignal(anychart.Signal.NEEDS_REAPPLICATION);
 };
 

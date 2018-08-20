@@ -2092,6 +2092,8 @@ anychart.themes.merging.typedEntities_ = {
 
 
 /**
+ * Default themes map for child entities that are using in lazy setup system
+ *
  * @type {Object}
  */
 anychart.themes.DefaultThemes = {
@@ -2101,9 +2103,12 @@ anychart.themes.DefaultThemes = {
   'legendItem': ['defaultFontSettings'],
   'paginator': ['defaultFontSettings'],
   'separator': ['defaultSeparator'],
+  'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
-  'labelsFactory': ['defaultLabelFactory'],
+  'labelsFactory': ['defaultFontSettings', 'defaultLabelFactory'],
   'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
   'seriesBase': ['chart.defaultSeriesSettings'],
-  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base']
+  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
+  'axis': ['defaultAxis'],
+  'map.axisSettings': ['map.axesSettings']
 };

@@ -3,6 +3,7 @@ goog.provide('anychart.pieModule.Chart');
 
 goog.require('anychart.animations.AnimationSerialQueue');
 goog.require('anychart.color');
+goog.require('anychart.core.Base');
 goog.require('anychart.core.ICenterContentChart');
 goog.require('anychart.core.IShapeManagerUser');
 goog.require('anychart.core.SeparateChart');
@@ -44,6 +45,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.pieModule.Chart.base(this, 'constructor');
 
   this.addThemes('pieFunnelPyramidBase', 'pie');
+
+  this.contextMenu(this.themeSettings['contextMenu']);
 
   this.suspendSignalsDispatching();
 
@@ -203,9 +206,12 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', pieFillNormalizer]
   ];
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL, descriptorsOverride);
+  // this.normal_.addThemes(this.getThemes());
+  this.setupCreated('normal', this.normal_);
+  var normalLabelsSettings = this.normal_.themeSettings['labels'];
+
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
-    // factory.addExtendedThemes(this.getThemes(), 'normal.labels');
     factory.listenSignals(this.labelsInvalidated_, this);
     factory.setParentEventTarget(this);
     this.invalidate(anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW);
@@ -226,6 +232,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
+  this.hovered_.addThemes({'labels': normalLabelsSettings});
+  this.setupCreated('hovered', this.hovered_);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   var selectedDescriptorsMeta = {};
@@ -239,8 +247,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  // this.selected_.addExtendedThemes(this.getThemes(), 'selected');
-  // this.selected_.setupByFlatTheme();
+  this.selected_.addThemes({'labels': normalLabelsSettings});
+  this.setupCreated('selected', this.selected_);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   this.resumeSignalsDispatching(false);
@@ -524,8 +532,7 @@ anychart.pieModule.Chart.prototype.data = function(opt_value, opt_csvSettings) {
     // handle HTML table data
     if (opt_value) {
       var title = opt_value['title'] || opt_value['caption'];
-      if (title && this.getCreated('title'))
-        this.title(title);
+      if (title) this.title(title);
       if (opt_value['rows']) opt_value = opt_value['rows'];
     }
 
@@ -2090,8 +2097,8 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   //   this.tooltip().container(/** @type {acgraph.vector.ILayer} */(this.container()));
   // }
 
+  var center = this.center();
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
-    var center = this.getCreated('center');
     if (center && center.contentLayer) {
       this.center_.clearContent();
       this.center_.contentLayer.parent(this.rootElement);
@@ -2164,9 +2171,14 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
     }
 
     if (this.labels().enabled()) {
-      var themePart = this.isOutsideLabels() ?
-          this.getFlatTheme('outsideLabels') :
-          this.getFlatTheme('insideLabels');
+      var settingsName = this.isOutsideLabels() ? 'outsideLabels' : 'insideLabels';
+      var labelsSettings = this.getCreated(settingsName, true, function() {
+        var labelsSettings = new anychart.core.Base();
+        this.registerDisposable(labelsSettings);
+        this.setupCreated(settingsName, labelsSettings);
+        return labelsSettings;
+      });
+      var themePart = labelsSettings.themeSettings;
       this.labels().setAutoColor(themePart['autoColor']);
       this.labels()['disablePointerEvents'](themePart['disablePointerEvents']);
       if (this.isOutsideLabels()) {
@@ -2315,7 +2327,6 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
-    var center = this.getCreated('center');
     if (center) {
       var realContent = center.realContent;
       var contentLayer = center.contentLayer;
@@ -2879,14 +2890,13 @@ anychart.pieModule.Chart.prototype.drawSimpleSide_ = function(pathName, cx, cy, 
 //region --- Animation
 /** @inheritDoc */
 anychart.pieModule.Chart.prototype.doAnimation = function() {
-  var animation = this.getCreated('animation');
-  if (!this.getOption('mode3d') && animation && animation.getOption('enabled') && /** @type {number} */(animation.getOption('duration')) > 0) {
+  if (!this.getOption('mode3d') && this.animation().getOption('enabled') && /** @type {number} */(this.animation().getOption('duration')) > 0) {
     if (this.animationQueue_ && this.animationQueue_.isPlaying()) {
       this.animationQueue_.update();
     } else if (this.hasInvalidationState(anychart.ConsistencyState.CHART_ANIMATION)) {
       goog.dispose(this.animationQueue_);
       this.animationQueue_ = new anychart.animations.AnimationSerialQueue();
-      var duration = /** @type {number} */(animation.getOption('duration'));
+      var duration = /** @type {number} */(this.animation().getOption('duration'));
       var pieDuration = duration * anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO;
       var pieLabelDuration = duration * (1 - anychart.pieModule.Chart.PIE_ANIMATION_DURATION_RATIO);
 
@@ -4610,8 +4620,11 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   var tooltip = new anychart.core.ui.Tooltip(0);
   this.registerDisposable(tooltip);
   tooltip.chart(this);
+  tooltip.containerProvider(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
 
+  // todo: (chernetsky) Update this when tooltip is refactored
+  tooltip.addThemes('defaultFontSettings', 'defaultTooltip');
   this.setupCreated('tooltip', tooltip);
 
   return tooltip;
@@ -4638,16 +4651,14 @@ anychart.pieModule.Chart.prototype.showTooltip = function(opt_event) {
   if (opt_event && legend && opt_event['target'] == legend) {
     return;
   }
+  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  var formatProvider = this.createFormatProvider();
   if (opt_event) {
-    var tooltip = this.getCreated('tooltip');
-    if (tooltip) {
-      var formatProvider = this.createFormatProvider();
-      tooltip.suspendSignalsDispatching();
-      tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
-      tooltip.resumeSignalsDispatching(false);
-      this.listen(goog.labs.userAgent.device.isDesktop() ?
-          goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
-    }
+    tooltip.suspendSignalsDispatching();
+    tooltip.showFloat(opt_event['clientX'], opt_event['clientY'], formatProvider);
+    tooltip.resumeSignalsDispatching(false);
+    this.listen(goog.labs.userAgent.device.isDesktop() ?
+        goog.events.EventType.MOUSEMOVE : goog.events.EventType.TOUCHSTART, this.showTooltip);
   }
 };
 
@@ -4686,7 +4697,7 @@ anychart.pieModule.Chart.prototype.serialize = function() {
   if (this.getCreated('tooltip'))
     json['tooltip'] = this.tooltip().serialize();
 
-  if (this.getCreated('center'))
+  if (this.center())
     json['center'] = this.center().serialize();
 
   anychart.core.settings.serialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, json, 'Pie');
@@ -4699,51 +4710,32 @@ anychart.pieModule.Chart.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.pieModule.Chart.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.pieModule.Chart.base(this, 'setupByJSONInternal', config, opt_default);
-
-  anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
-
-  // this.normal_.setupInternal(!!opt_default, config);
-  // this.normal_.setupInternal(!!opt_default, config['normal']);
-
-  this.normal_.addThemes(this.getFlatTheme());
-  this.normal_.addExtendedThemes(this.getThemes(), 'normal');
-  this.setupCreated('normal', this.normal_);
-
-  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
-  this.hovered_.addExtendedThemes(this.getThemes(), 'hovered');
-  this.setupCreated('hovered', this.hovered_);
-
-  // this.selected_.setupInternal(!!opt_default, config['selected']);
-  this.selected_.addExtendedThemes(this.getThemes(), 'selected');
-  this.setupCreated('selected', this.selected_);
-
-
-  // todo: not processed yet
-  // if (goog.isDef(config['explode'])) {
-  //   config = goog.object.clone(config);
-  //   this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-  //   delete config['explode'];
-  // }
-};
-
-/** @inheritDoc */
 anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.pieModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
+  anychart.core.settings.deserialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
+
   this.group(config['group']);
   this.data(config['data']);
-
-  // todo: (chernetsky)'palette' and  'hatchFillPalette' are global theme settings
-  // this.palette(config['palette']);
-  // this.hatchFillPalette(config['hatchFillPalette']);
 
   if ('center' in config)
     this.center().setupInternal(!!opt_default, config['center']);
 
   if ('tooltip' in config)
-    this.tooltip(config['tooltip']);
+    this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+
+  this.selected_.setupInternal(!!opt_default, config['selected']);
+
+  if (goog.isDef(config['explode'])) {
+    config = goog.object.clone(config);
+    this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
+    delete config['explode'];
+  }
+
+  this.normal_.setupInternal(!!opt_default, config);
+  this.normal_.setupInternal(!!opt_default, config['normal']);
+
+  this.hovered_.setupInternal(!!opt_default, config['hovered']);
 };
 
 
@@ -4960,7 +4952,7 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calcDomain = function(
   this.dropBoundsCache();
 
   var explode = this.explode;
-  var center = this.pie.getCreated('center');
+  var center = this.pie.center();
   var pieCenter = center ? center.getPoint() : this.pie.getCenterCoords();
   var piePxRadius = this.pie.getPixelRadius() + explode;
 

@@ -403,12 +403,13 @@ anychart.core.Chart.DrawEvent;
  * @param {(string|number)=} opt_left .
  * @return {!(anychart.core.Chart|anychart.core.utils.Margin)} .
  */
-anychart.core.Chart.prototype.margin = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom,
-                                                opt_left) {
+anychart.core.Chart.prototype.margin = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.margin_) {
     this.margin_ = new anychart.core.utils.Margin();
     this.margin_.listenSignals(this.marginInvalidated_, this);
     this.registerDisposable(this.margin_);
+
+    this.setupCreated('margin', this.margin_);
   }
 
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
@@ -454,6 +455,8 @@ anychart.core.Chart.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, o
     this.padding_ = new anychart.core.utils.Padding();
     this.padding_.listenSignals(this.paddingInvalidated_, this);
     this.registerDisposable(this.padding_);
+
+    this.setupCreated('padding', this.padding_);
   }
 
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
@@ -635,6 +638,15 @@ anychart.core.Chart.prototype.defaultLabelSettings = function(opt_value) {
     this.defaultLabelSettings_ = opt_value;
     return this;
   }
+
+  if (!goog.isDef(this.defaultLabelSettings_)) {
+    var labelsSettings = new anychart.core.Base();
+    this.registerDisposable(labelsSettings);
+    labelsSettings.addThemes('defaultFontSettings', 'defaultLabelSettings');
+    // this.setupCreated('defaultLabelSettings', labelsSettings);
+    this.defaultLabelSettings_ = labelsSettings.themeSettings;
+  }
+
   return this.defaultLabelSettings_ || {};
 };
 
@@ -799,7 +811,6 @@ anychart.core.Chart.prototype.getStat = function(key) {
 anychart.core.Chart.prototype.tooltip = function(opt_value) {
   if (!this.tooltip_) {
     this.tooltip_ = this.createTooltip();
-
     this.setupCreated('tooltip', this.tooltip_);
   }
 
@@ -821,6 +832,7 @@ anychart.core.Chart.prototype.createTooltip = function() {
   var tooltip = new anychart.core.ui.Tooltip(anychart.core.ui.Tooltip.Capabilities.ANY);
   this.registerDisposable(tooltip);
   tooltip.chart(this);
+  tooltip.containerProvider(this);
 
   if (this.supportsBaseHighlight())
     this.listen(anychart.enums.EventType.POINTS_HOVER, this.showTooltip_, true);
@@ -1334,6 +1346,7 @@ anychart.core.Chart.prototype.credits = function(opt_value) {
     this.credits_ = new anychart.core.ui.ChartCredits(this);
     this.registerDisposable(this.credits_);
     this.credits_.listenSignals(this.onCreditsSignal_, this);
+    this.setupCreated('credits', this.credits_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1378,7 +1391,6 @@ anychart.core.Chart.prototype.animation = function(opt_enabledOrJson, opt_durati
   if (!this.animation_) {
     this.animation_ = new anychart.core.utils.Animation();
     this.animation_.listenSignals(this.onAnimationSignal_, this);
-
     this.setupCreated('animation', this.animation_);
   }
   if (goog.isDef(opt_enabledOrJson)) {
@@ -1442,7 +1454,6 @@ anychart.core.Chart.prototype.a11y = function(opt_enabledOrJson) {
     this.a11y_ = new anychart.core.utils.ChartA11y(this);
     this.registerDisposable(this.a11y_);
     this.a11y_.listenSignals(this.onA11ySignal_, this);
-
     this.setupCreated('a11y', this.a11y_);
   }
   if (goog.isDef(opt_enabledOrJson)) {
@@ -1567,8 +1578,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
 
   this.suspendSignalsDispatching();
 
-  var noDataLabel = /** @type {anychart.core.ui.Label} */ (this.noData().label());
-  if (this.supportsNoData()) {
+  var noDataLabel = /** @type {anychart.core.ui.Label} */ (this.noData().getCreated('label'));
+  if (noDataLabel && this.supportsNoData()) {
     var noData = this.isNoData();
     // checking for root layer to avoid dispatching on the first draw
     var doDispatch = noDataLabel['visible']() !== noData && this.rootElement;
@@ -1610,9 +1621,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
       this.rootElement.parent(/** @type {acgraph.vector.ILayer} */(this.container()));
     }
 
-    var tooltip = this.getCreated('tooltip');
-    if (tooltip)
-      tooltip.containerProvider(this);
+    // todo: (chernetsky) Обсудить!
+    //this.tooltip().containerProvider(this);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
   }
 
@@ -1719,9 +1729,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
     anychart.core.reporting.info(msg);
   }
 
-  // To avoid interactivity creation before draw
-  // if (this.supportsBaseHighlight())
-  //   this.onInteractivitySignal();
+  if (this.supportsBaseHighlight())
+    this.onInteractivitySignal();
 
   anychart.performance.end('Chart.draw()');
 };
@@ -1993,7 +2002,9 @@ anychart.core.Chart.prototype.serialize = function() {
   if (this.getCreated('animation'))
     json['animation'] = this.animation().serialize();
 
-  json['noDataLabel'] = this.noData().label().serialize();
+  if(this.noData().getCreated('label'))
+    json['noDataLabel'] = this.noData().label().serialize();
+
   if (this.contextMenu_) {
     json['contextMenu'] = this.contextMenu()['serialize']();
   }
@@ -2008,20 +2019,6 @@ anychart.core.Chart.prototype.serialize = function() {
 
   anychart.core.settings.serialize(this, anychart.core.Chart.PROPERTY_DESCRIPTORS, json);
   return json;
-};
-
-
-/** @inheritDoc */
-anychart.core.Chart.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.Chart.base(this, 'setupByJSONInternal', config, opt_default);
-
-  anychart.core.settings.deserialize(this, anychart.core.Chart.PROPERTY_DESCRIPTORS, config, opt_default);
-
-  if ('padding' in config)
-    this.padding().setupInternal(!!opt_default, config['padding']);
-
-  if ('margin' in config)
-    this.margin().setupInternal(!!opt_default, config['margin']);
 };
 
 
@@ -2042,6 +2039,12 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('background' in config)
     this.background().setupInternal(!!opt_default, config['background']);
 
+  if ('padding' in config)
+    this.padding().setupInternal(!!opt_default, config['padding']);
+
+  if ('margin' in config)
+    this.margin(config['margin']);
+
   var labels = config['chartLabels'];
   if (goog.isArray(labels)) {
     for (var i = 0; i < labels.length; i++)
@@ -2061,7 +2064,9 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.right(config['right']);
   this.bottom(config['bottom']);
   this.animation(config['animation']);
-  this.noData().label(config['noDataLabel']);
+
+  if ('noDataLabel' in config)
+    this.noData().label().setupInternal(!!opt_default, config['noDataLabel']);
 
   if ('tooltip' in config)
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
@@ -2073,10 +2078,12 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.contextMenu(config['contextMenu']);
 
   if ('credits' in config)
-    this.credits().setupInternal(!!opt_default, config['credits']);
+    this.credits(config['credits']);
 
   if (config['exports'])
     this.exports(config['exports']);
+
+  anychart.core.settings.deserialize(this, anychart.core.Chart.PROPERTY_DESCRIPTORS, config);
 };
 
 

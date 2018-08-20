@@ -78,9 +78,11 @@ anychart.core.SeparateChart.prototype.getType = function() {
 anychart.core.SeparateChart.prototype.legend = function(opt_value) {
   if (!this.legend_) {
     this.legend_ = new anychart.core.ui.Legend();
-    this.registerDisposable(this.legend_);
     this.legend_.listenSignals(this.onLegendSignal_, this);
     this.legend_.setParentEventTarget(this);
+
+    // todo: remove this when tooltip is refactored
+    this.legend_.addThemes(this.legendThemeChache_);
 
     this.setupCreated('legend', this.legend_);
   }
@@ -268,10 +270,7 @@ anychart.core.SeparateChart.prototype.serialize = function() {
   var json = anychart.core.SeparateChart.base(this, 'serialize');
   if (this.getCreated('legend'))
     json['legend'] = this.legend().serialize();
-
-  if (this.getCreated('interactivity', false, this.interactivity))
-    json['interactivity'] = this.interactivity().serialize();
-
+  json['interactivity'] = this.interactivity().serialize();
   return json;
 };
 
@@ -280,11 +279,26 @@ anychart.core.SeparateChart.prototype.serialize = function() {
 anychart.core.SeparateChart.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.SeparateChart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('legend' in config)
-    this.legend().setupInternal(!!opt_default, config['legend']);
+  if ('legend' in config) {
+    if (this.getCreated('legend'))
+      this.legend().setupInternal(!!opt_default, config['legend']);
+    else {
+      // todo: remove this when tooltip is refactored
+      this.legendThemeChache_ = config['legend'];
+    }
+  }
 
-  if ('interactivity' in config)
-    this.interactivity().setupInternal(!!opt_default, config['interactivity']);
+  this.interactivity(config['interactivity']);
+};
+
+
+/** @inheritDoc */
+anychart.core.SeparateChart.prototype.disposeInternal = function() {
+  goog.dispose(this.legend_);
+
+  this.legend_ = null;
+
+  anychart.core.SeparateChart.base(this, 'disposeInternal');
 };
 
 
