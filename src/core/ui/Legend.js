@@ -31,8 +31,6 @@ goog.require('goog.object');
 anychart.core.ui.Legend = function() {
   anychart.core.ui.Legend.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['legend']);
-
   /**
    * Wrapped legend items.
    * @type {Array.<anychart.core.ui.LegendItem>}
@@ -101,7 +99,7 @@ anychart.core.ui.Legend = function() {
   var iconTextSpacingBeforeInvalidationHook = function() {
     if (goog.isDefAndNotNull(this.items_)) {
       for (var i = 0, len = this.items_.length; i < len; i++) {
-        this.items_[i].iconTextSpacing(this.iconTextSpacing_);
+        this.items_[i]['iconTextSpacing'](this.getOption('iconTextSpacing'));
       }
     }
   };
@@ -373,8 +371,6 @@ anychart.core.ui.Legend.prototype.background = function(opt_value) {
     this.background_ = new anychart.core.ui.Background();
     this.registerDisposable(this.background_);
     this.background_.listenSignals(this.backgroundInvalidated_, this);
-
-    this.setupCreated('background', this.background_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -409,8 +405,6 @@ anychart.core.ui.Legend.prototype.title = function(opt_value) {
     this.registerDisposable(this.title_);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.title_.setParentEventTarget(this);
-
-    this.setupCreated('title', this.title_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -452,8 +446,6 @@ anychart.core.ui.Legend.prototype.titleSeparator = function(opt_value) {
     this.titleSeparator_ = new anychart.core.ui.Separator();
     this.registerDisposable(this.titleSeparator_);
     this.titleSeparator_.listenSignals(this.titleSeparatorInvalidated_, this);
-
-    this.setupCreated('titleSeparator', this.titleSeparator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -496,8 +488,6 @@ anychart.core.ui.Legend.prototype.paginator = function(opt_value) {
     this.paginator_ = new anychart.core.ui.Paginator();
     this.registerDisposable(this.paginator_);
     this.paginator_.listenSignals(this.paginatorInvalidated_, this);
-
-    this.setupCreated('paginator', this.paginator_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -541,8 +531,6 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
     this.registerDisposable(this.tooltip_);
     this.tooltip_.listenSignals(this.onTooltipSignal_, this);
     this.tooltip_.containerProvider(this);
-
-    this.setupCreated('tooltip', this.tooltip_);
   }
   if (goog.isDef(opt_value)) {
     this.tooltip_.setup(opt_value);
@@ -559,8 +547,8 @@ anychart.core.ui.Legend.prototype.tooltip = function(opt_value) {
  * @private
  */
 anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
-  var tooltip = this.getCreated('tooltip');
-  if (tooltip && tooltip.container()) {
+  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  if (tooltip.container()) {
     tooltip.draw();
   }
 };
@@ -572,17 +560,17 @@ anychart.core.ui.Legend.prototype.onTooltipSignal_ = function(event) {
  * @param {anychart.core.MouseEvent} event Event that initiates tooltip display.
  */
 anychart.core.ui.Legend.prototype.showTooltip = function(event) {
-  var tooltip = this.getCreated('tooltip');
-  if (tooltip && tooltip.enabled()) {
+  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  if (tooltip.enabled()) {
     var index = event['itemIndex'];
     var item = this.items_[index];
     if (item && event) {
       var values = {
-        'value': {value: item.text(), type: anychart.enums.TokenType.STRING},
-        'iconType': {value: item.iconType(), type: anychart.enums.TokenType.STRING},
-        'iconStroke': {value: item.iconStroke(), type: anychart.enums.TokenType.UNKNOWN},
-        'iconFill': {value: item.iconFill(), type: anychart.enums.TokenType.UNKNOWN},
-        'iconHatchFill': {value: item.iconHatchFill(), type: anychart.enums.TokenType.UNKNOWN},
+        'value': {value: item.getOption('text'), type: anychart.enums.TokenType.STRING},
+        'iconType': {value: item.getOption('iconType'), type: anychart.enums.TokenType.STRING},
+        'iconStroke': {value: item.getOption('iconStroke'), type: anychart.enums.TokenType.UNKNOWN},
+        'iconFill': {value: item.getOption('iconFill'), type: anychart.enums.TokenType.UNKNOWN},
+        'iconHatchFill': {value: item.getOption('iconHatchFill'), type: anychart.enums.TokenType.UNKNOWN},
         'iconMarkerType': {value: item.iconMarkerType(), type: anychart.enums.TokenType.STRING},
         'iconMarkerStroke': {value: item.iconMarkerStroke(), type: anychart.enums.TokenType.UNKNOWN},
         'iconMarkerFill': {value: item.iconMarkerFill(), type: anychart.enums.TokenType.UNKNOWN},
@@ -600,9 +588,8 @@ anychart.core.ui.Legend.prototype.showTooltip = function(event) {
  * @protected
  */
 anychart.core.ui.Legend.prototype.hideTooltip = function() {
-  var tooltip = this.getCreated('tooltip');
-  if (tooltip)
-    tooltip.hide();
+  var tooltip = /** @type {anychart.core.ui.Tooltip} */(this.tooltip());
+  tooltip.hide();
 };
 
 
@@ -856,25 +843,20 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
   var paginatorBounds;
   var titleBounds;
 
-  var separator = this.getCreated('titleSeparator');
-  var paginator = this.getCreated('paginator');
-  var title = this.getCreated('title');
+  var separator = /** @type {anychart.core.ui.Separator} */(this.titleSeparator());
+  var paginator = /** @type {anychart.core.ui.Paginator} */(this.paginator());
+  var title = /** @type {anychart.core.ui.Title} */(this.title());
 
-  var paginatorOrientation = paginator && paginator.orientation();
+  var paginatorOrientation = paginator.getOption('orientation');
   var paginatorIsHorizontal = paginatorOrientation == anychart.enums.Orientation.BOTTOM || paginatorOrientation == anychart.enums.Orientation.TOP;
-  var titleOrientation = title && (title.getOption('orientation') || title.defaultOrientation());
-  var titleIsHorizontal = titleOrientation && (titleOrientation == anychart.enums.Orientation.BOTTOM || titleOrientation == anychart.enums.Orientation.TOP);
-  var titleIsRLYHorizontal = title ? title.getRotation() % 180 == 0 : 0;
-  var separatorIsHorizontal = separator && separator.isHorizontal();
+  var titleOrientation = title.getOption('orientation') || title.defaultOrientation();
+  var titleIsHorizontal = titleOrientation == anychart.enums.Orientation.BOTTOM || titleOrientation == anychart.enums.Orientation.TOP;
+  var titleIsRLYHorizontal = title.getRotation() % 180 == 0;
+  var separatorIsHorizontal = separator.isHorizontal();
 
-  if (separator)
-    separator.suspendSignalsDispatching();
-
-  if (paginator)
-    paginator.suspendSignalsDispatching();
-
-  if (title)
-    title.suspendSignalsDispatching();
+  separator.suspendSignalsDispatching();
+  paginator.suspendSignalsDispatching();
+  title.suspendSignalsDispatching();
 
   var calculatedBounds = null;
   var lastCalculatedPaginatorBounds = null;
@@ -889,7 +871,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     var forCompareHeight = 0;
     var forCompareWidth = 0;
 
-    if (title && title.enabled()) {
+    if (title.enabled()) {
       title.parentBounds(null);
       title.setAutoWidth(null);
       title.setAutoHeight(null);
@@ -924,7 +906,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
       titleBounds = null;
     }
 
-    if (separator && separator.enabled()) {
+    if (separator.enabled()) {
       separator.parentBounds(null);
       separatorBounds = separator.getContentBounds();
 
@@ -1002,7 +984,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
     width = margin.widenWidth(padding.widenWidth(contentAreaWidth));
     height = margin.widenHeight(padding.widenHeight(contentAreaHeight));
 
-    if (title && title.enabled()) {
+    if (title.enabled()) {
       var titleWidth = titleBounds.width;
       if (titleIsHorizontal || titleIsRLYHorizontal) {
         if (titleIsRLYHorizontal && !titleIsHorizontal) {
@@ -1026,7 +1008,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
             if (separatorBounds && separatorIsHorizontal) {
               accHeight += separatorBounds.height;
             }
-            if (paginator.orientation() == anychart.enums.Orientation.TOP || paginator.orientation() == anychart.enums.Orientation.BOTTOM) {
+            if (paginatorOrientation == anychart.enums.Orientation.TOP || paginatorOrientation == anychart.enums.Orientation.BOTTOM) {
               accHeight += paginatorBounds.height;
             }
 
@@ -1043,17 +1025,12 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
         }
 
         titleBounds = title.getContentBounds();
-        if (separator) {
-          separator['width'](width);
-          separatorBounds = separator.getContentBounds();
-        }
-
+        separator['width'](width);
+        separatorBounds = separator.getContentBounds();
       } else {
         titleBounds = title.getContentBounds();
-        if (separator) {
-          separator['width'](height);
-          separatorBounds = separator.getContentBounds();
-        }
+        separator['width'](height);
+        separatorBounds = separator.getContentBounds();
       }
 
       if (titleIsHorizontal)
@@ -1062,7 +1039,7 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
         contentAreaWidth -= titleBounds.width;
     }
 
-    if (separator && separator.enabled()) {
+    if (separator.enabled()) {
       if (separatorIsHorizontal) {
         contentAreaHeight -= separatorBounds.height;
       } else {
@@ -1173,14 +1150,9 @@ anychart.core.ui.Legend.prototype.calculateBounds_ = function() {
   this.relativeBoundsWithoutMargin_ = this.margin().tightenBounds(relativePixelBounds);
   this.relativeBoundsWithoutMarginAndPadding_ = this.padding().tightenBounds(this.relativeBoundsWithoutMargin_);
 
-  if (separator)
-    separator.resumeSignalsDispatching(false);
-
-  if (paginator)
-    paginator.resumeSignalsDispatching(false);
-
-  if (title)
-    title.resumeSignalsDispatching(false);
+  separator.resumeSignalsDispatching(false);
+  paginator.resumeSignalsDispatching(false);
+  title.resumeSignalsDispatching(false);
 
   this.markConsistent(anychart.ConsistencyState.BOUNDS);
 };
@@ -1578,54 +1550,46 @@ anychart.core.ui.Legend.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_BACKGROUND)) {
-    var background = this.getCreated('background');
-    if (background) {
-      background.suspendSignalsDispatching();
-      background.parentBounds(this.relativeBoundsWithoutMargin_);
-      if (this.enabled()) background.container(this.rootElement);
-      background.resumeSignalsDispatching(false);
-      background.draw();
-    }
+    var background = /** @type {anychart.core.ui.Background} */(this.background());
+    background.suspendSignalsDispatching();
+    background.parentBounds(this.relativeBoundsWithoutMargin_);
+    if (this.enabled()) background.container(this.rootElement);
+    background.resumeSignalsDispatching(false);
+    background.draw();
     this.markConsistent(anychart.ConsistencyState.LEGEND_BACKGROUND);
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_TITLE)) {
-    var title = this.getCreated('title');
-    if (title) {
-      title.suspendSignalsDispatching();
-      title.parentBounds(this.relativeBoundsWithoutMarginAndPadding_);
-      if (this.enabled()) title.container(this.rootElement);
-      title.resumeSignalsDispatching(false);
-      title.draw();
-    }
+    var title = /** @type {anychart.core.ui.Title} */(this.title());
+    title.suspendSignalsDispatching();
+    title.parentBounds(this.relativeBoundsWithoutMarginAndPadding_);
+    if (this.enabled()) title.container(this.rootElement);
+    title.resumeSignalsDispatching(false);
+    title.draw();
     this.markConsistent(anychart.ConsistencyState.LEGEND_TITLE);
   }
 
   var boundsWithoutTitle = this.title_ ? this.title_.getRemainingBounds() : this.relativeBoundsWithoutMarginAndPadding_;
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_SEPARATOR)) {
-    var titleSeparator = this.getCreated('titleSeparator');
-    if (titleSeparator) {
-      titleSeparator.suspendSignalsDispatching();
-      titleSeparator.parentBounds(boundsWithoutTitle);
-      if (this.enabled()) titleSeparator.container(this.rootElement);
-      titleSeparator.resumeSignalsDispatching(false);
-      titleSeparator.draw();
-    }
+    var titleSeparator = /** @type {anychart.core.ui.Separator} */(this.titleSeparator());
+    titleSeparator.suspendSignalsDispatching();
+    titleSeparator.parentBounds(boundsWithoutTitle);
+    if (this.enabled()) titleSeparator.container(this.rootElement);
+    titleSeparator.resumeSignalsDispatching(false);
+    titleSeparator.draw();
     this.markConsistent(anychart.ConsistencyState.LEGEND_SEPARATOR);
   }
 
   var boundsWithoutSeparator = this.titleSeparator_ ? this.titleSeparator_.getRemainingBounds() : boundsWithoutTitle;
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LEGEND_PAGINATOR)) {
-    var paginator = this.getCreated('paginator');
-    if (paginator) {
-      paginator.suspendSignalsDispatching();
-      paginator.parentBounds(boundsWithoutSeparator);
-      if (this.enabled()) paginator.container(this.rootElement);
-      paginator.resumeSignalsDispatching(false);
-      paginator.draw();
-    }
+    var paginator = /** @type {anychart.core.ui.Paginator} */(this.paginator());
+    paginator.suspendSignalsDispatching();
+    paginator.parentBounds(boundsWithoutSeparator);
+    if (this.enabled()) paginator.container(this.rootElement);
+    paginator.resumeSignalsDispatching(false);
+    paginator.draw();
     this.markConsistent(anychart.ConsistencyState.LEGEND_PAGINATOR);
   }
 
@@ -1753,8 +1717,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1769,8 +1733,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1793,8 +1757,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1818,8 +1782,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
             item
                 .suspendSignalsDispatching()
                 .parentBounds(contentBounds)
-                .x(x)
-                .y(y)
+                ['x'](x)
+                ['y'](y)
                 .enabled(true)
                 .resumeSignalsDispatching(false)
                 .draw();
@@ -1830,9 +1794,8 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
       }
     }
 
-    var title = this.getCreated('title');
-    if (title && title.enabled()) {
-      var titleOrientation = title.getOption('orientation') || title.defaultOrientation();
+    if (this.title().enabled()) {
+      var titleOrientation = this.title().getOption('orientation') || this.title().defaultOrientation();
       var titleIsHorizontal = titleOrientation == 'top' || titleOrientation == 'bottom';
 
       if (!titleIsHorizontal) {
@@ -2052,22 +2015,10 @@ anychart.core.ui.Legend.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Legend.prototype.setupByJSONInternal = function(config, opt_default) {
-  anychart.core.ui.Legend.base(this, 'setupByJSONInternal', config, opt_default);
-
-  anychart.core.settings.deserialize(this, anychart.core.ui.Legend.PROPERTY_DESCRIPTORS, config, opt_default);
-
-  if ('padding' in config)
-    this.padding().setupInternal(!!opt_default, config['padding']);
-
-  if ('margin' in config)
-    this.margin().setupInternal(!!opt_default, config['margin']);
-};
-
-
-/** @inheritDoc */
 anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ui.Legend.base(this, 'setupByJSON', config, opt_default);
+
+  anychart.core.settings.deserialize(this, anychart.core.ui.Legend.PROPERTY_DESCRIPTORS, config, opt_default);
 
   if ('title' in config)
     this.title(config['title']);
@@ -2075,14 +2026,16 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
   if ('background' in config)
     this.background(config['background']);
 
-  if ('titleSeparator' in config)
-    this.titleSeparator(config['titleSeparator']);
+  if ('padding' in config)
+    this.padding(config['padding']);
 
-  if ('paginator' in config)
-    this.paginator(config['paginator']);
+  if ('margin' in config)
+    this.margin(config['margin']);
 
-  if ('tooltip' in config)
-    this.tooltip(config['tooltip']);
+  this.titleSeparator(config['titleSeparator']);
+  this.paginator(config['paginator']);
+
+  this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   this.items(config['items']);
   this.itemsFormatter(config['itemsFormatter']);
@@ -2176,9 +2129,8 @@ anychart.standalones.Legend.prototype.onStockPlotSignal_ = function(event) {
     this.suspendSignalsDispatching();
     var plot = /** @type {anychart.stockModule.Plot} */ (event.target);
     var autoText = plot.getLegendAutoText(/** @type {string|Function} */ (this.getOption('titleFormat')));
-    var title = this.getCreated('title');
-    if (title && !goog.isNull(autoText))
-      title.autoText(autoText);
+    if (!goog.isNull(autoText))
+      this.title().autoText(autoText);
     this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.LEGEND_RECREATE_ITEMS);
     if (this.container())
       this.draw();
