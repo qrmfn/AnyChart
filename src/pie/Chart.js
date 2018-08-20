@@ -46,6 +46,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
 
   this.addThemes('pieFunnelPyramidBase', 'pie');
 
+  this.contextMenu(this.themeSettings['contextMenu']);
+
   this.suspendSignalsDispatching();
 
   /**

@@ -638,6 +638,15 @@ anychart.core.Chart.prototype.defaultLabelSettings = function(opt_value) {
     this.defaultLabelSettings_ = opt_value;
     return this;
   }
+
+  if (!goog.isDef(this.defaultLabelSettings_)) {
+    var labelsSettings = new anychart.core.Base();
+    this.registerDisposable(labelsSettings);
+    labelsSettings.addThemes('defaultFontSettings', 'defaultLabelSettings');
+    // this.setupCreated('defaultLabelSettings', labelsSettings);
+    this.defaultLabelSettings_ = labelsSettings.themeSettings;
+  }
+
   return this.defaultLabelSettings_ || {};
 };
 
@@ -1337,6 +1346,7 @@ anychart.core.Chart.prototype.credits = function(opt_value) {
     this.credits_ = new anychart.core.ui.ChartCredits(this);
     this.registerDisposable(this.credits_);
     this.credits_.listenSignals(this.onCreditsSignal_, this);
+    this.setupCreated('credits', this.credits_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -2024,13 +2034,13 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.defaultLabelSettings(config['defaultLabelSettings']);
 
   if ('title' in config)
-    this.title(config['title']);
+    this.title().setupInternal(!!opt_default, config['title']);
 
   if ('background' in config)
-    this.background(config['background']);
+    this.background().setupInternal(!!opt_default, config['background']);
 
   if ('padding' in config)
-    this.padding(config['padding']);
+    this.padding().setupInternal(!!opt_default, config['padding']);
 
   if ('margin' in config)
     this.margin(config['margin']);
@@ -2062,12 +2072,13 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
 
   if ('a11y' in config)
-    this.a11y(config['a11y']);
+    this.a11y().setupInternal(!!opt_default, config['a11y']);
 
   if (goog.isDef(config['contextMenu']))
     this.contextMenu(config['contextMenu']);
 
-  this.credits(config['credits']);
+  if ('credits' in config)
+    this.credits(config['credits']);
 
   if (config['exports'])
     this.exports(config['exports']);
