@@ -2095,7 +2095,7 @@ anychart.pieModule.Chart.prototype.drawContent = function(bounds) {
   //   this.tooltip().container(/** @type {acgraph.vector.ILayer} */(this.container()));
   // }
 
-  var center = this.getCreated('center');
+  var center = this.center();
   if (this.hasInvalidationState(anychart.ConsistencyState.PIE_CENTER_CONTENT)) {
     if (center && center.contentLayer) {
       this.center_.clearContent();
@@ -4695,7 +4695,7 @@ anychart.pieModule.Chart.prototype.serialize = function() {
   if (this.getCreated('tooltip'))
     json['tooltip'] = this.tooltip().serialize();
 
-  if (this.getCreated('center'))
+  if (this.center())
     json['center'] = this.center().serialize();
 
   anychart.core.settings.serialize(this, anychart.pieModule.Chart.PROPERTY_DESCRIPTORS, json, 'Pie');
@@ -4950,7 +4950,7 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calcDomain = function(
   this.dropBoundsCache();
 
   var explode = this.explode;
-  var center = this.pie.getCreated('center');
+  var center = this.pie.center();
   var pieCenter = center ? center.getPoint() : this.pie.getCenterCoords();
   var piePxRadius = this.pie.getPixelRadius() + explode;
 
