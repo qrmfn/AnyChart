@@ -21,8 +21,8 @@ anychart.themes.merging.compileTheme = function(theme, path, themeIndex) {
   if (needsCompilation) {
     descriptor.compiledIn = themeIndex + 1;
     var requires = descriptor.requires;
-    // if (requires.length)
-    //  console.log(path, "requires", requires);
+    if (requires.length)
+     console.log(path, "requires", requires);
     for (var i = 0; i < requires.length; i++) {
       var req = requires[i];
       // ensure the default object is merged first
@@ -2106,9 +2106,6 @@ anychart.themes.DefaultThemes = {
   'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
   'labelsFactory': ['defaultFontSettings', 'defaultLabelFactory'],
-  'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
-  'seriesBase': ['chart.defaultSeriesSettings'],
-  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
   'axis': ['defaultAxis'],
   'map.axisSettings': ['map.axesSettings']
 };

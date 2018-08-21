@@ -1,6 +1,7 @@
 goog.provide('anychart.core.ChartWithSeries');
 
 goog.require('anychart.consistency');
+goog.require('anychart.core.BaseSettings');
 goog.require('anychart.core.IChart');
 goog.require('anychart.core.SeparateChart');
 goog.require('anychart.core.StateSettings');
@@ -175,14 +176,20 @@ anychart.core.ChartWithSeries.prototype.seriesConfig = (function() { return {}; 
 /**
  * Getter/setter for series default settings.
  * @param {Object=} opt_value Object with default series settings.
- * @return {Object}
+ * @return {anychart.core.Base|anychart.core.ChartWithSeries}
  */
 anychart.core.ChartWithSeries.prototype.defaultSeriesSettings = function(opt_value) {
+  if (!this.defaultSeriesSettings_) {
+    this.defaultSeriesSettings_ = new anychart.core.BaseSettings();
+    this.setupCreated('defaultSeriesSettings', this.defaultSeriesSettings_);
+  }
+
   if (goog.isDef(opt_value)) {
-    this.defaultSeriesSettings_ = opt_value;
+    this.defaultSeriesSettings_.setup(opt_value);
     return this;
   }
-  return this.defaultSeriesSettings_ || {};
+
+  return this.defaultSeriesSettings_;
 };
 
 

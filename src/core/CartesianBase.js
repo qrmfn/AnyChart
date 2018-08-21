@@ -228,8 +228,9 @@ anychart.core.CartesianBase.prototype.scrollerChangeHandler = function(e) {
 //
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
-anychart.core.CartesianBase.prototype.createSeriesInstance = function(type, config) {
-  return new anychart.core.series.Cartesian(this, this, type, config, true);
+anychart.core.CartesianBase.prototype.createSeriesInstance = function(type, config) {debugger
+  var series = new anychart.core.series.Cartesian(this, this, type, config, true);
+  return series;
 };
 
 

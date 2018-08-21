@@ -49,8 +49,6 @@ goog.require('goog.math');
 anychart.core.series.Base = function(chart, plot, type, config) {
   anychart.core.series.Base.base(this, 'constructor');
 
-  //this.addThemes(anychart.themes.DefaultThemes['seriesBase']);
-
   /**
    * Chart reference.
    * @type {!anychart.core.IChart}
@@ -670,7 +668,7 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  this.themeSettings = this.plot.defaultSeriesSettings()[anychart.utils.toCamelCase(this.type_)] || {};
+  this.themeSettings = this.plot.defaultSeriesSettings().getOption(anychart.utils.toCamelCase(this.type_)) || {};
   this.normal_.setupInternal(true, this.themeSettings);
   this.normal_.setupInternal(true, this.themeSettings['normal']);
   this.hovered_.setupInternal(true, this.themeSettings['hovered']);
@@ -4549,7 +4547,7 @@ anychart.core.series.Base.prototype.serialize = function() {
 /**
  * @inheritDoc
  */
-anychart.core.series.Base.prototype.setupByJSON = function(config, opt_default) {
+anychart.core.series.Base.prototype.setupByJSON = function(config, opt_default) {debugger
   anychart.core.series.Base.base(this, 'setupByJSON', config, opt_default);
 
   this.id(config['id']);
