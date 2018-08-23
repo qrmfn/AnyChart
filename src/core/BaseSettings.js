@@ -1,5 +1,6 @@
 goog.provide('anychart.core.BaseSettings');
 
+goog.require('anychart.core.Base');
 
 /**
  * Theme settings wrapper

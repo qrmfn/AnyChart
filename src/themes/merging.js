@@ -2106,6 +2106,7 @@ anychart.themes.DefaultThemes = {
   'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
   'labelsFactory': ['defaultFontSettings', 'defaultLabelFactory'],
+  'markersFactory': ['defaultMarkerFactory'],
   'axis': ['defaultAxis'],
   'map.axisSettings': ['map.axesSettings']
 };

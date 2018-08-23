@@ -668,11 +668,19 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  this.themeSettings = this.plot.defaultSeriesSettings().getOption(anychart.utils.toCamelCase(this.type_)) || {};
-  this.normal_.setupInternal(true, this.themeSettings);
-  this.normal_.setupInternal(true, this.themeSettings['normal']);
-  this.hovered_.setupInternal(true, this.themeSettings['hovered']);
-  this.selected_.setupInternal(true, this.themeSettings['selected']);
+  var settingsObj = this.plot.defaultSeriesSettings().getSeriesTypeSettings(anychart.utils.toCamelCase(this.type_));
+  this.addThemes(settingsObj.getThemes());
+
+  //this.normal_.addThemes(this.themeSettings);
+  //this.normal_.addThemes(this.themeSettings['normal']);
+  this.setupCreated('normal', this.normal_);
+  this.normal_.setupInternal(true, this.normal_.themeSettings);
+
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+
+  this.setupCreated('selected', this.selected_);
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
   if (this.supportsOutliers()) {
     this.indexToMarkerIndexes_ = {};

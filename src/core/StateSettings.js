@@ -545,6 +545,7 @@ anychart.core.StateSettings.prototype.markers = function(opt_value) {
     var markersFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_MARKERS_CONSTRUCTOR;
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.MARKERS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.markers_ = markersFactoryConstructor();
+    this.setupCreated('markers', this.markers_);
     afterInitCallback.call(this.stateHolder, this.markers_);
   }
 
@@ -567,6 +568,7 @@ anychart.core.StateSettings.prototype.outlierMarkers = function(opt_value) {
   if (!this.outlierMarkers_) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.OUTLIER_MARKERS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.outlierMarkers_ = new anychart.core.ui.MarkersFactory();
+    this.setupCreated('outlierMarkers', this.outlierMarkers_);
     afterInitCallback.call(this.stateHolder, this.outlierMarkers_);
   }
 

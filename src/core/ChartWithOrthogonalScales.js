@@ -2434,8 +2434,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.defaultScalesLastIndex = funct
  * @protected
  */
 anychart.core.ChartWithOrthogonalScales.prototype.setupSeriesByJSON = function(config, scalesInstances, opt_default) {
-  debugger
-  this.defaultSeriesSettings(config['defaultSeriesSettings']);
+  // todo: (chernetsky) Uncomment when merge to main branch
+  //this.defaultSeriesSettings(config['defaultSeriesSettings']);
+
   var i, json;
   var series = config['series'];
   if (goog.isArray(series)) {
