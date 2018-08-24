@@ -2283,9 +2283,6 @@ anychart.sparklineModule.Chart.prototype.isNoData = function() {
 anychart.sparklineModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.sparklineModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('defaultLabelSettings' in config)
-    this.defaultLabelSettings(config['defaultLabelSettings']);
-
   if ('defaultMarkerSettings' in config)
     this.defaultMarkerSettings(config['defaultMarkerSettings']);
 

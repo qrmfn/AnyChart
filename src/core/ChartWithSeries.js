@@ -185,7 +185,7 @@ anychart.core.ChartWithSeries.prototype.defaultSeriesSettings = function(opt_val
   }
 
   if (goog.isDef(opt_value)) {
-    this.defaultSeriesSettings_.setup(opt_value);
+    this.defaultSeriesSettings_.themeSettings = opt_value;
     return this;
   }
 

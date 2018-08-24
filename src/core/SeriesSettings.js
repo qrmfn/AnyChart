@@ -14,10 +14,21 @@ anychart.core.SeriesSettings = function() {
 
   this.defaultsMap_ = [
     {
-      'seriesType': ['area', 'splineArea', 'stepArea', 'rangeArea', 'rangeSplineArea', 'rangeStepArea'],
-      'defaults': ['base', 'areaLike']
+      seriesType: ['area', 'splineArea', 'stepArea', 'rangeArea', 'rangeSplineArea', 'rangeStepArea'],
+      theme: 'areaLike'
     },
-      // todo: Extend me!
+    {
+      seriesType: ['rangeBar', 'rangeColumn', 'bar', 'column', 'box', 'candlestick'],
+      theme: 'barLike'
+    },
+    {
+      seriesType: ['hilo', 'line', 'spline', 'stepLine', 'jumpLine', 'ohlc', 'stick'],
+      theme: 'lineLike'
+    },
+    {
+      seriesType: ['rangeBar', 'rangeColumn', 'rangeArea', 'rangeSplineArea', 'rangeStepArea', 'hilo'],
+      theme: 'rangeLike'
+    }
   ];
 
   this.themeSettingsCache_ = {};
@@ -25,17 +36,26 @@ anychart.core.SeriesSettings = function() {
 goog.inherits(anychart.core.SeriesSettings, anychart.core.Base);
 
 
-
+/**
+ *
+ * @param {string} seriesType
+ * @return {Object}
+ */
 anychart.core.Base.prototype.getSettingsForType = function(seriesType) {
-  seriesType = anychart.utils.toCamelCase(seriesType);
   if (!goog.isDef(this.themeSettingsCache_[seriesType])) {
-    var baseThemePaths = this.getThemes();
-    var settings = new  anychart.core.Base();
-    settings.addThemes(this.createExtendedThemes(baseThemePaths, 'base'));
-    settings.addThemes(this.createExtendedThemes(baseThemePaths, 'areaLike'));
-    settings.addThemes(this.createExtendedThemes(baseThemePaths, 'area'));
+    seriesType = anychart.utils.toCamelCase(seriesType);
+    var settings = new anychart.core.Base();
     this.registerDisposable(settings);
     this.themeSettingsCache_[seriesType] = settings;
+
+    var baseThemePaths = this.getThemes();
+    settings.addThemes(this.createExtendedThemes(baseThemePaths, 'base'));
+    for (var i = 0; i < this.defaultsMap_.length; i++) {
+      var types = this.defaultsMap_[i].seriesType;
+      if (goog.array.indexOf(types, seriesType) != -1)
+        settings.addThemes(this.createExtendedThemes(baseThemePaths, this.defaultsMap_[i].theme));
+    }
+    settings.addThemes(this.createExtendedThemes(baseThemePaths, seriesType));
   }
 
   return this.themeSettingsCache_[seriesType].themeSettings;

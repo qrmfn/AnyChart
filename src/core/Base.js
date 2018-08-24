@@ -521,6 +521,7 @@ anychart.core.Base = function() {
    */
   this.themes_ = [];
 
+
   /**
    * Map for all getter instances states in format:
    * {
