@@ -668,8 +668,7 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  var settings = this.plot.defaultSeriesSettings().getSettingsForType(this.type_);
-  this.themeSettings = settings;
+  this.themeSettings = this.plot.defaultSeriesSettings().getSettingsForType(this.type_);
 
   //this.normal_.addThemes(this.themeSettings);
   //this.normal_.addThemes(this.themeSettings['normal']);

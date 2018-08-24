@@ -30,7 +30,7 @@ anychart.core.ui.LabelsFactory = function() {
   this.suspendSignalsDispatching();
   anychart.core.ui.LabelsFactory.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
+  // this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
 
   delete this.themeSettings['enabled'];
 

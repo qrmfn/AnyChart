@@ -1314,10 +1314,21 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   this.hatchFillPalette(config['hatchFillPalette']);
   this.dataArea().setupInternal(!!opt_default, config['dataArea']);
 
-  this.normal_.setupInternal(!!opt_default, config);
-  this.normal_.setupInternal(!!opt_default, config['normal']);
-  this.hovered_.setupInternal(!!opt_default, config['hovered']);
-  this.selected_.setupInternal(!!opt_default, config['selected']);
+  // todo: uncomment when merge
+  // this.normal_.setupInternal(!!opt_default, config);
+  // this.normal_.setupInternal(!!opt_default, config['normal']);
+  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  // this.selected_.setupInternal(!!opt_default, config['selected']);
+
+  this.normal_.addThemes(this.themeSettings);
+  this.setupCreated('normal', this.normal_);
+  this.normal_.setupInternal(true, this.normal_.themeSettings);
+
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+
+  this.setupCreated('selected', this.selected_);
+  this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
 
 
