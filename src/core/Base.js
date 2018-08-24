@@ -517,10 +517,9 @@ anychart.core.Base = function() {
    * of theme objects.
    * 
    * @type {Array.<Object|string>}
-   * @private
+   * @protected
    */
   this.themes_ = [];
-
 
   /**
    * Map for all getter instances states in format:
@@ -1197,12 +1196,14 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
   if (goog.isArray(arguments[0])) {
     this.addThemes.apply(this, arguments[0]);
   } else {
-    for (var i = 0; i < arguments.length; i++) {
-      var th = arguments[i];
-      if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1)
-        this.themes_.push(th);
+    if (arguments.length) {
+      for (var i = 0; i < arguments.length; i++) {
+        var th = arguments[i];
+        if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1)
+          this.themes_.push(th);
+      }
+      this.flattenThemes();
     }
-    this.flattenThemes();
   }
 };
 
@@ -1213,7 +1214,7 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
  * @return {Array.<string|Object>}
  */
 anychart.core.Base.prototype.getThemes = function() {
-  return this.themes_;
+  return this.themes_.length ? this.themes_ : [this.themeSettings];
 };
 
 
@@ -1247,8 +1248,8 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
       }
     }
   }
-  if (resultThemes.length == 0)
-    resultThemes.push(extendThemeName);
+  // if (resultThemes.length == 0)
+  //   resultThemes.push(extendThemeName);
 
   return resultThemes;
 };

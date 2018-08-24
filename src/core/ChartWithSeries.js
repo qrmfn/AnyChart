@@ -1,9 +1,9 @@
 goog.provide('anychart.core.ChartWithSeries');
 
 goog.require('anychart.consistency');
-goog.require('anychart.core.SeriesSettings');
 goog.require('anychart.core.IChart');
 goog.require('anychart.core.SeparateChart');
+goog.require('anychart.core.SeriesSettings');
 goog.require('anychart.core.StateSettings');
 goog.require('anychart.core.reporting');
 goog.require('anychart.core.ui.DataArea');
@@ -1347,8 +1347,8 @@ anychart.core.ChartWithSeries.prototype.disposeInternal = function() {
   this.removeAllSeries();
   this.resumeSignalsDispatching(false);
 
-  goog.disposeAll(this.palette_, this.markerPalette_, this.hatchFillPalette_, this.dataArea_);
-  this.palette_ = this.markerPalette_ = this.hatchFillPalette_ = this.dataArea_ = null;
+  goog.disposeAll(this.palette_, this.markerPalette_, this.hatchFillPalette_, this.dataArea_, this.defaultSeriesSettings_);
+  this.palette_ = this.markerPalette_ = this.hatchFillPalette_ = this.dataArea_ = this.defaultSeriesSettings_ = null;
 
   goog.disposeAll(this.normal_, this.hovered_, this.selected_);
 

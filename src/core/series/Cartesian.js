@@ -28,7 +28,6 @@ goog.require('goog.math.Rect');
 anychart.core.series.Cartesian = function(chart, plot, type, config, sortedMode) {
   anychart.core.series.Cartesian.base(this, 'constructor', chart, plot, type, config);
 
-
   /**
    * Interactivity state.
    * @type {anychart.core.utils.InteractivityState}

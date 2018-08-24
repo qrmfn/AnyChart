@@ -668,8 +668,8 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  var settingsObj = this.plot.defaultSeriesSettings().getSeriesTypeSettings(anychart.utils.toCamelCase(this.type_));
-  this.addThemes(settingsObj.getThemes());
+  var settings = this.plot.defaultSeriesSettings().getSettingsForType(this.type_);
+  this.themeSettings = settings;
 
   //this.normal_.addThemes(this.themeSettings);
   //this.normal_.addThemes(this.themeSettings['normal']);
@@ -4555,7 +4555,7 @@ anychart.core.series.Base.prototype.serialize = function() {
 /**
  * @inheritDoc
  */
-anychart.core.series.Base.prototype.setupByJSON = function(config, opt_default) {debugger
+anychart.core.series.Base.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.series.Base.base(this, 'setupByJSON', config, opt_default);
 
   this.id(config['id']);
