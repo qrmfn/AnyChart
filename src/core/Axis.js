@@ -67,7 +67,7 @@ anychart.core.Axis = function() {
   this.resumeSignalsDispatching(false);
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
-    ['stroke', 0, 0],//Signals and invalidation in normalize function
+    ['stroke', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],//Should check thickness of stroke before invalidation
     ['orientation', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropStaggeredLabelsCache_, this],
