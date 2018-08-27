@@ -12,7 +12,7 @@ goog.require('anychart.core.Base');
 anychart.core.SeriesSettings = function() {
   anychart.core.SeriesSettings.base(this, 'constructor');
 
-  this.defaultsMap_ = [
+  this.themeDependencies_ = [
     {
       seriesType: ['area', 'splineArea', 'stepArea', 'rangeArea', 'rangeSplineArea', 'rangeStepArea'],
       theme: 'areaLike'
@@ -50,10 +50,10 @@ anychart.core.Base.prototype.getSettingsForType = function(seriesType) {
 
     var baseThemePaths = this.getThemes();
     settings.addThemes(this.createExtendedThemes(baseThemePaths, 'base'));
-    for (var i = 0; i < this.defaultsMap_.length; i++) {
-      var types = this.defaultsMap_[i].seriesType;
+    for (var i = 0; i < this.themeDependencies_.length; i++) {
+      var types = this.themeDependencies_[i].seriesType;
       if (goog.array.indexOf(types, seriesType) != -1)
-        settings.addThemes(this.createExtendedThemes(baseThemePaths, this.defaultsMap_[i].theme));
+        settings.addThemes(this.createExtendedThemes(baseThemePaths, this.themeDependencies_[i].theme));
     }
     settings.addThemes(this.createExtendedThemes(baseThemePaths, seriesType));
   }

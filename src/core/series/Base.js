@@ -668,7 +668,9 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  this.themeSettings = this.plot.defaultSeriesSettings().getSettingsForType(this.type_);
+  this.themeSettings = goog.isFunction(this.plot.defaultSeriesSettings().getSettingsForType) ?
+      this.plot.defaultSeriesSettings().getSettingsForType(this.type_) :
+      this.plot.defaultSeriesSettings()[anychart.utils.toCamelCase(this.type_)] || {};
 
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, this.normal_.themeSettings);
