@@ -2110,5 +2110,10 @@ anychart.themes.DefaultThemes = {
   'seriesBase': ['chart.defaultSeriesSettings'],
   'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
   'axis': ['defaultAxis'],
-  'map.axisSettings': ['map.axesSettings']
+  'map.axisSettings': ['map.axesSettings'],
+  'scroller': ['defaultScroller'],
+  'thumbs': ['defaultScroller.thumbs']
 };
+
+anychart.themes.DefaultThemes['xScroller'] = anychart.themes.DefaultThemes['scroller'];
+anychart.themes.DefaultThemes['titleSeparator'] = anychart.themes.DefaultThemes['separator'];

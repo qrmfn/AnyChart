@@ -83,6 +83,7 @@ anychart.bubble = function(var_args) {
  */
 anychart.quadrant = function(var_args) {
   var chart = new anychart.scatterModule.Chart();
+  chart.addThemes('quadrant');
   chart.setupInternal(true, anychart.getFullTheme('quadrant'));
   chart.setType(anychart.enums.ChartTypes.QUADRANT);
 
