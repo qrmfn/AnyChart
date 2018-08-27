@@ -236,6 +236,8 @@ anychart.heatmapModule.Chart.prototype.yScroller = function(opt_value) {
         anychart.ConsistencyState.HEATMAP_Y_SCROLLER |
         anychart.ConsistencyState.BOUNDS,
         anychart.Signal.NEEDS_REDRAW);
+
+    this.setupCreated('yScroller', this.yScroller_);
   }
 
   if (goog.isDef(opt_value)) {

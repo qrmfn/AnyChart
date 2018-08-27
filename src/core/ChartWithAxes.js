@@ -1489,7 +1489,7 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
       this.crosslines_ = this.rootElement.path();
       this.crosslines_.zIndex(2);
     }
-    var stroke = /** @type {acgraph.vector.Stroke} */ (this.crossing().stroke());
+    var stroke = /** @type {acgraph.vector.Stroke} */ (this.crossing().getOption('stroke'));
     var strokeIsNone = anychart.utils.isNone(stroke) || !goog.isDef(stroke);
     var thickness = acgraph.vector.getThickness(stroke);
     if (!strokeIsNone) {
@@ -1591,6 +1591,8 @@ anychart.core.ChartWithAxes.prototype.quarterInvalidated = function(event) {
 anychart.core.ChartWithAxes.prototype.quarters = function(opt_value) {
   if (!this.quarterSettings_) {
     this.quarterSettings_ = new anychart.core.utils.QuarterSettings(this);
+
+    this.setupCreated('quarters', this.quarterSettings_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1619,6 +1621,7 @@ anychart.core.ChartWithAxes.prototype.crossingInvalidated_ = function(event) {
 anychart.core.ChartWithAxes.prototype.crossing = function(opt_value) {
   if (!this.crossing_) {
     this.crossing_ = new anychart.core.utils.Crossing();
+    this.setupCreated('crossing', this.crossing_);
     this.crossing_.listenSignals(this.crossingInvalidated_, this);
   }
 
