@@ -740,15 +740,16 @@ anychart.core.ui.LabelBase.prototype.draw = function() {
     this.markConsistent(anychart.ConsistencyState.APPEARANCE);
   }
 
+  var background = this.getCreated('background');
   if (this.hasInvalidationState(anychart.ConsistencyState.CONTAINER)) {
-    if (this.background_) this.background_.container(this.rootLayer_).draw();
+    if (background) background.container(this.rootLayer_).draw();
     if (this.textElement) this.textElement.parent(this.rootLayer_);
     this.rootLayer_.parent(container);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.Z_INDEX)) {
-    if (this.background_) this.background_.zIndex(0);
+    if (background) background.zIndex(0);
     if (this.textElement) this.textElement.zIndex(1);
     this.rootLayer_.zIndex(/** @type {number} */(this.zIndex()));
     this.markConsistent(anychart.ConsistencyState.Z_INDEX);
@@ -764,11 +765,11 @@ anychart.core.ui.LabelBase.prototype.draw = function() {
 
 
   if (this.hasInvalidationState(anychart.ConsistencyState.LABEL_BACKGROUND)) {
-    if (this.background_) {
-      this.background_.suspendSignalsDispatching();
-      this.background_.parentBounds(backgroundBounds);
-      this.background_.draw();
-      this.background_.resumeSignalsDispatching(false);
+    if (background) {
+      background.suspendSignalsDispatching();
+      background.parentBounds(backgroundBounds);
+      background.draw();
+      background.resumeSignalsDispatching(false);
     }
     this.markConsistent(anychart.ConsistencyState.LABEL_BACKGROUND);
   }
