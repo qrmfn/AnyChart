@@ -476,7 +476,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
       this.lines[i].clear();
   }
 
-  var orientation = /** @type {anychart.enums.Orientation} */(this.getOption('orientation'));
+  var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
   var lineDrawer;
   switch (orientation) {
     case anychart.enums.Orientation.TOP:
@@ -597,7 +597,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.getPixelBounds = function() {
       }
 
       var width, height;
-      switch (this.getOption('orientation')) {
+      switch (this.orientation()) {
         case anychart.enums.Orientation.TOP:
           y = parentBounds.top + topPad;
           x = parentBounds.left + offset;
@@ -728,7 +728,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.showMarker = function(value) 
 
       if (isNaN(ratio)) return;
 
-      var orientation = this.getOption('orientation');
+      var orientation = this.orientation();
       var x, y, rotation;
       switch (orientation) {
         case anychart.enums.Orientation.TOP:

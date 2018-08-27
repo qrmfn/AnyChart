@@ -163,7 +163,7 @@ anychart.core.ChartWithAxes.prototype.isVertical = function(opt_value) {
       for (i = axes.length; i--;) {
         var axis = axes[i];
         if (axis) {
-          switch (axis.getOption('orientation')) {
+          switch (axis.orientation()) {
             case anychart.enums.Orientation.BOTTOM:
               newValue = anychart.enums.Orientation.LEFT;
               break;
@@ -1149,7 +1149,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
   for (i = 0, count = axes.length; i < count; i++) {
     axis = /** @type {anychart.core.Axis} */(axes[i]);
     if (axis && axis.enabled()) {
-      switch (axis.getOption('orientation')) {
+      switch (axis.orientation()) {
         case anychart.enums.Orientation.TOP:
           if (!firstTopAxis)
             firstTopAxis = axis;
@@ -1190,7 +1190,8 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       axis = /** @type {anychart.core.Axis} */(axes[i]);
       if (axis && axis.enabled()) {
         axis.parentBounds(contentAreaBounds);
-        orientation = axis.getOption('orientation');
+        orientation = axis.orientation();
+
         axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(axis.getOption('stroke')));
 
         if (orientation == anychart.enums.Orientation.TOP) {
@@ -1256,7 +1257,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
 
         var axisPixelBounds = axis.getPixelBounds(false);
         var side;
-        switch (axis.getOption('orientation')) {
+        switch (axis.orientation()) {
           case anychart.enums.Orientation.TOP:
             side = anychart.enums.Orientation.BOTTOM;
             break;
