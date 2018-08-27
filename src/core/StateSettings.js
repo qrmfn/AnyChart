@@ -638,7 +638,7 @@ anychart.core.StateSettings.prototype.background = function(opt_value) {
     afterInitCallback.call(this.stateHolder, this.background_);
 
     // todo: (chernetsky) Remove this when StateSettings is refactored
-    this.background_.themeSettings = {};
+    // this.background_.themeSettings = {};
   }
 
   if (goog.isDef(opt_value)) {

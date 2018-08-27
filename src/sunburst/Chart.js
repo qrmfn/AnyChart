@@ -39,6 +39,8 @@ goog.require('goog.ui.KeyboardShortcutHandler');
 anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
   anychart.sunburstModule.Chart.base(this, 'constructor', opt_data, opt_fillMethod);
 
+  this.addThemes('sunburst');
+
   /**
    * Interactivity state.
    * @type {anychart.core.utils.InteractivityState}
