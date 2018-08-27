@@ -219,7 +219,7 @@ anychart.stockModule.CurrentPriceIndicator.prototype.getLabelPositionProvider = 
   var right = axisEnabled ? axisBounds.getRight() : plotBounds.getLeft();
 
   var x;
-  switch (axis.orientation()) {
+  switch (axis.getOption('orientation')) {
     case anychart.enums.Orientation.LEFT:
       x = this.isLabelAnchorLeft(this.label_) ? right : right;
       break;
@@ -448,7 +448,7 @@ anychart.stockModule.CurrentPriceIndicator.prototype.draw = function() {
         this.label_.formatProvider(labelFormatProvider);
         this.mainLabel_.dropCallsCache();
         this.label_.positionProvider(labelPositionProvider);
-        this.label_.autoAnchor(axis.orientation() == anychart.enums.Orientation.LEFT ? anychart.enums.Anchor.RIGHT_CENTER : anychart.enums.Anchor.LEFT_CENTER);
+        this.label_.autoAnchor(axis.getOption('orientation') == anychart.enums.Orientation.LEFT ? anychart.enums.Anchor.RIGHT_CENTER : anychart.enums.Anchor.LEFT_CENTER);
       }
     } else {
       this.label_.clear();
@@ -462,7 +462,7 @@ anychart.stockModule.CurrentPriceIndicator.prototype.draw = function() {
       labelFormatProvider = this.getLabelsFormatProvider(series, axis, yRatio);
       this.label_.formatProvider(labelFormatProvider);
       this.mainLabel_.dropCallsCache();
-      this.label_.autoAnchor(axis.orientation() == anychart.enums.Orientation.LEFT ? anychart.enums.Anchor.RIGHT_CENTER : anychart.enums.Anchor.LEFT_CENTER);
+      this.label_.autoAnchor(axis.getOption('orientation') == anychart.enums.Orientation.LEFT ? anychart.enums.Anchor.RIGHT_CENTER : anychart.enums.Anchor.LEFT_CENTER);
 
       var labelStateOrder = [];
       if (isSeriesOHLCBased) {
