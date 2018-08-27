@@ -65,6 +65,27 @@ anychart.core.Axis = function() {
       anychart.ConsistencyState.AXIS_OVERLAP;
 
   this.resumeSignalsDispatching(false);
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['stroke', anychart.ConsistencyState.APPEARANCE],
+    ['orientation', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropStaggeredLabelsCache_, this],
+    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropStaggeredLabelsCache_, this],
+    ['overlapMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropBoundsCache, this],
+    ['staggerLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, function() {
+      this.dropBoundsCache();
+      this.dropStaggeredLabelsCache_();
+    }, this],
+    ['staggerMaxLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, function() {
+      this.dropBoundsCache();
+      this.dropStaggeredLabelsCache_();
+
+    }, this]
+
+]);
+
 };
 goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 
@@ -518,23 +539,46 @@ anychart.core.Axis.prototype.stroke = function(opt_strokeOrFill, opt_thickness, 
 
 
 /**
+ * Simple properties descriptors.
+ * @type {!Object.<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'orientation', anychart.enums.normalizeOrientation],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'width', anychart.core.settings.numberOrPercentNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawFirstLabel', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.naturalNumberNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMaxLines', anychart.core.settings.naturalNumberNormalizer],
+  ]);
+
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.Axis, anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS);
+
+
+/**
  * Getter/setter for orientation.
  * @param {(string|anychart.enums.Orientation|null)=} opt_value Axis orientation.
  * @return {anychart.enums.Orientation|!anychart.core.Axis} Axis orientation or itself for method chaining.
  */
-anychart.core.Axis.prototype.orientation = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    var orientation = goog.isNull(opt_value) ? null : anychart.enums.normalizeOrientation(opt_value);
-    if (this.orientation_ != orientation) {
-      this.orientation_ = orientation;
-      this.dropStaggeredLabelsCache_();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  } else {
-    return this.orientation_ || this.defaultOrientation_;
-  }
-};
+// anychart.core.Axis.prototype.orientation = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     var orientation = goog.isNull(opt_value) ? null : anychart.enums.normalizeOrientation(opt_value);
+//     if (this.orientation_ != orientation) {
+//       this.orientation_ = orientation;
+//       this.dropStaggeredLabelsCache_();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   } else {
+//     return this.orientation_ || this.defaultOrientation_;
+//   }
+// };
 
 
 /**
@@ -610,16 +654,16 @@ anychart.core.Axis.prototype.scaleInvalidated = function(event) {
  * @param {?(number|string)=} opt_value .
  * @return {anychart.core.Axis|number|string|null} .
  */
-anychart.core.Axis.prototype.width = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.width_ != opt_value) {
-      this.width_ = opt_value;
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.width_;
-};
+// anychart.core.Axis.prototype.width = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.width_ != opt_value) {
+//       this.width_ = opt_value;
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.width_;
+// };
 
 
 /**
@@ -665,17 +709,17 @@ anychart.core.Axis.prototype.paddingInvalidated_ = function(event) {
  * @param {boolean=} opt_value Drawing flag.
  * @return {boolean|!anychart.core.Axis} Drawing flag or itself for method chaining.
  */
-anychart.core.Axis.prototype.drawFirstLabel = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.drawFirstLabel_ != opt_value) {
-      this.drawFirstLabel_ = opt_value;
-      this.dropStaggeredLabelsCache_();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.drawFirstLabel_;
-};
+// anychart.core.Axis.prototype.drawFirstLabel = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.drawFirstLabel_ != opt_value) {
+//       this.drawFirstLabel_ = opt_value;
+//       this.dropStaggeredLabelsCache_();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.drawFirstLabel_;
+// };
 
 
 /**
@@ -683,17 +727,17 @@ anychart.core.Axis.prototype.drawFirstLabel = function(opt_value) {
  * @param {boolean=} opt_value Drawing flag.
  * @return {boolean|!anychart.core.Axis} Drawing flag or itself for method chaining.
  */
-anychart.core.Axis.prototype.drawLastLabel = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.drawLastLabel_ != opt_value) {
-      this.drawLastLabel_ = opt_value;
-      this.dropStaggeredLabelsCache_();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.drawLastLabel_;
-};
+// anychart.core.Axis.prototype.drawLastLabel = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.drawLastLabel_ != opt_value) {
+//       this.drawLastLabel_ = opt_value;
+//       this.dropStaggeredLabelsCache_();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.drawLastLabel_;
+// };
 
 
 /**
@@ -701,17 +745,17 @@ anychart.core.Axis.prototype.drawLastLabel = function(opt_value) {
  * @param {(anychart.enums.LabelsOverlapMode|string)=} opt_value Value to set.
  * @return {anychart.enums.LabelsOverlapMode|!anychart.core.Axis} Drawing flag or itself for method chaining.
  */
-anychart.core.Axis.prototype.overlapMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    var overlap = anychart.enums.normalizeLabelsOverlapMode(opt_value, this.overlapMode_);
-    if (this.overlapMode_ != overlap) {
-      this.overlapMode_ = overlap;
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.overlapMode_;
-};
+// anychart.core.Axis.prototype.overlapMode = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     var overlap = anychart.enums.normalizeLabelsOverlapMode(opt_value, this.overlapMode_);
+//     if (this.overlapMode_ != overlap) {
+//       this.overlapMode_ = overlap;
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.overlapMode_;
+// };
 
 
 /**
@@ -737,20 +781,20 @@ anychart.core.Axis.prototype.staggerMode = function(opt_value) {
  * @param {?number=} opt_value Fixed/auto.
  * @return {null|number|!anychart.core.Axis} .
  */
-anychart.core.Axis.prototype.staggerLines = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = goog.isNull(opt_value) ? null : anychart.utils.normalizeToNaturalNumber(opt_value);
-    if (this.staggerLines_ != opt_value) {
-      this.staggerLines_ = opt_value;
-      this.dropBoundsCache();
-      this.dropStaggeredLabelsCache_();
-      if (this.staggerMode_)
-        this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.staggerLines_;
-};
+// anychart.core.Axis.prototype.staggerLines = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     opt_value = goog.isNull(opt_value) ? null : anychart.utils.normalizeToNaturalNumber(opt_value);
+//     if (this.staggerLines_ != opt_value) {
+//       this.staggerLines_ = opt_value;
+//       this.dropBoundsCache();
+//       this.dropStaggeredLabelsCache_();
+//       if (this.staggerMode_)
+//         this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.staggerLines_;
+// };
 
 
 /**
@@ -758,20 +802,20 @@ anychart.core.Axis.prototype.staggerLines = function(opt_value) {
  * @param {?number=} opt_value .
  * @return {null|number|!anychart.core.Axis} .
  */
-anychart.core.Axis.prototype.staggerMaxLines = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    opt_value = anychart.utils.normalizeToNaturalNumber(opt_value);
-    if (this.staggerMaxLines_ != opt_value) {
-      this.staggerMaxLines_ = opt_value;
-      this.dropBoundsCache();
-      this.dropStaggeredLabelsCache_();
-      if (this.staggerMode_)
-        this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.staggerMaxLines_;
-};
+// anychart.core.Axis.prototype.staggerMaxLines = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     opt_value = anychart.utils.normalizeToNaturalNumber(opt_value);
+//     if (this.staggerMaxLines_ != opt_value) {
+//       this.staggerMaxLines_ = opt_value;
+//       this.dropBoundsCache();
+//       this.dropStaggeredLabelsCache_();
+//       if (this.staggerMode_)
+//         this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.staggerMaxLines_;
+// };
 
 
 //endregion
