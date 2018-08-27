@@ -679,7 +679,7 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
   this.setupCreated('selected', this.selected_);
-  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+  this.selected_.setupInternal(true, this.selected_.themeSettings);
 
   if (this.supportsOutliers()) {
     this.indexToMarkerIndexes_ = {};

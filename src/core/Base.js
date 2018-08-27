@@ -1261,7 +1261,7 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
  * from instance themes chain and saves it as themeSettings
  */
 anychart.core.Base.prototype.flattenThemes = function() {
-  var flatTheme = {};
+  var flatTheme = this.themeSettings || {};
   var baseThemes = anychart.getThemes();
 
   for (var i = 0; i < this.themes_.length; i++) {
