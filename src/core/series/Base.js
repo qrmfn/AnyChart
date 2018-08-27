@@ -670,8 +670,6 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
 
   this.themeSettings = this.plot.defaultSeriesSettings().getSettingsForType(this.type_);
 
-  //this.normal_.addThemes(this.themeSettings);
-  //this.normal_.addThemes(this.themeSettings['normal']);
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, this.normal_.themeSettings);
 
