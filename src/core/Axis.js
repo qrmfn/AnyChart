@@ -163,13 +163,6 @@ anychart.core.Axis.prototype.minorTicks_ = null;
 
 
 /**
- * @type {string|acgraph.vector.Stroke}
- * @private
- */
-anychart.core.Axis.prototype.stroke_;
-
-
-/**
  * @type {?anychart.enums.Orientation}
  * @private
  */
@@ -189,33 +182,6 @@ anychart.core.Axis.prototype.defaultOrientation_ = anychart.enums.Orientation.TO
  */
 anychart.core.Axis.prototype.internalScale = null;
 
-
-/**
- * @type {anychart.enums.LabelsOverlapMode}
- * @private
- */
-anychart.core.Axis.prototype.overlapMode_ = anychart.enums.LabelsOverlapMode.NO_OVERLAP;
-
-
-/**
- * @type {boolean}
- * @private
- */
-anychart.core.Axis.prototype.staggerMode_ = false;
-
-
-/**
- * @type {?number}
- * @private
- */
-anychart.core.Axis.prototype.staggerLines_ = null;
-
-
-/**
- * @type {?number}
- * @private
- */
-anychart.core.Axis.prototype.staggerMaxLines_ = null;
 
 
 /**
@@ -240,14 +206,6 @@ anychart.core.Axis.prototype.insideBounds_ = null;
 
 
 /**
- * Axis width.
- * @type {?(number|string)}
- * @private
- */
-anychart.core.Axis.prototype.width_ = null;
-
-
-/**
  * Axis padding.
  * @type {anychart.core.utils.Padding}
  * @private
@@ -260,20 +218,6 @@ anychart.core.Axis.prototype.padding_ = null;
  * @private
  */
 anychart.core.Axis.prototype.offsetY_;
-
-
-/**
- * @type {boolean}
- * @private
- */
-anychart.core.Axis.prototype.drawFirstLabel_ = true;
-
-
-/**
- * @type {boolean}
- * @private
- */
-anychart.core.Axis.prototype.drawLastLabel_ = true;
 
 
 /**
@@ -680,6 +624,7 @@ anychart.core.Axis.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, op
     this.padding_ = new anychart.core.utils.Padding();
     this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.paddingInvalidated_, this);
+    this.setupCreated('padding', this.padding_);
   }
   if (goog.isDef(opt_spaceOrTopOrTopAndBottom)) {
     this.padding_.setup.apply(this.padding_, arguments);
@@ -765,17 +710,17 @@ anychart.core.Axis.prototype.paddingInvalidated_ = function(event) {
  * @param {boolean=} opt_value On/off.
  * @return {boolean|!anychart.core.Axis} .
  */
-anychart.core.Axis.prototype.staggerMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.staggerMode_ != opt_value) {
-      this.staggerMode_ = opt_value;
-      this.dropBoundsCache();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.staggerMode_;
-};
+// anychart.core.Axis.prototype.staggerMode = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.staggerMode_ != opt_value) {
+//       this.staggerMode_ = opt_value;
+//       this.dropBoundsCache();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.staggerMode_;
+// };
 
 
 /**
@@ -855,7 +800,7 @@ anychart.core.Axis.prototype.dropOverlappedLabelsCache_ = function() {
  */
 anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
   if (!this.overlappedLabels_ || this.hasInvalidationState(anychart.ConsistencyState.AXIS_OVERLAP)) {
-    if (this.overlapMode_ == anychart.enums.LabelsOverlapMode.ALLOW_OVERLAP) {
+    if (this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.ALLOW_OVERLAP) {
       return false;
     } else {
       var scale = /** @type {anychart.scales.ScatterBase|anychart.scales.Ordinal} */(this.scale());
@@ -1101,8 +1046,8 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
     }
 
-    if (!goog.isNull(this.staggerLines_)) {
-      this.currentStageLines_ = this.staggerLines_;
+    if (!goog.isNull(this.getOption('staggerLines'))) {
+      this.currentStageLines_ = this.getOption('staggerLines');
     } else {
       var isConvergence = false;
       i = 1;
@@ -1124,15 +1069,17 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
       this.staggerAutoLines_ = isConvergence ? i : ticksArrLen;
 
-      if (!goog.isNull(this.staggerMaxLines_) && this.staggerAutoLines_ > this.staggerMaxLines_) {
-        this.currentStageLines_ = this.staggerMaxLines_;
+      var staggerMaxLines = this.getOption('staggerMaxLines');
+
+      if (!goog.isNull(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines) {
+        this.currentStageLines_ = staggerMaxLines;
       } else {
         this.currentStageLines_ = this.staggerAutoLines_;
       }
     }
 
-    var limitedLineNumber = (!goog.isNull(this.staggerLines_) ||
-        !goog.isNull(this.staggerMaxLines_) && this.staggerAutoLines_ > this.staggerMaxLines_);
+    var limitedLineNumber = (!goog.isNull(this.getOption('staggerLines')) ||
+        !goog.isNull(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines);
 
     if (limitedLineNumber && this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.NO_OVERLAP) {
       for (j = 0; j < this.currentStageLines_; j++) {
@@ -1416,12 +1363,12 @@ anychart.core.Axis.prototype.getSize = function(parentBounds, length, opt_includ
   var maxMinorLabelSize = 0;
   var titleSize = 0;
 
-  var title = this.title();
+  var title = this.getCreated('title');
   var labels = this.labels();
   var minorLabels = this.minorLabels();
   var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
 
-  if (title.enabled()) {
+  if (title && title.enabled()) {
     if (!title.container()) title.container(/** @type {acgraph.vector.ILayer} */(this.container()));
     title.suspendSignalsDispatching();
     title.parentBounds(parentBounds);
@@ -1591,8 +1538,8 @@ anychart.core.Axis.prototype.getRemainingBounds = function(opt_includeInsideCont
  * @return {number} Calculated size.
  */
 anychart.core.Axis.prototype.calculateSize = function(parentSize, length, parentBounds, opt_includeInsideContent) {
-  return this.width_ ?
-      anychart.utils.normalizeSize(this.width_, parentSize) :
+  return this.getOption('width') ?
+      anychart.utils.normalizeSize(this.getOption('width'), parentSize) :
       this.getSize(parentBounds, length, opt_includeInsideContent);
 };
 
