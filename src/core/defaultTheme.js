@@ -983,7 +983,9 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
     'fill': function() {
       return this['palette'].itemAt(this['index']);
     },
-    'palette': ['none'],
+    'palette': {
+      'items': ['none']
+    },
     'stroke': anychart.core.defaultTheme.colorStrokeNormal,
     'scale': 1,
     'zIndex': 11
