@@ -74,14 +74,17 @@ anychart.core.Axis = function() {
     ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, this.dropStaggeredLabelsCache_, this],
     ['overlapMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, this.dropBoundsCache, this],
-    ['staggerLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, function() {
+    ['staggerLines', 0, 0, null, function() {
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
+      if (this.getOption('staggerMode'))
+        this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
     }, this],
-    ['staggerMaxLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, function() {
+    ['staggerMaxLines', 0, 0, null, function() {
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
-
+      if (this.getOption('staggerMode'))
+        this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
     }, this]
   ]);
 
@@ -401,7 +404,7 @@ anychart.core.Axis.prototype.getLine = function() {
 anychart.core.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
-    this.setupCreated('ticks', this.ticks_);
+//    this.setupCreated('ticks', this.ticks_);
     this.ticks_.setParentEventTarget(this);
     this.ticks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.ticks_);
@@ -501,7 +504,7 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawLastLabel', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.naturalNumberNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings, anychart.core],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMaxLines', anychart.core.settings.naturalNumberNormalizer]
 
   ]);
@@ -863,7 +866,6 @@ anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
             if (nextDrawableLabel == -1 && isLabels) {
               k = i;
               while (nextDrawableLabel == -1 && k < ticksArrLen) {
-
                 if ((!k && drawFirstLabel) || (k == ticksArrLen - 1 && drawLastLabel) || (k != 0 && k != ticksArrLen - 1))
                   bounds1 = this.getLabelBounds_(k, true, scaleTicksArr, opt_bounds);
                 else
@@ -1042,6 +1044,8 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var isLabelInInsideSpace;
     var drawFirstLabel = this.getOption('drawFirstLabel');
     var drawLastLabel = this.getOption('drawLastLabel');
+    var staggerLines = /**@type {number}*/(this.getOption('staggerLines'));
+    var staggerMaxLines = /**@type {number}*/(this.getOption('staggerMaxLines'));
     states = [];
     for (var tickIndex = 0; tickIndex < ticksArrLen; tickIndex++) {
       //check for needs drawing first and last label
@@ -1053,8 +1057,8 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
     }
 
-    if (goog.isDef(this.getOption('staggerLines'))) {
-      this.currentStageLines_ = /**@type {number}*/(this.getOption('staggerLines'));
+    if (!goog.isNull(staggerLines)) {
+      this.currentStageLines_ = staggerLines;
     } else {
       var isConvergence = false;
       i = 1;
@@ -1076,17 +1080,15 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
       this.staggerAutoLines_ = isConvergence ? i : ticksArrLen;
 
-      var staggerMaxLines = /**@type {number}*/(this.getOption('staggerMaxLines'));
-
-      if (goog.isDef(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines) {
+      if (!goog.isNull(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines) {
         this.currentStageLines_ = staggerMaxLines;
       } else {
         this.currentStageLines_ = this.staggerAutoLines_;
       }
     }
 
-    var limitedLineNumber = (goog.isDef(this.getOption('staggerLines')) ||
-        goog.isDef(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines);
+    var limitedLineNumber = (!goog.isNull(staggerLines) ||
+      !goog.isNull(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines);
 
     if (limitedLineNumber && this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.NO_OVERLAP) {
       for (j = 0; j < this.currentStageLines_; j++) {
