@@ -70,21 +70,20 @@ anychart.core.Axis = function() {
     ['stroke', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],//Should check thickness of stroke before invalidation
     //['orientation', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropStaggeredLabelsCache_, this],
-    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropStaggeredLabelsCache_, this],
+    ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, this.dropStaggeredLabelsCache_, this],
+    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, this.dropStaggeredLabelsCache_, this],
     ['overlapMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, this.dropBoundsCache, this],
-    ['staggerLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, function() {
+    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, this.dropBoundsCache, this],
+    ['staggerLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, function() {
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
     }, this],
-    ['staggerMaxLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, function() {
+    ['staggerMaxLines', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, null, function() {
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
 
     }, this]
-
-]);
+  ]);
 
 };
 goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
@@ -288,6 +287,9 @@ anychart.core.Axis.prototype.labels = function(opt_value) {
     this.labels_ = new anychart.core.ui.LabelsFactory();
     this.labels_.setParentEventTarget(this);
     this.labels_.listenSignals(this.labelsInvalidated_, this);
+
+    this.setupCreated('labels', this.labels_);
+
     this.registerDisposable(this.labels_);
   }
 
@@ -333,6 +335,7 @@ anychart.core.Axis.prototype.labelsInvalidated_ = function(event) {
 anychart.core.Axis.prototype.minorLabels = function(opt_value) {
   if (!this.minorLabels_) {
     this.minorLabels_ = new anychart.core.ui.LabelsFactory();
+    this.setupCreated('minorLabels', this.minorLabels_);
     this.minorLabels_.setParentEventTarget(this);
     this.isHorizontal() ? this.minorLabels_['rotation'](0) : this.minorLabels_['rotation'](-90);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
@@ -399,6 +402,7 @@ anychart.core.Axis.prototype.getLine = function() {
 anychart.core.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
+    this.setupCreated('ticks', this.ticks_);
     this.ticks_.setParentEventTarget(this);
     this.ticks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.ticks_);
@@ -420,6 +424,7 @@ anychart.core.Axis.prototype.ticks = function(opt_value) {
 anychart.core.Axis.prototype.minorTicks = function(opt_value) {
   if (!this.minorTicks_) {
     this.minorTicks_ = this.createTicks();
+    this.setupCreated('minorTicks', this.minorTicks_);
     this.minorTicks_.setParentEventTarget(this);
     this.minorTicks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.minorTicks_);
@@ -1015,7 +1020,8 @@ anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
  * or Boolean when there are no labels.
  * @private
  */
-anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
+anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {debugger
+
   if (!this.staggeredLabels_) {
     var labels = /** @type {anychart.core.ui.LabelsFactory} */(this.labels());
 
@@ -1031,7 +1037,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var i, j, k, bounds1, bounds2, bounds3, states;
 
     var labelsPosition = /** @type {anychart.enums.SidePosition} */(labels.getOption('position'));
-    var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0  ?
+    var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0 ?
         this.insideBounds_ : null;
     var isLabelInInsideSpace;
 
@@ -1046,7 +1052,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
     }
 
-    if (!goog.isNull(this.getOption('staggerLines'))) {
+    if (!goog.isDef(this.getOption('staggerLines'))) {
       this.currentStageLines_ = this.getOption('staggerLines');
     } else {
       var isConvergence = false;
@@ -1193,7 +1199,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
   var lineBounds = goog.isDef(opt_parentBounds) ? opt_parentBounds : this.line.getBounds();
   var ticks = /** @type {!anychart.core.AxisTicks} */(isMajor ? this.ticks() : this.minorTicks());
   var stroke = this.getOption('stroke');
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
 
   var labels = isMajor ? this.labels() : this.minorLabels();
 
