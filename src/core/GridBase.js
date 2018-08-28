@@ -308,6 +308,11 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
+  debugger;
+  if (!this.palette_ && !opt_value) {
+    opt_value = this.themeSettings['palette'];
+  }
+
   if (anychart.utils.instanceOf(opt_value, anychart.palettes.RangeColors)) {
     this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(opt_value));
     return this;
@@ -626,7 +631,7 @@ anychart.core.GridBase.prototype.getFillElement = function(index) {
     var context = {
       'index': index,
       'grid': this,
-      'palette': this.palette_ || this.parent_.palette()
+      'palette': this.palette() || this.parent_.palette()
     };
 
     fill_ = fill.call(context);

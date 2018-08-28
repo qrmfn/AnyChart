@@ -390,7 +390,7 @@ anychart.core.ChartWithAxes.prototype.xGrid = function(opt_indexOrValue, opt_val
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
-    //grid.setup(this.defaultGridSettings());
+    grid.setup(this.defaultGridSettings());
     grid.zIndex(this.getGridZIndex(true));
     this.xGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -427,7 +427,7 @@ anychart.core.ChartWithAxes.prototype.yGrid = function(opt_indexOrValue, opt_val
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
-    grid.setup(this.defaultGridSettings());
+    //grid.setup(this.defaultGridSettings());
     grid.zIndex(this.getGridZIndex(true));
     this.yGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -502,7 +502,8 @@ anychart.core.ChartWithAxes.prototype.yMinorGrid = function(opt_indexOrValue, op
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
-    grid.setup(this.defaultMinorGridSettings());
+    //grid.setup(this.defaultMinorGridSettings());
+    grid.addThemes('defaultMinorGridSettings');
     grid.zIndex(this.getGridZIndex(false));
     this.yMinorGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -1664,7 +1665,7 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
   this.defaultXAxisSettings(config['defaultXAxisSettings']);
   this.defaultYAxisSettings(config['defaultYAxisSettings']);
-  //this.defaultGridSettings(config['defaultGridSettings']);
+  this.defaultGridSettings(config['defaultGridSettings']);
   //this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
   this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
   this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
