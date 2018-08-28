@@ -1448,8 +1448,10 @@ anychart.sunburstModule.Chart.prototype.level = function(index, opt_value) {
 anychart.sunburstModule.Chart.prototype.leaves = function(opt_value) {
   if (!this.leavesLevel_) {
     this.leavesLevel_ = new anychart.sunburstModule.Level(this);
-    this.leavesLevel_.setupInternal(true, anychart.getFullTheme('sunburst.level'));
     this.leavesLevel_.listenSignals(this.levelListener_, this);
+
+    this.leavesLevel_.addThemes(this.themeSettings['normal']);
+    this.setupCreated('leaves', this.leavesLevel_);
   }
 
   if (goog.isDef(opt_value)) {
