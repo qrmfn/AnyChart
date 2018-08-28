@@ -1052,7 +1052,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {debugger
       }
     }
 
-    if (!goog.isDef(this.getOption('staggerLines'))) {
+    if (goog.isDef(this.getOption('staggerLines'))) {
       this.currentStageLines_ = this.getOption('staggerLines');
     } else {
       var isConvergence = false;
