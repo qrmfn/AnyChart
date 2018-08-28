@@ -32,6 +32,8 @@ anychart.core.SeriesSettings = function() {
   ];
 
   this.themeSettingsCache_ = {};
+
+  this.themesCache_ = {};
 };
 goog.inherits(anychart.core.SeriesSettings, anychart.core.Base);
 
@@ -59,4 +61,21 @@ anychart.core.Base.prototype.getSettingsForType = function(seriesType) {
   }
 
   return this.themeSettingsCache_[seriesType].themeSettings;
+};
+
+
+anychart.core.Base.prototype.getThemesForType = function(seriesType) {
+  if (!goog.isDef(this.themesCache_[seriesType])) {
+    seriesType = anychart.utils.toCamelCase(seriesType);
+
+    var baseThemePaths = this.getThemes();
+    this.themesCache_[seriesType] = [this.createExtendedThemes(baseThemePaths, 'base')];
+    for (var i = 0; i < this.themeDependencies_.length; i++) {
+      var types = this.themeDependencies_[i].seriesType;
+      if (goog.array.indexOf(types, seriesType) != -1)
+        this.themesCache_[seriesType].push(this.createExtendedThemes(baseThemePaths, this.themeDependencies_[i].theme));
+    }
+    this.themesCache_[seriesType].push(this.createExtendedThemes(baseThemePaths, seriesType));
+  }
+  return this.themesCache_[seriesType];
 };
