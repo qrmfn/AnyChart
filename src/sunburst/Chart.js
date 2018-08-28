@@ -143,6 +143,11 @@ anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
    * @private
    */
   this.initInteractivityControlsWrapper_ = goog.bind(this.initInteractivityControls_, this);
+
+  // todo: (chernetsky) Remove this when sunburst refactored
+  this.normal_.labels().themeSettings = {};
+  this.hovered_.labels().themeSettings = {};
+  this.selected_.labels().themeSettings = {};
 };
 goog.inherits(anychart.sunburstModule.Chart, anychart.treeChartBase.Chart);
 anychart.core.settings.populateAliases(anychart.sunburstModule.Chart, ['fill', 'stroke', 'hatchFill', 'labels'], 'normal');
@@ -1448,10 +1453,8 @@ anychart.sunburstModule.Chart.prototype.level = function(index, opt_value) {
 anychart.sunburstModule.Chart.prototype.leaves = function(opt_value) {
   if (!this.leavesLevel_) {
     this.leavesLevel_ = new anychart.sunburstModule.Level(this);
+    this.leavesLevel_.setupInternal(true, anychart.getFullTheme('sunburst.level'));
     this.leavesLevel_.listenSignals(this.levelListener_, this);
-
-    this.leavesLevel_.addThemes(this.themeSettings['normal']);
-    this.setupCreated('leaves', this.leavesLevel_);
   }
 
   if (goog.isDef(opt_value)) {
