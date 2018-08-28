@@ -584,6 +584,7 @@ anychart.core.ChartWithAxes.prototype.xAxis = function(opt_indexOrValue, opt_val
   var axis = this.xAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
+    //axis.addThemes('defaultXAxisSettings');
     axis.setParentEventTarget(this);
     axis.setupInternal(true, this.defaultXAxisSettings());
     this.xAxes_[index] = axis;
@@ -622,6 +623,7 @@ anychart.core.ChartWithAxes.prototype.yAxis = function(opt_indexOrValue, opt_val
   var axis = this.yAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
+    //this.setupCreated('defaultYAxisSettings', axis);
     axis.setParentEventTarget(this);
     axis.setupInternal(true, this.defaultYAxisSettings());
     this.yAxes_[index] = axis;
@@ -1191,7 +1193,6 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       if (axis && axis.enabled()) {
         axis.parentBounds(contentAreaBounds);
         orientation = axis.orientation();
-
         axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(axis.getOption('stroke')));
 
         if (orientation == anychart.enums.Orientation.TOP) {
