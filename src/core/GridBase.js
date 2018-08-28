@@ -309,7 +309,7 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
   if (!this.palette_ && !opt_value) {
-    var palette = this.themeSettings['palette']['items'];
+    var palette = this.themeSettings['palette'];
     if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
       this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
     } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
@@ -353,8 +353,8 @@ anychart.core.GridBase.prototype.setupPalette_ = function(cls, opt_cloneFrom) {
     var doDispatch = !!this.palette_;
     goog.dispose(this.palette_);
     this.palette_ = new cls();
-    debugger;
     this.setupCreated('palette', this.palette_);
+    this.palette_.restoreDefaults(true);
     if (opt_cloneFrom)
       this.palette_.setup(opt_cloneFrom);
     this.palette_.listenSignals(this.paletteInvalidated_, this);
