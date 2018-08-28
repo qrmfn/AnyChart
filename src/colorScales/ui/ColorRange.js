@@ -494,7 +494,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
   }
 
   var stroke = this.getOption('stroke');
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
   var pixelShift = lineThickness % 2 == 0 ? 0 : 0.5;
   var bounds = this.getPixelBounds();
   var markerSize = this.getMarkerSpace_();
@@ -515,7 +515,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
 anychart.colorScalesModule.ui.ColorRange.prototype.getMarkerSpace_ = function() {
   var markerSpace = 0;
   if (this.marker_ && this.marker_.enabled()) {
-    var orientation = /** @type {anychart.enums.Orientation} */(this.getOption('orientation'));
+    var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
     markerSpace = this.marker_.size() * 2;
 
     var offsetX = goog.isDef(this.marker_.offsetX()) ? this.marker_.offsetX() : 0;

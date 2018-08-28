@@ -401,7 +401,7 @@ anychart.core.Axis.prototype.getLine = function() {
 anychart.core.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
-   // this.setupCreated('ticks', this.ticks_);
+    this.setupCreated('ticks', this.ticks_);
     this.ticks_.setParentEventTarget(this);
     this.ticks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.ticks_);
@@ -842,7 +842,8 @@ anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
         var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0  ?
             this.insideBounds_ : null;
         var isLabelInInsideSpace;
-
+        var drawFirstLabel = this.getOption('drawFirstLabel');
+        var drawLastLabel = this.getOption('drawLastLabel');
         if (anychart.utils.instanceOf(scale, anychart.scales.ScatterBase)) {
           var scaleMinorTicksArr = scale.minorTicks().get();
           i = 0;
@@ -851,9 +852,6 @@ anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
           var minorTickVal, minorRatio;
           var minorLabels = /** @type {anychart.core.ui.LabelsFactory} */(this.minorLabels());
           var isMinorLabels = minorLabels.enabled();
-
-          var drawFirstLabel = this.getOption('drawFirstLabel');
-          var drawLastLabel = this.getOption('drawLastLabel');
 
           while (i < ticksArrLen || j < minorTicksArrLen) {
             tickVal = scaleTicksArr[i];
@@ -1039,7 +1037,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var i, j, k, bounds1, bounds2, bounds3, states;
 
     var labelsPosition = /** @type {anychart.enums.SidePosition} */(labels.getOption('position'));
-    var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0 ?
+    var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0  ?
         this.insideBounds_ : null;
     var isLabelInInsideSpace;
     var drawFirstLabel = this.getOption('drawFirstLabel');
