@@ -944,12 +944,14 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
     },
     'labels': {
       'enabled': true,
+      'anchor': 'center',
       'format': anychart.core.defaultTheme.returnValue,
       'position': 'outside',
       'zIndex': 35
     },
     'minorLabels': {
       'fontSize': 9,
+      'anchor': 'center',
       'format': anychart.core.defaultTheme.returnValue,
       'position': 'outside',
       'zIndex': 35
