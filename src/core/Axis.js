@@ -245,11 +245,12 @@ anychart.core.Axis.prototype.minorLabelsBounds_ = null;
 anychart.core.Axis.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
+    this.setupCreated('title', this.title_);
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.registerDisposable(this.title_);
 
-    //this.setupCreated('title', this.title_);
+
   }
 
   if (goog.isDef(opt_value)) {
@@ -404,7 +405,7 @@ anychart.core.Axis.prototype.getLine = function() {
 anychart.core.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
-//    this.setupCreated('ticks', this.ticks_);
+    this.setupCreated('ticks', this.ticks_);
     this.ticks_.setParentEventTarget(this);
     this.ticks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.ticks_);
@@ -426,7 +427,7 @@ anychart.core.Axis.prototype.ticks = function(opt_value) {
 anychart.core.Axis.prototype.minorTicks = function(opt_value) {
   if (!this.minorTicks_) {
     this.minorTicks_ = this.createTicks();
-//    this.setupCreated('minorTicks', this.minorTicks_);
+    this.setupCreated('minorTicks', this.minorTicks_);
     this.minorTicks_.setParentEventTarget(this);
     this.minorTicks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.minorTicks_);
@@ -1046,6 +1047,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var drawLastLabel = this.getOption('drawLastLabel');
     var staggerLines = /**@type {number}*/(this.getOption('staggerLines'));
     var staggerMaxLines = /**@type {number}*/(this.getOption('staggerMaxLines'));
+
     states = [];
     for (var tickIndex = 0; tickIndex < ticksArrLen; tickIndex++) {
       //check for needs drawing first and last label
@@ -2350,13 +2352,14 @@ anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.Axis.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  if ('title' in config)
+  /*if ('title' in config)
     this.title().setupInternal(!!opt_default, config['title']);
-
-  this.labels().setupInternal(!!opt_default, config['labels']);
-  this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
   this.ticks(config['ticks']);
   this.minorTicks(config['minorTicks']);
+  */
+  this.labels().setupInternal(!!opt_default, config['labels']);
+  this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
+
 
   // this.staggerMode(config['staggerMode']);
   // this.staggerLines(config['staggerLines']);
