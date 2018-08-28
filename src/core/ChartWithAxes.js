@@ -277,6 +277,10 @@ anychart.core.ChartWithAxes.prototype.defaultYAxisSettings = function(opt_value)
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) {
+  if (!this.defaultGridSettings_) {
+    this.defaultGridSettings_ = anychart.getThemes()['defaultGridSettings'];
+  }
+
   if (goog.isDef(opt_value)) {
     this.defaultGridSettings_ = opt_value;
     return this;
@@ -291,6 +295,10 @@ anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) 
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultMinorGridSettings = function(opt_value) {
+  if (!this.defaultMinorGridSettings_) {
+    this.defaultMinorGridSettings_ = anychart.getThemes()['defaultMinorGridSettings'];
+  }
+
   if (goog.isDef(opt_value)) {
     this.defaultMinorGridSettings_ = opt_value;
     return this;
