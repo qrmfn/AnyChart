@@ -308,9 +308,16 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
-  debugger;
   if (!this.palette_ && !opt_value) {
-    opt_value = this.themeSettings['palette'];
+    var palette = this.themeSettings['palette'];
+    if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
+      this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
+    } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
+      this.setupPalette_(anychart.palettes.DistinctColors, /** @type {anychart.palettes.DistinctColors} */(palette));
+    } else if (goog.isObject(palette) && palette['type'] == 'range') {
+      this.setupPalette_(anychart.palettes.RangeColors);
+    } else if (goog.isObject(palette) || this.palette_ == null)
+      this.setupPalette_(anychart.palettes.DistinctColors);
   }
 
   if (anychart.utils.instanceOf(opt_value, anychart.palettes.RangeColors)) {
@@ -346,6 +353,7 @@ anychart.core.GridBase.prototype.setupPalette_ = function(cls, opt_cloneFrom) {
     var doDispatch = !!this.palette_;
     goog.dispose(this.palette_);
     this.palette_ = new cls();
+    this.palette_.addThemes('palette');
     if (opt_cloneFrom)
       this.palette_.setup(opt_cloneFrom);
     this.palette_.listenSignals(this.paletteInvalidated_, this);

@@ -1665,7 +1665,7 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
   this.defaultXAxisSettings(config['defaultXAxisSettings']);
   this.defaultYAxisSettings(config['defaultYAxisSettings']);
-  this.defaultGridSettings(config['defaultGridSettings']);
+  //this.defaultGridSettings(config['defaultGridSettings']);
   //this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
   this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
   this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
