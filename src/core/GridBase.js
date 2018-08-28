@@ -22,6 +22,7 @@ goog.require('anychart.scales');
 anychart.core.GridBase = function() {
   anychart.core.GridBase.base(this, 'constructor');
 
+  this.addThemes('defaultGridSettings');
 
   /**
    * @type {acgraph.vector.Path}
