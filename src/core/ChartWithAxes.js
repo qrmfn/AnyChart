@@ -1683,7 +1683,7 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
 
   if ('crosshair' in config)
-   this.crosshair().setupInternal(!!opt_default, config['crosshair']);
+    this.crosshair().setupInternal(!!opt_default, config['crosshair']);
 };
 
 
