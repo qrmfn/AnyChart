@@ -1086,7 +1086,8 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var insideLabelSpace = this.insideBounds_ && anychart.utils.sidePositionToNumber(labelsPosition) < 0  ?
         this.insideBounds_ : null;
     var isLabelInInsideSpace;
-    var staggerMaxLines = /**@type {number}*/(this.getOption('staggerMaxLines'));
+    var staggerMaxLines = /**@type {number|null}*/(this.getOption('staggerMaxLines'));
+    var staggerLines = /**@type {number|null}*/(this.getOption('staggerLines'));
     states = [];
     for (var tickIndex = 0; tickIndex < ticksArrLen; tickIndex++) {
       //check for needs drawing first and last label
@@ -1098,8 +1099,8 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
     }
 
-    if (!goog.isNull(this.getOption('staggerLines'))) {
-      this.currentStageLines_ = this.getOption('staggerLines');
+    if (!goog.isNull(staggerLines)) {
+      this.currentStageLines_ = staggerLines;
     } else {
       var isConvergence = false;
       i = 1;
@@ -1128,7 +1129,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
       }
     }
 
-    var limitedLineNumber = (!goog.isNull(this.getOption('staggerLines')) ||
+    var limitedLineNumber = (!goog.isNull(staggerLines) ||
         !goog.isNull(staggerMaxLines) && this.staggerAutoLines_ > staggerMaxLines);
 
     if (limitedLineNumber && this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.NO_OVERLAP) {
