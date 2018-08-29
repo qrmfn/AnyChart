@@ -807,7 +807,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
   'defaultLabelFactory': {
     'enabled': false,
     'offsetX': 0,
-    'offsetY': 0,
+    // 'offsetY': 0,
     'width': null,
     'height': null,
     'clip': null,
