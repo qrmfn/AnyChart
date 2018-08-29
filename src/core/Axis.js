@@ -68,7 +68,8 @@ anychart.core.Axis = function() {
     ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
     ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
-    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropBoundsCache, this]
+    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropBoundsCache, this],
+    ['overlapMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
   ]);
 
   this.resumeSignalsDispatching(false);
@@ -88,7 +89,8 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'width', anychart.core.settings.numberOrPercentNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawFirstLabel', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawLastLabel', anychart.core.settings.booleanNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode]
   ]);
 
   return map;
@@ -200,7 +202,7 @@ anychart.core.Axis.prototype.internalScale = null;
  * @type {anychart.enums.LabelsOverlapMode}
  * @private
  */
-anychart.core.Axis.prototype.overlapMode_ = anychart.enums.LabelsOverlapMode.NO_OVERLAP;
+//anychart.core.Axis.prototype.overlapMode_ = anychart.enums.LabelsOverlapMode.NO_OVERLAP;
 
 
 /**
@@ -250,7 +252,7 @@ anychart.core.Axis.prototype.insideBounds_ = null;
  * @type {?(number|string)}
  * @private
  */
-anychart.core.Axis.prototype.width_ = null;
+//anychart.core.Axis.prototype.width_ = null;
 
 
 /**
@@ -728,17 +730,17 @@ anychart.core.Axis.prototype.paddingInvalidated_ = function(event) {
  * @param {(anychart.enums.LabelsOverlapMode|string)=} opt_value Value to set.
  * @return {anychart.enums.LabelsOverlapMode|!anychart.core.Axis} Drawing flag or itself for method chaining.
  */
-anychart.core.Axis.prototype.overlapMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    var overlap = anychart.enums.normalizeLabelsOverlapMode(opt_value, this.overlapMode_);
-    if (this.overlapMode_ != overlap) {
-      this.overlapMode_ = overlap;
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.overlapMode_;
-};
+// anychart.core.Axis.prototype.overlapMode = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     var overlap = anychart.enums.normalizeLabelsOverlapMode(opt_value, this.overlapMode_);
+//     if (this.overlapMode_ != overlap) {
+//       this.overlapMode_ = overlap;
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.overlapMode_;
+// };
 
 
 /**
@@ -746,17 +748,17 @@ anychart.core.Axis.prototype.overlapMode = function(opt_value) {
  * @param {boolean=} opt_value On/off.
  * @return {boolean|!anychart.core.Axis} .
  */
-/*anychart.core.Axis.prototype.staggerMode = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.staggerMode_ != opt_value) {
-      this.staggerMode_ = opt_value;
-      this.dropBoundsCache();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.staggerMode_;
-};*/
+// anychart.core.Axis.prototype.staggerMode = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.staggerMode_ != opt_value) {
+//       this.staggerMode_ = opt_value;
+//       this.dropBoundsCache();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.staggerMode_;
+// };
 
 
 /**
@@ -836,7 +838,7 @@ anychart.core.Axis.prototype.dropOverlappedLabelsCache_ = function() {
  */
 anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
   if (!this.overlappedLabels_ || this.hasInvalidationState(anychart.ConsistencyState.AXIS_OVERLAP)) {
-    if (this.overlapMode_ == anychart.enums.LabelsOverlapMode.ALLOW_OVERLAP) {
+    if (this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.ALLOW_OVERLAP) {
       return false;
     } else {
       var scale = /** @type {anychart.scales.ScatterBase|anychart.scales.Ordinal} */(this.scale());
@@ -1115,7 +1117,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
     var limitedLineNumber = (!goog.isNull(this.staggerLines_) ||
         !goog.isNull(this.staggerMaxLines_) && this.staggerAutoLines_ > this.staggerMaxLines_);
 
-    if (limitedLineNumber && this.overlapMode() == anychart.enums.LabelsOverlapMode.NO_OVERLAP) {
+    if (limitedLineNumber && this.getOption('overlapMode') == anychart.enums.LabelsOverlapMode.NO_OVERLAP) {
       for (j = 0; j < this.currentStageLines_; j++) {
         var prevDrawableLabel = -1;
         for (i = j; i < ticksArrLen; i = i + this.currentStageLines_) {
@@ -2359,7 +2361,6 @@ anychart.core.Axis.prototype.serialize = function() {
   json['staggerLines'] = this.staggerLines();
   json['staggerMaxLines'] = this.staggerMaxLines();
   if (this.orientation_) json['orientation'] = this.orientation_;
-  json['overlapMode'] = this.overlapMode();
   return json;
 };
 
@@ -2379,7 +2380,6 @@ anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   this.staggerMaxLines(config['staggerMaxLines']);
   this.stroke(config['stroke']);
   this.orientation(config['orientation']);
-  this.overlapMode(config['overlapMode']);
 };
 
 
@@ -2461,7 +2461,7 @@ anychart.standalones.axes.linear = function() {
   proto['getRemainingBounds'] = proto.getRemainingBounds;
   // proto['drawFirstLabel'] = proto.drawFirstLabel;
   // proto['drawLastLabel'] = proto.drawLastLabel;
-  proto['overlapMode'] = proto.overlapMode;
+  //proto['overlapMode'] = proto.overlapMode;
   proto['isHorizontal'] = proto.isHorizontal;
   proto['padding'] = proto.padding;
   proto['getPixelBounds'] = proto.getPixelBounds;
