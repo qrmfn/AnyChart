@@ -656,6 +656,8 @@ anychart.core.ChartWithSeries.prototype.markerPalette = function(opt_value) {
     this.markerPalette_ = new anychart.palettes.Markers();
     this.markerPalette_.listenSignals(this.markerPaletteInvalidated_, this);
     this.registerDisposable(this.markerPalette_);
+
+    this.setupCreated('markerPalette', this.markerPalette_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -679,6 +681,8 @@ anychart.core.ChartWithSeries.prototype.hatchFillPalette = function(opt_value) {
     this.hatchFillPalette_ = new anychart.palettes.HatchFills();
     this.hatchFillPalette_.listenSignals(this.hatchFillPaletteInvalidated_, this);
     this.registerDisposable(this.hatchFillPalette_);
+
+    this.setupCreated('hatchFillPalette', this.hatchFillPalette_);
   }
 
   if (goog.isDef(opt_value)) {
