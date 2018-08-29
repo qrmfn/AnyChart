@@ -47,6 +47,13 @@ anychart.core.Axis = function() {
   this.minorLabelsBounds_ = [];
 
   /**
+   * Auto values of settings set by external controller.
+   * @type {!Object}
+   */
+  this.autoSettings = {};
+  this.autoSettings['orientation'] = anychart.enums.Orientation.TOP;
+
+  /**
    * @type {acgraph.vector.Element}
    * @protected
    */
@@ -81,7 +88,8 @@ anychart.core.Axis = function() {
       this.dropStaggeredLabelsCache_();
       if (this.getOption('staggerMode'))
         this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }, this]
+    }, this],
+    ['orientation', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this]
   ]);
 
   this.resumeSignalsDispatching(false);
@@ -104,7 +112,8 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMaxLines', anychart.core.settings.numberOrNullNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.numberOrNullNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.numberOrNullNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'orientation', anychart.core.settings.orientationNormalizer]
   ]);
 
   return map;
@@ -195,14 +204,14 @@ anychart.core.Axis.prototype.stroke_;
  * @type {?anychart.enums.Orientation}
  * @private
  */
-anychart.core.Axis.prototype.orientation_;
+//anychart.core.Axis.prototype.orientation_;
 
 
 /**
  * @type {anychart.enums.Orientation}
  * @private
  */
-anychart.core.Axis.prototype.defaultOrientation_ = anychart.enums.Orientation.TOP;
+//anychart.core.Axis.prototype.defaultOrientation_ = anychart.enums.Orientation.TOP;
 
 
 /**
@@ -565,19 +574,19 @@ anychart.core.Axis.prototype.stroke = function(opt_strokeOrFill, opt_thickness, 
  * @param {(string|anychart.enums.Orientation|null)=} opt_value Axis orientation.
  * @return {anychart.enums.Orientation|!anychart.core.Axis} Axis orientation or itself for method chaining.
  */
-anychart.core.Axis.prototype.orientation = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    var orientation = goog.isNull(opt_value) ? null : anychart.enums.normalizeOrientation(opt_value);
-    if (this.orientation_ != orientation) {
-      this.orientation_ = orientation;
-      this.dropStaggeredLabelsCache_();
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  } else {
-    return this.orientation_ || this.defaultOrientation_;
-  }
-};
+// anychart.core.Axis.prototype.orientation = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     var orientation = goog.isNull(opt_value) ? null : anychart.enums.normalizeOrientation(opt_value);
+//     if (this.orientation_ != orientation) {
+//       this.orientation_ = orientation;
+//       this.dropStaggeredLabelsCache_();
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   } else {
+//     return this.orientation_ || this.defaultOrientation_;
+//   }
+// };
 
 
 /**
@@ -585,10 +594,12 @@ anychart.core.Axis.prototype.orientation = function(opt_value) {
  * @param {anychart.enums.Orientation} value Default orientation value.
  */
 anychart.core.Axis.prototype.setDefaultOrientation = function(value) {
-  var needInvalidate = (this.defaultOrientation_ != value && !this.orientation_);
-  this.defaultOrientation_ = value;
-  if (needInvalidate)
-    this.invalidate(this.ALL_VISUAL_STATES);
+  if (goog.isDef(value)) {
+    var needInvalidate = this.getOption('orientation') != value;
+    this.autoSettings['orientation'] = value;
+    if (needInvalidate)
+      this.invalidate(this.ALL_VISUAL_STATES);
+  }
 };
 
 
@@ -653,16 +664,16 @@ anychart.core.Axis.prototype.scaleInvalidated = function(event) {
  * @param {?(number|string)=} opt_value .
  * @return {anychart.core.Axis|number|string|null} .
  */
-/*anychart.core.Axis.prototype.width = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.width_ != opt_value) {
-      this.width_ = opt_value;
-      this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-  return this.width_;
-};*/
+// anychart.core.Axis.prototype.width = function(opt_value) {
+//   if (goog.isDef(opt_value)) {
+//     if (this.width_ != opt_value) {
+//       this.width_ = opt_value;
+//       this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//     }
+//     return this;
+//   }
+//   return this.width_;
+// };
 
 
 /**
@@ -1266,7 +1277,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
   var side = anychart.utils.sidePositionToNumber(labelPosition);
   var tickLength = anychart.utils.getAffectBoundsTickLength(ticks, side);
 
-  switch (this.orientation()) {
+  switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
       x = Math.round(bounds.left + ratio * bounds.width);
       y = lineBounds.top - lineThickness / 2 - tickLength;
@@ -1297,7 +1308,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
 
   var labelsSidePosition = anychart.utils.sidePositionToNumber(labelPosition);
 
-  switch (this.orientation()) {
+  switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
       labelBounds.top -= labelsSidePosition * labelBounds.height / 2;
       break;
@@ -1417,7 +1428,7 @@ anychart.core.Axis.prototype.getSize = function(parentBounds, length, opt_includ
   var title = this.title();
   var labels = this.labels();
   var minorLabels = this.minorLabels();
-  var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
+  var orientation = /** @type {anychart.enums.Orientation} */(this.getOption('orientation'));
 
   if (title.enabled()) {
     if (!title.container()) title.container(/** @type {acgraph.vector.ILayer} */(this.container()));
@@ -1444,7 +1455,7 @@ anychart.core.Axis.prototype.getSize = function(parentBounds, length, opt_includ
   var bottomPad = anychart.utils.normalizeSize(/** @type {number|string} */(padding.getOption('bottom')), parentBounds.height);
   var leftPad = anychart.utils.normalizeSize(/** @type {number|string} */(padding.getOption('left')), parentBounds.width);
 
-  switch (this.orientation()) {
+  switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
       left += leftPad;
       top += topPad;
@@ -1556,7 +1567,7 @@ anychart.core.Axis.prototype.getRemainingBounds = function(opt_includeInsideCont
       var heightOffset = parentBounds.height - padding.tightenHeight(parentBounds.height) + axisBounds.height;
       var widthOffset = parentBounds.width - padding.tightenWidth(parentBounds.width) + axisBounds.width;
 
-      switch (this.orientation()) {
+      switch (this.getOption('orientation')) {
         case anychart.enums.Orientation.TOP:
           remainingBounds.height -= heightOffset;
           remainingBounds.top += heightOffset;
@@ -1630,7 +1641,7 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
       var leftPad = anychart.utils.normalizeSize(/** @type {number|string} */(padding.getOption('left')), parentBounds.width);
 
       var x = 0, y = 0, width = 0, height = 0;
-      switch (this.orientation()) {
+      switch (this.getOption('orientation')) {
         case anychart.enums.Orientation.TOP:
           y = parentBounds.top + topPad;
           x = parentBounds.left + leftPad;
@@ -1770,7 +1781,7 @@ anychart.core.Axis.prototype.drawLeftLine = function(bounds, pixelShift, lineThi
 anychart.core.Axis.prototype.drawLine = function() {
   this.getLine().clear();
 
-  var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
+  var orientation = /** @type {anychart.enums.Orientation} */(this.getOption('orientation'));
 
   var lineDrawer;
   switch (orientation) {
@@ -1831,7 +1842,7 @@ anychart.core.Axis.prototype.drawLabel_ = function(value, ratio, index, pixelShi
   var stroke = this.stroke();
   var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
   var labelBounds = anychart.math.Rect.fromCoordinateBox(this.getLabelBounds_(index, isMajor, ticksArr));
-  var orientation = this.orientation();
+  var orientation = this.getOption('orientation');
   var staggerSize = 0;
 
   if (isMajor) {
@@ -1930,7 +1941,7 @@ anychart.core.Axis.prototype.draw = function() {
   var ticksDrawer, minorTicksDrawer, pixelShift;
   var minorTicks, ticks;
   var lineThickness;
-  var orientation = /** @type {anychart.enums.Orientation} */(this.orientation());
+  var orientation = /** @type {anychart.enums.Orientation} */(this.getOption('orientation'));
   var axisTicks = /** @type {anychart.core.AxisTicks} */(this.ticks());
   var axisMinorTicks = /** @type {anychart.core.AxisTicks} */(this.minorTicks());
 
@@ -2280,7 +2291,7 @@ anychart.core.Axis.prototype.getLabelsPositionProvider = function(index, isMajor
     ratio = scale.transform(value, .5);
   }
 
-  switch (this.orientation()) {
+  switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
       x = Math.round(bounds.left + ratio * bounds.width);
       y = lineBounds.top - lineThickness / 2;
@@ -2323,7 +2334,7 @@ anychart.core.Axis.prototype.getLabelsPositionProvider = function(index, isMajor
  * @return {boolean} If the axis is horizontal.
  */
 anychart.core.Axis.prototype.isHorizontal = function() {
-  var orientation = this.orientation();
+  var orientation = this.getOption('orientation');
   return orientation == anychart.enums.Orientation.TOP ||
       orientation == anychart.enums.Orientation.BOTTOM;
 };
@@ -2336,7 +2347,7 @@ anychart.core.Axis.prototype.isHorizontal = function() {
  */
 anychart.core.Axis.prototype.hasIntersectionLabelsSpace = function(insideLabelSpace, bounds1) {
   var intersected = false;
-  switch (this.orientation()) {
+  switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
     case anychart.enums.Orientation.BOTTOM:
       intersected = insideLabelSpace.left > bounds1[0] || insideLabelSpace.getRight() < bounds1[2];
@@ -2373,7 +2384,6 @@ anychart.core.Axis.prototype.serialize = function() {
   json['ticks'] = this.ticks().serialize();
   json['minorTicks'] = this.minorTicks().serialize();
   json['stroke'] = anychart.color.serialize(/** @type {acgraph.vector.Stroke} */(this.stroke()));
-  if (this.orientation_) json['orientation'] = this.orientation_;
   return json;
 };
 
@@ -2390,7 +2400,6 @@ anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   this.ticks(config['ticks']);
   this.minorTicks(config['minorTicks']);
   this.stroke(config['stroke']);
-  this.orientation(config['orientation']);
 };
 
 
@@ -2463,7 +2472,6 @@ anychart.standalones.axes.linear = function() {
   proto['ticks'] = proto.ticks;
   proto['minorTicks'] = proto.minorTicks;
   proto['stroke'] = proto.stroke;
-  proto['orientation'] = proto.orientation;
   proto['scale'] = proto.scale;
   proto['getRemainingBounds'] = proto.getRemainingBounds;
   proto['isHorizontal'] = proto.isHorizontal;
