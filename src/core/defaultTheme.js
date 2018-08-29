@@ -2015,6 +2015,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
         'position': 'inside',
         'disablePointerEvents': false,
         'autoRotate': false,
+        'offsetY': 0,
         'zIndex': 34,
         /**
          * @this {*}
