@@ -584,7 +584,7 @@ anychart.core.ChartWithAxes.prototype.xAxis = function(opt_indexOrValue, opt_val
   var axis = this.xAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
-    //axis.addThemes('defaultXAxisSettings');
+    this.setupCreated('defaultXAxisSettings', axis);
     axis.setParentEventTarget(this);
     axis.setupInternal(true, this.defaultXAxisSettings());
     this.xAxes_[index] = axis;
@@ -623,7 +623,7 @@ anychart.core.ChartWithAxes.prototype.yAxis = function(opt_indexOrValue, opt_val
   var axis = this.yAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
-    //this.setupCreated('defaultYAxisSettings', axis);
+    this.setupCreated('defaultYAxisSettings', axis);
     axis.setParentEventTarget(this);
     axis.setupInternal(true, this.defaultYAxisSettings());
     this.yAxes_[index] = axis;

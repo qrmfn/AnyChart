@@ -245,7 +245,7 @@ anychart.core.Axis.prototype.minorLabelsBounds_ = null;
 anychart.core.Axis.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
-    this.setupCreated('title', this.title_);
+    //this.setupCreated('title', this.title_);
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.registerDisposable(this.title_);
@@ -2352,11 +2352,11 @@ anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.Axis.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  /*if ('title' in config)
+  if ('title' in config)
     this.title().setupInternal(!!opt_default, config['title']);
   this.ticks(config['ticks']);
   this.minorTicks(config['minorTicks']);
-  */
+
   this.labels().setupInternal(!!opt_default, config['labels']);
   this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
 
