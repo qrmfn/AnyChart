@@ -31,39 +31,17 @@ anychart.core.SeriesSettings = function() {
     }
   ];
 
-  this.themeSettingsCache_ = {};
-
   this.themesCache_ = {};
 };
 goog.inherits(anychart.core.SeriesSettings, anychart.core.Base);
 
 
 /**
+ * Returns theme path for series type.
  *
  * @param {string} seriesType
- * @return {Object}
+ * @return {Array.<string>}
  */
-anychart.core.Base.prototype.getSettingsForType = function(seriesType) {
-  if (!goog.isDef(this.themeSettingsCache_[seriesType])) {
-    seriesType = anychart.utils.toCamelCase(seriesType);
-    var settings = new anychart.core.Base();
-    this.registerDisposable(settings);
-    this.themeSettingsCache_[seriesType] = settings;
-
-    var baseThemePaths = this.getThemes();
-    settings.addThemes(this.createExtendedThemes(baseThemePaths, 'base'));
-    for (var i = 0; i < this.themeDependencies_.length; i++) {
-      var types = this.themeDependencies_[i].seriesType;
-      if (goog.array.indexOf(types, seriesType) != -1)
-        settings.addThemes(this.createExtendedThemes(baseThemePaths, this.themeDependencies_[i].theme));
-    }
-    settings.addThemes(this.createExtendedThemes(baseThemePaths, seriesType));
-  }
-
-  return this.themeSettingsCache_[seriesType].themeSettings;
-};
-
-
 anychart.core.Base.prototype.getThemesForType = function(seriesType) {
   if (!goog.isDef(this.themesCache_[seriesType])) {
     seriesType = anychart.utils.toCamelCase(seriesType);

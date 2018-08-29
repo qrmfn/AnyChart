@@ -295,23 +295,25 @@ anychart.core.settings.serialize = function(target, descriptors, json, opt_warni
         );
       }
     }
-    if (!goog.isDef(val) && !opt_ownOnly && target.check(/** @type {number} */ (target.getCapabilities(name)))) {
-      val = target.getThemeOption(name);
-    }
-    if (goog.isDef(val) && !goog.isFunction(val)) {
-      if (descriptor.normalizer == anychart.core.settings.strokeOrFunctionNormalizer ||
-          descriptor.normalizer == anychart.core.settings.fillOrFunctionNormalizer ||
-          descriptor.normalizer == anychart.core.settings.hatchFillOrFunctionNormalizer ||
-          descriptor.normalizer == anychart.core.settings.strokeNormalizer ||
-          descriptor.normalizer == anychart.core.settings.fillNormalizer ||
-          descriptor.normalizer == anychart.core.settings.hatchFillNormalizer) {
-        val = anychart.color.serialize(descriptor.normalizer([val]));
-      } else if (descriptor.normalizer == anychart.core.settings.colorNormalizer && !goog.isNull(val)) {
-        val = anychart.color.serialize(descriptor.normalizer(val));
-      } else if (descriptor.normalizer == anychart.core.settings.adjustFontSizeNormalizer) {
-        val = descriptor.normalizer([val]);
+    if (descriptor) {
+      if (!goog.isDef(val) && !opt_ownOnly && target.check(/** @type {number} */ (target.getCapabilities(name)))) {
+        val = target.getThemeOption(name);
       }
-      json[name] = val;
+      if (goog.isDef(val) && !goog.isFunction(val)) {
+        if (descriptor.normalizer == anychart.core.settings.strokeOrFunctionNormalizer ||
+            descriptor.normalizer == anychart.core.settings.fillOrFunctionNormalizer ||
+            descriptor.normalizer == anychart.core.settings.hatchFillOrFunctionNormalizer ||
+            descriptor.normalizer == anychart.core.settings.strokeNormalizer ||
+            descriptor.normalizer == anychart.core.settings.fillNormalizer ||
+            descriptor.normalizer == anychart.core.settings.hatchFillNormalizer) {
+          val = anychart.color.serialize(descriptor.normalizer([val]));
+        } else if (descriptor.normalizer == anychart.core.settings.colorNormalizer && !goog.isNull(val)) {
+          val = anychart.color.serialize(descriptor.normalizer(val));
+        } else if (descriptor.normalizer == anychart.core.settings.adjustFontSizeNormalizer) {
+          val = descriptor.normalizer([val]);
+        }
+        json[name] = val;
+      }
     }
   }
 };
