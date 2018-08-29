@@ -469,7 +469,7 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     if (this.themes_.length)
       this.setupCreated('background', this.background_);
     else
-      this.background_.themeSettings = {};
+      this.background_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
@@ -509,7 +509,7 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     if (this.themes_.length)
       this.setupCreated('title', this.title_);
     else
-      this.title_.themeSettings = {};
+      this.title_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {

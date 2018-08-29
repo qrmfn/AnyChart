@@ -644,7 +644,7 @@ anychart.core.StateSettings.prototype.background = function(opt_value) {
     afterInitCallback.call(this.stateHolder, this.background_);
 
     // todo: (chernetsky) Remove this when StateSettings is refactored or drop this comment!
-    this.background_.themeSettings = {};
+    this.background_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
@@ -803,6 +803,28 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
   if (goog.isDef(this.descriptorsMeta['background'])) {
     this.background().setupInternal(!!opt_default, config['background']);
     this.background().markConsistent(anychart.ConsistencyState.ALL);
+  }
+};
+
+
+/** @inheritDoc */
+anychart.core.StateSettings.prototype.dropThemes = function() {
+  anychart.core.StateSettings.base(this, 'dropThemes');
+  var children = [this.labels_,
+    this.minLabels_,
+    this.maxLabels_,
+    this.headers_,
+    this.lowerLabels_,
+    this.markers_,
+    this.outlierMarkers_,
+    this.outline_,
+    this.connector_,
+    this.background_];
+
+  for (var i = children.length; i--;) {
+    var child = children[i];
+    if (child && child.dropThemes)
+      child.dropThemes();
   }
 };
 

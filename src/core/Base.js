@@ -1210,6 +1210,15 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 
 /**
+ * Reset themes queue and drops themeSettings
+ */
+anychart.core.Base.prototype.dropThemes = function() {
+  this.themes_.length = 0;
+  this.themeSettings = {};
+};
+
+
+/**
  * Returns themes chain of current instance.
  *
  * @return {Array.<string|Object>}

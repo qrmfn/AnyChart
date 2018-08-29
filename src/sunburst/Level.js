@@ -73,9 +73,9 @@ anychart.sunburstModule.Level = function(target) {
   this.normal_.labels().markConsistent(anychart.ConsistencyState.ALL);
 
   // todo: (chernetsky) Remove this when sunburst refactored
-  this.normal_.labels().themeSettings = {};
-  this.hovered_.labels().themeSettings = {};
-  this.selected_.labels().themeSettings = {};
+  this.normal_.labels().dropThemes();
+  this.hovered_.labels().dropThemes();
+  this.selected_.labels().dropThemes();
 };
 goog.inherits(anychart.sunburstModule.Level, anychart.core.Base);
 anychart.core.settings.populateAliases(anychart.sunburstModule.Level, ['labels'], 'normal');

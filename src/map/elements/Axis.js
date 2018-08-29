@@ -337,7 +337,7 @@ anychart.mapModule.elements.Axis.prototype.title = function(opt_value) {
     this.registerDisposable(this.title_);
 
     // todo: (chernetsky) Remove this when mapModule.elements.Axis is refactored
-    this.title_.themeSettings = {};
+    this.title_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
