@@ -67,7 +67,8 @@ anychart.core.Axis = function() {
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
-    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this]
+    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
+    ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropBoundsCache, this]
   ]);
 
   this.resumeSignalsDispatching(false);
@@ -86,7 +87,8 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
   anychart.core.settings.createDescriptors(map, [
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'width', anychart.core.settings.numberOrPercentNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawFirstLabel', anychart.core.settings.booleanNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawLastLabel', anychart.core.settings.booleanNormalizer]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'drawLastLabel', anychart.core.settings.booleanNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer]
   ]);
 
   return map;
@@ -205,7 +207,7 @@ anychart.core.Axis.prototype.overlapMode_ = anychart.enums.LabelsOverlapMode.NO_
  * @type {boolean}
  * @private
  */
-anychart.core.Axis.prototype.staggerMode_ = false;
+//anychart.core.Axis.prototype.staggerMode_ = false;
 
 
 /**
@@ -744,7 +746,7 @@ anychart.core.Axis.prototype.overlapMode = function(opt_value) {
  * @param {boolean=} opt_value On/off.
  * @return {boolean|!anychart.core.Axis} .
  */
-anychart.core.Axis.prototype.staggerMode = function(opt_value) {
+/*anychart.core.Axis.prototype.staggerMode = function(opt_value) {
   if (goog.isDef(opt_value)) {
     if (this.staggerMode_ != opt_value) {
       this.staggerMode_ = opt_value;
@@ -754,7 +756,7 @@ anychart.core.Axis.prototype.staggerMode = function(opt_value) {
     return this;
   }
   return this.staggerMode_;
-};
+};*/
 
 
 /**
@@ -769,7 +771,7 @@ anychart.core.Axis.prototype.staggerLines = function(opt_value) {
       this.staggerLines_ = opt_value;
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
-      if (this.staggerMode_)
+      if (this.getOption('staggerMode'))
         this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
     }
     return this;
@@ -790,7 +792,7 @@ anychart.core.Axis.prototype.staggerMaxLines = function(opt_value) {
       this.staggerMaxLines_ = opt_value;
       this.dropBoundsCache();
       this.dropStaggeredLabelsCache_();
-      if (this.staggerMode_)
+      if (this.getOption('staggerMode'))
         this.invalidate(this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
     }
     return this;
@@ -1198,7 +1200,7 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
  * @private
  */
 anychart.core.Axis.prototype.calcLabels_ = function(opt_bounds) {
-  return this.staggerMode() ?
+  return this.getOption('staggerMode') ?
       this.applyStaggerMode_(opt_bounds) :
       this.getOverlappedLabels_(opt_bounds);
 };
@@ -1452,7 +1454,7 @@ anychart.core.Axis.prototype.getSize = function(parentBounds, length, opt_includ
   if (isLabels && scale) {
     ticksArr = scale.ticks().get();
     var drawLabels = goog.isObject(overlappedLabels) ? overlappedLabels.labels : !overlappedLabels;
-    if (this.staggerMode()) {
+    if (this.getOption('staggerMode')) {
       for (i = 0; i < this.linesSize_.length; i++) {
         maxLabelSize += this.linesSize_[i];
       }
@@ -1468,7 +1470,7 @@ anychart.core.Axis.prototype.getSize = function(parentBounds, length, opt_includ
     }
   }
 
-  if (isMinorLabels && !this.staggerMode()) {
+  if (isMinorLabels && !this.getOption('staggerMode')) {
     var drawMinorLabels = goog.isObject(overlappedLabels) ? overlappedLabels.minorLabels : !overlappedLabels;
     ticksArr = scale.minorTicks().get();
     for (i = 0, len = drawMinorLabels.length; i < len; i++) {
@@ -1817,7 +1819,7 @@ anychart.core.Axis.prototype.drawLabel_ = function(value, ratio, index, pixelShi
 
   if (isMajor) {
     var incSize = true;
-    if (this.currentStageLines_ > 1 && this.staggerMode()) {
+    if (this.currentStageLines_ > 1 && this.getOption('staggerMode')) {
       for (var i = 0, len = this.staggerLabelslines_.length; i < len; i++) {
         var line = this.staggerLabelslines_[i];
         for (var j = 0, len_ = line.length; j < len_; j++) {
@@ -2354,7 +2356,6 @@ anychart.core.Axis.prototype.serialize = function() {
   json['ticks'] = this.ticks().serialize();
   json['minorTicks'] = this.minorTicks().serialize();
   json['stroke'] = anychart.color.serialize(/** @type {acgraph.vector.Stroke} */(this.stroke()));
-  json['staggerMode'] = this.staggerMode();
   json['staggerLines'] = this.staggerLines();
   json['staggerMaxLines'] = this.staggerMaxLines();
   if (this.orientation_) json['orientation'] = this.orientation_;
@@ -2374,7 +2375,6 @@ anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
   this.ticks(config['ticks']);
   this.minorTicks(config['minorTicks']);
-  this.staggerMode(config['staggerMode']);
   this.staggerLines(config['staggerLines']);
   this.staggerMaxLines(config['staggerMaxLines']);
   this.stroke(config['stroke']);
@@ -2446,7 +2446,7 @@ anychart.standalones.axes.linear = function() {
 //exports
 (function() {
   var proto = anychart.core.Axis.prototype;
-  proto['staggerMode'] = proto.staggerMode;
+  //proto['staggerMode'] = proto.staggerMode;
   proto['staggerLines'] = proto.staggerLines;
   proto['staggerMaxLines'] = proto.staggerMaxLines;
   proto['title'] = proto.title;
