@@ -336,7 +336,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawTopLine = function(bounds
           .lineTo(x, y - size)
           .close();
 
-      line.stroke(/** @type {acgraph.vector.Stroke} */(this.stroke()));
+      line.stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
       line.fill(color);
     }
   }
@@ -373,7 +373,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawRightLine = function(boun
           .lineTo(x + size, y)
           .close();
 
-      line.stroke(/** @type {acgraph.vector.Stroke} */(this.stroke()));
+      line.stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
       line.fill(color);
     }
   }
@@ -410,7 +410,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawBottomLine = function(bou
           .lineTo(x, y + size)
           .close();
 
-      line.stroke(/** @type {acgraph.vector.Stroke} */(this.stroke()));
+      line.stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
       line.fill(color);
     }
   }
@@ -447,7 +447,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLeftLine = function(bound
           .lineTo(x - size, y)
           .close();
 
-      line.stroke(/** @type {acgraph.vector.Stroke} */(this.stroke()));
+      line.stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
       line.fill(color);
     }
   }
@@ -464,7 +464,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
 
   if (anychart.utils.instanceOf(scale, anychart.colorScalesModule.Linear)) {
     line.clear();
-    line.stroke(/** @type {acgraph.vector.Stroke} */(this.stroke()));
+    line.stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
     var fill = acgraph.vector.normalizeFill(/** @type {!Array.<acgraph.vector.GradientKey>} */(scale.colors()));
     if (this.isHorizontal())
       fill['angle'] = 0;
@@ -493,8 +493,8 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
       break;
   }
 
-  var stroke = this.stroke();
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.stroke()['thickness']) : 1;
+  var stroke = this.getOption('stroke');
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
   var pixelShift = lineThickness % 2 == 0 ? 0 : 0.5;
   var bounds = this.getPixelBounds();
   var markerSize = this.getMarkerSpace_();
@@ -700,7 +700,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.calcSize = function(maxLabelS
     }
   }
 
-  var stroke = this.stroke();
+  var stroke = this.getOption('stroke');
   var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
   var colorLineSizePx = Math.round(this.colorLineSize_) + lineThickness;
 

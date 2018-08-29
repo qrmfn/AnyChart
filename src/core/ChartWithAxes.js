@@ -1191,7 +1191,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       if (axis && axis.enabled()) {
         axis.parentBounds(contentAreaBounds);
         orientation = axis.getOption('orientation');
-        axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(axis.stroke()));
+        axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(axis.getOption('stroke')));
 
         if (orientation == anychart.enums.Orientation.TOP) {
           axis.padding()['top'](offsets[0]);
