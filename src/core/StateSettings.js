@@ -438,7 +438,9 @@ anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.minLabels_ = labelsFactoryConstructor();
     this.minLabels_.supportsEnabledSuspension = false;
+    this.minLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('minLabels', this.minLabels_);
+
     afterInitCallback.call(this.stateHolder, this.minLabels_);
     this.minLabels_.markConsistent(anychart.ConsistencyState.ALL);
   }
@@ -464,7 +466,9 @@ anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.maxLabels_ = labelsFactoryConstructor();
     this.maxLabels_.supportsEnabledSuspension = false;
+    this.maxLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('maxLabels', this.maxLabels_);
+
     afterInitCallback.call(this.stateHolder, this.maxLabels_);
     this.maxLabels_.markConsistent(anychart.ConsistencyState.ALL);
   }
@@ -521,7 +525,9 @@ anychart.core.StateSettings.prototype.lowerLabels = function(opt_value) {
   if (!this.lowerLabels_) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LOWER_LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.lowerLabels_ = new anychart.core.ui.LabelsFactory();
+    this.lowerLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('lowerLabels', this.lowerLabels_);
+
     afterInitCallback.call(this.stateHolder, this.lowerLabels_);
   }
 
@@ -637,8 +643,8 @@ anychart.core.StateSettings.prototype.background = function(opt_value) {
     this.setupCreated('background', this.background_);
     afterInitCallback.call(this.stateHolder, this.background_);
 
-    // todo: (chernetsky) Remove this when StateSettings is refactored
-    // this.background_.themeSettings = {};
+    // todo: (chernetsky) Remove this when StateSettings is refactored or drop this comment!
+    this.background_.themeSettings = {};
   }
 
   if (goog.isDef(opt_value)) {
