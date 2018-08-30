@@ -98,6 +98,16 @@ anychart.core.Axis = function() {
 goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 
 
+/** @inheritDoc */
+anychart.core.Axis.prototype.getOption = function(name) {
+  var res = anychart.core.Axis.base(this, 'getOption', name);
+  if (!goog.isDefAndNotNull(res)) {
+    res = this.autoSettings[name];
+  }
+  return res;
+};
+
+
 /**
  * Simple properties descriptors.
  * @type {!Object.<string, anychart.core.settings.PropertyDescriptor>}
