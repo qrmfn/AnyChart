@@ -460,6 +460,14 @@ anychart.pertModule.VisualElements.prototype.setupByJSON = function(config, opt_
 
   anychart.core.settings.deserialize(this, anychart.pertModule.VisualElements.PROPERTY_DESCRIPTORS, config);
 
+  // todo: (chernetsky) Remove this when pert refactored
+  this.normal_.upperLabels().dropThemes();
+  this.hovered_.upperLabels().dropThemes();
+  this.selected_.upperLabels().dropThemes();
+  this.normal_.lowerLabels().dropThemes();
+  this.hovered_.lowerLabels().dropThemes();
+  this.selected_.lowerLabels().dropThemes();
+
   this.normal_.setupInternal(!!opt_default, config);
   this.normal_.setupInternal(!!opt_default, config['normal']);
   this.hovered_.setupInternal(!!opt_default, config['hovered']);
