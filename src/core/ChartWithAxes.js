@@ -278,7 +278,7 @@ anychart.core.ChartWithAxes.prototype.defaultYAxisSettings = function(opt_value)
  */
 anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) {
   if (!this.defaultGridSettings_) { // we need this for getGridZIndex method to work
-    this.defaultGridSettings_ = anychart.getThemes()['defaultGridSettings'];
+    this.defaultGridSettings_ = anychart.getThemes()[0]['defaultGridSettings'];
   }
 
   if (goog.isDef(opt_value)) {
@@ -296,7 +296,7 @@ anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) 
  */
 anychart.core.ChartWithAxes.prototype.defaultMinorGridSettings = function(opt_value) {
   if (!this.defaultMinorGridSettings_) { // we need this for getGridZIndex method to work
-    this.defaultMinorGridSettings_ = anychart.getThemes()['defaultMinorGridSettings'];
+    this.defaultMinorGridSettings_ = anychart.getThemes()[0]['defaultMinorGridSettings'];
   }
 
   if (goog.isDef(opt_value)) {
@@ -399,7 +399,7 @@ anychart.core.ChartWithAxes.prototype.xGrid = function(opt_indexOrValue, opt_val
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
     //grid.setup(this.defaultGridSettings());
-    //grid.zIndex(this.getGridZIndex(true));
+    grid.zIndex(this.getGridZIndex(true));
     this.xGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_GRIDS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -436,7 +436,7 @@ anychart.core.ChartWithAxes.prototype.yGrid = function(opt_indexOrValue, opt_val
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     //grid.setup(this.defaultGridSettings());
-    //grid.zIndex(this.getGridZIndex(true));
+    grid.zIndex(this.getGridZIndex(true));
     this.yGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_GRIDS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -474,7 +474,7 @@ anychart.core.ChartWithAxes.prototype.xMinorGrid = function(opt_indexOrValue, op
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
     //grid.setup(this.defaultMinorGridSettings());
     grid.addThemes('defaultMinorGridSettings');
-    //grid.zIndex(this.getGridZIndex(false));
+    grid.zIndex(this.getGridZIndex(false));
     this.xMinorGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_GRIDS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -512,7 +512,7 @@ anychart.core.ChartWithAxes.prototype.yMinorGrid = function(opt_indexOrValue, op
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     //grid.setup(this.defaultMinorGridSettings());
     grid.addThemes('defaultMinorGridSettings');
-    //grid.zIndex(this.getGridZIndex(false));
+    grid.zIndex(this.getGridZIndex(false));
     this.yMinorGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_GRIDS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
