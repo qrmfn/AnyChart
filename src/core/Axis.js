@@ -2407,7 +2407,7 @@ anychart.core.Axis.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.Axis.base(this, 'setupByJSON', config, opt_default);
-  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config, opt_default);
+  anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
   if ('title' in config)
     this.title().setupInternal(!!opt_default, config['title']);
 
