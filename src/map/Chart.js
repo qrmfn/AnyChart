@@ -5036,8 +5036,8 @@ anychart.mapModule.Chart.prototype.toGeoJSON = function() {
 anychart.mapModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.mapModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  //if ('defaultSeriesSettings' in config)
-  //  this.defaultSeriesSettings(config['defaultSeriesSettings']);
+  if ('defaultSeriesSettings' in config)
+    this.defaultSeriesSettings(config['defaultSeriesSettings']);
 
   if ('defaultCalloutSettings' in config)
     this.defaultCalloutSettings(config['defaultCalloutSettings']);
@@ -5079,9 +5079,9 @@ anychart.mapModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('axesSettings' in config) {
     this.axes().setupInternal(!!opt_default, config['axesSettings']);
   }
-  if ('gridsSettings' in config) {
-    this.grids().setupInternal(!!opt_default, config['gridsSettings']);
-  }
+  //if ('gridsSettings' in config) {
+  //  this.grids().setupInternal(!!opt_default, config['gridsSettings']);
+  //}
 
   this.crosshair(config['crosshair']);
 
