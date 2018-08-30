@@ -14,6 +14,8 @@ goog.require('anychart.core.IStandaloneBackend');
  */
 anychart.cartesian3dModule.Grid = function() {
   anychart.cartesian3dModule.Grid.base(this, 'constructor');
+
+  this.addThemes('defaultGridSettings');
 };
 goog.inherits(anychart.cartesian3dModule.Grid, anychart.core.GridBase);
 
