@@ -806,24 +806,33 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
 };
 
 
-/** @inheritDoc */
-anychart.core.StateSettings.prototype.dropThemes = function() {
-  anychart.core.StateSettings.base(this, 'dropThemes');
-  var children = [this.labels_,
-    this.minLabels_,
-    this.maxLabels_,
-    this.headers_,
-    this.lowerLabels_,
-    this.markers_,
-    this.outlierMarkers_,
-    this.outline_,
-    this.connector_,
-    this.background_];
+/**
+ * todo: Describe me!
+ */
+anychart.core.StateSettings.prototype.updateChildrenThemes = function() {
+  var children = {
+    'labels': this.labels_,
+    'minLabels': this.minLabels_,
+    'maxLabels': this.maxLabels_,
+    'headers': this.headers_,
+    'lowerLabels': this.lowerLabels_,
+    'markers': this.markers_,
+    'outlierMarkers': this.outlierMarkers_,
+    'outline': this.outline_,
+    'connector': this.connector_,
+    'background': this.background_
+  };
 
-  for (var i = children.length; i--;) {
-    var child = children[i];
-    if (child && child.dropThemes)
+  for (var getterName in children) {
+    var child = children[getterName];
+    if (child && child.dropThemes) {
       child.dropThemes();
+      child.restoreDefaultThemes();
+      if (getterName == 'minLabels' || getterName == 'maxLabels') {
+        child.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
+      }
+      this.setupCreated(getterName, child);
+    }
   }
 };
 

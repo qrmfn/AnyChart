@@ -522,6 +522,9 @@ anychart.core.Base = function() {
   this.themes_ = [];
 
 
+  this.defaultThemes_ = [];
+
+
   /**
    * Map for all getter instances states in format:
    * {
@@ -1185,6 +1188,16 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 //  Theme Map Processing
 //
 //------------------------------------------------------------------------------
+anychart.core.Base.prototype.addDefaultThemes = function(var_args) {
+  this.defaultThemes_ = this.addThemes(var_args);
+};
+
+anychart.core.Base.prototype.restoreDefaultThemes = function() {
+  if (this.defaultThemes_.length)
+    this.addThemes.apply(this, this.defaultThemes_);
+};
+
+
 /**
  * Add theme or multiple themes to instance themes chain.
  *
@@ -1195,17 +1208,19 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
  */
 anychart.core.Base.prototype.addThemes = function(var_args) {
   if (goog.isArray(arguments[0])) {
-    this.addThemes.apply(this, arguments[0]);
-  } else {
-    if (arguments.length) {
-      for (var i = 0; i < arguments.length; i++) {
-        var th = arguments[i];
-        if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1)
-          this.themes_.push(th);
-      }
-      this.flattenThemes();
-    }
+    return this.addThemes.apply(this, arguments[0]);
   }
+
+  if (arguments.length) {
+    for (var i = 0; i < arguments.length; i++) {
+      var th = arguments[i];
+      if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1)
+        this.themes_.push(th);
+    }
+    this.flattenThemes();
+  }
+
+  return arguments;
 };
 
 
