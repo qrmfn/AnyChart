@@ -5036,8 +5036,8 @@ anychart.mapModule.Chart.prototype.toGeoJSON = function() {
 anychart.mapModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.mapModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('defaultSeriesSettings' in config)
-    this.defaultSeriesSettings(config['defaultSeriesSettings']);
+  //if ('defaultSeriesSettings' in config)
+  //  this.defaultSeriesSettings(config['defaultSeriesSettings']);
 
   if ('defaultCalloutSettings' in config)
     this.defaultCalloutSettings(config['defaultCalloutSettings']);
