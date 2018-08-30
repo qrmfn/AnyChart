@@ -273,6 +273,8 @@ anychart.mapModule.elements.GridSettings.prototype.paletteInvalidated_ = functio
  * @return {Array.<anychart.mapModule.elements.Grid>}
  */
 anychart.mapModule.elements.GridSettings.prototype.getItems = function() {
+  if (!this.verticalGrid_) this.vertical();
+  if (!this.horizontalGrid_) this.horizontal();
   return this.grids_;
 };
 
