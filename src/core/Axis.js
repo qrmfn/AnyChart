@@ -101,7 +101,7 @@ goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 /** @inheritDoc */
 anychart.core.Axis.prototype.getOption = function(name) {
   var res = anychart.core.Axis.base(this, 'getOption', name);
-  if (!goog.isDefAndNotNull(res)) {
+  if (!goog.isDef(res)) {
     res = this.autoSettings[name];
   }
   return res;
@@ -123,7 +123,9 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMaxLines', anychart.core.settings.numberOrNullNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.numberOrNullNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', function (val) {
+     return anychart.core.settings.numberOrNullNormalizer(val)
+    }],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'orientation', anychart.core.settings.orientationNormalizer],
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer]
   ]);
@@ -1113,7 +1115,9 @@ anychart.core.Axis.prototype.applyStaggerMode_ = function(opt_bounds) {
         this.insideBounds_ : null;
     var isLabelInInsideSpace;
     var staggerMaxLines = /**@type {number|null}*/(this.getOption('staggerMaxLines'));
+
     var staggerLines = /**@type {number|null}*/(this.getOption('staggerLines'));
+
     var drawFirstLabel = this.getOption('drawFirstLabel');
     var drawLastLabel = this.getOption('drawLastLabel');
     states = [];
