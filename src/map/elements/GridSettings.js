@@ -220,9 +220,6 @@ anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value)
     this.setupPalette_(anychart.palettes.DistinctColors);
 
   if (goog.isDef(opt_value)) {
-    for (var i = 0; i < this.grids_.length; i++) {
-      this.grids_[i].palette(opt_value);
-    }
     this.palette_.setup(opt_value);
     return this;
   }
