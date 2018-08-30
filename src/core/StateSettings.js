@@ -525,8 +525,7 @@ anychart.core.StateSettings.prototype.lowerLabels = function(opt_value) {
   if (!this.lowerLabels_) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LOWER_LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.lowerLabels_ = new anychart.core.ui.LabelsFactory();
-    this.lowerLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
-    this.setupCreated('lowerLabels', this.lowerLabels_);
+    //this.setupCreated('lowerLabels', this.lowerLabels_);
 
     afterInitCallback.call(this.stateHolder, this.lowerLabels_);
   }
