@@ -998,7 +998,7 @@ anychart.linearGaugeModule.Chart.prototype.beforeDraw = function() {
   for (i = 0; i < this.axes_.length; i++) {
     item = this.axes_[i];
     if (item) {
-      //item.setDefaultOrientation(defaultOrientation);
+      item.setDefaultOrientation(defaultOrientation);
       if (!item.scale())
         item.scale(/** @type {anychart.scales.ScatterBase} */(this.scale()));
     }
