@@ -277,7 +277,7 @@ anychart.core.ChartWithAxes.prototype.defaultYAxisSettings = function(opt_value)
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) {
-  if (!this.defaultGridSettings_) {
+  if (!this.defaultGridSettings_) { // we need this for getGridZIndex method to work
     this.defaultGridSettings_ = anychart.getThemes()['defaultGridSettings'];
   }
 
@@ -295,7 +295,7 @@ anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) 
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultMinorGridSettings = function(opt_value) {
-  if (!this.defaultMinorGridSettings_) {
+  if (!this.defaultMinorGridSettings_) { // we need this for getGridZIndex method to work
     this.defaultMinorGridSettings_ = anychart.getThemes()['defaultMinorGridSettings'];
   }
 
