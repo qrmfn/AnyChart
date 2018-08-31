@@ -1188,16 +1188,6 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 //  Theme Map Processing
 //
 //------------------------------------------------------------------------------
-anychart.core.Base.prototype.addDefaultThemes = function(var_args) {
-  this.defaultThemes_ = this.addThemes(var_args);
-};
-
-anychart.core.Base.prototype.restoreDefaultThemes = function() {
-  if (this.defaultThemes_.length)
-    this.addThemes.apply(this, this.defaultThemes_);
-};
-
-
 /**
  * Add theme or multiple themes to instance themes chain.
  *
@@ -1205,22 +1195,27 @@ anychart.core.Base.prototype.restoreDefaultThemes = function() {
  * Example: this.addThemes('chartDefault', 'pieDefault', 'myCustomPie')
  *
  * @param {...(Object|string)|Array.<Object|string>} var_args Themes as string names (keys) from defaultTheme object or json settings objects.
+ *
+ * @return {Array.<Object|string>}
  */
 anychart.core.Base.prototype.addThemes = function(var_args) {
   if (goog.isArray(arguments[0])) {
     return this.addThemes.apply(this, arguments[0]);
   }
 
+  var addedThemes = [];
   if (arguments.length) {
     for (var i = 0; i < arguments.length; i++) {
       var th = arguments[i];
-      if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1)
+      if (goog.isObject(th) || this.themes_.indexOf(/** @type {string} */(th)) == -1) {
         this.themes_.push(th);
+        addedThemes.push(th);
+      }
     }
     this.flattenThemes();
   }
 
-  return arguments;
+  return addedThemes;
 };
 
 
@@ -1230,6 +1225,24 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 anychart.core.Base.prototype.dropThemes = function() {
   this.themes_.length = 0;
   this.themeSettings = {};
+};
+
+
+/**
+ * Add themes and save added theme names as default
+ * @param var_args
+ */
+anychart.core.Base.prototype.addDefaultThemes = function(var_args) {
+  this.defaultThemes_ = this.addThemes(var_args);
+};
+
+
+/**
+ * Reapply themes that are stored as defaults
+ */
+anychart.core.Base.prototype.restoreDefaultThemes = function() {
+  if (this.defaultThemes_.length)
+    this.addThemes.apply(this, this.defaultThemes_);
 };
 
 

@@ -806,8 +806,15 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
 };
 
 
+/** @inheritDoc */
+anychart.core.StateSettings.prototype.dropThemes = function() {
+  anychart.core.StateSettings.base(this, 'dropThemes');
+  this.resolutionChainCache(null);
+};
+
+
 /**
- * todo: Describe me!
+ * Re-initialize theme settings for all child elements
  */
 anychart.core.StateSettings.prototype.updateChildrenThemes = function() {
   var children = {
