@@ -46,9 +46,11 @@ anychart.mapModule.elements.Callout = function() {
     factory.enabled(null);
   }
   this.hovered_ = new anychart.core.StateSettings(this, normalHoveredSelectedDescriptorsMeta, anychart.PointState.HOVER);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, afterInitCallback);
 
   this.selected_ = new anychart.core.StateSettings(this, normalHoveredSelectedDescriptorsMeta, anychart.PointState.SELECT);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, afterInitCallback);
 
   this.ALL_VISUAL_STATES = anychart.ConsistencyState.CALLOUT_TITLE |

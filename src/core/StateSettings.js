@@ -141,6 +141,18 @@ anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
 
 
 /**
+ * Default labels factory constructor. But without using defaultLabelsFactory theme
+ * @this {*}
+ * @return {anychart.core.ui.LabelsFactory}
+ */
+anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME = function() {
+  var f = new anychart.core.ui.LabelsFactory();
+  f.dropThemes();
+  return f;
+};
+
+
+/**
  * Circular labels factory constructor.
  * @this {*}
  * @return {anychart.core.ui.CircularLabelsFactory}
