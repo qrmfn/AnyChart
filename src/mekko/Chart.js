@@ -315,7 +315,7 @@ anychart.mekkoModule.Chart.prototype.createLegendItemsProvider = function(source
 anychart.mekkoModule.Chart.prototype.setYAxisScale = function(axis) {
   if (this.useCategoryScale_) {
     var straight = !this.xScale().inverted();
-    var straightFirst = this.getOption('orientation') == anychart.enums.Orientation.LEFT || this.getOption('orientation') == anychart.enums.Orientation.BOTTOM;
+    var straightFirst = axis.getOption('orientation') == anychart.enums.Orientation.LEFT || axis.getOption('orientation') == anychart.enums.Orientation.BOTTOM;
     axis.scale(/** @type {anychart.scales.Base} */(straightFirst == straight ? this.firstCategoriesScale() : this.lastCategoriesScale()));
   } else {
     axis.scale(/** @type {anychart.scales.Base} */(this.yScale()));

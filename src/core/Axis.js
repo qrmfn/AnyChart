@@ -905,6 +905,7 @@ anychart.core.Axis.prototype.getOverlappedLabels_ = function(opt_bounds) {
         var prevDrawableMinorLabel = -1;
 
         var scaleTicksArr = scale.ticks().get();
+        console.log('scaleticks', scaleTicksArr);
         var ticksArrLen = scaleTicksArr.length;
         var tickVal, ratio, bounds1, bounds2, bounds3, bounds4;
         var tempRatio;
