@@ -306,7 +306,7 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
-  if (!this.palette_ && !opt_value && !this.parent_) {
+  if (!this.palette_ && (!this.parent_ || opt_value || this.themeSettings['palette'])) { // this is for map/elements/Grid.js to work properly
     var palette = this.themeSettings['palette'];
     if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
       this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
