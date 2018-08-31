@@ -378,6 +378,8 @@ anychart.mapModule.elements.Axis.prototype.labels = function(opt_value) {
     this.labels_.setParentEventTarget(this);
     this.labels_.listenSignals(this.labelsInvalidated_, this);
     this.registerDisposable(this.labels_);
+
+    this.labels_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
@@ -422,6 +424,8 @@ anychart.mapModule.elements.Axis.prototype.minorLabels = function(opt_value) {
     this.minorLabels_.setParentEventTarget(this);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
     this.registerDisposable(this.minorLabels_);
+
+    this.minorLabels_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
