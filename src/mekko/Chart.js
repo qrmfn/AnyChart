@@ -24,6 +24,8 @@ goog.require('anychart.mekkoModule.Series');
 anychart.mekkoModule.Chart = function(opt_useCategoryScale, opt_barmekkoMode) {
   anychart.mekkoModule.Chart.base(this, 'constructor', true);
 
+  this.addThemes('mekko');
+
   /**
    * Scale for LEFT oriented Y axis. Uses first categories values to calculate weights.
    * @type {anychart.scales.Ordinal}

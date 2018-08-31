@@ -1016,6 +1016,8 @@ anychart.core.ChartWithAxes.prototype.crosshair = function(opt_value) {
     this.crosshair_.enabled(false);
     this.crosshair_.interactivityTarget(this);
     this.crosshair_.listenSignals(this.onCrosshairSignal_, this);
+    this.setupCreated('crosshair', this.crosshair_);
+
     this.invalidate(anychart.ConsistencyState.AXES_CHART_CROSSHAIR, anychart.Signal.NEEDS_REDRAW);
   }
 
@@ -1462,12 +1464,14 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
       this.leftAxisPadding_);
 
   if (this.hasInvalidationState(anychart.ConsistencyState.AXES_CHART_CROSSHAIR)) {
-    var crosshair = /** @type {anychart.core.ui.Crosshair} */(this.crosshair());
-    crosshair.suspendSignalsDispatching();
-    crosshair.parentBounds(this.dataBounds);
-    crosshair.container(this.rootElement);
-    crosshair.draw();
-    crosshair.resumeSignalsDispatching(false);
+    var crosshair = this.getCreated('crosshair');
+    if (crosshair) {
+      crosshair.suspendSignalsDispatching();
+      crosshair.parentBounds(this.dataBounds);
+      crosshair.container(this.rootElement);
+      crosshair.draw();
+      crosshair.resumeSignalsDispatching(false);
+    }
 
     this.markConsistent(anychart.ConsistencyState.AXES_CHART_CROSSHAIR);
   }
@@ -1677,7 +1681,9 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
   this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
-  this.crosshair(config['crosshair']);
+
+  if ('crosshair' in config)
+    this.crosshair().setupInternal(!!opt_default, config['crosshair']);
 };
 
 

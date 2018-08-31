@@ -656,6 +656,8 @@ anychart.core.ChartWithSeries.prototype.markerPalette = function(opt_value) {
     this.markerPalette_ = new anychart.palettes.Markers();
     this.markerPalette_.listenSignals(this.markerPaletteInvalidated_, this);
     this.registerDisposable(this.markerPalette_);
+
+    this.setupCreated('markerPalette', this.markerPalette_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -679,6 +681,8 @@ anychart.core.ChartWithSeries.prototype.hatchFillPalette = function(opt_value) {
     this.hatchFillPalette_ = new anychart.palettes.HatchFills();
     this.hatchFillPalette_.listenSignals(this.hatchFillPaletteInvalidated_, this);
     this.registerDisposable(this.hatchFillPalette_);
+
+    this.setupCreated('hatchFillPalette', this.hatchFillPalette_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -1147,6 +1151,8 @@ anychart.core.ChartWithSeries.prototype.dataArea = function(opt_value) {
   if (!this.dataArea_) {
     this.dataArea_ = new anychart.core.ui.DataArea();
     this.dataArea_.listenSignals(this.dataAreaInvalidated_, this);
+
+    this.setupCreated('dataArea', this.dataArea_);
   }
   if (goog.isDef(opt_value)) {
     this.dataArea_.setup(opt_value);
@@ -1172,12 +1178,14 @@ anychart.core.ChartWithSeries.prototype.dataAreaInvalidated_ = function(e) {
 anychart.core.ChartWithSeries.prototype.specialDraw = function(bounds) {
   anychart.core.ChartWithSeries.base(this, 'specialDraw', bounds);
   if (this.hasStateInvalidation(anychart.enums.Store.SERIES_CHART, anychart.enums.State.DATA_AREA)) {
-    var dataArea = this.dataArea();
-    dataArea.suspendSignalsDispatching();
-    if (!dataArea.container()) dataArea.container(this.rootElement);
-    dataArea.parentBounds(bounds);
-    dataArea.resumeSignalsDispatching(false);
-    dataArea.draw();
+    var dataArea = this.getCreated('dataArea');
+    if (dataArea) {
+      dataArea.suspendSignalsDispatching();
+      if (!dataArea.container()) dataArea.container(this.rootElement);
+      dataArea.parentBounds(bounds);
+      dataArea.resumeSignalsDispatching(false);
+      dataArea.draw();
+    }
     this.markStateConsistent(anychart.enums.Store.SERIES_CHART, anychart.enums.State.DATA_AREA);
   }
 };
