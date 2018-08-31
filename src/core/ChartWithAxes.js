@@ -1683,6 +1683,18 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
   this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+  if ('xAxes' in config) {
+    for (var i = 0; i < config['xAxes'].length; i++) {
+      this.xAxis(i).setupInternal(!!opt_default, config['xAxes'][i]);
+      //this.yAxis(i).scale(scalesInstances);
+    }
+  }
+  if ('yAxes' in config) {
+    for (var i = 0; i < config['xAxes'].length; i++) {
+      this.yAxis(i).setupInternal(!!opt_default, config['yAxes'][i]);
+      //this.xAxis(i).scale(scalesInstances);
+    }
+  }
 
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);
