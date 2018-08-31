@@ -57,10 +57,15 @@ anychart.pertModule.VisualElements = function() {
     ['labels', 0, 0]
   ]);
   this.normal_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.NORMAL);
+  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
+
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.HOVER);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
+
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.SELECT);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
 };
 goog.inherits(anychart.pertModule.VisualElements, anychart.core.Base);
@@ -457,18 +462,7 @@ anychart.pertModule.VisualElements.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.pertModule.VisualElements.prototype.setupByJSON = function(config, opt_default) {
   anychart.pertModule.VisualElements.base(this, 'setupByJSON', config, opt_default);
-
   anychart.core.settings.deserialize(this, anychart.pertModule.VisualElements.PROPERTY_DESCRIPTORS, config);
-
-  // todo: (chernetsky) Remove this when pert refactored
-  if (opt_default) {
-    this.normal_.upperLabels().dropThemes();
-    this.hovered_.upperLabels().dropThemes();
-    this.selected_.upperLabels().dropThemes();
-    this.normal_.lowerLabels().dropThemes();
-    this.hovered_.lowerLabels().dropThemes();
-    this.selected_.lowerLabels().dropThemes();
-  }
 
   this.normal_.setupInternal(!!opt_default, config);
   this.normal_.setupInternal(!!opt_default, config['normal']);

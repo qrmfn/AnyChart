@@ -548,8 +548,9 @@ anychart.core.StateSettings.prototype.upperLabels = function(opt_value) {
  */
 anychart.core.StateSettings.prototype.lowerLabels = function(opt_value) {
   if (!this.lowerLabels_) {
-    var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LOWER_LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
-    this.lowerLabels_ = new anychart.core.ui.LabelsFactory();
+    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR;
+    var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
+    this.lowerLabels_ = labelsFactoryConstructor();
     //this.setupCreated('lowerLabels', this.lowerLabels_);
 
     afterInitCallback.call(this.stateHolder, this.lowerLabels_);
