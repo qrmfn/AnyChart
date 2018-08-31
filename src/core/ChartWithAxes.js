@@ -585,7 +585,7 @@ anychart.core.ChartWithAxes.prototype.xAxis = function(opt_indexOrValue, opt_val
   if (!axis) {
     axis = new anychart.core.Axis();
     axis.setParentEventTarget(this);
-    axis.setupCreated('defaultXAxisSettings', axis);
+    this.setupCreated('defaultXAxisSettings', axis);
     //axis.setupInternal(true, this.defaultXAxisSettings());
     this.xAxes_[index] = axis;
     axis.listenSignals(this.onAxisSignal_, this);
@@ -623,7 +623,7 @@ anychart.core.ChartWithAxes.prototype.yAxis = function(opt_indexOrValue, opt_val
   var axis = this.yAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
-    axis.setupCreated('defaultYAxisSettings', axis);
+    this.setupCreated('defaultYAxisSettings', axis);
     axis.setParentEventTarget(this);
     //axis.setupInternal(true, this.defaultYAxisSettings());
     this.yAxes_[index] = axis;
@@ -1683,15 +1683,20 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
   this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+
   if ('xAxes' in config) {
     for (var i = 0; i < config['xAxes'].length; i++) {
-      this.xAxis(i).setupInternal(!!opt_default, config['xAxes'][i]);
+      var axis = this.xAxis(i);
+      axis.addThemes(config['xAxes'][i]);
+      //this.xAxis(i).setupInternal(!!opt_default, config['xAxes'][i]);
       //this.yAxis(i).scale(scalesInstances);
     }
   }
   if ('yAxes' in config) {
-    for (var i = 0; i < config['xAxes'].length; i++) {
-      this.yAxis(i).setupInternal(!!opt_default, config['yAxes'][i]);
+    for (var i = 0; i < config['yAxes'].length; i++) {
+      var axis = this.yAxis(i);
+      axis.addThemes(config['yAxes'][i]);
+      //this.yAxis(i).setupInternal(!!opt_default, config['yAxes'][i]);
       //this.xAxis(i).scale(scalesInstances);
     }
   }
