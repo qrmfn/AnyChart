@@ -306,7 +306,7 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
-  if (!this.palette_ && !opt_value) {
+  if (!this.palette_ && !opt_value && !this.parent_) {
     var palette = this.themeSettings['palette'];
     if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
       this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
@@ -326,7 +326,7 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
     return this;
   } else if (goog.isObject(opt_value) && opt_value['type'] == 'range') {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(opt_value) || this.palette_ == null)
+  } else if (goog.isObject(opt_value)/* || this.palette_ == null*/)
     this.setupPalette_(anychart.palettes.DistinctColors);
 
   if (goog.isDef(opt_value)) {
