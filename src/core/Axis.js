@@ -123,9 +123,7 @@ anychart.core.Axis.prototype.SIMPLE_PROPS_DESCRIPTORS = (function() {
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMode', anychart.core.settings.booleanNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'overlapMode', anychart.enums.normalizeLabelsOverlapMode],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerMaxLines', anychart.core.settings.numberOrNullNormalizer],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', function (val) {
-     return anychart.core.settings.numberOrNullNormalizer(val)
-    }],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'staggerLines', anychart.core.settings.numberOrNullNormalizer],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'orientation', anychart.core.settings.orientationNormalizer],
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer]
   ]);
