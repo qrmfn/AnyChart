@@ -314,7 +314,7 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
       this.setupPalette_(anychart.palettes.DistinctColors, /** @type {anychart.palettes.DistinctColors} */(palette));
     } else if (goog.isObject(palette) && palette['type'] == 'range') {
       this.setupPalette_(anychart.palettes.RangeColors);
-    } else if (goog.isObject(palette) || this.palette_ == null)
+    } else if (goog.isObject(palette))
       this.setupPalette_(anychart.palettes.DistinctColors);
   }
 
