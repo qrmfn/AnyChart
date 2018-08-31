@@ -585,7 +585,8 @@ anychart.core.ChartWithAxes.prototype.xAxis = function(opt_indexOrValue, opt_val
   if (!axis) {
     axis = new anychart.core.Axis();
     axis.setParentEventTarget(this);
-    axis.setupInternal(true, this.defaultXAxisSettings());
+    axis.setupCreated('defaultXAxisSettings', axis);
+    //axis.setupInternal(true, this.defaultXAxisSettings());
     this.xAxes_[index] = axis;
     axis.listenSignals(this.onAxisSignal_, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES |
@@ -622,8 +623,9 @@ anychart.core.ChartWithAxes.prototype.yAxis = function(opt_indexOrValue, opt_val
   var axis = this.yAxes_[index];
   if (!axis) {
     axis = new anychart.core.Axis();
+    axis.setupCreated('defaultYAxisSettings', axis);
     axis.setParentEventTarget(this);
-    axis.setupInternal(true, this.defaultYAxisSettings());
+    //axis.setupInternal(true, this.defaultYAxisSettings());
     this.yAxes_[index] = axis;
     axis.listenSignals(this.onAxisSignal_, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW);
@@ -1661,8 +1663,8 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if ('isVertical' in config)
     this.isVerticalInternal = !!config['isVertical'];
 
-  this.defaultXAxisSettings(config['defaultXAxisSettings']);
-  this.defaultYAxisSettings(config['defaultYAxisSettings']);
+  // this.defaultXAxisSettings(config['defaultXAxisSettings']);
+  // this.defaultYAxisSettings(config['defaultYAxisSettings']);
   this.defaultGridSettings(config['defaultGridSettings']);
   this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
   this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
@@ -1676,8 +1678,8 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances);
   this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances);
   this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
-  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
+  // this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
+  // this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
   this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
