@@ -17,6 +17,8 @@ goog.require('anychart.mapModule.elements.Grid');
 anychart.mapModule.elements.GridSettings = function(map) {
   anychart.mapModule.elements.GridSettings.base(this, 'constructor');
 
+  this.addThemes('defaultGridSettings');
+
   /**
    * Parent title.
    * @type {anychart.core.settings.IResolvable}
@@ -208,6 +210,18 @@ anychart.core.settings.populate(anychart.mapModule.elements.GridSettings, anycha
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.mapModule.elements.GridSettings)} .
  */
 anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value) {
+  if (!this.palette_) {
+    var palette = this.themeSettings['palette'];
+    if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
+      this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
+    } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
+      this.setupPalette_(anychart.palettes.DistinctColors, /** @type {anychart.palettes.DistinctColors} */(palette));
+    } else if (goog.isObject(palette) && palette['type'] == 'range') {
+      this.setupPalette_(anychart.palettes.RangeColors);
+    } else if (goog.isObject(palette))
+      this.setupPalette_(anychart.palettes.DistinctColors);
+  }
+
   if (anychart.utils.instanceOf(opt_value, anychart.palettes.RangeColors)) {
     this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(opt_value));
     return this;
@@ -216,7 +230,7 @@ anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value)
     return this;
   } else if (goog.isObject(opt_value) && opt_value['type'] == 'range') {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(opt_value) || this.palette_ == null)
+  } else if (goog.isObject(opt_value))
     this.setupPalette_(anychart.palettes.DistinctColors);
 
   if (goog.isDef(opt_value)) {
@@ -241,6 +255,8 @@ anychart.mapModule.elements.GridSettings.prototype.setupPalette_ = function(cls,
     var doDispatch = !!this.palette_;
     goog.dispose(this.palette_);
     this.palette_ = new cls();
+    this.setupCreated('palette', this.palette_);
+    this.palette_.restoreDefaults(true);
     if (opt_cloneFrom)
       this.palette_.setup(opt_cloneFrom);
     this.palette_.listenSignals(this.paletteInvalidated_, this);
