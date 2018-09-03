@@ -102,9 +102,9 @@ goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 anychart.core.Axis.prototype.getOption = function(name) {
   var res = anychart.core.Axis.base(this, 'getOption', name);
 
-  // if (!goog.isDef(res)) {
-  //   res = this.autoSettings[name];
-  // }
+  if (!goog.isDef(res)) {
+    res = this.autoSettings[name];
+  }
   return res;
 };
 
@@ -436,9 +436,7 @@ anychart.core.Axis.prototype.minorLabels = function(opt_value) {
     this.minorLabels_ = new anychart.core.ui.LabelsFactory();
     //this.setupCreated('minorLabels', this.minorLabels_);
     this.minorLabels_.setParentEventTarget(this);
-
-    this.isHorizontal() ? this.minorLabels_['rotation'](0) : this.minorLabels_['rotation'](-90);
-
+    //this.isHorizontal() ? this.minorLabels_['rotation'](0) : this.minorLabels_['rotation'](-90);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
     this.registerDisposable(this.minorLabels_);
   }
