@@ -818,7 +818,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
       'width': false,
       'height': false
     },
-    // 'anchor': 'center',
+    'anchor': 'center',
     'padding': 4,
     'rotation': 0,
     'format': anychart.core.defaultTheme.returnValue,
