@@ -80,8 +80,7 @@ goog.mixin(goog.global['anychart']['themes']['defaultTheme'], {
           'hatchFill': null,
           'labels': {
             'zIndex': 0,
-            'position': 'center-top',
-            'anchor': 'center'
+            'position': 'center-top'
           }
         },
         'hovered': {
