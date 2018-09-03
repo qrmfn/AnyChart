@@ -807,7 +807,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
   'defaultLabelFactory': {
     'enabled': false,
     'offsetX': 0,
-    // 'offsetY': 0,
+    'offsetY': 0,
     'width': null,
     'height': null,
     'clip': null,
@@ -944,14 +944,12 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
     },
     'labels': {
       'enabled': true,
-      'anchor': 'center',
       'format': anychart.core.defaultTheme.returnValue,
       'position': 'outside',
       'zIndex': 35
     },
     'minorLabels': {
       'fontSize': 9,
-      'anchor': 'center',
       'format': anychart.core.defaultTheme.returnValue,
       'position': 'outside',
       'zIndex': 35
@@ -2015,7 +2013,6 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
         'position': 'inside',
         'disablePointerEvents': false,
         'autoRotate': false,
-        'offsetY': 0,
         'zIndex': 34,
         /**
          * @this {*}
@@ -2023,8 +2020,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
          */
         'format': function() {
           return this['name'] ? this['name'] : this['x'];
-        },
-        'anchor': 'center'
+        }
       },
       'markers': {
         'enabled': false,
