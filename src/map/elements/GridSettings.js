@@ -17,7 +17,7 @@ goog.require('anychart.mapModule.elements.Grid');
 anychart.mapModule.elements.GridSettings = function(map) {
   anychart.mapModule.elements.GridSettings.base(this, 'constructor');
 
-  this.addThemes('defaultGridSettings');
+  this.addThemes('defaultGridSettings', 'map.gridsSettings');
 
   /**
    * Parent title.
@@ -65,6 +65,10 @@ anychart.mapModule.elements.GridSettings = function(map) {
     ['enabled', anychart.ConsistencyState.ONLY_DISPATCHING, anychart.Signal.ENABLED_STATE_CHANGED],
     ['zIndex', anychart.ConsistencyState.ONLY_DISPATCHING, anychart.Signal.Z_INDEX_STATE_CHANGED]
   ]);
+
+  // this is to retain old behaviour when horizontal and vertical grids obtained zIndex relative to GridSettings theme zIndex
+  if (!this.horizontalGrid_) this.horizontal();
+  if (!this.verticalGrid_) this.vertical();
 };
 goog.inherits(anychart.mapModule.elements.GridSettings, anychart.core.Base);
 
@@ -286,8 +290,6 @@ anychart.mapModule.elements.GridSettings.prototype.paletteInvalidated_ = functio
  * @return {Array.<anychart.mapModule.elements.Grid>}
  */
 anychart.mapModule.elements.GridSettings.prototype.getItems = function() {
-  if (!this.horizontalGrid_) this.horizontal();
-  if (!this.verticalGrid_) this.vertical();
   return this.grids_;
 };
 
