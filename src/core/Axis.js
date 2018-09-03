@@ -97,12 +97,6 @@ anychart.core.Axis = function() {
 };
 goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 
-anychart.core.Axis.prototype.setOption = function(name, value) {
-  if(name=='orientation') {
-    console.log('orientation', value);
-  }
-  return anychart.core.Axis.base(this, 'setOption', name, value);
-};
 
 /** @inheritDoc */
 anychart.core.Axis.prototype.getOption = function(name) {
@@ -350,7 +344,7 @@ anychart.core.Axis.prototype.minorLabelsBounds_ = null;
 anychart.core.Axis.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
-    this.setupCreated('title', this.title_);
+    // this.setupCreated('title', this.title_);
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.registerDisposable(this.title_);
@@ -444,7 +438,6 @@ anychart.core.Axis.prototype.minorLabels = function(opt_value) {
     this.minorLabels_.setParentEventTarget(this);
 
     this.isHorizontal() ? this.minorLabels_['rotation'](0) : this.minorLabels_['rotation'](-90);
-    console.log('this.isHorizontal()', this.isHorizontal(), this.getOption('orientation'));
 
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
     this.registerDisposable(this.minorLabels_);
@@ -510,7 +503,7 @@ anychart.core.Axis.prototype.getLine = function() {
 anychart.core.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
-    this.setupCreated('ticks', this.ticks_);
+    // this.setupCreated('ticks', this.ticks_);
     this.ticks_.setParentEventTarget(this);
     this.ticks_.listenSignals(this.ticksInvalidated, this);
     this.registerDisposable(this.ticks_);
@@ -712,7 +705,7 @@ anychart.core.Axis.prototype.scaleInvalidated = function(event) {
 anychart.core.Axis.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.padding_) {
     this.padding_ = new anychart.core.utils.Padding();
-    this.setupCreated('padding', this.padding_);
+    // this.setupCreated('padding', this.padding_);
     this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.paddingInvalidated_, this);
   }
@@ -2428,12 +2421,12 @@ anychart.core.Axis.prototype.serialize = function() {
 anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.Axis.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  // if ('title' in config)
-  //   this.title().setupInternal(!!opt_default, config['title']);
+  if ('title' in config)
+    this.title().setupInternal(!!opt_default, config['title']);
 
   this.labels().setupInternal(!!opt_default, config['labels']);
   this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
-  // this.ticks(config['ticks']);
+  this.ticks(config['ticks']);
   this.minorTicks(config['minorTicks']);
 };
 
