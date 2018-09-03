@@ -344,7 +344,7 @@ anychart.core.Axis.prototype.minorLabelsBounds_ = null;
 anychart.core.Axis.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
-    // this.setupCreated('title', this.title_);
+    this.setupCreated('title', this.title_);
     this.title_.setParentEventTarget(this);
     this.title_.listenSignals(this.titleInvalidated_, this);
     this.registerDisposable(this.title_);
@@ -705,7 +705,7 @@ anychart.core.Axis.prototype.scaleInvalidated = function(event) {
 anychart.core.Axis.prototype.padding = function(opt_spaceOrTopOrTopAndBottom, opt_rightOrRightAndLeft, opt_bottom, opt_left) {
   if (!this.padding_) {
     this.padding_ = new anychart.core.utils.Padding();
-    // this.setupCreated('padding', this.padding_);
+    this.setupCreated('padding', this.padding_);
     this.registerDisposable(this.padding_);
     this.padding_.listenSignals(this.paddingInvalidated_, this);
   }
