@@ -326,7 +326,7 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
     return this;
   } else if (goog.isObject(opt_value) && opt_value['type'] == 'range') {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(opt_value)/* || this.palette_ == null*/)
+  } else if (goog.isObject(opt_value))
     this.setupPalette_(anychart.palettes.DistinctColors);
 
   if (goog.isDef(opt_value)) {
