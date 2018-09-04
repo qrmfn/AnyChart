@@ -1221,10 +1221,14 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 /**
  * Reset themes queue and drops themeSettings
+ *
+ * @param {?boolean} opt_dropDefaultThemes
  */
-anychart.core.Base.prototype.dropThemes = function() {
+anychart.core.Base.prototype.dropThemes = function(opt_dropDefaultThemes) {
   this.themes_.length = 0;
   this.themeSettings = {};
+  if (opt_dropDefaultThemes)
+    this.defaultThemes_ = {};
 };
 
 

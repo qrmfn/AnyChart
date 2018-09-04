@@ -147,7 +147,7 @@ anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR = function() {
  */
 anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME = function() {
   var f = new anychart.core.ui.LabelsFactory();
-  f.dropThemes();
+  f.dropThemes(true);
   return f;
 };
 
@@ -169,7 +169,7 @@ anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR = function() {
  */
 anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME = function() {
   var f =  new anychart.core.ui.CircularLabelsFactory();
-  f.dropThemes();
+  f.dropThemes(true);
   return f;
 };
 
