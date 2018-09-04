@@ -231,7 +231,7 @@ anychart.mapModule.elements.GridSettings.prototype.checkSetupPalette_ = function
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.mapModule.elements.GridSettings)} .
  */
 anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value) {
-  if (!this.palette_ && !goog.isDef(opt_value)) {
+  if (!this.palette_) {
     var palette = this.themeSettings['palette'];
     this.checkSetupPalette_(palette);
     this.setupCreated('palette', this.palette_);
