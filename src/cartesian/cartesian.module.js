@@ -50,7 +50,7 @@ anychart.area = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['area'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.AREA] = anychart.area;
@@ -78,7 +78,7 @@ anychart.bar = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['bar'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.BAR] = anychart.bar;
@@ -112,7 +112,7 @@ anychart.box = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['box'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 
@@ -141,7 +141,7 @@ anychart.column = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['column'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN] = anychart.column;
@@ -166,7 +166,7 @@ anychart.hilo = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['hilo'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.HILO] = anychart.hilo;
@@ -198,7 +198,7 @@ anychart.financial = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['candlestick'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.FINANCIAL] = anychart.financial;
@@ -227,6 +227,7 @@ anychart.line = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['line'](arguments[i]);
   }
+  chart.setupAxes();
   anychart.performance.end('anychart.line()');
   return chart;
 };
@@ -252,7 +253,7 @@ anychart.verticalArea = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart[anychart.enums.CartesianSeriesType.AREA](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.VERTICAL_AREA] = anychart.verticalArea;
@@ -277,7 +278,7 @@ anychart.verticalLine = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart[anychart.enums.CartesianSeriesType.LINE](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.VERTICAL_LINE] = anychart.verticalLine;

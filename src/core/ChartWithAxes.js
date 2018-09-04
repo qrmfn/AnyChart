@@ -586,7 +586,7 @@ anychart.core.ChartWithAxes.prototype.xAxis = function(opt_indexOrValue, opt_val
     axis = new anychart.core.Axis();
     axis.setParentEventTarget(this);
     this.setupCreated('defaultXAxisSettings', axis);
-    axis.setupInternal(true, this.defaultXAxisSettings());
+    //axis.setupInternal(true, this.defaultXAxisSettings());
     this.xAxes_[index] = axis;
     axis.listenSignals(this.onAxisSignal_, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES |
@@ -625,7 +625,7 @@ anychart.core.ChartWithAxes.prototype.yAxis = function(opt_indexOrValue, opt_val
     axis = new anychart.core.Axis();
     this.setupCreated('defaultYAxisSettings', axis);
     axis.setParentEventTarget(this);
-    axis.setupInternal(true, this.defaultYAxisSettings());
+    //axis.setupInternal(true, this.defaultYAxisSettings());
     this.yAxes_[index] = axis;
     axis.listenSignals(this.onAxisSignal_, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW);
@@ -1663,8 +1663,8 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if ('isVertical' in config)
     this.isVerticalInternal = !!config['isVertical'];
 
-  this.defaultXAxisSettings(config['defaultXAxisSettings']);
-  this.defaultYAxisSettings(config['defaultYAxisSettings']);
+  // this.defaultXAxisSettings(config['defaultXAxisSettings']);
+  // this.defaultYAxisSettings(config['defaultYAxisSettings']);
   this.defaultGridSettings(config['defaultGridSettings']);
   this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
   this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
@@ -1678,31 +1678,34 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances);
   this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances);
   this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
-  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
+  // this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
+  // this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
   this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
 
-  // if ('xAxes' in config) {
-  //   for (var i = 0; i < config['xAxes'].length; i++) {
-  //     var axis = this.xAxis(i);
-  //     axis.addThemes(config['xAxes'][i]);
-  //     this.xAxis(i).setupInternal(!!opt_default, config['xAxes'][i]);
-  //     this.yAxis(i).scale(scalesInstances);
-  //   }
-  // }
-  // if ('yAxes' in config) {
-  //   for (var i = 0; i < config['yAxes'].length; i++) {
-  //     var axis = this.yAxis(i);
-  //     axis.addThemes(config['yAxes'][i]);
-  //     this.yAxis(i).setupInternal(!!opt_default, config['yAxes'][i]);
-  //     this.xAxis(i).scale(scalesInstances);
-  //   }
-  // }
-
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);
+};
+
+
+/** Setup xAxes and yAxes */
+anychart.core.ChartWithAxes.prototype.setupAxes = function() {
+  var axes = this.getThemeOption('xAxes');
+  var scales = /**@type {Object}*/(this.getThemeOption('scales'));
+  if (axes && axes.length) {
+    for (var i = 0; i < axes.length; i++) {
+      var axis = this.xAxis(i);
+      axis.scale(scales);
+    }
+  }
+  axes = this.getThemeOption('yAxes');
+  if (axes && axes.length) {
+    for (var i = 0; i < axes.length; i++) {
+      var axis = this.yAxis(i);
+      axis.scale(scales);
+    }
+  }
 };
 
 

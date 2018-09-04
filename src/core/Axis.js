@@ -386,7 +386,7 @@ anychart.core.Axis.prototype.titleInvalidated_ = function(event) {
 anychart.core.Axis.prototype.labels = function(opt_value) {
   if (!this.labels_) {
     this.labels_ = new anychart.core.ui.LabelsFactory();
-    //this.setupCreated('labels', this.labels_);
+    this.setupCreated('labels', this.labels_);
     this.labels_.setParentEventTarget(this);
     this.labels_.listenSignals(this.labelsInvalidated_, this);
     this.registerDisposable(this.labels_);
@@ -434,7 +434,7 @@ anychart.core.Axis.prototype.labelsInvalidated_ = function(event) {
 anychart.core.Axis.prototype.minorLabels = function(opt_value) {
   if (!this.minorLabels_) {
     this.minorLabels_ = new anychart.core.ui.LabelsFactory();
-    //this.setupCreated('minorLabels', this.minorLabels_);
+    this.setupCreated('minorLabels', this.minorLabels_);
     this.minorLabels_.setParentEventTarget(this);
     //this.isHorizontal() ? this.minorLabels_['rotation'](0) : this.minorLabels_['rotation'](-90);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
@@ -2419,13 +2419,13 @@ anychart.core.Axis.prototype.serialize = function() {
 anychart.core.Axis.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.Axis.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, this.SIMPLE_PROPS_DESCRIPTORS, config);
-  // if ('title' in config)
-  //   this.title().setupInternal(!!opt_default, config['title']);
+  if ('title' in config)
+    this.title().setupInternal(!!opt_default, config['title']);
 
   this.labels().setupInternal(!!opt_default, config['labels']);
   this.minorLabels().setupInternal(!!opt_default, config['minorLabels']);
-  // this.ticks(config['ticks']);
-  // this.minorTicks(config['minorTicks']);
+  this.ticks(config['ticks']);
+  this.minorTicks(config['minorTicks']);
 };
 
 
