@@ -1893,7 +1893,7 @@ anychart.core.ui.LabelsFactory.Label.prototype.iterateDrawingPlans_ = function(p
     var processedSetting = processor.call(this, state, stateSettings, i, opt_field, opt_handler);
     if (goog.isDef(processedSetting)) {
       if (goog.typeOf(processedSetting) == 'object') {
-        if (goog.isDefAndNotNull(result) && goog.typeOf(result) == 'object') {
+        if (goog.isDefAndNotNull(result)) {
           opt_invert ? goog.object.extend(result, processedSetting) : goog.object.extend(processedSetting, result);
         } else {
           result = goog.object.clone(processedSetting);
@@ -1958,6 +1958,8 @@ anychart.core.ui.LabelsFactory.Label.defaultSettingsProcessor_ = function(state,
   } else if (goog.typeOf(settings) == 'object') {
     if (field == 'adjustFontSize') {
       setting = anychart.core.ui.LabelsFactory.Label.normalizeAdjustFontSize(settings[field]);
+    } else if (field == 'padding' && goog.isNumber(settings[field])) {
+      setting = anychart.core.utils.Space.normalizeSpace(settings[field]);
     } else {
       setting = settings[field];
       if (field == 'enabled' && goog.isNull(setting))
