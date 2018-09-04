@@ -1331,7 +1331,14 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   // this.hovered_.setupInternal(!!opt_default, config['hovered']);
   // this.selected_.setupInternal(!!opt_default, config['selected']);
 
-  // todo: where should we cal this now?
+  console.log('Call setupStateSettings!');
+};
+
+
+/**
+ * Setup chart state settings after chart has been instantiated
+ */
+anychart.core.ChartWithSeries.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, this.normal_.themeSettings);

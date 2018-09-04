@@ -42,6 +42,8 @@ goog.require('anychart.core.drawers.Stick');
  */
 anychart.area = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.setupStateSettings();
+
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.AREA);
   chart.setType(anychart.enums.ChartTypes.AREA);
 
@@ -67,8 +69,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.AREA] = anychart.area;
  */
 anychart.bar = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('bar');
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.BAR);
   chart.setType(anychart.enums.ChartTypes.BAR);
@@ -103,6 +105,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.BAR] = anychart.bar;
  */
 anychart.box = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.BOX);
   chart.setType(anychart.enums.ChartTypes.BOX);
@@ -130,8 +133,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.BOX] = anychart.box;
  */
 anychart.column = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('column');
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.COLUMN);
   chart.setType(anychart.enums.ChartTypes.COLUMN);
@@ -158,6 +161,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN] = anychart.column;
  */
 anychart.hilo = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.setupStateSettings();
+
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.HILO);
   chart.setType(anychart.enums.ChartTypes.HILO);
 
@@ -190,6 +195,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.HILO] = anychart.hilo;
  */
 anychart.financial = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.setupStateSettings();
+
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.CANDLESTICK);
   chart.setType(anychart.enums.ChartTypes.FINANCIAL);
 
@@ -216,8 +223,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.FINANCIAL] = anychart.financial
 anychart.line = function(var_args) {
   anychart.performance.start('anychart.line()');
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('line');
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.LINE);
@@ -241,8 +248,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.LINE] = anychart.line;
  */
 anychart.verticalArea = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('verticalArea');
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.AREA);
   chart.setType(anychart.enums.ChartTypes.VERTICAL_AREA);
@@ -266,8 +273,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.VERTICAL_AREA] = anychart.verti
  */
 anychart.verticalLine = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('verticalLine');
+  chart.setupStateSettings();
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.VERTICAL_LINE);
