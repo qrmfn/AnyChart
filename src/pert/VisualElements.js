@@ -57,10 +57,15 @@ anychart.pertModule.VisualElements = function() {
     ['labels', 0, 0]
   ]);
   this.normal_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.NORMAL);
+  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
+
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.HOVER);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
+
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMap, anychart.PointState.SELECT);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, this.labelsAfterInitCallback);
 };
 goog.inherits(anychart.pertModule.VisualElements, anychart.core.Base);
@@ -457,7 +462,6 @@ anychart.pertModule.VisualElements.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.pertModule.VisualElements.prototype.setupByJSON = function(config, opt_default) {
   anychart.pertModule.VisualElements.base(this, 'setupByJSON', config, opt_default);
-
   anychart.core.settings.deserialize(this, anychart.pertModule.VisualElements.PROPERTY_DESCRIPTORS, config);
 
   this.normal_.setupInternal(!!opt_default, config);

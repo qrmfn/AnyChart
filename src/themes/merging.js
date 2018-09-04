@@ -773,6 +773,10 @@ anychart.themes.merging.mergingMap_ = (function() {
       ]
     },
     {
+      defaultObj: 'sunburst.normal',
+      targets: ['chart.leaves']
+    },
+    {
       defaultObj: 'defaultCrosshairLabel',
       targets: [
         [[
@@ -2106,9 +2110,7 @@ anychart.themes.DefaultThemes = {
   'titleSeparator': ['defaultSeparator'],
   'tooltip': ['defaultFontSettings', 'defaultTooltip'],
   'labelsFactory': ['defaultFontSettings', 'defaultLabelFactory'],
-  'cartesianBase': ['cartesianBase', 'cartesianBase.defaultSeriesSettings.base'/* <--? */],
-  'seriesBase': ['chart.defaultSeriesSettings'],
-  'seriesCartesian': ['cartesianBase.defaultSeriesSettings.base'],
+  'markersFactory': ['defaultMarkerFactory'],
   'axis': ['defaultAxis'],
   'map.axisSettings': ['map.axesSettings'],
   'scroller': ['defaultScroller'],

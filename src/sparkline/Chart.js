@@ -132,6 +132,7 @@ anychart.sparklineModule.Chart = function(opt_data, opt_csvSettings) {
   this.labelsInternal_['maxFontSize'](72);
   this.labelsInternal_.setParentEventTarget(this);
   this.labelsInternal_.setAutoZIndex(anychart.sparklineModule.Chart.ZINDEX_LABEL);
+  this.labelsInternal_.dropThemes(true);
 
   this.data(opt_data || null, opt_csvSettings);
 
@@ -2282,9 +2283,6 @@ anychart.sparklineModule.Chart.prototype.isNoData = function() {
 /** @inheritDoc */
 anychart.sparklineModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.sparklineModule.Chart.base(this, 'setupByJSON', config, opt_default);
-
-  if ('defaultLabelSettings' in config)
-    this.defaultLabelSettings(config['defaultLabelSettings']);
 
   if ('defaultMarkerSettings' in config)
     this.defaultMarkerSettings(config['defaultMarkerSettings']);

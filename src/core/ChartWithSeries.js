@@ -3,6 +3,7 @@ goog.provide('anychart.core.ChartWithSeries');
 goog.require('anychart.consistency');
 goog.require('anychart.core.IChart');
 goog.require('anychart.core.SeparateChart');
+goog.require('anychart.core.SeriesSettings');
 goog.require('anychart.core.StateSettings');
 goog.require('anychart.core.reporting');
 goog.require('anychart.core.ui.DataArea');
@@ -75,6 +76,7 @@ anychart.core.ChartWithSeries = function() {
     ['maxLabels', 0, 0]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.HOVER);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
 
   anychart.core.settings.createDescriptorsMeta(descriptorsMeta, [
     ['labels', 0, 0],
@@ -82,6 +84,7 @@ anychart.core.ChartWithSeries = function() {
     ['maxLabels', 0, 0]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.SELECT);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['defaultSeriesType', 0, 0],
@@ -175,14 +178,20 @@ anychart.core.ChartWithSeries.prototype.seriesConfig = (function() { return {}; 
 /**
  * Getter/setter for series default settings.
  * @param {Object=} opt_value Object with default series settings.
- * @return {Object}
+ * @return {anychart.core.SeriesSettings|anychart.core.ChartWithSeries}
  */
 anychart.core.ChartWithSeries.prototype.defaultSeriesSettings = function(opt_value) {
+  if (!this.defaultSeriesSettings_) {
+    this.defaultSeriesSettings_ = new anychart.core.SeriesSettings();
+    this.setupCreated('defaultSeriesSettings', this.defaultSeriesSettings_);
+  }
+
   if (goog.isDef(opt_value)) {
-    this.defaultSeriesSettings_ = opt_value;
+    this.defaultSeriesSettings_.themeSettings = opt_value;
     return this;
   }
-  return this.defaultSeriesSettings_ || {};
+
+  return this.defaultSeriesSettings_;
 };
 
 
@@ -1310,15 +1319,28 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   anychart.core.ChartWithSeries.base(this, 'setupByJSON', config, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.core.ChartWithSeries.PROPERTY_DESCRIPTORS, config, opt_default);
+
   this.palette(config['palette']);
   this.markerPalette(config['markerPalette']);
   this.hatchFillPalette(config['hatchFillPalette']);
   this.dataArea().setupInternal(!!opt_default, config['dataArea']);
 
-  this.normal_.setupInternal(!!opt_default, config);
-  this.normal_.setupInternal(!!opt_default, config['normal']);
-  this.hovered_.setupInternal(!!opt_default, config['hovered']);
-  this.selected_.setupInternal(!!opt_default, config['selected']);
+  // todo: uncomment when merge
+  // this.normal_.setupInternal(!!opt_default, config);
+  // this.normal_.setupInternal(!!opt_default, config['normal']);
+  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  // this.selected_.setupInternal(!!opt_default, config['selected']);
+
+  // todo: where should we cal this now?
+  this.normal_.addThemes(this.themeSettings);
+  this.setupCreated('normal', this.normal_);
+  this.normal_.setupInternal(true, this.normal_.themeSettings);
+
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+
+  this.setupCreated('selected', this.selected_);
+  this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
 
 
@@ -1348,8 +1370,8 @@ anychart.core.ChartWithSeries.prototype.disposeInternal = function() {
   this.removeAllSeries();
   this.resumeSignalsDispatching(false);
 
-  goog.disposeAll(this.palette_, this.markerPalette_, this.hatchFillPalette_, this.dataArea_);
-  this.palette_ = this.markerPalette_ = this.hatchFillPalette_ = this.dataArea_ = null;
+  goog.disposeAll(this.palette_, this.markerPalette_, this.hatchFillPalette_, this.dataArea_, this.defaultSeriesSettings_);
+  this.palette_ = this.markerPalette_ = this.hatchFillPalette_ = this.dataArea_ = this.defaultSeriesSettings_ = null;
 
   goog.disposeAll(this.normal_, this.hovered_, this.selected_);
 

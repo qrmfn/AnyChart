@@ -32,6 +32,9 @@ anychart.stockModule.CurrentPriceIndicator = function() {
   this.label_.zIndex(1);
   this.mainLabel_.markConsistent(anychart.ConsistencyState.ALL);
 
+  // todo: (chernetsky) Remove when class is refactored
+  this.mainLabel_.dropThemes();
+
   /**
    * @type {anychart.core.ui.LabelsFactory}
    * @private
@@ -40,6 +43,9 @@ anychart.stockModule.CurrentPriceIndicator = function() {
   this.risingLabel_.listenSignals(this.labelInvalidated_, this);
   this.risingLabel_.markConsistent(anychart.ConsistencyState.ALL);
 
+  // todo: (chernetsky) Remove when class is refactored
+  this.risingLabel_.dropThemes();
+
   /**
    * @type {anychart.core.ui.LabelsFactory}
    * @private
@@ -47,6 +53,9 @@ anychart.stockModule.CurrentPriceIndicator = function() {
   this.fallingLabel_ = new anychart.core.ui.LabelsFactory();
   this.fallingLabel_.listenSignals(this.labelInvalidated_, this);
   this.fallingLabel_.markConsistent(anychart.ConsistencyState.ALL);
+
+  // todo: (chernetsky) Remove when class is refactored
+  this.fallingLabel_.dropThemes();
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['value', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW],

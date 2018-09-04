@@ -26,7 +26,7 @@ goog.require('goog.array');
 anychart.core.ui.Background = function() {
   anychart.core.ui.Background.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['background']);
+  this.addDefaultThemes(anychart.themes.DefaultThemes['background']);
 
   delete this.themeSettings['enabled'];
 

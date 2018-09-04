@@ -43,6 +43,8 @@ anychart.core.ui.MarkersFactory = function(opt_isNonInteractive, opt_crispEdges)
   this.suspendSignalsDispatching();
   anychart.core.ui.MarkersFactory.base(this, 'constructor');
 
+  this.addDefaultThemes(anychart.themes.DefaultThemes['markersFactory']);
+
   delete this.themeSettings['enabled'];
 
   /**

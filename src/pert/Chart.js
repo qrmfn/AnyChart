@@ -22,6 +22,8 @@ goog.require('goog.array');
 anychart.pertModule.Chart = function() {
   anychart.pertModule.Chart.base(this, 'constructor');
 
+  this.addThemes('pert');
+
   /**
    * Data tree.
    * @private {(anychart.treeDataModule.Tree|anychart.treeDataModule.View)}

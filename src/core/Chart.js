@@ -602,7 +602,8 @@ anychart.core.Chart.prototype.label = function(opt_indexOrValue, opt_value) {
   if (!label) {
     label = this.createChartLabel();
     label.setParentEventTarget(this);
-    label.setup(this.defaultLabelSettings());
+    label.addThemes('defaultFontSettings', 'defaultLabelSettings');
+    
     this.chartLabels_[index] = label;
     this.registerDisposable(label);
     label.listenSignals(this.onLabelSignal_, this);
@@ -625,29 +626,6 @@ anychart.core.Chart.prototype.label = function(opt_indexOrValue, opt_value) {
  */
 anychart.core.Chart.prototype.onLabelSignal_ = function(event) {
   this.invalidate(anychart.ConsistencyState.CHART_LABELS, anychart.Signal.NEEDS_REDRAW);
-};
-
-
-/**
- * Getter/setter for chart label default settings.
- * @param {Object=} opt_value Object with label settings.
- * @return {Object}
- */
-anychart.core.Chart.prototype.defaultLabelSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultLabelSettings_ = opt_value;
-    return this;
-  }
-
-  if (!goog.isDef(this.defaultLabelSettings_)) {
-    var labelsSettings = new anychart.core.Base();
-    this.registerDisposable(labelsSettings);
-    labelsSettings.addThemes('defaultFontSettings', 'defaultLabelSettings');
-    // this.setupCreated('defaultLabelSettings', labelsSettings);
-    this.defaultLabelSettings_ = labelsSettings.themeSettings;
-  }
-
-  return this.defaultLabelSettings_ || {};
 };
 
 
@@ -2031,9 +2009,6 @@ anychart.core.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.autoRedraw_ = config['autoRedraw']; //don't use method this.autoRedraw() to avoid calling draw().
 
   anychart.core.Chart.base(this, 'setupByJSON', config, opt_default);
-
-  if ('defaultLabelSettings' in config)
-    this.defaultLabelSettings(config['defaultLabelSettings']);
 
   if ('title' in config)
     this.title().setupInternal(!!opt_default, config['title']);

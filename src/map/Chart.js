@@ -55,6 +55,8 @@ goog.require('goog.ui.KeyboardShortcutHandler');
 anychart.mapModule.Chart = function() {
   anychart.mapModule.Chart.base(this, 'constructor');
 
+  this.addThemes('map');
+
   /**
    * Custom crs passed to crs() method.
    * @type {Object|Function|anychart.enums.MapProjections|string}
