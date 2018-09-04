@@ -427,6 +427,7 @@ anychart.core.ui.Tooltip.prototype.padding = function(opt_spaceOrTopOrTopAndBott
     this.padding_.listenSignals(this.onPaddingSignal_, this);
     this.registerDisposable(this.padding_);
 
+    // todo: (chernetsky) Update this when tooltip is refactored
     if (this.themes_.length)
       this.setupCreated('padding', this.padding_);
   }
@@ -1269,6 +1270,7 @@ anychart.core.ui.Tooltip.prototype.contentInternal = function(opt_value) {
     this.content_.width('100%').height('100%');
     this.registerDisposable(this.content_);
 
+    // todo: (chernetsky) Update this when tooltip is refactored
     if (this.themes_.length)
       this.setupCreated('contentInternal', this.content_);
   }

@@ -668,7 +668,6 @@ anychart.core.StateSettings.prototype.background = function(opt_value) {
     this.setupCreated('background', this.background_);
     afterInitCallback.call(this.stateHolder, this.background_);
 
-    // todo: (chernetsky) Remove this when StateSettings is refactored or drop this comment!
     this.background_.dropThemes();
   }
 

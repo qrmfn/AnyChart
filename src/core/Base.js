@@ -522,6 +522,11 @@ anychart.core.Base = function() {
   this.themes_ = [];
 
 
+  /**
+   * Default themes that could be restored by restoreDefaultThemes() method
+   * @type {Array.<Object|string>}
+   * @private
+   */
   this.defaultThemes_ = [];
 
 
@@ -1220,9 +1225,9 @@ anychart.core.Base.prototype.addThemes = function(var_args) {
 
 
 /**
- * Reset themes queue and drops themeSettings
+ * Reset themes queue and drop themeSettings
  *
- * @param {boolean=} opt_dropDefaultThemes
+ * @param {boolean=} opt_dropDefaultThemes true if need to drow default themes
  */
 anychart.core.Base.prototype.dropThemes = function(opt_dropDefaultThemes) {
   this.themes_.length = 0;
@@ -1290,8 +1295,6 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
       }
     }
   }
-  // if (resultThemes.length == 0)
-  //   resultThemes.push(extendThemeName);
 
   return resultThemes;
 };
