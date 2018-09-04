@@ -132,6 +132,7 @@ anychart.sparklineModule.Chart = function(opt_data, opt_csvSettings) {
   this.labelsInternal_['maxFontSize'](72);
   this.labelsInternal_.setParentEventTarget(this);
   this.labelsInternal_.setAutoZIndex(anychart.sparklineModule.Chart.ZINDEX_LABEL);
+  this.labelsInternal_.dropThemes(true);
 
   this.data(opt_data || null, opt_csvSettings);
 
