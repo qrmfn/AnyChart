@@ -2482,6 +2482,7 @@ anychart.core.makeStandalone(anychart.standalones.axes.Linear, anychart.core.Axi
  */
 anychart.standalones.axes.linear = function() {
   var axis = new anychart.standalones.axes.Linear();
+  axis.addThemes('standalones.linearAxis');
   axis.setup(anychart.getFullTheme('standalones.linearAxis'));
   return axis;
 };
