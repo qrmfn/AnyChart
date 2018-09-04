@@ -1331,7 +1331,8 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   // this.hovered_.setupInternal(!!opt_default, config['hovered']);
   // this.selected_.setupInternal(!!opt_default, config['selected']);
 
-  console.log('Call setupStateSettings!');
+  if (goog.object.isEmpty(this.normal_.themeSettings))
+    console.log('Call setupStateSettings!');
 };
 
 
