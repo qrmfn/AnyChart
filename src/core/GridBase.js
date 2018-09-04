@@ -301,6 +301,23 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
 //endregion
 //region --- Palette
 /**
+ * Creates palette depending on passed value type.
+ * @param {(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|Object|Array.<string>)} palette
+ * @private
+ */
+anychart.core.GridBase.prototype.checkSetupPalette_ = function(palette) {
+  if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
+    this.setupPalette_(anychart.palettes.RangeColors);
+  } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
+    this.setupPalette_(anychart.palettes.DistinctColors);
+  } else if (goog.isObject(palette) && palette['type'] == 'range') {
+    this.setupPalette_(anychart.palettes.RangeColors);
+  } else if (goog.isObject(palette))
+    this.setupPalette_(anychart.palettes.DistinctColors);
+};
+
+
+/**
  * Getter/setter for palette.
  * @param {(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|Object|Array.<string>)=} opt_value .
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
@@ -308,17 +325,13 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
 anychart.core.GridBase.prototype.palette = function(opt_value) {
   if (!this.palette_ && (!this.parent_ || opt_value || this.themeSettings['palette'])) { // this is for map/elements/Grid.js to work properly
     var palette = this.themeSettings['palette'];
-    if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
-      this.setupPalette_(anychart.palettes.RangeColors, /** @type {anychart.palettes.RangeColors} */(palette));
-    } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
-      this.setupPalette_(anychart.palettes.DistinctColors, /** @type {anychart.palettes.DistinctColors} */(palette));
-    } else if (goog.isObject(palette) && palette['type'] == 'range') {
-      this.setupPalette_(anychart.palettes.RangeColors);
-    } else if (goog.isObject(palette))
-      this.setupPalette_(anychart.palettes.DistinctColors);
+    this.checkSetupPalette_(palette);
+    this.setupCreated('palette', this.palette_);
+    this.palette_.restoreDefaults(true);
   }
 
   if (goog.isDef(opt_value)) {
+    this.checkSetupPalette_(opt_value);
     this.palette_.setup(opt_value);
     return this;
   }
@@ -333,17 +346,11 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
  */
 anychart.core.GridBase.prototype.setupPalette_ = function(cls, opt_cloneFrom) {
   if (anychart.utils.instanceOf(this.palette_, cls)) {
-    if (opt_cloneFrom)
-      this.palette_.setup(opt_cloneFrom);
   } else {
     // we dispatch only if we replace existing palette.
     var doDispatch = !!this.palette_;
     goog.dispose(this.palette_);
     this.palette_ = new cls();
-    this.setupCreated('palette', this.palette_);
-    this.palette_.restoreDefaults(true);
-    if (opt_cloneFrom)
-      this.palette_.setup(opt_cloneFrom);
     this.palette_.listenSignals(this.paletteInvalidated_, this);
     this.registerDisposable(this.palette_);
     if (doDispatch)
