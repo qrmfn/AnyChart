@@ -220,7 +220,7 @@ anychart.mapModule.elements.GridSettings.prototype.checkSetupPalette_ = function
     this.setupPalette_(anychart.palettes.DistinctColors);
   } else if (goog.isObject(palette) && palette['type'] == 'range') {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(palette))
+  } else if (goog.isObject(palette) || this.palette_ == null)
     this.setupPalette_(anychart.palettes.DistinctColors);
 };
 
