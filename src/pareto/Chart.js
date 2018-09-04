@@ -18,6 +18,8 @@ goog.require('anychart.scales.Ordinal');
 anychart.paretoModule.Chart = function() {
   anychart.paretoModule.Chart.base(this, 'constructor');
 
+  this.addThemes('pareto');
+
   /**
    * Percent scale.
    * @type {anychart.scales.Linear}

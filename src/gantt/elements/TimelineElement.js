@@ -636,6 +636,8 @@ anychart.ganttModule.elements.TimelineElement.prototype.labels = function(opt_va
   if (!this.labels_) {
     this.labels_ = new anychart.core.ui.LabelsFactory();
     this.labels_.listenSignals(this.labelsInvalidated_, this);
+
+    this.labels_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {

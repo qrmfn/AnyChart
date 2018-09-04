@@ -38,6 +38,8 @@ goog.require('goog.color');
 anychart.cartesian3dModule.Chart = function() {
   anychart.cartesian3dModule.Chart.base(this, 'constructor');
 
+  this.addThemes('cartesian', 'cartesian3dBase', 'cartesian3d');
+
   /**
    * @type {number}
    * @private

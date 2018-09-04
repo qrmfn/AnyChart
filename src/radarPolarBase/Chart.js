@@ -741,7 +741,7 @@ anychart.radarPolarBaseModule.Chart.prototype.setupByJSONWithScales = function(c
     this.xAxis().scale(scalesInstances[json['scale']]);
 
   json = config['yAxis'];
-  this.yAxis(json);
+  this.yAxis().setupInternal(!!opt_default, json);
   if (goog.isObject(json) && 'scale' in json && json['scale'] > 1)
     this.yAxis().scale(scalesInstances[json['scale']]);
 };

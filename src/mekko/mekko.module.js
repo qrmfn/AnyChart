@@ -39,6 +39,7 @@ anychart.mekko = function(var_args) {
 anychart.mosaic = function(var_args) {
   var chart = new anychart.mekkoModule.Chart(true);
 
+  chart.addThemes('mosaic');
   chart.setType(anychart.enums.ChartTypes.MOSAIC);
   chart.setupInternal(true, anychart.getFullTheme('mosaic'));
 
@@ -59,6 +60,7 @@ anychart.mosaic = function(var_args) {
 anychart.barmekko = function(var_args) {
   var chart = new anychart.mekkoModule.Chart(false, true);
 
+  chart.addThemes('barmekko');
   chart.setType(anychart.enums.ChartTypes.BARMEKKO);
   chart.setupInternal(true, anychart.getFullTheme('barmekko'));
 
