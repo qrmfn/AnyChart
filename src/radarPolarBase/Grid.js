@@ -20,6 +20,7 @@ goog.require('anychart.scales');
 anychart.radarPolarBaseModule.Grid = function() {
   anychart.radarPolarBaseModule.Grid.base(this, 'constructor');
 
+  this.addThemes('defaultGridSettings');
   /**
    * @type {anychart.scales.Ordinal}
    * @private

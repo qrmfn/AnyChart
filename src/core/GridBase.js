@@ -323,7 +323,7 @@ anychart.core.GridBase.prototype.checkSetupPalette_ = function(palette) {
  * @return {!(anychart.palettes.RangeColors|anychart.palettes.DistinctColors|anychart.core.GridBase)} .
  */
 anychart.core.GridBase.prototype.palette = function(opt_value) {
-  if (!this.palette_ && (!this.parent_ || opt_value || this.themeSettings['palette'])) { // this is for map/elements/Grid.js to work properly
+  if (!this.palette_ && !opt_value && (!this.parent_ || this.themeSettings['palette'])) { // this is for map/elements/Grid.js to work properly
     var palette = this.themeSettings['palette'];
     this.checkSetupPalette_(palette);
     this.setupCreated('palette', this.palette_);
