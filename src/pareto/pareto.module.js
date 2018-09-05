@@ -29,7 +29,7 @@ anychart.pareto = function(opt_data) {
 
   chart.setupInternal(true, anychart.getFullTheme('pareto'));
   chart.data(opt_data);
-
+  chart.setupAxes();
   anychart.performance.end('anychart.pareto()');
   return chart;
 };
