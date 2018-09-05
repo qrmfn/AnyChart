@@ -1701,7 +1701,6 @@ anychart.core.ChartWithAxes.prototype.setupAxes = function() {
     }
   }
   theme = this.getThemeOption('yAxes');
-  console.log(theme);
   if (theme && theme.length) {
     for (var i = 0; i < theme.length; i++) {
       var axis = this.yAxis(i);
