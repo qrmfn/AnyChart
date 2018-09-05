@@ -24,7 +24,7 @@ anychart.scatter = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 
@@ -45,7 +45,7 @@ anychart.marker = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 
@@ -70,7 +70,7 @@ anychart.bubble = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['bubble'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 
@@ -90,7 +90,7 @@ anychart.quadrant = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
   }
-
+  chart.setupAxes();
   return chart;
 };
 

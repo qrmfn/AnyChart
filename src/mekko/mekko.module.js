@@ -25,6 +25,7 @@ anychart.mekko = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['mekko'](arguments[i]);
   }
+  chart.setupAxes();
   return chart;
 };
 
@@ -45,6 +46,7 @@ anychart.mosaic = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['mekko'](arguments[i]);
   }
+  chart.setupAxes();
   return chart;
 };
 
@@ -65,6 +67,7 @@ anychart.barmekko = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['mekko'](arguments[i]);
   }
+  chart.setupAxes();
   return chart;
 };
 

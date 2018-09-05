@@ -1696,6 +1696,7 @@ anychart.core.ChartWithAxes.prototype.setupAxes = function() {
   if (axes && axes.length) {
     for (var i = 0; i < axes.length; i++) {
       var axis = this.xAxis(i);
+      axis.addThemes(axes[i]);
       axis.scale(scales);
     }
   }
@@ -1703,6 +1704,7 @@ anychart.core.ChartWithAxes.prototype.setupAxes = function() {
   if (axes && axes.length) {
     for (var i = 0; i < axes.length; i++) {
       var axis = this.yAxis(i);
+      axis.addThemes(axes[i]);
       axis.scale(scales);
     }
   }

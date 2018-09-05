@@ -29,7 +29,7 @@ anychart.area3d = function(var_args) {
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.AREA_3D] = anychart.area3d;
@@ -54,7 +54,7 @@ anychart.bar3d = function(var_args) {
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.BAR_3D] = anychart.bar3d;
@@ -79,7 +79,7 @@ anychart.column3d = function(var_args) {
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN_3D] = anychart.column3d;
@@ -104,7 +104,7 @@ anychart.line3d = function(var_args) {
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
-
+  chart.setupAxes();
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.LINE_3D] = anychart.line3d;
