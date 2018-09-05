@@ -22,15 +22,19 @@ goog.require('goog.math.Coordinate');
 /**
  * Class for creation of sets of similar labels and management of such sets.
  * Any individual label can be changed after all labels are displayed.
+ *
+ * @param {boolean=} opt_skipDefaultThemes
+ *
  * @constructor
  * @extends {anychart.core.VisualBase}
  * @implements {anychart.core.IStandaloneBackend}
  */
-anychart.core.ui.LabelsFactory = function() {
+anychart.core.ui.LabelsFactory = function(opt_skipDefaultThemes) {
   this.suspendSignalsDispatching();
   anychart.core.ui.LabelsFactory.base(this, 'constructor');
 
-  this.addDefaultThemes(anychart.themes.DefaultThemes['labelsFactory']);
+  if (!opt_skipDefaultThemes)
+    this.addDefaultThemes(anychart.themes.DefaultThemes['labelsFactory']);
 
   delete this.themeSettings['enabled'];
 

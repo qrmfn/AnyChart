@@ -1233,7 +1233,7 @@ anychart.core.Base.prototype.dropThemes = function(opt_dropDefaultThemes) {
   this.themes_.length = 0;
   this.themeSettings = {};
   if (opt_dropDefaultThemes)
-    this.defaultThemes_ = {};
+    this.defaultThemes_.length = 0;
 };
 
 
