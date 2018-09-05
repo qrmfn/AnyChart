@@ -19,6 +19,7 @@ goog.require('anychart.mekkoModule.Drawer');
 anychart.mekko = function(var_args) {
   var chart = new anychart.mekkoModule.Chart(false);
 
+  chart.setupStateSettings();
   chart.setType(anychart.enums.ChartTypes.MEKKO);
   chart.setupInternal(true, anychart.getFullTheme('mekko'));
 
@@ -40,6 +41,7 @@ anychart.mosaic = function(var_args) {
   var chart = new anychart.mekkoModule.Chart(true);
 
   chart.addThemes('mosaic');
+  chart.setupStateSettings();
   chart.setType(anychart.enums.ChartTypes.MOSAIC);
   chart.setupInternal(true, anychart.getFullTheme('mosaic'));
 
@@ -61,6 +63,7 @@ anychart.barmekko = function(var_args) {
   var chart = new anychart.mekkoModule.Chart(false, true);
 
   chart.addThemes('barmekko');
+  chart.setupStateSettings();
   chart.setType(anychart.enums.ChartTypes.BARMEKKO);
   chart.setupInternal(true, anychart.getFullTheme('barmekko'));
 
