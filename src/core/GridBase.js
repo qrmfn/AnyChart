@@ -22,6 +22,7 @@ goog.require('anychart.scales');
 anychart.core.GridBase = function() {
   anychart.core.GridBase.base(this, 'constructor');
 
+  this.addThemes('defaultGridSettings');
   /**
    * @type {acgraph.vector.Path}
    * @protected
@@ -502,7 +503,7 @@ anychart.core.GridBase.prototype.setupScale = function(useAutoScale, opt_value) 
         scaleProperty.unlistenSignals(this.scaleInvalidated, this);
 
       scaleProperty = /** @type {anychart.stockModule.scales.Scatter|anychart.scales.Base} */(val);
-      useAutoScale ? this.autoScale_ = scaleProperty :this.scale_ = scaleProperty;
+      useAutoScale ? this.autoScale_ = scaleProperty : this.scale_ = scaleProperty;
 
       if (val && !stockScale)
         val.resumeSignalsDispatching(dispatch);
@@ -516,6 +517,7 @@ anychart.core.GridBase.prototype.setupScale = function(useAutoScale, opt_value) 
 
   return scaleProperty;
 };
+
 
 /**
  * Getter/setter for scale.
@@ -846,7 +848,7 @@ anychart.core.GridBase.prototype.applyZIndex = function() {
 };
 
 
-    /**
+/**
  * Drawing.
  * @return {anychart.core.GridBase} An instance of {@link anychart.core.GridBase} class for method chaining.
  */
