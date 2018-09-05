@@ -190,6 +190,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.HILO] = anychart.hilo;
  */
 anychart.financial = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('financial');
   chart.setupAxes();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.CANDLESTICK);
   chart.setType(anychart.enums.ChartTypes.FINANCIAL);
@@ -199,7 +200,6 @@ anychart.financial = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['candlestick'](arguments[i]);
   }
-
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.FINANCIAL] = anychart.financial;
@@ -217,7 +217,6 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.FINANCIAL] = anychart.financial
 anychart.line = function(var_args) {
   anychart.performance.start('anychart.line()');
   var chart = new anychart.cartesianModule.Chart();
-
   chart.addThemes('line');
   chart.setupAxes();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
@@ -228,7 +227,6 @@ anychart.line = function(var_args) {
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['line'](arguments[i]);
   }
-
   anychart.performance.end('anychart.line()');
   return chart;
 };

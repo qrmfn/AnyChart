@@ -538,7 +538,6 @@ anychart.core.ChartWithAxes.prototype.calculateGridsThickness = function() {
     var grid = /** @type {anychart.core.GridBase} */(grids[i]);
     if (grid && grid.enabled()) {
       var thickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(grid.getOption('stroke')));
-
       if (grid.isHorizontal()) {
         if (thickness > maxHorizontalThickness) {
           maxHorizontalThickness = thickness;
@@ -1195,8 +1194,10 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       if (axis && axis.enabled()) {
         axis.parentBounds(contentAreaBounds);
         orientation = axis.getOption('orientation');
-        axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(axis.getOption('stroke')));
-
+        var stroke = axis.getOption('stroke');
+        if (!goog.isObject(stroke))
+          stroke = acgraph.vector.normalizeStroke(stroke);
+        axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(stroke));
         if (orientation == anychart.enums.Orientation.TOP) {
           axis.padding()['top'](offsets[0]);
           axis.padding()['bottom'](0);
