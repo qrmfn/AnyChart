@@ -206,10 +206,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', pieFillNormalizer]
   ];
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL, descriptorsOverride);
-  // this.normal_.addThemes(this.getThemes());
-  this.setupCreated('normal', this.normal_);
-  var normalLabelsSettings = this.normal_.themeSettings['labels'];
-
   this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.pieModule.Chart} */ function(factory) {
     factory.listenSignals(this.labelsInvalidated_, this);
@@ -232,8 +228,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.addThemes({'labels': normalLabelsSettings});
-  this.setupCreated('hovered', this.hovered_);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   var selectedDescriptorsMeta = {};
@@ -247,8 +241,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.addThemes({'labels': normalLabelsSettings});
-  this.setupCreated('selected', this.selected_);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
 
   this.resumeSignalsDispatching(false);
@@ -4736,6 +4728,23 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   this.normal_.setupInternal(!!opt_default, config['normal']);
 
   this.hovered_.setupInternal(!!opt_default, config['hovered']);
+};
+
+
+/** @inheritDoc */
+anychart.pieModule.Chart.prototype.setupStateSettings = function() {
+  this.normal_.addThemes(this.themeSettings);
+  this.setupCreated('normal', this.normal_);
+  var normalLabelsSettings = this.normal_.themeSettings['labels'];
+  this.normal_.setupInternal(true, this.normal_.themeSettings);
+
+  // this.hovered_.addThemes({'labels': normalLabelsSettings});
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+
+  // this.selected_.addThemes({'labels': normalLabelsSettings});
+  this.setupCreated('selected', this.selected_);
+  this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
 
 

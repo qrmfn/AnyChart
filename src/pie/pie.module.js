@@ -21,7 +21,7 @@ goog.require('anychart.pieModule.Chart');
  */
 anychart.pie = function(opt_data, opt_csvSettings) {
   var chart = new anychart.pieModule.Chart(opt_data, opt_csvSettings);
-
+  chart.setupStateSettings();
   //chart.setupInternal(true, anychart.getFullTheme('pie'));
 
   return chart;
