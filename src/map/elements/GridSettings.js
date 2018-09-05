@@ -249,11 +249,11 @@ anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value)
 
 /**
  * @param {Function} cls Palette constructor.
- * @param {(anychart.palettes.RangeColors|anychart.palettes.DistinctColors)=} opt_cloneFrom Settings to clone from.
  * @private
  */
-anychart.mapModule.elements.GridSettings.prototype.setupPalette_ = function(cls, opt_cloneFrom) {
+anychart.mapModule.elements.GridSettings.prototype.setupPalette_ = function(cls) {
   if (anychart.utils.instanceOf(this.palette_, cls)) {
+    //do nothing
   } else {
     // we dispatch only if we replace existing palette.
     var doDispatch = !!this.palette_;
