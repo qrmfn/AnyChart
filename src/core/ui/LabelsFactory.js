@@ -30,7 +30,7 @@ anychart.core.ui.LabelsFactory = function() {
   this.suspendSignalsDispatching();
   anychart.core.ui.LabelsFactory.base(this, 'constructor');
 
-  this.addThemes(anychart.themes.DefaultThemes['labelsFactory']);
+  this.addDefaultThemes(anychart.themes.DefaultThemes['labelsFactory']);
 
   delete this.themeSettings['enabled'];
 
@@ -1958,6 +1958,8 @@ anychart.core.ui.LabelsFactory.Label.defaultSettingsProcessor_ = function(state,
   } else if (goog.typeOf(settings) == 'object') {
     if (field == 'adjustFontSize') {
       setting = anychart.core.ui.LabelsFactory.Label.normalizeAdjustFontSize(settings[field]);
+    } else if (field == 'padding' && goog.isNumber(settings[field])) {
+      setting = anychart.core.utils.Space.normalizeSpace(settings[field]);
     } else {
       setting = settings[field];
       if (field == 'enabled' && goog.isNull(setting))

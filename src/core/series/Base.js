@@ -49,8 +49,6 @@ goog.require('goog.math');
 anychart.core.series.Base = function(chart, plot, type, config) {
   anychart.core.series.Base.base(this, 'constructor');
 
-  //this.addThemes(anychart.themes.DefaultThemes['seriesBase']);
-
   /**
    * Chart reference.
    * @type {!anychart.core.IChart}
@@ -289,7 +287,10 @@ anychart.core.series.Base = function(chart, plot, type, config) {
     ['outlierMarkers', 0, 0]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.HOVER);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.SELECT);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   function markLabelsAllConsistent(factory) {
     anychart.core.StateSettings.DEFAULT_LABELS_AFTER_INIT_CALLBACK.call(this, factory);
     factory.markConsistent(anychart.ConsistencyState.ALL);
@@ -670,11 +671,27 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.suspendSignalsDispatching();
   this.recreateShapeManager();
 
-  this.themeSettings = this.plot.defaultSeriesSettings()[anychart.utils.toCamelCase(this.type_)] || {};
-  this.normal_.setupInternal(true, this.themeSettings);
-  this.normal_.setupInternal(true, this.themeSettings['normal']);
-  this.hovered_.setupInternal(true, this.themeSettings['hovered']);
-  this.selected_.setupInternal(true, this.themeSettings['selected']);
+  if (goog.isFunction(this.plot.defaultSeriesSettings().getThemesForType)) {
+    this.dropThemes();
+    var themes = this.plot.defaultSeriesSettings().getThemesForType(this.type_);
+    this.addThemes(themes);
+  } else
+    this.themeSettings = this.plot.defaultSeriesSettings()[anychart.utils.toCamelCase(this.type_)] || {};
+
+  this.normal_.dropThemes();
+  this.setupCreated('normal', this.normal_);
+  this.normal_.updateChildrenThemes();
+  this.normal_.setupInternal(true, this.normal_.themeSettings);
+
+  this.hovered_.dropThemes();
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.updateChildrenThemes();
+  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+
+  this.selected_.dropThemes();
+  this.setupCreated('selected', this.selected_);
+  this.selected_.updateChildrenThemes();
+  this.selected_.setupInternal(true, this.selected_.themeSettings);
 
   if (this.supportsOutliers()) {
     this.indexToMarkerIndexes_ = {};

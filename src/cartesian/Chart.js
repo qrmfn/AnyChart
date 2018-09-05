@@ -26,7 +26,7 @@ goog.require('anychart.enums');
 anychart.cartesianModule.Chart = function() {
   anychart.cartesianModule.Chart.base(this, 'constructor');
 
-  this.addThemes('cartesianBase', 'cartesian');
+  this.addThemes('cartesian');
 
   this.setType(anychart.enums.ChartTypes.CARTESIAN);
 };

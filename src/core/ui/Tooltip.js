@@ -427,7 +427,8 @@ anychart.core.ui.Tooltip.prototype.padding = function(opt_spaceOrTopOrTopAndBott
     this.padding_.listenSignals(this.onPaddingSignal_, this);
     this.registerDisposable(this.padding_);
 
-    if (this.getThemes().length)
+    // todo: (chernetsky) Update this when tooltip is refactored
+    if (this.themes_.length)
       this.setupCreated('padding', this.padding_);
   }
 
@@ -466,10 +467,10 @@ anychart.core.ui.Tooltip.prototype.background = function(opt_value) {
     this.registerDisposable(this.background_);
 
     // todo: (chernetsky) Update this when tooltip is refactored
-    if (this.getThemes().length)
+    if (this.themes_.length)
       this.setupCreated('background', this.background_);
     else
-      this.background_.themeSettings = {};
+      this.background_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
@@ -506,10 +507,10 @@ anychart.core.ui.Tooltip.prototype.title = function(opt_value) {
     this.registerDisposable(this.title_);
 
     // todo: (chernetsky) Update this when tooltip is refactored
-    if (this.getThemes().length)
+    if (this.themes_.length)
       this.setupCreated('title', this.title_);
     else
-      this.title_.themeSettings = {};
+      this.title_.dropThemes();
   }
 
   if (goog.isDef(opt_value)) {
@@ -549,7 +550,7 @@ anychart.core.ui.Tooltip.prototype.separator = function(opt_value) {
     this.registerDisposable(this.separator_);
 
     // todo: (chernetsky) Update this when tooltip is refactored
-    if (this.getThemes().length)
+    if (this.themes_.length)
       this.setupCreated('separator', this.separator_);
   }
 
@@ -1269,7 +1270,8 @@ anychart.core.ui.Tooltip.prototype.contentInternal = function(opt_value) {
     this.content_.width('100%').height('100%');
     this.registerDisposable(this.content_);
 
-    if (this.getThemes().length)
+    // todo: (chernetsky) Update this when tooltip is refactored
+    if (this.themes_.length)
       this.setupCreated('contentInternal', this.content_);
   }
 

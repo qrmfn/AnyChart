@@ -741,8 +741,11 @@ anychart.core.ui.LabelBase.prototype.draw = function() {
   }
 
   var background = this.getCreated('background');
+  if (background && !background.container())
+    background.container(this.rootLayer_);
+
   if (this.hasInvalidationState(anychart.ConsistencyState.CONTAINER)) {
-    if (background) background.container(this.rootLayer_).draw();
+    if (background) background.draw();
     if (this.textElement) this.textElement.parent(this.rootLayer_);
     this.rootLayer_.parent(container);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
