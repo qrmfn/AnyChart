@@ -16,8 +16,6 @@ goog.require('anychart.enums');
  */
 anychart.cartesianModule.Grid = function() {
   anychart.cartesianModule.Grid.base(this, 'constructor');
-
-  this.addThemes('defaultGridSettings');
 };
 goog.inherits(anychart.cartesianModule.Grid, anychart.core.GridBase);
 
