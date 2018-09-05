@@ -1333,9 +1333,7 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
 };
 
 
-/**
- * Setup chart state settings after chart has been instantiated
- */
+/** @inheritDoc */
 anychart.core.ChartWithSeries.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
