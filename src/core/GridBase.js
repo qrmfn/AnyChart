@@ -327,7 +327,7 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
     var palette = this.themeSettings['palette'];
     this.checkSetupPalette_(palette);
     this.setupCreated('palette', this.palette_);
-    this.palette_.restoreDefaults(true);
+    this.palette_.restoreDefaults(false);
   }
 
   if (goog.isDef(opt_value)) {
