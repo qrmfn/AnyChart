@@ -24,7 +24,7 @@ goog.require('anychart.paretoModule.Chart');
 anychart.pareto = function(opt_data) {
   anychart.performance.start('anychart.pareto()');
   var chart = new anychart.paretoModule.Chart();
-
+  chart.setupStateSettings();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.COLUMN);
 
   chart.setupInternal(true, anychart.getFullTheme('pareto'));

@@ -19,7 +19,7 @@ goog.require('anychart.waterfallModule.Drawer');
  */
 anychart.waterfall = function(var_args) {
   var chart = new anychart.waterfallModule.Chart();
-
+  chart.setupStateSettings();
   chart.setupInternal(true, anychart.getFullTheme('waterfall'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
