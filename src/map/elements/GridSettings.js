@@ -17,7 +17,7 @@ goog.require('anychart.mapModule.elements.Grid');
 anychart.mapModule.elements.GridSettings = function(map) {
   anychart.mapModule.elements.GridSettings.base(this, 'constructor');
 
-  this.addThemes('defaultGridSettings', 'map.gridsSettings');
+  this.addThemes('map.gridsSettings');
 
   /**
    * Parent title.
@@ -298,6 +298,7 @@ anychart.mapModule.elements.GridSettings.prototype.getItems = function() {
 anychart.mapModule.elements.GridSettings.prototype.vertical = function(opt_value) {
   if (!this.verticalGrid_) {
     this.verticalGrid_ = new anychart.mapModule.elements.Grid();
+    this.verticalGrid_.dropThemes();
     this.verticalGrid_.setDefaultLayout(anychart.enums.Layout.VERTICAL);
     this.verticalGrid_.parent(this);
     var zIndex = this.getOption('zIndex') + this.grids_.length * anychart.mapModule.Chart.ZINDEX_INCREMENT_MULTIPLIER;
@@ -323,6 +324,7 @@ anychart.mapModule.elements.GridSettings.prototype.vertical = function(opt_value
 anychart.mapModule.elements.GridSettings.prototype.horizontal = function(opt_value) {
   if (!this.horizontalGrid_) {
     this.horizontalGrid_ = new anychart.mapModule.elements.Grid();
+    this.horizontalGrid_.dropThemes();
     this.horizontalGrid_.setDefaultLayout(anychart.enums.Layout.HORIZONTAL);
     this.horizontalGrid_.parent(this);
     var zIndex = this.getOption('zIndex') + this.grids_.length * anychart.mapModule.Chart.ZINDEX_INCREMENT_MULTIPLIER;
