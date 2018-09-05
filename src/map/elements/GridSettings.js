@@ -239,7 +239,7 @@ anychart.mapModule.elements.GridSettings.prototype.palette = function(opt_value)
   }
 
   if (goog.isDef(opt_value)) {
-    this.checkSetupPalette_(palette);
+    this.checkSetupPalette_(opt_value);
     this.palette_.setup(opt_value);
     return this;
   }
