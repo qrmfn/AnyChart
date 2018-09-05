@@ -1330,9 +1330,6 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   // this.normal_.setupInternal(!!opt_default, config['normal']);
   // this.hovered_.setupInternal(!!opt_default, config['hovered']);
   // this.selected_.setupInternal(!!opt_default, config['selected']);
-
-  if (goog.object.isEmpty(this.normal_.themeSettings))
-    console.log('Call setupStateSettings!');
 };
 
 
