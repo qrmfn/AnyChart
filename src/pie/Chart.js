@@ -4738,11 +4738,11 @@ anychart.pieModule.Chart.prototype.setupStateSettings = function() {
   var normalLabelsSettings = this.normal_.themeSettings['labels'];
   this.normal_.setupInternal(true, this.normal_.themeSettings);
 
-  // this.hovered_.addThemes({'labels': normalLabelsSettings});
+  this.hovered_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('hovered', this.hovered_);
   this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
-  // this.selected_.addThemes({'labels': normalLabelsSettings});
+  this.selected_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('selected', this.selected_);
   this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
