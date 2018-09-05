@@ -76,6 +76,7 @@ anychart.column3d = function(var_args) {
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.COLUMN);
   chart.setType(anychart.enums.ChartTypes.COLUMN_3D);
   chart.setupInternal(true, anychart.getFullTheme('column3d'));
+  chart.setupGridsWithScales();
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
