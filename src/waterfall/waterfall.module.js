@@ -19,13 +19,13 @@ goog.require('anychart.waterfallModule.Drawer');
  */
 anychart.waterfall = function(var_args) {
   var chart = new anychart.waterfallModule.Chart();
-
+  chart.setupAxes();
   chart.setupInternal(true, anychart.getFullTheme('waterfall'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['waterfall'](arguments[i]);
   }
-  chart.setupAxes();
+
   return chart;
 };
 anychart.chartTypesMap[anychart.enums.ChartTypes.WATERFALL] = anychart.waterfall;

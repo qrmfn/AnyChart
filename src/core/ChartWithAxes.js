@@ -1691,20 +1691,21 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
 /** Setup xAxes and yAxes */
 anychart.core.ChartWithAxes.prototype.setupAxes = function() {
-  var axes = this.getThemeOption('xAxes');
+  var theme = this.getThemeOption('xAxes');
   var scales = /**@type {Object}*/(this.getThemeOption('scales'));
-  if (axes && axes.length) {
-    for (var i = 0; i < axes.length; i++) {
+  if (theme && theme.length) {
+    for (var i = 0; i < theme.length; i++) {
       var axis = this.xAxis(i);
-      axis.addThemes(axes[i]);
+      axis.addThemes(theme[i]);
       axis.scale(scales);
     }
   }
-  axes = this.getThemeOption('yAxes');
-  if (axes && axes.length) {
-    for (var i = 0; i < axes.length; i++) {
+  theme = this.getThemeOption('yAxes');
+  console.log(theme);
+  if (theme && theme.length) {
+    for (var i = 0; i < theme.length; i++) {
       var axis = this.yAxis(i);
-      axis.addThemes(axes[i]);
+      axis.addThemes(theme[i]);
       axis.scale(scales);
     }
   }
