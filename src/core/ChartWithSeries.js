@@ -1330,8 +1330,11 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   // this.normal_.setupInternal(!!opt_default, config['normal']);
   // this.hovered_.setupInternal(!!opt_default, config['hovered']);
   // this.selected_.setupInternal(!!opt_default, config['selected']);
+};
 
-  // todo: where should we cal this now?
+
+/** @inheritDoc */
+anychart.core.ChartWithSeries.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, this.normal_.themeSettings);
