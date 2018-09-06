@@ -228,7 +228,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   var selectedDescriptorsMeta = {};
   anychart.core.settings.createDescriptorsMeta(selectedDescriptorsMeta, [
@@ -241,7 +241,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   this.resumeSignalsDispatching(false);
 };
@@ -4735,14 +4735,11 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 anychart.pieModule.Chart.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
-  var normalLabelsSettings = this.normal_.themeSettings['labels'];
   this.normal_.setupInternal(true, this.normal_.themeSettings);
 
-  this.hovered_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('hovered', this.hovered_);
   this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
-  this.selected_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('selected', this.selected_);
   this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
