@@ -22,8 +22,8 @@ goog.require('anychart.cartesian3dModule.drawers.Column');
 anychart.area3d = function(var_args) {
   var chart = new anychart.cartesian3dModule.Chart();
 
-  chart.setupStateSettings();
   chart.addThemes('area3d');
+  chart.setupStateSettings();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.AREA);
   chart.setType(anychart.enums.ChartTypes.AREA_3D);
   chart.setupInternal(true, anychart.getFullTheme('area3d'));
@@ -48,8 +48,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.AREA_3D] = anychart.area3d;
 anychart.bar3d = function(var_args) {
   var chart = new anychart.cartesian3dModule.Chart();
 
-  chart.setupStateSettings();
   chart.addThemes('bar3d');
+  chart.setupStateSettings();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.BAR);
   chart.setType(anychart.enums.ChartTypes.BAR_3D);
   chart.setupInternal(true, anychart.getFullTheme('bar3d'));
@@ -74,8 +74,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.BAR_3D] = anychart.bar3d;
 anychart.column3d = function(var_args) {
   var chart = new anychart.cartesian3dModule.Chart();
 
-  chart.setupStateSettings();
   chart.addThemes('column3d');
+  chart.setupStateSettings();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.COLUMN);
   chart.setType(anychart.enums.ChartTypes.COLUMN_3D);
   chart.setupInternal(true, anychart.getFullTheme('column3d'));
@@ -100,8 +100,8 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN_3D] = anychart.column3d;
 anychart.line3d = function(var_args) {
   var chart = new anychart.cartesian3dModule.Chart();
 
-  chart.setupStateSettings();
   chart.addThemes('line3d');
+  chart.setupStateSettings();
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.LINE_3D);
   chart.setupInternal(true, anychart.getFullTheme('line3d'));
