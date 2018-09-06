@@ -264,6 +264,8 @@ anychart.core.axisMarkers.Range.prototype.setupByJSON = function(config, opt_def
  */
 anychart.standalones.axisMarkers.Range = function() {
   anychart.standalones.axisMarkers.Range.base(this, 'constructor');
+
+  this.addThemes('rangeAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Range, anychart.core.axisMarkers.Range);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Range, anychart.core.axisMarkers.Range);
@@ -275,7 +277,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Range, anychart.co
  */
 anychart.standalones.axisMarkers.range = function() {
   var res = new anychart.standalones.axisMarkers.Range();
-  res.setup(anychart.getFullTheme('standalones.rangeAxisMarker'));
+  //res.setup(anychart.getFullTheme('standalones.rangeAxisMarker'));
   return res;
 };
 

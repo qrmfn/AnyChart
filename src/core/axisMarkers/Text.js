@@ -92,6 +92,8 @@ anychart.core.axisMarkers.Text.prototype.setupByJSON = function(config, opt_defa
  */
 anychart.standalones.axisMarkers.Text = function() {
   anychart.standalones.axisMarkers.Text.base(this, 'constructor');
+
+  this.addThemes('textAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Text, anychart.core.axisMarkers.Text);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Text, anychart.core.axisMarkers.Text);
@@ -103,7 +105,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Text, anychart.cor
  */
 anychart.standalones.axisMarkers.text = function() {
   var text = new anychart.standalones.axisMarkers.Text();
-  text.setup(anychart.getFullTheme('standalones.textAxisMarker'));
+  //text.setup(anychart.getFullTheme('standalones.textAxisMarker'));
   return text;
 };
 

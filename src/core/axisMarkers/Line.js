@@ -209,6 +209,8 @@ anychart.core.axisMarkers.Line.prototype.setupByJSON = function(config, opt_defa
  */
 anychart.standalones.axisMarkers.Line = function() {
   anychart.standalones.axisMarkers.Line.base(this, 'constructor');
+
+  this.addThemes('lineAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Line, anychart.core.axisMarkers.Line);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Line, anychart.core.axisMarkers.Line);
@@ -220,7 +222,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Line, anychart.cor
  */
 anychart.standalones.axisMarkers.line = function() {
   var line = new anychart.standalones.axisMarkers.Line();
-  line.setup(anychart.getFullTheme('standalones.lineAxisMarker'));
+  //line.setup(anychart.getFullTheme('standalones.lineAxisMarker'));
   return line;
 };
 
