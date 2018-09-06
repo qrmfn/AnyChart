@@ -755,7 +755,7 @@ anychart.core.series.Base.prototype.applyDefaultsToElements = function(defaults,
     this.zIndex(defaults['zIndex']);
   }
 
-  this.a11y().setupInternal(!!opt_default, defaults['a11y'] || this.plot.defaultSeriesSettings()['a11y']);
+  this.a11y().setupInternal(!!opt_default, defaults['a11y'] || this.themeSettings['a11y']);
 };
 
 
