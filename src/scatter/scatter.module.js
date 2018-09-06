@@ -88,7 +88,7 @@ anychart.quadrant = function(var_args) {
   var chart = new anychart.scatterModule.Chart();
   chart.addThemes('quadrant');
   chart.setupAxes();
-  //chart.setupInternal(true, anychart.getFullTheme('quadrant'));
+  chart.setupInternal(true, anychart.getFullTheme('quadrant'));
   chart.setType(anychart.enums.ChartTypes.QUADRANT);
 
   for (var i = 0, count = arguments.length; i < count; i++) {
