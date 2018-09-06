@@ -214,14 +214,11 @@ anychart.core.settings.populate(anychart.mapModule.elements.GridSettings, anycha
  * @private
  */
 anychart.mapModule.elements.GridSettings.prototype.checkSetupPalette_ = function(palette) {
-  if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
+  if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors) || (goog.isObject(palette) && palette['type'] == 'range')) {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
+  } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors) || goog.isObject(palette) || this.palette_ == null) {
     this.setupPalette_(anychart.palettes.DistinctColors);
-  } else if (goog.isObject(palette) && palette['type'] == 'range') {
-    this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(palette) || this.palette_ == null)
-    this.setupPalette_(anychart.palettes.DistinctColors);
+  }
 };
 
 

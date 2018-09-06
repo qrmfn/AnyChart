@@ -307,14 +307,11 @@ anychart.core.GridBase.prototype.zIndex = function(opt_value) {
  * @private
  */
 anychart.core.GridBase.prototype.checkSetupPalette_ = function(palette) {
-  if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors)) {
+  if (anychart.utils.instanceOf(palette, anychart.palettes.RangeColors) || (goog.isObject(palette) && palette['type'] == 'range')) {
     this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors)) {
+  } else if (anychart.utils.instanceOf(palette, anychart.palettes.DistinctColors) || goog.isObject(palette) || this.palette_ == null) {
     this.setupPalette_(anychart.palettes.DistinctColors);
-  } else if (goog.isObject(palette) && palette['type'] == 'range') {
-    this.setupPalette_(anychart.palettes.RangeColors);
-  } else if (goog.isObject(palette) || this.palette_ == null)
-    this.setupPalette_(anychart.palettes.DistinctColors);
+  }
 };
 
 
@@ -342,10 +339,9 @@ anychart.core.GridBase.prototype.palette = function(opt_value) {
 
 /**
  * @param {Function} cls Palette constructor.
- * @param {(anychart.palettes.RangeColors|anychart.palettes.DistinctColors)=} opt_cloneFrom Settings to clone from.
  * @private
  */
-anychart.core.GridBase.prototype.setupPalette_ = function(cls, opt_cloneFrom) {
+anychart.core.GridBase.prototype.setupPalette_ = function(cls) {
   if (anychart.utils.instanceOf(this.palette_, cls)) {
     //do nothing
   } else {
