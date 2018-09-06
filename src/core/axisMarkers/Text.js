@@ -13,7 +13,8 @@ goog.require('anychart.core.axisMarkers.TextBase');
 anychart.core.axisMarkers.Text = function() {
   anychart.core.axisMarkers.Text.base(this, 'constructor');
 
-  this.addThemes('defaultTextMarkerSettings');
+  // because fontSize should be 13
+  this.addThemes('defaultTextMarkerSettings', 'defaultFontSettings');
 };
 goog.inherits(anychart.core.axisMarkers.Text, anychart.core.axisMarkers.TextBase);
 
@@ -106,7 +107,6 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Text, anychart.cor
 anychart.standalones.axisMarkers.text = function() {
   var text = new anychart.standalones.axisMarkers.Text();
   //text.setup(anychart.getFullTheme('standalones.textAxisMarker'));
-  text.addThemes('defaultFontSettings');
   return text;
 };
 
