@@ -1194,7 +1194,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       if (axis && axis.enabled()) {
         axis.parentBounds(contentAreaBounds);
         orientation = axis.getOption('orientation');
-        var stroke = axis.getOption('stroke');
+        var stroke = /**@type {acgraph.vector.Stroke|string}*/(axis.getOption('stroke'));
         if (!goog.isObject(stroke))
           stroke = acgraph.vector.normalizeStroke(stroke);
         axisStrokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(stroke));
@@ -1692,24 +1692,9 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
 /** Setup xAxes and yAxes */
 anychart.core.ChartWithAxes.prototype.setupAxes = function() {
-  var theme = this.getThemeOption('xAxes');
-  var scales = /**@type {Object}*/(this.getThemeOption('scales'));
-  if (theme && theme.length) {
-    for (var i = 0; i < theme.length; i++) {
-      var axis = this.xAxis(i);
-      axis.addThemes(theme[i]);
-      axis.scale(scales);
-    }
-  }
-  theme = this.getThemeOption('yAxes');
-  if (theme && theme.length) {
-    for (var i = 0; i < theme.length; i++) {
-      var axis = this.yAxis(i);
-      axis.addThemes(theme[i]);
-      axis.scale(scales);
-    }
-  }
-  this.invalidate(this.SUPPORTED_CONSISTENCY_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+  var scalesInstances = /**@type {Object}*/(this.getScaleInstance());
+  this.setupElementsWithScales(this.getThemeOption('xAxes'), this.xAxis, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('yAxes'), this.yAxis, scalesInstances);
 };
 
 
