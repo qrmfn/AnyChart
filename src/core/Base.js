@@ -1322,7 +1322,11 @@ anychart.core.Base.prototype.flattenThemes = function() {
             theme = theme[part];
           }
         }
-        if (goog.isNumber(theme) && (part == 'padding' || part == 'margin'))
+        if (goog.isBoolean(theme)) {
+          theme = {
+            'enabled': theme
+          };
+        } else if (goog.isNumber(theme) && (part == 'padding' || part == 'margin'))
           theme = anychart.core.utils.Space.normalizeSpace(theme);
 
         if (theme)

@@ -1709,6 +1709,7 @@ anychart.core.ChartWithAxes.prototype.setupAxes = function() {
       axis.scale(scales);
     }
   }
+  this.invalidate(this.SUPPORTED_CONSISTENCY_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
 };
 
 

@@ -28,9 +28,6 @@ goog.require('anychart.core.drawers.Stick');
 
 
 
-
-
-
 /**
  * Default area chart.<br/>
  * <b>Note:</b> Contains predefined settings for axes and grids.
