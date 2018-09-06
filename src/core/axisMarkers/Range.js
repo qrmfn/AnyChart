@@ -14,6 +14,8 @@ goog.require('anychart.core.axisMarkers.PathBase');
 anychart.core.axisMarkers.Range = function() {
   anychart.core.axisMarkers.Range.base(this, 'constructor');
 
+  this.addThemes('defaultRangeMarkerSettings');
+
   /**
    * @type {anychart.core.axisMarkers.PathBase.Range}
    */

@@ -754,7 +754,7 @@ anychart.core.ChartWithAxes.prototype.lineMarker = function(opt_indexOrValue, op
   if (!lineMarker) {
     lineMarker = this.createLineMarkerInstance();
     lineMarker.setChart(this);
-    lineMarker.setup(this.defaultLineMarkerSettings());
+    //lineMarker.setup(this.defaultLineMarkerSettings());
     lineMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.lineAxesMarkers_[index] = lineMarker;
     lineMarker.listenSignals(this.onMarkersSignal, this);
@@ -800,7 +800,7 @@ anychart.core.ChartWithAxes.prototype.rangeMarker = function(opt_indexOrValue, o
   if (!rangeMarker) {
     rangeMarker = this.createRangeMarkerInstance();
     rangeMarker.setChart(this);
-    rangeMarker.setup(this.defaultRangeMarkerSettings());
+    //rangeMarker.setup(this.defaultRangeMarkerSettings());
     rangeMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.rangeAxesMarkers_[index] = rangeMarker;
     rangeMarker.listenSignals(this.onMarkersSignal, this);
@@ -846,7 +846,7 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
   if (!textMarker) {
     textMarker = this.createTextMarkerInstance();
     textMarker.setChart(this);
-    textMarker.setup(this.defaultTextMarkerSettings());
+    //textMarker.setup(this.defaultTextMarkerSettings());
     textMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.textAxesMarkers_[index] = textMarker;
     textMarker.listenSignals(this.onMarkersSignal, this);
@@ -1665,9 +1665,9 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.defaultYAxisSettings(config['defaultYAxisSettings']);
   this.defaultGridSettings(config['defaultGridSettings']);
   this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
-  this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
-  this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
-  this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
+  //this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
+  //this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
+  //this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
   this.defaultAnnotationSettings(config['defaultAnnotationSettings']);
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
@@ -1678,9 +1678,9 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
   this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
   this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
-  this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
-  this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
-  this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+  //this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
+  //this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
+  //this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
 
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);

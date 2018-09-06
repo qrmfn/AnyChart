@@ -17,6 +17,8 @@ anychart.core.axisMarkers.Line = function() {
 
   this.val = 0;
 
+  this.addThemes('defaultLineMarkerSettings');
+
   /**
    * @type {?acgraph.vector.Stroke}
    * @private

@@ -13,6 +13,7 @@ goog.require('anychart.core.axisMarkers.TextBase');
 anychart.core.axisMarkers.Text = function() {
   anychart.core.axisMarkers.Text.base(this, 'constructor');
 
+  this.addThemes('defaultTextMarkerSettings');
 };
 goog.inherits(anychart.core.axisMarkers.Text, anychart.core.axisMarkers.TextBase);
 
