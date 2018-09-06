@@ -19,11 +19,6 @@ anychart.core.axisMarkers.Line = function() {
 
   this.addThemes('defaultLineMarkerSettings');
 
-  /**
-   * @type {?acgraph.vector.Stroke}
-   * @private
-   */
-  this.stroke_;
 
   /**
    * @type {anychart.enums.Layout}
@@ -36,8 +31,28 @@ anychart.core.axisMarkers.Line = function() {
    * @private
    */
   this.defaultLayout_ = anychart.enums.Layout.HORIZONTAL;
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    //['layout', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    ['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
+  ]);
 };
 goog.inherits(anychart.core.axisMarkers.Line, anychart.core.axisMarkers.PathBase);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+  anychart.core.settings.createDescriptors(map, [
+    //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'layout', anychart.enum.normalizeLayout],
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer]
+  ]);
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.axisMarkers.Line, anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS);
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,30 +131,6 @@ anychart.core.axisMarkers.Line.prototype.scale = function(opt_value) {
 //  Settings.
 //----------------------------------------------------------------------------------------------------------------------
 /**
- * Get/set line marker stroke.
- * @param {(acgraph.vector.Stroke|acgraph.vector.ColoredFill|string|null)=} opt_strokeOrFill Fill settings
- *    or stroke settings.
- * @param {number=} opt_thickness [1] Line thickness.
- * @param {string=} opt_dashpattern Controls the pattern of dashes and gaps used to stroke paths.
- * @param {acgraph.vector.StrokeLineJoin=} opt_lineJoin Line joint style.
- * @param {acgraph.vector.StrokeLineCap=} opt_lineCap Line cap style.
- * @return {(anychart.core.axisMarkers.Line|acgraph.vector.Stroke)} LineMarker line settings or LineMarker instance for method chaining.
- */
-anychart.core.axisMarkers.Line.prototype.stroke = function(opt_strokeOrFill, opt_thickness, opt_dashpattern, opt_lineJoin, opt_lineCap) {
-  if (goog.isDef(opt_strokeOrFill)) {
-    var stroke = acgraph.vector.normalizeStroke.apply(null, arguments);
-    if (this.stroke_ != stroke) {
-      this.stroke_ = stroke;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  } else {
-    return this.stroke_;
-  }
-};
-
-
-/**
  * Get/set value.
  * @param {number=} opt_newValue LineMarker value settings.
  * @return {number|anychart.core.axisMarkers.Line} - LineMarker value settings or LineMarker instance for method chaining.
@@ -164,7 +155,7 @@ anychart.core.axisMarkers.Line.prototype.boundsInvalidated = function() {
  * @inheritDoc
  */
 anychart.core.axisMarkers.Line.prototype.appearanceInvalidated = function() {
-  this.markerElement().stroke(/** @type {acgraph.vector.Stroke} */(this.stroke_));
+  this.markerElement().stroke(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
 };
 
 
@@ -173,7 +164,7 @@ anychart.core.axisMarkers.Line.prototype.appearanceInvalidated = function() {
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.axisMarkers.Line.prototype.disposeInternal = function() {
-  this.stroke_ = null;
+  this.setOption('stroke', null);
   anychart.core.axisMarkers.Line.base(this, 'disposeInternal');
 };
 
@@ -181,8 +172,8 @@ anychart.core.axisMarkers.Line.prototype.disposeInternal = function() {
 /** @inheritDoc */
 anychart.core.axisMarkers.Line.prototype.serialize = function() {
   var json = anychart.core.axisMarkers.Line.base(this, 'serialize');
+  anychart.core.settings.serialize(this, anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS, json);
   json['value'] = this.value();
-  json['stroke'] = anychart.color.serialize(/** @type {acgraph.vector.Stroke} */(this.stroke()));
   if (this.layout_) json['layout'] = this.layout_;
   return json;
 };
@@ -191,8 +182,8 @@ anychart.core.axisMarkers.Line.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.core.axisMarkers.Line.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.axisMarkers.Line.base(this, 'setupByJSON', config, opt_default);
+  anychart.core.settings.deserialize(this, anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS, config);
   this.value(config['value']);
-  this.stroke(config['stroke']);
 };
 
 
@@ -235,7 +226,8 @@ anychart.standalones.axisMarkers.line = function() {
   proto['scale'] = proto.scale;
   proto['axis'] = proto.axis;
   proto['layout'] = proto.layout;
-  proto['stroke'] = proto.stroke;
+  // auto generated
+  //proto['stroke'] = proto.stroke;
   proto['isHorizontal'] = proto.isHorizontal;
 
   proto = anychart.standalones.axisMarkers.Line.prototype;
