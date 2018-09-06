@@ -1662,7 +1662,7 @@ anychart.core.ChartWithAxes.prototype.setupByJSON = function(config, opt_default
  * Setups scales for grids.
  */
 anychart.core.ChartWithAxes.prototype.setupGridsWithScales = function() {
-  var scalesInstances = goog.array.concat(this.xScales, this.yScales);
+  var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
   this.setupElementsWithScales(this.getThemeOption('xGrids'), this.xGrid, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('yGrids'), this.yGrid, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('xMinorGrids'), this.xMinorGrid, scalesInstances);
