@@ -378,6 +378,7 @@ anychart.core.ChartWithSeries.generateSeriesConstructors(anychart.cartesian3dMod
  */
 anychart.cartesian3d = function() {
   var chart = new anychart.cartesian3dModule.Chart();
+  chart.setupStateSettings();
   chart.setupInternal(true, anychart.getFullTheme('cartesian3d'));
   return chart;
 };
