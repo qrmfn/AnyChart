@@ -223,7 +223,6 @@ anychart.line = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
   chart.addThemes('line');
 
-
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.LINE);
   chart.setupAxes();
