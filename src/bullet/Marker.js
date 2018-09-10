@@ -67,7 +67,7 @@ anychart.bulletModule.Marker = function() {
    * @type {acgraph.vector.Fill}
    * @private
    */
-  this.defaultFill_ = 'black';
+  this.defaultFill_;// = 'black';
 
   /**
    * Stroke of bullet marker.
@@ -80,14 +80,14 @@ anychart.bulletModule.Marker = function() {
    * @type {acgraph.vector.Stroke}
    * @private
    */
-  this.defaultStroke_ = 'black';
+  this.defaultStroke_;// = 'black';
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
-    ['type', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    //['type', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['value', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['layout', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['fill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
-    ['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
+    //['fill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
+    //['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
 };
 goog.inherits(anychart.bulletModule.Marker, anychart.core.VisualBase);
@@ -100,11 +100,11 @@ anychart.bulletModule.Marker.PROTOTYPE_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
   anychart.core.settings.createDescriptors(map, [
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'type', anychart.enums.normalizeBulletMarkerType],
+    //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'type', anychart.enums.normalizeBulletMarkerType],
     [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'value', anychart.utils.toNumber],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'layout', anychart.enums.normalizeLayout],
-    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', acgraph.vector.normalizeFill],
-    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', acgraph.vector.normalizeStroke]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'layout', anychart.enums.normalizeLayout]
+    //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', acgraph.vector.normalizeFill],
+    //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', acgraph.vector.normalizeStroke]
   ]);
   return map;
 })();
@@ -149,17 +149,17 @@ anychart.bulletModule.Marker.prototype.SUPPORTED_CONSISTENCY_STATES =
  * @param {(string|anychart.enums.BulletMarkerType)=} opt_value [{@link anychart.enums.BulletMarkerType}.BAR] Type value.
  * @return {(anychart.enums.BulletMarkerType|anychart.bulletModule.Marker)}
  */
-//anychart.bulletModule.Marker.prototype.type = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    var type = anychart.enums.normalizeBulletMarkerType(opt_value);
-//    if (this.type_ != type) {
-//      this.type_ = type;
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.type_ || this.defaultType_;
-//};
+anychart.bulletModule.Marker.prototype.type = function(opt_value) {
+  if (goog.isDef(opt_value)) {
+    var type = anychart.enums.normalizeBulletMarkerType(opt_value);
+    if (this.type_ != type) {
+      this.type_ = type;
+      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+    }
+    return this;
+  }
+  return this.type_ || this.defaultType_;
+};
 
 
 /**
@@ -187,7 +187,7 @@ anychart.bulletModule.Marker.prototype.gap = function(opt_value) {
     }
     return this;
   } else {
-    return goog.isNull(this.gap_) ? anychart.bulletModule.Marker.DEFAULT_GAP_BY_TYPE[this.getOption('type')] : this.gap_;
+    return goog.isNull(this.gap_) ? anychart.bulletModule.Marker.DEFAULT_GAP_BY_TYPE[this.type()] : this.gap_;
   }
 };
 
@@ -303,24 +303,27 @@ anychart.bulletModule.Marker.prototype.onScaleSignal_ = function(event) {
  * @param {number=} opt_fy .
  * @return {!(acgraph.vector.Fill|anychart.bulletModule.Marker)} .
  */
-//anychart.bulletModule.Marker.prototype.fill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
-//  if (goog.isDef(opt_fillOrColorOrKeys)) {
-//    var fill = acgraph.vector.normalizeFill.apply(null, arguments);
-//    if (fill != this.fill_) {
-//      this.fill_ = fill;
-//      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  }
-//  return this.fill_ || this.defaultFill_;
-//};
+anychart.bulletModule.Marker.prototype.fill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
+  if (!this.defaultFill_) {
+    this.defaultFill_ = this.getThemeOption('fill');
+  }
+  if (goog.isDef(opt_fillOrColorOrKeys)) {
+    var fill = acgraph.vector.normalizeFill.apply(null, arguments);
+    if (fill != this.fill_) {
+      this.fill_ = fill;
+      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
+    }
+    return this;
+  }
+  return this.fill_ || this.defaultFill_;
+};
 
 
 /**
  * @param {acgraph.vector.Fill} value Default fill value.
  */
 anychart.bulletModule.Marker.prototype.setDefaultFill = function(value) {
-  var needInvalidate = !this.fill_ && this.defaultFill_ != value;
+  var needInvalidate = !this.fill() && this.defaultFill_ != value;
   this.defaultFill_ = value;
   if (needInvalidate)
     this.invalidate(anychart.ConsistencyState.APPEARANCE);
@@ -337,25 +340,29 @@ anychart.bulletModule.Marker.prototype.setDefaultFill = function(value) {
  * @param {acgraph.vector.StrokeLineCap=} opt_lineCap Line cap style.
  * @return {!(anychart.bulletModule.Marker|acgraph.vector.Stroke)} LineMarker line settings or LineMarker instance for method chaining.
  */
-//anychart.bulletModule.Marker.prototype.stroke = function(opt_strokeOrFill, opt_thickness, opt_dashpattern, opt_lineJoin, opt_lineCap) {
-//  if (goog.isDef(opt_strokeOrFill)) {
-//    var stroke = acgraph.vector.normalizeStroke.apply(null, arguments);
-//    if (this.stroke_ != stroke) {
-//      this.stroke_ = stroke;
-//      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-//    }
-//    return this;
-//  } else {
-//    return this.stroke_ || this.defaultStroke_;
-//  }
-//};
+anychart.bulletModule.Marker.prototype.stroke = function(opt_strokeOrFill, opt_thickness, opt_dashpattern, opt_lineJoin, opt_lineCap) {
+  if (!this.defaultStroke_) {
+    this.defaultStroke_ = this.getThemeOption('stroke');
+  }
+
+  if (goog.isDef(opt_strokeOrFill)) {
+    var stroke = acgraph.vector.normalizeStroke.apply(null, arguments);
+    if (this.stroke_ != stroke) {
+      this.stroke_ = stroke;
+      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
+    }
+    return this;
+  } else {
+    return this.stroke_ || this.defaultStroke_;
+  }
+};
 
 
 /**
  * @param {acgraph.vector.Stroke} value Default stroke value.
  */
 anychart.bulletModule.Marker.prototype.setDefaultStroke = function(value) {
-  var needInvalidate = !this.stroke_ && this.defaultStroke_ != value;
+  var needInvalidate = !this.stroke() && this.defaultStroke_ != value;
   this.defaultStroke_ = value;
   if (needInvalidate)
     this.invalidate(anychart.ConsistencyState.APPEARANCE);
@@ -585,8 +592,8 @@ anychart.bulletModule.Marker.prototype.draw = function() {
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.APPEARANCE)) {
-    this.path_.stroke(this.getOption('stroke'));
-    this.path_.fill(this.getOption('fill'));
+    this.path_.stroke(this.stroke());
+    this.path_.fill(this.fill());
     this.markConsistent(anychart.ConsistencyState.APPEARANCE);
   }
 
@@ -599,7 +606,7 @@ anychart.bulletModule.Marker.prototype.draw = function() {
       ratio = goog.math.clamp(ratio, 0, 1);
       var drawer = anychart.bulletModule.Marker.getDrawer(
           /** @type {anychart.enums.Layout} */(this.getOption('layout')),
-          /** @type {anychart.enums.BulletMarkerType} */(this.getOption('type'))
+          /** @type {anychart.enums.BulletMarkerType} */(this.type())
           );
       drawer.call(this, this.path_, ratio);
     }

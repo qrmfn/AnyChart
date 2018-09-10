@@ -412,7 +412,7 @@ anychart.bulletModule.Chart.prototype.calculate = function() {
     marker = this.markers_[i];
     if (goog.isDefAndNotNull(marker)) {
       marker.scale(scale);
-      if (marker.getOption('type') == anychart.enums.BulletMarkerType.BAR) {
+      if (marker.type() == anychart.enums.BulletMarkerType.BAR) {
         scale.extendDataRange(0);
       }
       scale.extendDataRange(marker.getOption('value'));
@@ -572,15 +572,15 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   //marker.zIndex(settings['zIndex']);
   //marker.setDefaultFill(settings['fill']);
   //marker.setDefaultStroke(settings['stroke']);
-  marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
+  marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
   marker.addThemes('defaultRangeMarkerSettings', 'bullet.defaultMarkerSettings');
 
   //settings from data
   marker.setOption('value', (/** @type {string|number} */(iterator.get('value'))));
-  marker.setOption('type', (/** @type {string} */(iterator.get('type'))));
+  marker.type((/** @type {string} */(iterator.get('type'))));
   marker.gap(/** @type {string|number} */(iterator.get('gap')));
-  marker.setOption('fill', (/** @type {acgraph.vector.Fill} */(iterator.get('fill'))));
-  marker.setOption('stroke', (/** @type {acgraph.vector.Stroke} */(iterator.get('stroke'))));
+  marker.fill((/** @type {acgraph.vector.Fill} */(iterator.get('fill'))));
+  marker.stroke((/** @type {acgraph.vector.Stroke} */(iterator.get('stroke'))));
   marker.resumeSignalsDispatching(false);
   marker.listenSignals(this.markerInvalidated_, this);
 
