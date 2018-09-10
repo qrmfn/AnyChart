@@ -108,6 +108,7 @@ anychart.bulletModule.Marker.PROTOTYPE_DESCRIPTORS = (function() {
   ]);
   return map;
 })();
+anychart.core.settings.populate(anychart.bulletModule.Marker, anychart.bulletModule.Marker.PROTOTYPE_DESCRIPTORS);
 
 
 /**
