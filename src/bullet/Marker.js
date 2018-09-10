@@ -246,7 +246,7 @@ anychart.bulletModule.Marker.prototype.setDefaultLayout = function(value) {
  * @return {boolean} Is layout horizontal.
  */
 anychart.bulletModule.Marker.prototype.isHorizontal = function() {
-  return this.layout() == anychart.enums.Layout.HORIZONTAL;
+  return this.getOption('layout') == anychart.enums.Layout.HORIZONTAL;
 };
 
 
