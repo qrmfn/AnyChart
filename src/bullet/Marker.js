@@ -305,7 +305,7 @@ anychart.bulletModule.Marker.prototype.onScaleSignal_ = function(event) {
  */
 anychart.bulletModule.Marker.prototype.fill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
   if (!this.defaultFill_) {
-    this.defaultFill_ = this.getThemeOption('fill');
+    this.defaultFill_ = /** @type {acgraph.vector.Fill} */(this.getThemeOption('fill'));
   }
   if (goog.isDef(opt_fillOrColorOrKeys)) {
     var fill = acgraph.vector.normalizeFill.apply(null, arguments);
@@ -342,7 +342,7 @@ anychart.bulletModule.Marker.prototype.setDefaultFill = function(value) {
  */
 anychart.bulletModule.Marker.prototype.stroke = function(opt_strokeOrFill, opt_thickness, opt_dashpattern, opt_lineJoin, opt_lineCap) {
   if (!this.defaultStroke_) {
-    this.defaultStroke_ = this.getThemeOption('stroke');
+    this.defaultStroke_ = /** @type {acgraph.vector.Stroke} */(this.getThemeOption('stroke'));
   }
 
   if (goog.isDef(opt_strokeOrFill)) {
