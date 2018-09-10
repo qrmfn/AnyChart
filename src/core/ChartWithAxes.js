@@ -1652,6 +1652,14 @@ anychart.core.ChartWithAxes.prototype.setupByJSON = function(config, opt_default
 };
 
 
+anychart.core.ChartWithAxes.prototype.setupAxisMarkersWithScales = function() {
+  var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
+  this.setupElementsWithScales(this.getThemeOption('lineAxesMarkers'), this.lineMarker, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('rangeAxesMarkers'), this.rangeMarker, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('textAxesMarkers'), this.textMarker, scalesInstances);
+};
+
+
 /**
  * @inheritDoc
  */
