@@ -752,11 +752,11 @@ anychart.bulletModule.Chart.prototype.serialize = function() {
 anychart.bulletModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.bulletModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('defaultRangeMarkerSettings' in config)
-    this.defaultRangeSettings(config['defaultRangeMarkerSettings']);
+  //if ('defaultRangeMarkerSettings' in config)
+  //  this.defaultRangeSettings(config['defaultRangeMarkerSettings']);
 
-  if ('defaultMarkerSettings' in config)
-    this.defaultMarkerSettings(config['defaultMarkerSettings']);
+  //if ('defaultMarkerSettings' in config)
+  //  this.defaultMarkerSettings(config['defaultMarkerSettings']);
 
   this.data(config['data']);
   anychart.core.settings.deserialize(this, anychart.bulletModule.Chart.PROPERTY_DESCRIPTORS, config);
