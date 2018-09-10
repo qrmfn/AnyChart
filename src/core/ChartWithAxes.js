@@ -1652,6 +1652,9 @@ anychart.core.ChartWithAxes.prototype.setupByJSON = function(config, opt_default
 };
 
 
+/**
+ * Setup axis markers with scales.
+ */
 anychart.core.ChartWithAxes.prototype.setupAxisMarkersWithScales = function() {
   var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
   this.setupElementsWithScales(this.getThemeOption('lineAxesMarkers'), this.lineMarker, scalesInstances);
