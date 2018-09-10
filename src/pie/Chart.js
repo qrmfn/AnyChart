@@ -167,9 +167,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outsideLabelsCriticalAngle', anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
     ['forceHoverLabels', anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
     ['connectorStroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
-    ['mode3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
-    ['height3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
-    ['aspect3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW]
+    ['mode3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW]
   ]);
 
   var normalDescriptorsMeta = {};
@@ -228,7 +226,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   var selectedDescriptorsMeta = {};
   anychart.core.settings.createDescriptorsMeta(selectedDescriptorsMeta, [
@@ -241,7 +239,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   this.resumeSignalsDispatching(false);
 };
@@ -450,9 +448,7 @@ anychart.pieModule.Chart.PROPERTY_DESCRIPTORS = (function() {
         [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'outsideLabelsCriticalAngle', criticalAngleNormalizer],
         [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'forceHoverLabels', anychart.core.settings.asIsNormalizer],
         [anychart.enums.PropertyHandlerType.MULTI_ARG, 'connectorStroke', anychart.core.settings.strokeNormalizer],
-        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'mode3d', anychart.core.settings.booleanNormalizer],
-        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'height3d', anychart.core.settings.numberNormalizer],
-        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'aspect3d', anychart.core.settings.numberNormalizer]
+        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'mode3d', anychart.core.settings.booleanNormalizer]
   ]);
   return map;
 })();
@@ -1898,7 +1894,7 @@ anychart.pieModule.Chart.prototype.calculateBounds_ = function(bounds) {
   var mode3d = /** @type {boolean} */ (this.getOption('mode3d'));
   if (mode3d) {
     var radiusXMax = Math.min(radiusX, (bounds.width - 2 * clampPie) / 2);
-    var ratioSum = this['aspect3d']() + anychart.pieModule.Chart.PIE_THICKNESS;
+    var ratioSum = anychart.pieModule.Chart.ASPECT_3D + anychart.pieModule.Chart.PIE_THICKNESS;
     var radiusYMax = (bounds.height - 2 * clampPie) / (2 * ratioSum);
     this.radiusValue_ = Math.min(radiusXMax, radiusYMax);
   } else {
@@ -2994,7 +2990,7 @@ anychart.pieModule.Chart.prototype.updateLabelsOnAnimate = function(labelOpacity
  * @protected
  */
 anychart.pieModule.Chart.prototype.get3DYRadius = function(majorRadius) {
-  return majorRadius * this['aspect3d']();
+  return majorRadius * anychart.pieModule.Chart.ASPECT_3D;
 };
 
 
@@ -3004,11 +3000,7 @@ anychart.pieModule.Chart.prototype.get3DYRadius = function(majorRadius) {
  * @protected
  */
 anychart.pieModule.Chart.prototype.get3DHeight = function() {
-  var height = this['height3d']();
-  if (!goog.isDef(height)) {
-    height = this.radiusValue_ * anychart.pieModule.Chart.PIE_THICKNESS;
-  }
-  return height;
+  return this.radiusValue_ * anychart.pieModule.Chart.PIE_THICKNESS;
 };
 
 
@@ -4735,14 +4727,11 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 anychart.pieModule.Chart.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
-  var normalLabelsSettings = this.normal_.themeSettings['labels'];
   this.normal_.setupInternal(true, this.normal_.themeSettings);
 
-  this.hovered_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('hovered', this.hovered_);
   this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
-  this.selected_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('selected', this.selected_);
   this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
@@ -5190,8 +5179,6 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calculate = function()
   // proto['outsideLabelsCriticalAngle'] = proto.outsideLabelsCriticalAngle;//doc|ex
   // proto['connectorStroke'] = proto.connectorStroke;//doc|ex
   // proto['mode3d'] = proto.mode3d;
-  // proto['aspect3d'] = proto.aspect3d;
-  // proto['height3d'] = proto.height3d;
   // proto['forceHoverLabels'] = proto.forceHoverLabels;
   //deprecated
   // proto['outsideLabelsSpace'] = proto.outsideLabelsSpace;//doc|ewx
