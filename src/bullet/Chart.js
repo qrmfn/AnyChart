@@ -299,7 +299,7 @@ anychart.bulletModule.Chart.prototype.range = function(opt_indexOrValue, opt_val
   var range = this.ranges_[index];
   if (!range) {
     range = new anychart.core.axisMarkers.Range();
-    range.setup(this.defaultRangeSettings());
+    range.addThemes('bullet.defaultRangeMarkerSettings');
     this.ranges_[index] = range;
     this.registerDisposable(range);
     range.listenSignals(this.onRangeSignal_, this);
