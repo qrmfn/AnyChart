@@ -201,7 +201,7 @@ anychart.core.axisMarkers.Line.prototype.setupByJSON = function(config, opt_defa
 anychart.standalones.axisMarkers.Line = function() {
   anychart.standalones.axisMarkers.Line.base(this, 'constructor');
 
-  this.addThemes('lineAxisMarker');
+  this.addThemes('standalones.lineAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Line, anychart.core.axisMarkers.Line);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Line, anychart.core.axisMarkers.Line);

@@ -94,7 +94,7 @@ anychart.core.axisMarkers.Text.prototype.setupByJSON = function(config, opt_defa
 anychart.standalones.axisMarkers.Text = function() {
   anychart.standalones.axisMarkers.Text.base(this, 'constructor');
 
-  this.addThemes('textAxisMarker');
+  this.addThemes('standalones.textAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Text, anychart.core.axisMarkers.Text);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Text, anychart.core.axisMarkers.Text);

@@ -265,7 +265,7 @@ anychart.core.axisMarkers.Range.prototype.setupByJSON = function(config, opt_def
 anychart.standalones.axisMarkers.Range = function() {
   anychart.standalones.axisMarkers.Range.base(this, 'constructor');
 
-  this.addThemes('rangeAxisMarker');
+  this.addThemes('standalones.rangeAxisMarker');
 };
 goog.inherits(anychart.standalones.axisMarkers.Range, anychart.core.axisMarkers.Range);
 anychart.core.makeStandalone(anychart.standalones.axisMarkers.Range, anychart.core.axisMarkers.Range);
