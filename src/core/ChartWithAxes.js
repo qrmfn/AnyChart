@@ -1692,7 +1692,65 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
 /** Setup xAxes and yAxes */
 anychart.core.ChartWithAxes.prototype.setupAxes = function() {
-  var scalesInstances = [this.xScale(), this.yScale()];
+
+  var type = this.getType();
+  var i, json, scale;
+  var scales = this.getThemeOption('scales');
+  var scalesInstances = {};
+  if (goog.isArray(scales)) {
+    for (i = 0; i < scales.length; i++) {
+      json = scales[i];
+      if (goog.isString(json)) {
+        json = {'type': json};
+      }
+      scale = anychart.scales.Base.fromString(json['type'], false);
+      scale.setup(json);
+      scalesInstances[i] = scale;
+    }
+  } else if (goog.isObject(scales)) {
+    for (i in scales) {
+      if (!scales.hasOwnProperty(i)) continue;
+      json = scales[i];
+      if (goog.isString(json)) {
+        json = {'type': json};
+      }
+      scale = anychart.scales.Base.fromString(json['type'], false);
+      scale.setup(json);
+      scalesInstances[i] = scale;
+    }
+  }
+  json = this.getThemeOption('xScale');
+  if (goog.isNumber(json)) {
+    scale = scalesInstances[json];
+  } else if (goog.isString(json)) {
+    scale = anychart.scales.Base.fromString(json, null);
+    if (!scale)
+      scale = scalesInstances[json];
+  } else if (goog.isObject(json)) {
+    scale = anychart.scales.Base.fromString(json['type'], true);
+    scale.setup(json);
+  } else {
+    scale = null;
+  }
+  if (scale)
+    this.xScale(scale);
+
+  json = this.getThemeOption('yScale');
+  if (goog.isNumber(json)) {
+    scale = scalesInstances[json];
+  } else if (goog.isString(json)) {
+    scale = anychart.scales.Base.fromString(json, null);
+    if (!scale)
+      scale = scalesInstances[json];
+  } else if (goog.isObject(json)) {
+    scale = anychart.scales.Base.fromString(json['type'], false);
+    scale.setup(json);
+  } else {
+    scale = null;
+  }
+  if (scale)
+    this.yScale(scale);
+
   this.setupElementsWithScales(this.getThemeOption('xAxes'), this.xAxis, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('yAxes'), this.yAxis, scalesInstances);
 };

@@ -2307,7 +2307,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getCsvGrouperAlias = function(
 anychart.core.ChartWithOrthogonalScales.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.ChartWithOrthogonalScales.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, anychart.core.ChartWithOrthogonalScales.PROPERTY_DESCRIPTORS, config);
-
+//debugger
   var type = this.getType();
   var i, json, scale;
   var scales = config['scales'];
