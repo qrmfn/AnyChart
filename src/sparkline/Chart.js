@@ -722,7 +722,7 @@ anychart.sparklineModule.Chart.prototype.lineMarker = function(opt_indexOrValue,
   var lineMarker = this.lineAxesMarkers_[index];
   if (!lineMarker) {
     lineMarker = new anychart.core.axisMarkers.Line();
-    lineMarker.setup(this.defaultLineMarkerSettings());
+    //lineMarker.setup(this.defaultLineMarkerSettings());
     this.lineAxesMarkers_[index] = lineMarker;
     this.registerDisposable(lineMarker);
     lineMarker.listenSignals(this.onMarkersSignal_, this);
@@ -757,7 +757,7 @@ anychart.sparklineModule.Chart.prototype.rangeMarker = function(opt_indexOrValue
   var rangeMarker = this.rangeAxesMarkers_[index];
   if (!rangeMarker) {
     rangeMarker = new anychart.core.axisMarkers.Range();
-    rangeMarker.setup(this.defaultRangeMarkerSettings());
+    //rangeMarker.setup(this.defaultRangeMarkerSettings());
     this.rangeAxesMarkers_[index] = rangeMarker;
     this.registerDisposable(rangeMarker);
     rangeMarker.listenSignals(this.onMarkersSignal_, this);
@@ -792,7 +792,7 @@ anychart.sparklineModule.Chart.prototype.textMarker = function(opt_indexOrValue,
   var textMarker = this.textAxesMarkers_[index];
   if (!textMarker) {
     textMarker = new anychart.core.axisMarkers.Text();
-    textMarker.setup(this.defaultTextMarkerSettings());
+    //textMarker.setup(this.defaultTextMarkerSettings());
     this.textAxesMarkers_[index] = textMarker;
     this.registerDisposable(textMarker);
     textMarker.listenSignals(this.onMarkersSignal_, this);
@@ -2284,20 +2284,20 @@ anychart.sparklineModule.Chart.prototype.isNoData = function() {
 anychart.sparklineModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.sparklineModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  if ('defaultMarkerSettings' in config)
-    this.defaultMarkerSettings(config['defaultMarkerSettings']);
+  //if ('defaultMarkerSettings' in config)
+  //  this.defaultMarkerSettings(config['defaultMarkerSettings']);
 
   if ('defaultSeriesSettings' in config)
     this.defaultSeriesSettings(config['defaultSeriesSettings']);
 
-  if ('defaultLineMarkerSettings' in config)
-    this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
+  //if ('defaultLineMarkerSettings' in config)
+  //  this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
 
-  if ('defaultTextMarkerSettings' in config)
-    this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
+  //if ('defaultTextMarkerSettings' in config)
+  //  this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
 
-  if ('defaultRangeMarkerSettings' in config)
-    this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
+  //if ('defaultRangeMarkerSettings' in config)
+  //  this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
 
   var i, json, scale;
   var lineAxesMarkers = config['lineAxesMarkers'];
@@ -2371,29 +2371,29 @@ anychart.sparklineModule.Chart.prototype.setupByJSON = function(config, opt_defa
   if (scale)
     this.yScale(scale);
 
-  if (goog.isArray(lineAxesMarkers)) {
-    for (i = 0; i < lineAxesMarkers.length; i++) {
-      json = lineAxesMarkers[i];
-      this.lineMarker(i, json);
-      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.lineMarker(i).scale(scalesInstances[json['scale']]);
-    }
-  }
+  //if (goog.isArray(lineAxesMarkers)) {
+  //  for (i = 0; i < lineAxesMarkers.length; i++) {
+  //    json = lineAxesMarkers[i];
+  //    this.lineMarker(i, json);
+  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.lineMarker(i).scale(scalesInstances[json['scale']]);
+  //  }
+  //}
 
-  if (goog.isArray(rangeAxesMarkers)) {
-    for (i = 0; i < rangeAxesMarkers.length; i++) {
-      json = rangeAxesMarkers[i];
-      this.rangeMarker(i, json);
-      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.rangeMarker(i).scale(scalesInstances[json['scale']]);
-    }
-  }
+  //if (goog.isArray(rangeAxesMarkers)) {
+  //  for (i = 0; i < rangeAxesMarkers.length; i++) {
+  //    json = rangeAxesMarkers[i];
+  //    this.rangeMarker(i, json);
+  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.rangeMarker(i).scale(scalesInstances[json['scale']]);
+  //  }
+  //}
 
-  if (goog.isArray(textAxesMarkers)) {
-    for (i = 0; i < textAxesMarkers.length; i++) {
-      json = textAxesMarkers[i];
-      this.textMarker(i, json);
-      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.textMarker(i).scale(scalesInstances[json['scale']]);
-    }
-  }
+  //if (goog.isArray(textAxesMarkers)) {
+  //  for (i = 0; i < textAxesMarkers.length; i++) {
+  //    json = textAxesMarkers[i];
+  //    this.textMarker(i, json);
+  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.textMarker(i).scale(scalesInstances[json['scale']]);
+  //  }
+  //}
 
   this.stroke(config['stroke']);
 
