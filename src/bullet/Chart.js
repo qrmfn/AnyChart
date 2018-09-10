@@ -568,11 +568,12 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   marker.container(this.rootElement);
 
   //defaults
-  var settings = this.defaultMarkerSettings();
-  marker.zIndex(settings['zIndex']);
-  marker.setDefaultFill(settings['fill']);
-  marker.setDefaultStroke(settings['stroke']);
+  //var settings = this.defaultMarkerSettings();
+  //marker.zIndex(settings['zIndex']);
+  //marker.setDefaultFill(settings['fill']);
+  //marker.setDefaultStroke(settings['stroke']);
   marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
+  marker.addThemes('bullet.defaultMarkerSettings');
 
   //settings from data
   marker.value(/** @type {string|number} */(iterator.get('value')));
