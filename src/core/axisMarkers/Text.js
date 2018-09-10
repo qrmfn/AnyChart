@@ -14,7 +14,7 @@ anychart.core.axisMarkers.Text = function() {
   anychart.core.axisMarkers.Text.base(this, 'constructor');
 
   // because fontSize should be 13
-  this.addThemes('defaultTextMarkerSettings', 'defaultFontSettings');
+  this.addThemes('defaultTextMarkerSettings');
 };
 goog.inherits(anychart.core.axisMarkers.Text, anychart.core.axisMarkers.TextBase);
 

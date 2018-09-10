@@ -845,6 +845,7 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
   var textMarker = this.textAxesMarkers_[index];
   if (!textMarker) {
     textMarker = this.createTextMarkerInstance();
+    textMarker.addThemes('defaultFontSettings');
     textMarker.setChart(this);
     //textMarker.setup(this.defaultTextMarkerSettings());
     textMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
