@@ -84,8 +84,8 @@ anychart.bulletModule.Marker = function() {
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     //['type', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['value', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['layout', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
+    ['value', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
+    //['layout', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
     //['fill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
     //['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
@@ -101,8 +101,8 @@ anychart.bulletModule.Marker.PROTOTYPE_DESCRIPTORS = (function() {
   var map = {};
   anychart.core.settings.createDescriptors(map, [
     //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'type', anychart.enums.normalizeBulletMarkerType],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'value', anychart.utils.toNumber],
-    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'layout', anychart.enums.normalizeLayout]
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'value', anychart.utils.toNumber]
+    //[anychart.enums.PropertyHandlerType.SINGLE_ARG, 'layout', anychart.enums.normalizeLayout]
     //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'fill', acgraph.vector.normalizeFill],
     //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', acgraph.vector.normalizeStroke]
   ]);
@@ -193,40 +193,22 @@ anychart.bulletModule.Marker.prototype.gap = function(opt_value) {
 
 
 /**
- * Getter/setter for bullet marker value.
- * @param {(number|string)=} opt_value [NaN] Value of bullet marker.
- * @return {number|string|anychart.bulletModule.Marker} Bullet marker value or itself for chaining call.
- */
-//anychart.bulletModule.Marker.prototype.value = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    var value = anychart.utils.toNumber(opt_value);
-//    if (this.value_ != value) {
-//      this.value_ = value;
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  }
-//  return this.value_;
-//};
-
-
-/**
  * Get/set layout.
  * @param {anychart.enums.Layout=} opt_value [{@link anychart.enums.Layout}.VERTICAL] BulletMarker layout.
  * @return {anychart.enums.Layout|anychart.bulletModule.Marker} Bullet marker layout or self for method chaining.
  */
-//anychart.bulletModule.Marker.prototype.layout = function(opt_value) {
-//  if (goog.isDef(opt_value)) {
-//    var layout = anychart.enums.normalizeLayout(opt_value);
-//    if (this.layout_ != layout) {
-//      this.layout_ = layout;
-//      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-//    }
-//    return this;
-//  } else {
-//    return this.layout_ || this.defaultLayout_;
-//  }
-//};
+anychart.bulletModule.Marker.prototype.layout = function(opt_value) {
+  if (goog.isDef(opt_value)) {
+    var layout = anychart.enums.normalizeLayout(opt_value);
+    if (this.layout_ != layout) {
+      this.layout_ = layout;
+      this.invalidate(anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+    }
+    return this;
+  } else {
+    return this.layout_ || this.defaultLayout_;
+  }
+};
 
 
 /**

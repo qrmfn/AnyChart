@@ -518,8 +518,8 @@ anychart.bulletModule.Chart.prototype.drawContent = function(bounds) {
       var marker = this.markers_[i];
       marker.suspendSignalsDispatching();
       marker.parentBounds(boundsWithoutAxis);
-      marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(i)));
-      marker['layout'](/** @type {anychart.enums.Layout} */(this.getOption('layout')));
+      marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(i)));
+      marker.setDefaultLayout(/** @type {anychart.enums.Layout} */(this.getOption('layout')));
       marker.draw();
       marker.resumeSignalsDispatching(false);
     }
