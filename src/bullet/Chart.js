@@ -389,7 +389,7 @@ anychart.bulletModule.Chart.prototype.calculate = function() {
     marker = this.markers_[i];
     if (goog.isDefAndNotNull(marker)) {
       marker.scale(scale);
-      if (marker.type() == anychart.enums.BulletMarkerType.BAR) {
+      if (marker.getOption('type') == anychart.enums.BulletMarkerType.BAR) {
         scale.extendDataRange(0);
       }
       scale.extendDataRange(marker.getOption('value'));
@@ -495,8 +495,8 @@ anychart.bulletModule.Chart.prototype.drawContent = function(bounds) {
       var marker = this.markers_[i];
       marker.suspendSignalsDispatching();
       marker.parentBounds(boundsWithoutAxis);
-      marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(i)));
-      marker.setDefaultLayout(/** @type {anychart.enums.Layout} */(this.getOption('layout')));
+      marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(i)));
+      marker['layout'](/** @type {anychart.enums.Layout} */(this.getOption('layout')));
       marker.draw();
       marker.resumeSignalsDispatching(false);
     }
@@ -545,15 +545,16 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   marker.container(this.rootElement);
 
   //defaults
-  marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
+  //marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
+  marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
   marker.addThemes('defaultRangeMarkerSettings', 'bullet.defaultMarkerSettings');
 
   //settings from data
-  marker.setOption('value', (/** @type {string|number} */(iterator.get('value'))));
-  marker.type((/** @type {string} */(iterator.get('type'))));
+  marker['value'](/** @type {string|number} */(iterator.get('value')));
+  marker['type'](/** @type {string} */(iterator.get('type')));
   marker.gap(/** @type {string|number} */(iterator.get('gap')));
-  marker.fill((/** @type {acgraph.vector.Fill} */(iterator.get('fill'))));
-  marker.stroke((/** @type {acgraph.vector.Stroke} */(iterator.get('stroke'))));
+  marker['fill'](/** @type {acgraph.vector.Fill} */(iterator.get('fill')));
+  marker['stroke'](/** @type {acgraph.vector.Stroke} */(iterator.get('stroke')));
   marker.resumeSignalsDispatching(false);
   marker.listenSignals(this.markerInvalidated_, this);
 
