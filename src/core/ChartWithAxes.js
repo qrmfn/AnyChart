@@ -299,48 +299,6 @@ anychart.core.ChartWithAxes.prototype.defaultMinorGridSettings = function(opt_va
 };
 
 
-/**
- * Getter/setter for line marker default settings.
- * @param {Object=} opt_value Object with line marker settings.
- * @return {Object}
- */
-anychart.core.ChartWithAxes.prototype.defaultLineMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultLineMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultLineMarkerSettings_ || {};
-};
-
-
-/**
- * Getter/setter for text marker default settings.
- * @param {Object=} opt_value Object with text marker settings.
- * @return {Object}
- */
-anychart.core.ChartWithAxes.prototype.defaultTextMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultTextMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultTextMarkerSettings_ || {};
-};
-
-
-/**
- * Getter/setter for range marker default settings.
- * @param {Object=} opt_value Object with range marker settings.
- * @return {Object}
- */
-anychart.core.ChartWithAxes.prototype.defaultRangeMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultRangeMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultRangeMarkerSettings_ || {};
-};
-
-
 //endregion
 //region --- Grids
 //----------------------------------------------------------------------------------------------------------------------
@@ -1678,9 +1636,6 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   this.defaultYAxisSettings(config['defaultYAxisSettings']);
   this.defaultGridSettings(config['defaultGridSettings']);
   this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
-  //this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
-  //this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
-  //this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
   this.defaultAnnotationSettings(config['defaultAnnotationSettings']);
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
