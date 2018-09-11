@@ -311,6 +311,7 @@ anychart.bulletModule.Chart.prototype.rangePalette = function(opt_value) {
     this.registerDisposable(this.rangePalette_);
 
     this.setupCreated('rangePalette', this.rangePalette_);
+    this.rangePalette_.restoreDefaults(false);
   }
 
   if (goog.isDef(opt_value)) {
@@ -727,7 +728,7 @@ anychart.bulletModule.Chart.prototype.setupByJSON = function(config, opt_default
 
   this.data(config['data']);
   anychart.core.settings.deserialize(this, anychart.bulletModule.Chart.PROPERTY_DESCRIPTORS, config);
-  this.rangePalette(config['rangePalette']);
+  //this.rangePalette(config['rangePalette']);
   //this.markerPalette(config['markerPalette']);
 
   var scaleJson = config['scale'];
