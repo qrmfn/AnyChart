@@ -67,7 +67,7 @@ anychart.bulletModule.Marker = function() {
    * @type {acgraph.vector.Fill}
    * @private
    */
-  this.defaultFill_;// = 'black';
+  this.defaultFill_;
 
   /**
    * Stroke of bullet marker.
@@ -80,7 +80,7 @@ anychart.bulletModule.Marker = function() {
    * @type {acgraph.vector.Stroke}
    * @private
    */
-  this.defaultStroke_;// = 'black';
+  this.defaultStroke_;
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     //['type', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
@@ -228,7 +228,7 @@ anychart.bulletModule.Marker.prototype.setDefaultLayout = function(value) {
  * @return {boolean} Is layout horizontal.
  */
 anychart.bulletModule.Marker.prototype.isHorizontal = function() {
-  return this.getOption('layout') == anychart.enums.Layout.HORIZONTAL;
+  return this.layout() == anychart.enums.Layout.HORIZONTAL;
 };
 
 
@@ -587,7 +587,7 @@ anychart.bulletModule.Marker.prototype.draw = function() {
     if (!isNaN(ratio)) {
       ratio = goog.math.clamp(ratio, 0, 1);
       var drawer = anychart.bulletModule.Marker.getDrawer(
-          /** @type {anychart.enums.Layout} */(this.getOption('layout')),
+          /** @type {anychart.enums.Layout} */(this.layout()),
           /** @type {anychart.enums.BulletMarkerType} */(this.type())
           );
       drawer.call(this, this.path_, ratio);
