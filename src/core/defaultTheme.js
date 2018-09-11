@@ -1769,6 +1769,9 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
   },
 
   'cartesianBase': {
+    'defaultTextMarkerSettings': {
+      'fontSize': 13
+    },
     'defaultSeriesSettings': {
       'base': {
         'normal': {

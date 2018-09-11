@@ -801,11 +801,7 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
   var textMarker = this.textAxesMarkers_[index];
   if (!textMarker) {
     textMarker = this.createTextMarkerInstance();
-
-    // this is because in old scheme defaultFontSettings was merged over defaultTextMarkerSettings
-    // so this is only to retain old behaviour
-    textMarker.addThemes('defaultFontSettings');
-
+    textMarker.addThemes('cartesianBase.defaultTextMarkerSettings');
     textMarker.setChart(this);
     textMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.textAxesMarkers_[index] = textMarker;
