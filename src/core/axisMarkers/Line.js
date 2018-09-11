@@ -212,9 +212,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Line, anychart.cor
  * @return {!anychart.standalones.axisMarkers.Line}
  */
 anychart.standalones.axisMarkers.line = function() {
-  var line = new anychart.standalones.axisMarkers.Line();
-  //line.setup(anychart.getFullTheme('standalones.lineAxisMarker'));
-  return line;
+  return new anychart.standalones.axisMarkers.Line();
 };
 
 

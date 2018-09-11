@@ -276,9 +276,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Range, anychart.co
  * @return {!anychart.standalones.axisMarkers.Range}
  */
 anychart.standalones.axisMarkers.range = function() {
-  var res = new anychart.standalones.axisMarkers.Range();
-  //res.setup(anychart.getFullTheme('standalones.rangeAxisMarker'));
-  return res;
+  return new anychart.standalones.axisMarkers.Range();
 };
 
 

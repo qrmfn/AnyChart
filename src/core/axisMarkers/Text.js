@@ -104,9 +104,7 @@ anychart.core.makeStandalone(anychart.standalones.axisMarkers.Text, anychart.cor
  * @return {!anychart.standalones.axisMarkers.Text}
  */
 anychart.standalones.axisMarkers.text = function() {
-  var text = new anychart.standalones.axisMarkers.Text();
-  //text.setup(anychart.getFullTheme('standalones.textAxisMarker'));
-  return text;
+  return new anychart.standalones.axisMarkers.Text();
 };
 
 
