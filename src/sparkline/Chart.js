@@ -521,20 +521,6 @@ anychart.sparklineModule.Chart.prototype.getStartValueForAppearanceReduction = g
 
 
 /**
- * Getter/setter for marker default settings.
- * @param {Object=} opt_value Object with default series settings.
- * @return {Object}
- */
-anychart.sparklineModule.Chart.prototype.defaultMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultMarkerSettings_ || {};
-};
-
-
-/**
  * Getter/setter for series default settings.
  * @param {Object=} opt_value Object with default series settings.
  * @return {Object}
@@ -545,48 +531,6 @@ anychart.sparklineModule.Chart.prototype.defaultSeriesSettings = function(opt_va
     return this;
   }
   return this.defaultSeriesSettings_ || {};
-};
-
-
-/**
- * Getter/setter for line marker default settings.
- * @param {Object=} opt_value Object with line marker settings.
- * @return {Object}
- */
-anychart.sparklineModule.Chart.prototype.defaultLineMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultLineMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultLineMarkerSettings_ || {};
-};
-
-
-/**
- * Getter/setter for text marker default settings.
- * @param {Object=} opt_value Object with text marker settings.
- * @return {Object}
- */
-anychart.sparklineModule.Chart.prototype.defaultTextMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultTextMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultTextMarkerSettings_ || {};
-};
-
-
-/**
- * Getter/setter for range marker default settings.
- * @param {Object=} opt_value Object with range marker settings.
- * @return {Object}
- */
-anychart.sparklineModule.Chart.prototype.defaultRangeMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultRangeMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultRangeMarkerSettings_ || {};
 };
 
 
