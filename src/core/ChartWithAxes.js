@@ -802,7 +802,7 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
   if (!textMarker) {
     textMarker = this.createTextMarkerInstance();
 
-    // this is because in old scheme defaultFontSettings was incorrectly merged over defaultTextMarkerSettings
+    // this is because in old scheme defaultFontSettings was merged over defaultTextMarkerSettings
     // so this is only to retain old behaviour
     textMarker.addThemes('defaultFontSettings');
 
