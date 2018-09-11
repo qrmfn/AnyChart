@@ -547,7 +547,7 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   //defaults
   //marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
   marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
-  marker.addThemes('defaultRangeMarkerSettings', 'bullet.defaultMarkerSettings');
+  marker.addThemes('bullet.defaultMarkerSettings');
 
   //settings from data
   marker['value'](/** @type {string|number} */(iterator.get('value')));

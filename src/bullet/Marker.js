@@ -15,6 +15,8 @@ goog.require('anychart.utils');
 anychart.bulletModule.Marker = function() {
   anychart.bulletModule.Marker.base(this, 'constructor');
 
+  this.addThemes('defaultRangeMarkerSettings');
+
   /**
    * Gap for bullet marker.
    * @type {number|string|null}
