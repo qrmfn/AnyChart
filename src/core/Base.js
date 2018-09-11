@@ -672,6 +672,15 @@ anychart.core.Base.prototype.getHook = function(fieldName) {
 
 
 /** @inheritDoc */
+anychart.core.Base.prototype.getInvalidationCondition = function(fieldName) {
+  var meta = this.descriptorsMeta[fieldName];
+  return meta ?
+      (meta.invalidationCondition || anychart.core.settings.DEFAULT_INVALIDATION_CONDITION) :
+      anychart.core.settings.DEFAULT_INVALIDATION_CONDITION;
+};
+
+
+/** @inheritDoc */
 anychart.core.Base.prototype.isResolvable = function() {
   return false;
 };

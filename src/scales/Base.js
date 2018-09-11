@@ -56,6 +56,8 @@ anychart.scales.Base = function() {
    * @private
    */
   this.stackDirection_ = anychart.enums.ScaleStackDirection.DIRECT;
+
+  this.addThemes('defaultScaleSettings.linear');
 };
 goog.inherits(anychart.scales.Base, anychart.core.Base);
 

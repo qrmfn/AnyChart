@@ -2315,9 +2315,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         if (goog.isString(json)) {
           json = {'type': json};
         }
-        json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
+        //json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
         scale = anychart.scales.Base.fromString(json['type'], false);
-        scale.setup(json); //todo
+        scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
     } else if (goog.isObject(scales)) {
@@ -2327,9 +2327,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         if (goog.isString(json)) {
           json = {'type': json};
         }
-        json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
+        // json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
         scale = anychart.scales.Base.fromString(json['type'], false);
-        scale.setup(json); //todo
+        scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
     }
@@ -2343,7 +2343,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], true);
-      scale.setup(json);
+      scale.setup(scale.themeSettings);
     } else {
       scale = null;
     }
@@ -2359,7 +2359,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], false);
-      scale.setup(json);
+      scale.setup(scale.themeSettings);
     } else {
       scale = null;
     }
@@ -2387,9 +2387,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupByJSON = function(config,
   if (config['scales']) {
     this.scalesChanged_ = true;
   }
-  var scalesInstances = this.getScaleInstance();
+  // var scalesInstances = this.getScaleInstance();
 
-  this.setupByJSONWithScales(config, scalesInstances, opt_default);
+  // this.setupByJSONWithScales(config, scalesInstances, opt_default);
 };
 
 

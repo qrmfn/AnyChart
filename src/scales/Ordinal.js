@@ -80,6 +80,7 @@ anychart.scales.Ordinal = function() {
   this.ticks_ = null;
 
   anychart.scales.Ordinal.base(this, 'constructor');
+
   this.addThemes('defaultScaleSettings.ordinal');
 };
 goog.inherits(anychart.scales.Ordinal, anychart.scales.Base);
