@@ -29,6 +29,8 @@ goog.require('anychart.utils');
 anychart.bulletModule.Chart = function(opt_data, opt_csvSettings) {
   anychart.bulletModule.Chart.base(this, 'constructor');
 
+  this.addThemes('bullet');
+
   /**
    * @type {Array.<anychart.core.axisMarkers.Range>}
    * @private
