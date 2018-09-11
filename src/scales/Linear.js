@@ -110,7 +110,7 @@ anychart.scales.Linear.prototype.ticks = function(opt_value) {
 anychart.scales.Linear.prototype.minorTicks = function(opt_value) {
   if (!this.minorTicksObj) {
     this.minorTicksObj = this.createTicks();
-    this.setupCreated('ticks', this.minorTicksObj);
+    this.setupCreated('minorTicks', this.minorTicksObj);
     this.minorTicksObj.suspendSignalsDispatching();
     this.minorTicksObj.count(5);
     this.minorTicksObj.resumeSignalsDispatching(false);
