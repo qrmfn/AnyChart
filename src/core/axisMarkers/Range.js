@@ -232,12 +232,13 @@ anychart.standalones.axisMarkers.range = function() {
 //exports
 (function() {
   var proto = anychart.core.axisMarkers.Range.prototype;
-  proto['from'] = proto.from;
-  proto['to'] = proto.to;
+  // auto generated
+  //proto['from'] = proto.from;
+  //proto['to'] = proto.to;
+  //proto['fill'] = proto.fill;
   proto['scale'] = proto.scale;
   proto['axis'] = proto.axis;
   proto['layout'] = proto.layout;
-  proto['fill'] = proto.fill;
   proto['isHorizontal'] = proto.isHorizontal;
 
   proto = anychart.standalones.axisMarkers.Range.prototype;
