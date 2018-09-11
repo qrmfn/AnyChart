@@ -226,7 +226,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   var selectedDescriptorsMeta = {};
   anychart.core.settings.createDescriptorsMeta(selectedDescriptorsMeta, [
@@ -239,7 +239,7 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outline', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   this.resumeSignalsDispatching(false);
 };
@@ -4606,11 +4606,7 @@ anychart.pieModule.Chart.prototype.createTooltip = function() {
   tooltip.chart(this);
   tooltip.containerProvider(this);
   tooltip.listenSignals(this.onTooltipSignal_, this);
-
-  // todo: (chernetsky) Update this when tooltip is refactored
-  tooltip.addThemes('defaultFontSettings', 'defaultTooltip');
   this.setupCreated('tooltip', tooltip);
-
   return tooltip;
 };
 
@@ -4707,19 +4703,6 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   if ('tooltip' in config)
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
-
-  this.selected_.setupInternal(!!opt_default, config['selected']);
-
-  if (goog.isDef(config['explode'])) {
-    config = goog.object.clone(config);
-    this.selected_.setupInternal(!!opt_default, {'explode': config['explode']});
-    delete config['explode'];
-  }
-
-  this.normal_.setupInternal(!!opt_default, config);
-  this.normal_.setupInternal(!!opt_default, config['normal']);
-
-  this.hovered_.setupInternal(!!opt_default, config['hovered']);
 };
 
 
@@ -4727,14 +4710,11 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 anychart.pieModule.Chart.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
-  var normalLabelsSettings = this.normal_.themeSettings['labels'];
   this.normal_.setupInternal(true, this.normal_.themeSettings);
 
-  this.hovered_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('hovered', this.hovered_);
   this.hovered_.setupInternal(true, this.hovered_.themeSettings);
 
-  this.selected_.addThemes({'labels': normalLabelsSettings});
   this.setupCreated('selected', this.selected_);
   this.selected_.setupInternal(true, this.selected_.themeSettings);
 };
