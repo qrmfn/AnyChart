@@ -400,8 +400,8 @@ anychart.bulletModule.Chart.prototype.calculate = function() {
     range = this.ranges_[i];
     if (goog.isDefAndNotNull(range)) {
       range.scale(scale);
-      scale.extendDataRange(range.from());
-      scale.extendDataRange(range.to());
+      scale.extendDataRange(range.getOption('from'));
+      scale.extendDataRange(range.getOption('to'));
     }
 
     if (scale.needsAutoCalc()) {
@@ -476,7 +476,7 @@ anychart.bulletModule.Chart.prototype.drawContent = function(bounds) {
                 anychart.enums.Layout.VERTICAL :
                 anychart.enums.Layout.HORIZONTAL
         );
-        range.setDefaultFill(/** @type {acgraph.vector.Fill} */(this.rangePalette().itemAt(i)));
+        range['fill'](/** @type {acgraph.vector.Fill} */(this.rangePalette().itemAt(i)));
         range.parentBounds(boundsWithoutAxis);
         range.container(this.rootElement);
         range.axesLinesSpace(0);

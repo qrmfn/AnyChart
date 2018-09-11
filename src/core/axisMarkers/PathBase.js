@@ -453,8 +453,8 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
   var el = /** @type {acgraph.vector.Path} */ (this.markerElement());
   el.clear();
 
-  var to = range.to;
-  var from = range.from;
+  var to = this.getOption('to');
+  var from = this.getOption('from');
 
   //Safe transformation to ratio.
   var fromScaleRatio = scale.transform(from);
@@ -462,8 +462,8 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
 
   //Safe comparison - comparing numbers.
   if (fromScaleRatio > toScaleRatio) {
-    to = range.from;
-    from = range.to;
+    to = this.getOption('from');
+    from = this.getOption('to');
   }
 
   var fromRatio = scale.transform(from, 0);
