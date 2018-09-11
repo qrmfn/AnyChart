@@ -82,34 +82,6 @@ anychart.bulletModule.Chart.prototype.SUPPORTED_CONSISTENCY_STATES =
     anychart.ConsistencyState.BULLET_DATA;           // chart data
 
 
-/**
- * Getter/setter for range marker default settings.
- * @param {Object=} opt_value Object with range marker settings.
- * @return {Object}
- */
-anychart.bulletModule.Chart.prototype.defaultRangeSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultRangeSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultRangeSettings_ || {};
-};
-
-
-/**
- * Getter/setter for marker default settings.
- * @param {Object=} opt_value Object with range marker settings.
- * @return {Object}
- */
-anychart.bulletModule.Chart.prototype.defaultMarkerSettings = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    this.defaultMarkerSettings_ = opt_value;
-    return this;
-  }
-  return this.defaultMarkerSettings_ || {};
-};
-
-
 /** @inheritDoc */
 anychart.bulletModule.Chart.prototype.getType = function() {
   return anychart.enums.ChartTypes.BULLET;
@@ -333,9 +305,10 @@ anychart.bulletModule.Chart.prototype.onRangeSignal_ = function(event) {
 anychart.bulletModule.Chart.prototype.rangePalette = function(opt_value) {
   if (!this.rangePalette_) {
     this.rangePalette_ = new anychart.palettes.DistinctColors();
-    this.rangePalette_.items(['#828282', '#a8a8a8', '#c2c2c2', '#d4d4d4', '#e1e1e1']);
     this.rangePalette_.listenSignals(this.onRangePaletteSignal_, this);
     this.registerDisposable(this.rangePalette_);
+
+    this.setupCreated('rangePalette', this.rangePalette_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -367,9 +340,10 @@ anychart.bulletModule.Chart.prototype.onRangePaletteSignal_ = function(event) {
 anychart.bulletModule.Chart.prototype.markerPalette = function(opt_value) {
   if (!this.markerPalette_) {
     this.markerPalette_ = new anychart.palettes.Markers();
-    this.markerPalette_.items(['bar', 'line', 'x', 'ellipse']);
     this.markerPalette_.listenSignals(this.onPaletteSignal_, this);
     this.registerDisposable(this.markerPalette_);
+
+    this.setupCreated('markerPalette', this.markerPalette_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -568,10 +542,6 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   marker.container(this.rootElement);
 
   //defaults
-  //var settings = this.defaultMarkerSettings();
-  //marker.zIndex(settings['zIndex']);
-  //marker.setDefaultFill(settings['fill']);
-  //marker.setDefaultStroke(settings['stroke']);
   marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
   marker.addThemes('defaultRangeMarkerSettings', 'bullet.defaultMarkerSettings');
 
@@ -753,16 +723,10 @@ anychart.bulletModule.Chart.prototype.serialize = function() {
 anychart.bulletModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   anychart.bulletModule.Chart.base(this, 'setupByJSON', config, opt_default);
 
-  //if ('defaultRangeMarkerSettings' in config)
-  //  this.defaultRangeSettings(config['defaultRangeMarkerSettings']);
-
-  //if ('defaultMarkerSettings' in config)
-  //  this.defaultMarkerSettings(config['defaultMarkerSettings']);
-
   this.data(config['data']);
   anychart.core.settings.deserialize(this, anychart.bulletModule.Chart.PROPERTY_DESCRIPTORS, config);
   this.rangePalette(config['rangePalette']);
-  this.markerPalette(config['markerPalette']);
+  //this.markerPalette(config['markerPalette']);
 
   var scaleJson = config['scale'];
   var scale;
