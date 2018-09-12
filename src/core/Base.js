@@ -1187,6 +1187,16 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 };
 
 
+/**
+ *
+ * @param {...*} var_args
+ * @return {Object|null}
+ */
+anychart.core.Base.prototype.resolveSpecialValue = function(var_args) {
+  return null;
+};
+
+
 //region --- Theme Map Processing
 //------------------------------------------------------------------------------
 //
@@ -1309,11 +1319,12 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
 anychart.core.Base.prototype.flattenThemes = function() {
   var flatTheme = this.themeSettings || {}; // this one is to preserve themeSettings['enabled'] = true from VisualBase constructor
   var baseThemes = anychart.getThemes();
+  var splitPath;
 
   for (var i = 0; i < this.themes_.length; i++) {
     var theme = this.themes_[i];
     if (goog.isString(theme)) {
-      var splitPath = theme.split('.');
+      splitPath = theme.split('.');
 
       for (var t = 0; t < baseThemes.length; t++) {
         theme = baseThemes[t];
@@ -1323,13 +1334,26 @@ anychart.core.Base.prototype.flattenThemes = function() {
             theme = theme[part];
           }
         }
-        if (theme)
-          goog.mixin(flatTheme, theme);
+
+        if (goog.isDef(theme)) {
+          if (goog.isObject(theme))
+            goog.mixin(flatTheme, theme);
+          else {
+            flatTheme = theme;
+          }
+        }
       }
     } else if (goog.isObject(theme))
       goog.mixin(flatTheme, theme);
   }
-  this.themeSettings = flatTheme;
+
+  if (!goog.isObject(flatTheme)) {
+    //console.log(splitPath[splitPath.length - 1], flatTheme);
+    flatTheme = this.resolveSpecialValue(flatTheme);
+    //console.log("Resolved", flatTheme);
+  }
+
+  this.themeSettings = /** @type {!Object} */(flatTheme);
 };
 
 

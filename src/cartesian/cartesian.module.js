@@ -139,7 +139,7 @@ anychart.column = function(var_args) {
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.COLUMN);
   chart.setType(anychart.enums.ChartTypes.COLUMN);
 
-  chart.setupInternal(true, anychart.getFullTheme('column'));
+  // chart.setupInternal(true, anychart.getFullTheme('column'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['column'](arguments[i]);
