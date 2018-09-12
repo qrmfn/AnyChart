@@ -132,19 +132,6 @@ anychart.core.axisMarkers.Line.prototype.scale = function(opt_value) {
 
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Settings.
-//----------------------------------------------------------------------------------------------------------------------
-/**
- * Get/set value.
- * @param {number=} opt_newValue LineMarker value settings.
- * @return {number|anychart.core.axisMarkers.Line} - LineMarker value settings or LineMarker instance for method chaining.
- */
-anychart.core.axisMarkers.Line.prototype.value = function(opt_newValue) {
-  return /** @type {number|anychart.core.axisMarkers.Line} */ (this.valueInternal(opt_newValue));
-};
-
-
-//----------------------------------------------------------------------------------------------------------------------
 //  Drawing.
 //----------------------------------------------------------------------------------------------------------------------
 /**
