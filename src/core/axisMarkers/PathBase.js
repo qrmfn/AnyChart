@@ -409,7 +409,7 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
 
   var el = /** @type {acgraph.vector.Path} */ (this.markerElement());
 
-  var ratio = scale.transform(this.val, 0.5);
+  var ratio = scale.transform(this.getOption('value'), 0.5);
   el.clear();
   if (isNaN(ratio)) return this;
 
@@ -440,7 +440,7 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
  * @return {anychart.core.axisMarkers.PathBase} - Itself for method chaining.
  */
 anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
-  var range = /** @type {anychart.core.axisMarkers.PathBase.Range} */ (this.val);
+  var range = /** @type {anychart.core.axisMarkers.PathBase.Range} */ (this.valueInternal());
 
   var scale = /** @type {anychart.scales.Base|anychart.ganttModule.Scale} */ (this.scale());
 
@@ -461,8 +461,8 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
 
   //Safe comparison - comparing numbers.
   if (fromScaleRatio > toScaleRatio) {
-    to = this.getOption('from');
-    from = this.getOption('to');
+    to = this.getOption('to');
+    from = this.getOption('from');
   }
 
   var fromRatio = scale.transform(from, 0);

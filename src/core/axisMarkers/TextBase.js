@@ -356,7 +356,7 @@ anychart.core.axisMarkers.TextBase.prototype.isHorizontal = function() {
  * @private
  */
 anychart.core.axisMarkers.TextBase.prototype.isReady_ = function() {
-  return Boolean(goog.isDefAndNotNull(this.val) && this.scaleInternal());
+  return Boolean(goog.isDefAndNotNull(this.valueInternal()) && this.scaleInternal());
 };
 
 
@@ -368,7 +368,7 @@ anychart.core.axisMarkers.TextBase.prototype.checkDrawingNeeded = function() {
   if (!draw)
     return draw;
 
-  var ratio = this.scale().transform(this.val, 0.5);
+  var ratio = this.scale().transform(this.valueInternal(), 0.5);
   if (ratio >= 0 && ratio <= 1) {
     this.invalidate(anychart.ConsistencyState.CONTAINER | anychart.ConsistencyState.BOUNDS);
     return true;
@@ -461,7 +461,7 @@ anychart.core.axisMarkers.TextBase.prototype.parentBounds = function(opt_boundsO
     if (this.isReady_() && this.contBounds_) {
       //TODO (A.Kudryavtsev): Cache cloning result.
       var clone = this.contBounds_.clone();
-      var ratio = this.scale().transform(this.val, 0.5);
+      var ratio = this.scale().transform(this.valueInternal(), 0.5);
       if (this.isHorizontal()) {
         clone.height = 0;
         clone.top = Math.round(this.contBounds_.top + this.contBounds_.height - ratio * this.contBounds_.height);
