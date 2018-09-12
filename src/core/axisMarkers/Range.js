@@ -75,37 +75,6 @@ anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS = (function() {
 anychart.core.settings.populate(anychart.core.axisMarkers.Range, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS);
 
 
-/**
- * Writes default fill setting to theme settings
- * @param {string|acgraph.vector.Fill} value
- */
-anychart.core.axisMarkers.Range.prototype.setDefaultFill = function(value) {
-  value = acgraph.vector.normalizeFill(value);
-  if (value != this.getThemeOption('fill')) {
-    anychart.core.settings.copy(this.themeSettings, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS, {'fill': value});
-    this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-  }
-};
-
-
-/**
- * @param {*=} opt_value
- * @returns {{from: *, to: *}}
- */
-anychart.core.axisMarkers.Range.prototype.valueInternal = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (goog.isDef(opt_value['from']))
-      this['from'](opt_value['from']);
-    if (goog.isDef(opt_value['to']))
-      this['to'](opt_value['to']);
-  }
-  return {
-    'from': this.getOption('from'),
-    'to': this.getOption('to')
-  };
-};
-
-
 //----------------------------------------------------------------------------------------------------------------------
 //  States and signals.
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,9 +147,43 @@ anychart.core.axisMarkers.Range.prototype.scale = function(opt_value) {
 };
 
 
+//----------------------------------------------------------------------------------------------------------------------
+//  Settings.
+//----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.axisMarkers.Range.prototype.getReferenceValues = function() {
   return [this.getOption('from'), this.getOption('to')];
+};
+
+
+/**
+ * Writes default fill setting to theme settings
+ * @param {string|acgraph.vector.Fill} value
+ */
+anychart.core.axisMarkers.Range.prototype.setDefaultFill = function(value) {
+  value = acgraph.vector.normalizeFill(value);
+  if (value != this.getThemeOption('fill')) {
+    anychart.core.settings.copy(this.themeSettings, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS, {'fill': value});
+    this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
+  }
+};
+
+
+/**
+ * @param {*=} opt_value
+ * @returns {{from: *, to: *}}
+ */
+anychart.core.axisMarkers.Range.prototype.valueInternal = function(opt_value) {
+  if (goog.isDef(opt_value)) {
+    if (goog.isDef(opt_value['from']))
+      this['from'](opt_value['from']);
+    if (goog.isDef(opt_value['to']))
+      this['to'](opt_value['to']);
+  }
+  return {
+    'from': this.getOption('from'),
+    'to': this.getOption('to')
+  };
 };
 
 
