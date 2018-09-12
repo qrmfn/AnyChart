@@ -235,10 +235,11 @@ anychart.ganttModule.axisMarkers.Range.prototype.setupByJSON = function(config, 
 //exports
 (function() {
   var proto = anychart.ganttModule.axisMarkers.Range.prototype;
-  proto['from'] = proto.from;
-  proto['to'] = proto.to;
+  // auto generated
+  //proto['from'] = proto.from;
+  //proto['to'] = proto.to;
+  //proto['fill'] = proto.fill;
   proto['scale'] = proto.scale;
   proto['layout'] = proto.layout;
-  proto['fill'] = proto.fill;
   proto['isHorizontal'] = proto.isHorizontal;
 })();
