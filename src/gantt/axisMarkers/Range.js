@@ -133,7 +133,7 @@ anychart.ganttModule.axisMarkers.Range.prototype.appearanceInvalidated = functio
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.ganttModule.axisMarkers.Range.prototype.disposeInternal = function() {
-  delete this.fill_;
+  this.setOption('fill', null);
   anychart.ganttModule.axisMarkers.Range.base(this, 'disposeInternal');
 };
 

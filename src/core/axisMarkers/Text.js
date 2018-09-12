@@ -123,7 +123,8 @@ anychart.standalones.axisMarkers.text = function() {
 //exports
 (function() {
   var proto = anychart.core.axisMarkers.Text.prototype;
-  proto['value'] = proto.value;
+  // auto generated
+  //proto['value'] = proto.value;
   proto['scale'] = proto.scale;
   proto['axis'] = proto.axis;
   proto['layout'] = proto.layout;
