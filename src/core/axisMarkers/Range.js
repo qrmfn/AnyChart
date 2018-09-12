@@ -76,6 +76,19 @@ anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS = (function() {
 anychart.core.settings.populate(anychart.core.axisMarkers.Range, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS);
 
 
+/**
+ * Writes default fill setting to theme settings
+ * @param {string|acgraph.vector.Fill} value
+ */
+anychart.core.axisMarkers.Range.prototype.setDefaultFill = function(value) {
+  value = acgraph.vector.normalizeFill(value);
+  if (value != this.getThemeOption('fill')) {
+    anychart.core.settings.copy(this.themeSettings, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS, {'fill': value});
+    this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
+  }
+};
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  States and signals.
 //----------------------------------------------------------------------------------------------------------------------
