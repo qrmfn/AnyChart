@@ -150,7 +150,7 @@ anychart.core.axisMarkers.Range.prototype.scale = function(opt_value) {
 
 /** @inheritDoc */
 anychart.core.axisMarkers.Range.prototype.getReferenceValues = function() {
-  return [this.val.from, this.val.to];
+  return [this.getOption('from'), this.getOption('to')];
 };
 
 
@@ -178,7 +178,7 @@ anychart.core.axisMarkers.Range.prototype.appearanceInvalidated = function() {
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.axisMarkers.Range.prototype.disposeInternal = function() {
-  this.fill_ = null;
+  this.setOption('fill', null);
   anychart.core.axisMarkers.Range.base(this, 'disposeInternal');
 };
 
