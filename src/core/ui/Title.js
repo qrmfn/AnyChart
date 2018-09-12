@@ -1123,22 +1123,39 @@ anychart.core.ui.Title.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.core.ui.Title.prototype.resolveSpecialValue = function(var_args) {
+  var result = null;
+  var arg0 = arguments[0];
   if (goog.isString(arg0)) {
-    if (isDefault) {
-      this.themeSettings['text'] = arg0;
-      this.themeSettings['enabled'] = true;
-    } else {
-      this['text'](arg0);
-      this.enabled(true);
-    }
-    return true;
+    result = {
+      'text': arg0,
+      'enabled': true
+    };
   } else if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    if (isDefault)
-      this.themeSettings['enabled'] = !!arg0;
-    else
-      this.enabled(!!arg0);
+    result = {'enabled': !!arg0};
+  }
+  return result;
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.Title.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    if (isDefault) {
+      if ('text' in resolvedValue)
+        this.themeSettings['text'] = resolvedValue['text'];
+
+      if ('enabled' in resolvedValue)
+        this.themeSettings['enabled'] = resolvedValue['enabled'];
+
+    } else {
+      if ('text' in resolvedValue)
+        this['text'](resolvedValue['text']);
+
+      if ('enabled' in resolvedValue)
+        this.enabled(resolvedValue['enabled']);
+    }
     return true;
   }
   return false;

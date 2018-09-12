@@ -1402,12 +1402,17 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
               theme = theme[part];
             }
           }
-          if (theme && goog.isDef(theme['enabled'])) {
-            if (theme['enabled'])
-              this.setCreated(getterName, opt_getterFunction);
-            else
-              this.createdMap_[getterName].enabled = false;
-            return this.createdMap_[getterName].instance ? this.createdMap_[getterName].instance : null;
+          if (goog.isDef(theme)) {
+            if (goog.isBoolean(theme))
+              theme = {'enabled': theme};
+
+            if (goog.isDef(theme['enabled'])) {
+              if (theme['enabled'])
+                this.setCreated(getterName, opt_getterFunction);
+              else
+                this.createdMap_[getterName].enabled = false;
+              return this.createdMap_[getterName].instance ? this.createdMap_[getterName].instance : null;
+            }
           }
         }
       }
