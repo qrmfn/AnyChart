@@ -14,8 +14,30 @@ anychart.core.axisMarkers.Text = function() {
   anychart.core.axisMarkers.Text.base(this, 'constructor');
 
   this.addThemes('defaultTextMarkerSettings');
+
+  var valueBeforeInvalidationHook = function() {
+    this.invalidate(anychart.ConsistencyState.BOUNDS, this.getValueChangeSignals());
+  };
+
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['value', 0, 0, 0, valueBeforeInvalidationHook]
+  ]);
 };
 goog.inherits(anychart.core.axisMarkers.Text, anychart.core.axisMarkers.TextBase);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.axisMarkers.Text.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'value', anychart.core.settings.asIsNormalizer]
+  ]);
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.axisMarkers.Text, anychart.core.axisMarkers.Text.PROPERTY_DESCRIPTORS);
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -50,24 +72,13 @@ anychart.core.axisMarkers.Text.prototype.scale = function(opt_value) {
 };
 
 
-/**
- * Get/set value.
- * @param {number=} opt_newValue TextMarker value settings.
- * @return {number|anychart.core.axisMarkers.Text} TextMarker value settings or LineMarker instance for method chaining.
- */
-anychart.core.axisMarkers.Text.prototype.value = function(opt_newValue) {
-  return /** @type {number|anychart.core.axisMarkers.Text} */ (this.valueInternal(opt_newValue));
-
-};
-
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Elements creation.
 //----------------------------------------------------------------------------------------------------------------------
 /** @inheritDoc */
 anychart.core.axisMarkers.Text.prototype.serialize = function() {
   var json = anychart.core.axisMarkers.Text.base(this, 'serialize');
-  json['value'] = this.value();
+  anychart.core.settings.serialize(this, anychart.core.axisMarkers.Text.PROPERTY_DESCRIPTORS, json);
   return json;
 };
 
@@ -75,7 +86,7 @@ anychart.core.axisMarkers.Text.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.core.axisMarkers.Text.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.axisMarkers.Text.base(this, 'setupByJSON', config, opt_default);
-  this.value(config['value']);
+  anychart.core.settings.deserialize(this, anychart.core.axisMarkers.Text.PROPERTY_DESCRIPTORS, config, opt_default);
 };
 
 

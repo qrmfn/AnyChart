@@ -486,13 +486,12 @@ anychart.core.axisMarkers.TextBase.prototype.parentBounds = function(opt_boundsO
  */
 anychart.core.axisMarkers.TextBase.prototype.valueInternal = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    if (this.val !== opt_value) {
-      this.val = opt_value;
-      this.invalidate(anychart.ConsistencyState.BOUNDS, this.getValueChangeSignals());
+    if (this.getOption('value') !== opt_value) {
+      this['value'](opt_value);
     }
     return this;
   }
-  return this.val;
+  return this.getOption('value');
 };
 
 
