@@ -949,7 +949,7 @@ anychart.core.VisualBase.prototype.resolveSpecialValue = function(var_args) {
 
 /** @inheritDoc */
 anychart.core.VisualBase.prototype.setupSpecial = function(isDefault, var_args) {
-  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  var resolvedValue = anychart.core.VisualBase.prototype.resolveSpecialValue(arguments[1]);
   if (resolvedValue) {
     if (isDefault)
       this.themeSettings['enabled'] = resolvedValue['enabled'];
