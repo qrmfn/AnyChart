@@ -476,7 +476,8 @@ anychart.bulletModule.Chart.prototype.drawContent = function(bounds) {
                 anychart.enums.Layout.VERTICAL :
                 anychart.enums.Layout.HORIZONTAL
         );
-        //range['fill'](/** @type {acgraph.vector.Fill} */(this.rangePalette().itemAt(i)));
+        if (!range.getOption('fill'))
+          range['fill'](/** @type {acgraph.vector.Fill} */(this.rangePalette().itemAt(i)));
         range.parentBounds(boundsWithoutAxis);
         range.container(this.rootElement);
         range.axesLinesSpace(0);
