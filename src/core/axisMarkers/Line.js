@@ -32,9 +32,13 @@ anychart.core.axisMarkers.Line = function() {
    */
   this.defaultLayout_ = anychart.enums.Layout.HORIZONTAL;
 
+  var valueBeforeInvalidationHook = function() {
+    this.invalidate(anychart.ConsistencyState.BOUNDS, this.getValueChangeSignals());
+  };
+
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
-    //['layout', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
+    ['stroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
+    ['value', 0, 0, 0, valueBeforeInvalidationHook]
   ]);
 };
 goog.inherits(anychart.core.axisMarkers.Line, anychart.core.axisMarkers.PathBase);
@@ -47,8 +51,8 @@ anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS = (function() {
   /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
   var map = {};
   anychart.core.settings.createDescriptors(map, [
-    //[anychart.enums.PropertyHandlerType.MULTI_ARG, 'layout', anychart.enum.normalizeLayout],
-    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer]
+    [anychart.enums.PropertyHandlerType.MULTI_ARG, 'stroke', anychart.core.settings.strokeNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'value', anychart.core.settings.asIsNormalizer]
   ]);
   return map;
 })();
@@ -173,7 +177,6 @@ anychart.core.axisMarkers.Line.prototype.disposeInternal = function() {
 anychart.core.axisMarkers.Line.prototype.serialize = function() {
   var json = anychart.core.axisMarkers.Line.base(this, 'serialize');
   anychart.core.settings.serialize(this, anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS, json);
-  json['value'] = this.value();
   if (this.layout_) json['layout'] = this.layout_;
   return json;
 };
@@ -183,7 +186,6 @@ anychart.core.axisMarkers.Line.prototype.serialize = function() {
 anychart.core.axisMarkers.Line.prototype.setupByJSON = function(config, opt_default) {
   anychart.core.axisMarkers.Line.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, anychart.core.axisMarkers.Line.PROPERTY_DESCRIPTORS, config);
-  this.value(config['value']);
 };
 
 
@@ -220,12 +222,12 @@ anychart.standalones.axisMarkers.line = function() {
 //exports
 (function() {
   var proto = anychart.core.axisMarkers.Line.prototype;
-  proto['value'] = proto.value;
   proto['scale'] = proto.scale;
   proto['axis'] = proto.axis;
   proto['layout'] = proto.layout;
   // auto generated
   //proto['stroke'] = proto.stroke;
+  //proto['value'] = proto.value;
   proto['isHorizontal'] = proto.isHorizontal;
 
   proto = anychart.standalones.axisMarkers.Line.prototype;

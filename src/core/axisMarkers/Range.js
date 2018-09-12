@@ -55,7 +55,6 @@ anychart.core.axisMarkers.Range = function() {
     ['to', 0, 0, 0, fromToBeforeInvalidationHook]
   ]);
 
-  //this.setDefaultFill('#c1c1c1 0.4');
 };
 goog.inherits(anychart.core.axisMarkers.Range, anychart.core.axisMarkers.PathBase);
 
@@ -86,6 +85,24 @@ anychart.core.axisMarkers.Range.prototype.setDefaultFill = function(value) {
     anychart.core.settings.copy(this.themeSettings, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS, {'fill': value});
     this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
   }
+};
+
+
+/**
+ * @param {*=} opt_value
+ * @returns {{from: *, to: *}}
+ */
+anychart.core.axisMarkers.Range.prototype.valueInternal = function(opt_value) {
+  if (goog.isDef(opt_value)) {
+    if (goog.isDef(opt_value['from']))
+      this['from'](opt_value['from']);
+    if (goog.isDef(opt_value['to']))
+      this['to'](opt_value['to']);
+  }
+  return {
+    'from': this.getOption('from'),
+    'to': this.getOption('to')
+  };
 };
 
 
