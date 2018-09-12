@@ -831,7 +831,6 @@ anychart.core.ui.MarkersFactory.prototype.setupSpecial = function(isDefault, var
     this.enabled(resolvedValue['enabled']);
     return true;
   }
-
   return anychart.core.VisualBase.prototype.setupSpecial.apply(this, arguments);
 };
 
