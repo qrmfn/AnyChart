@@ -29,8 +29,31 @@ anychart.ganttModule.axisMarkers.Range = function(scale) {
    */
   this.fill_;
 
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['fill', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
+    ['from', anychart.ConsistencyState.BOUNDS,
+          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
+    ['to', anychart.ConsistencyState.BOUNDS,
+          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
+  ]);
 };
 goog.inherits(anychart.ganttModule.axisMarkers.Range, anychart.core.axisMarkers.PathBase);
+
+
+/**
+ * @type {!Object<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.ganttModule.axisMarkers.Range.PROPERTY_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'fill', acgraph.vector.normalizeFill],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'from', anychart.core.settings.asIsNormalizer],
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'to', anychart.core.settings.asIsNormalizer]
+  ]);
+  return map;
+})();
+anychart.core.settings.populate(anychart.ganttModule.axisMarkers.Range, anychart.ganttModule.axisMarkers.Range.PROPERTY_DESCRIPTORS);
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -99,17 +122,17 @@ anychart.ganttModule.axisMarkers.Range.prototype.scale = function(opt_value) {
  * @param {number=} opt_fy .
  * @return {!(acgraph.vector.Fill|anychart.ganttModule.axisMarkers.Range)} .
  */
-anychart.ganttModule.axisMarkers.Range.prototype.fill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
-  if (goog.isDef(opt_fillOrColorOrKeys)) {
-    var fill = acgraph.vector.normalizeFill.apply(null, arguments);
-    if (fill != this.fill_) {
-      this.fill_ = fill;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.fill_ || 'none';
-};
+//anychart.ganttModule.axisMarkers.Range.prototype.fill = function(opt_fillOrColorOrKeys, opt_opacityOrAngleOrCx, opt_modeOrCy, opt_opacityOrMode, opt_opacity, opt_fx, opt_fy) {
+//  if (goog.isDef(opt_fillOrColorOrKeys)) {
+//    var fill = acgraph.vector.normalizeFill.apply(null, arguments);
+//    if (fill != this.fill_) {
+//      this.fill_ = fill;
+//      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
+//    }
+//    return this;
+//  }
+//  return this.fill_ || 'none';
+//};
 
 
 /**
@@ -125,18 +148,18 @@ anychart.ganttModule.axisMarkers.Range.prototype.setDefaultFill = function(value
  * @return {number|anychart.enums.GanttDateTimeMarkers|anychart.ganttModule.axisMarkers.Range} - RangeMarker value
  *  settings or RangeMarker instance for method chaining.
  */
-anychart.ganttModule.axisMarkers.Range.prototype.from = function(opt_newValue) {
-  if (goog.isDef(opt_newValue)) {
-    if (this.val.from != opt_newValue) {
-      this.val.from = opt_newValue;
-      this.invalidate(anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-
-  return /** @type {number|anychart.enums.GanttDateTimeMarkers} */ (this.val.from);
-};
+//anychart.ganttModule.axisMarkers.Range.prototype.from = function(opt_newValue) {
+//  if (goog.isDef(opt_newValue)) {
+//    if (this.val.from != opt_newValue) {
+//      this.val.from = opt_newValue;
+//      this.invalidate(anychart.ConsistencyState.BOUNDS,
+//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//    }
+//    return this;
+//  }
+//
+//  return /** @type {number|anychart.enums.GanttDateTimeMarkers} */ (this.val.from);
+//};
 
 
 /**
@@ -145,18 +168,18 @@ anychart.ganttModule.axisMarkers.Range.prototype.from = function(opt_newValue) {
  * @return {number|anychart.enums.GanttDateTimeMarkers|anychart.ganttModule.axisMarkers.Range} RangeMarker value settings or
  *  RangeMarker instance for method chaining.
  */
-anychart.ganttModule.axisMarkers.Range.prototype.to = function(opt_newValue) {
-  if (goog.isDef(opt_newValue)) {
-    if (this.val.to != opt_newValue) {
-      this.val.to = opt_newValue;
-      this.invalidate(anychart.ConsistencyState.BOUNDS,
-          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
-    }
-    return this;
-  }
-
-  return /** @type {number|anychart.enums.GanttDateTimeMarkers} */ (this.val.to);
-};
+//anychart.ganttModule.axisMarkers.Range.prototype.to = function(opt_newValue) {
+//  if (goog.isDef(opt_newValue)) {
+//    if (this.val.to != opt_newValue) {
+//      this.val.to = opt_newValue;
+//      this.invalidate(anychart.ConsistencyState.BOUNDS,
+//          anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
+//    }
+//    return this;
+//  }
+//
+//  return /** @type {number|anychart.enums.GanttDateTimeMarkers} */ (this.val.to);
+//};
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -174,7 +197,7 @@ anychart.ganttModule.axisMarkers.Range.prototype.boundsInvalidated = function() 
  * @inheritDoc
  */
 anychart.ganttModule.axisMarkers.Range.prototype.appearanceInvalidated = function() {
-  this.markerElement().stroke(null).fill(/** @type {acgraph.vector.Fill} */(this.fill()));
+  this.markerElement().stroke(null).fill(/** @type {acgraph.vector.Fill} */(this.getOption('fill')));
 };
 
 
@@ -191,9 +214,10 @@ anychart.ganttModule.axisMarkers.Range.prototype.disposeInternal = function() {
 /** @inheritDoc */
 anychart.ganttModule.axisMarkers.Range.prototype.serialize = function() {
   var json = anychart.ganttModule.axisMarkers.Range.base(this, 'serialize');
-  json['from'] = this.from();
-  json['to'] = this.to();
-  json['fill'] = anychart.color.serialize(/** @type {acgraph.vector.Fill} */(this.fill()));
+  anychart.core.settings.serialize(this, anychart.ganttModule.axisMarkers.Range.PROPERTY_DESCRIPTORS, json);
+  //json['from'] = this.from();
+  //json['to'] = this.to();
+  //json['fill'] = anychart.color.serialize(/** @type {acgraph.vector.Fill} */(this.fill()));
   return json;
 };
 
@@ -201,9 +225,10 @@ anychart.ganttModule.axisMarkers.Range.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.ganttModule.axisMarkers.Range.prototype.setupByJSON = function(config, opt_default) {
   anychart.ganttModule.axisMarkers.Range.base(this, 'setupByJSON', config, opt_default);
-  this.from(config['from']);
-  this.to(config['to']);
-  this.fill(config['fill']);
+  anychart.core.settings.deserialize(this, anychart.ganttModule.axisMarkers.Range.PROPERTY_DESCRIPTORS, config, opt_default);
+  //this.from(config['from']);
+  //this.to(config['to']);
+  //this.fill(config['fill']);
 };
 
 

@@ -186,7 +186,7 @@ anychart.core.axisMarkers.Range.prototype.disposeInternal = function() {
 /** @inheritDoc */
 anychart.core.axisMarkers.Range.prototype.serialize = function() {
   var json = anychart.core.axisMarkers.Range.base(this, 'serialize');
-  anychart.core.settings.serialize(this, anychart.core.CartesianBase.PROPERTY_DESCRIPTORS, json);
+  anychart.core.settings.serialize(this, anychart.core.axisMarkers.Range.PROPERTY_DESCRIPTORS, json);
   if (this.layout_) json['layout'] = this.layout_;
   return json;
 };
