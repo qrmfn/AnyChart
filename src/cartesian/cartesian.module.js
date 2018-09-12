@@ -134,8 +134,7 @@ anychart.column = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.COLUMN);
   chart.setupAxes();
   chart.setupStateSettings();
-
-  chart.setupInternal(true, anychart.getFullTheme('column'));
+  //chart.setupInternal(true, anychart.getFullTheme('column'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['column'](arguments[i]);
@@ -222,7 +221,6 @@ anychart.line = function(var_args) {
   anychart.performance.start('anychart.line()');
   var chart = new anychart.cartesianModule.Chart();
   chart.addThemes('line');
-
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.LINE);
   chart.setType(anychart.enums.ChartTypes.LINE);

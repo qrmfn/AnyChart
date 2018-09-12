@@ -1692,7 +1692,7 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
 /** Setup xAxes and yAxes */
 anychart.core.ChartWithAxes.prototype.setupAxes = function() {
-  var scalesInstances = /**@type {Object}*/(this.getScaleInstance());
+  var scalesInstances = /**@type {Object}*/(this.getScaleInstances());
   this.setupElementsWithScales(this.getThemeOption('xAxes'), this.xAxis, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('yAxes'), this.yAxis, scalesInstances);
 };

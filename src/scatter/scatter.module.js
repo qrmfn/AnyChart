@@ -89,11 +89,11 @@ anychart.bubble = function(var_args) {
  */
 anychart.quadrant = function(var_args) {
   var chart = new anychart.scatterModule.Chart();
-  chart.setType(anychart.enums.ChartTypes.QUADRANT);
   chart.addThemes('quadrant');
+  chart.setType(anychart.enums.ChartTypes.QUADRANT);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('quadrant'));
+  //chart.setupInternal(true, anychart.getFullTheme('quadrant'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);

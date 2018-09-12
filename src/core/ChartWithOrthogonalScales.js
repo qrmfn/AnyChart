@@ -2303,7 +2303,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getCsvGrouperAlias = function(
  * @param {Object=} opt_config
  * @return {Object}
  * */
-anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(opt_config) {
+anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(opt_config) {
   if (!this.scalesInstances_ || this.scalesChanged_) {
     var type = this.getType();
     var i, json, scale;
@@ -2315,7 +2315,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         if (goog.isString(json)) {
           json = {'type': json};
         }
-        //json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
+        //json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
@@ -2327,7 +2327,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstance = function(op
         if (goog.isString(json)) {
           json = {'type': json};
         }
-        // json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR);
+        // json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
