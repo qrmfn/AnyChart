@@ -536,6 +536,8 @@ anychart.bulletModule.Chart.prototype.createMarkers_ = function() {
 anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   var index = iterator.getIndex();
   var marker = new anychart.bulletModule.Marker();
+  marker.addThemes('bullet.defaultMarkerSettings');
+
   marker.suspendSignalsDispatching();
   this.markers_[index] = marker;
   this.registerDisposable(marker);
@@ -545,9 +547,7 @@ anychart.bulletModule.Chart.prototype.createMarker_ = function(iterator) {
   marker.container(this.rootElement);
 
   //defaults
-  //marker.setDefaultType(/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
   marker['type'](/** @type {anychart.enums.BulletMarkerType} */(this.markerPalette().itemAt(index)));
-  marker.addThemes('bullet.defaultMarkerSettings');
 
   //settings from data
   marker['value'](/** @type {string|number} */(iterator.get('value')));
