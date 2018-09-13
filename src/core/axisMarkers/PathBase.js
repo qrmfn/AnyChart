@@ -461,8 +461,8 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
 
   //Safe comparison - comparing numbers.
   if (fromScaleRatio > toScaleRatio) {
-    to = this.getOption('to');
-    from = this.getOption('from');
+    to = this.getOption('from');
+    from = this.getOption('to');
   }
 
   var fromRatio = scale.transform(from, 0);
