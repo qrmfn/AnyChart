@@ -2317,7 +2317,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
-        scale.setup(scale.themeSettings);
+        scale.setup(json);
         scalesInstances[i] = scale;
       }
     } else if (goog.isObject(scales)) {
@@ -2329,7 +2329,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
-        scale.setup(scale.themeSettings);
+        scale.setup(json);
         scalesInstances[i] = scale;
       }
     }
@@ -2343,7 +2343,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], true);
-      scale.setup(scale.themeSettings);
+      scale.setup(json);
     } else {
       scale = null;
     }
@@ -2359,7 +2359,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], false);
-      scale.setup(scale.themeSettings);
+      scale.setup(json);
     } else {
       scale = null;
     }
@@ -2387,9 +2387,8 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupByJSON = function(config,
   if (config['scales']) {
     this.scalesChanged_ = true;
   }
-  // var scalesInstances = this.getScaleInstance();
-
-  // this.setupByJSONWithScales(config, scalesInstances, opt_default);
+   var scalesInstances = this.getScaleInstances();
+   this.setupByJSONWithScales(config, scalesInstances, opt_default);
 };
 
 
@@ -2454,6 +2453,8 @@ anychart.core.ChartWithOrthogonalScales.prototype.defaultScalesLastIndex = funct
  * @protected
  */
 anychart.core.ChartWithOrthogonalScales.prototype.setupSeriesByJSON = function(config, scalesInstances, opt_default) {
+  this.defaultSeriesSettings(config['defaultSeriesSettings']);
+
   var i, json;
   var series = config['series'];
   if (goog.isArray(series)) {
@@ -2464,6 +2465,33 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupSeriesByJSON = function(c
       var seriesInst = this.createSeriesByType(seriesType, data);
       if (seriesInst) {
         seriesInst.setupInternal(!!opt_default, json);
+        if (goog.isObject(json)) {
+          if ('xScale' in json && json['xScale'] > this.defaultScalesLastIndex())
+            seriesInst.xScale(scalesInstances[json['xScale']]);
+          if ('yScale' in json && json['yScale'] > this.defaultScalesLastIndex())
+            seriesInst.yScale(scalesInstances[json['yScale']]);
+        }
+      }
+    }
+  }
+};
+
+
+/**
+ * Setup series with scale instances.
+ */
+anychart.core.ChartWithOrthogonalScales.prototype.setupScaleForSeries = function() {
+  var scalesInstances = this.getScaleInstances();
+  var i, json;
+  var series = this.getThemeOption('series');
+  if (goog.isArray(series)) {
+    for (i = 0; i < series.length; i++) {
+      json = series[i];
+      var seriesType = json['seriesType'] || this.getOption('defaultSeriesType');
+      var data = json['data'];
+      var seriesInst = this.createSeriesByType(seriesType, data);
+      if (seriesInst) {
+        //seriesInst.setupInternal(!!opt_default, json);
         if (goog.isObject(json)) {
           if ('xScale' in json && json['xScale'] > this.defaultScalesLastIndex())
             seriesInst.xScale(scalesInstances[json['xScale']]);
