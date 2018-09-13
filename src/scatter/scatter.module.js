@@ -82,7 +82,7 @@ anychart.bubble = function(var_args) {
 
 
 /**
- * Default quarant chart.<br/>
+ * Default quadrant chart.<br/>
  * <b>Note:</b> Contains predefined settings for quadrant chart.
  * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Marker chart data.
  * @return {anychart.scatterModule.Chart} Chart with defaults.
