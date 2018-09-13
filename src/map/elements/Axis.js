@@ -19,8 +19,8 @@ goog.require('anychart.math.Rect');
 anychart.mapModule.elements.Axis = function() {
   anychart.mapModule.elements.Axis.base(this, 'constructor');
 
-  delete this.themeSettings['enabled'];
-
+  //delete this.themeSettings['enabled'];
+  this.addThemes('map.axesSettings');
   this.labelsBounds_ = [];
   this.minorLabelsBounds_ = [];
 
@@ -331,6 +331,7 @@ anychart.core.settings.populate(anychart.mapModule.elements.Axis, anychart.mapMo
 anychart.mapModule.elements.Axis.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
+    this.setupCreated('title', this.title_);
     this.title_.setParentEventTarget(this);
     this.title_.parent(/** @type {anychart.core.ui.Title} */(this.parent().title()));
     this.title_.listenSignals(this.titleInvalidated_, this);
@@ -375,6 +376,7 @@ anychart.mapModule.elements.Axis.prototype.titleInvalidated_ = function(event) {
 anychart.mapModule.elements.Axis.prototype.labels = function(opt_value) {
   if (!this.labels_) {
     this.labels_ = new anychart.core.ui.LabelsFactory();
+    this.setupCreated('labels', this.labels_);
     this.labels_.setParentEventTarget(this);
     this.labels_.listenSignals(this.labelsInvalidated_, this);
     this.registerDisposable(this.labels_);
@@ -421,6 +423,7 @@ anychart.mapModule.elements.Axis.prototype.labelsInvalidated_ = function(event) 
 anychart.mapModule.elements.Axis.prototype.minorLabels = function(opt_value) {
   if (!this.minorLabels_) {
     this.minorLabels_ = new anychart.core.ui.LabelsFactory();
+    this.setupCreated('minorLabesls', this.minorLabels_);
     this.minorLabels_.setParentEventTarget(this);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
     this.registerDisposable(this.minorLabels_);
@@ -481,6 +484,7 @@ anychart.mapModule.elements.Axis.prototype.createTicks = function() {
 anychart.mapModule.elements.Axis.prototype.ticks = function(opt_value) {
   if (!this.ticks_) {
     this.ticks_ = this.createTicks();
+    this.setupCreated('ticks', this.ticks_);
     this.ticks_.parent(/** @type {anychart.mapModule.elements.AxisTicks} */(this.parent().ticks()));
   }
 
@@ -500,6 +504,7 @@ anychart.mapModule.elements.Axis.prototype.ticks = function(opt_value) {
 anychart.mapModule.elements.Axis.prototype.minorTicks = function(opt_value) {
   if (!this.minorTicks_) {
     this.minorTicks_ = this.createTicks();
+    this.setupCreated('minorTicks', this.minorTicks_);
     this.minorTicks_.parent(/** @type {anychart.mapModule.elements.AxisTicks} */(this.parent().minorTicks()));
   }
 
