@@ -1775,6 +1775,7 @@ goog.exportSymbol('anychart.themes.defaultTheme', {
       'base': {
         'normal': {
           'labels': {
+            'enabled': null,
             'format': anychart.core.defaultTheme.VALUE_TOKEN_DECIMALS_COUNT_2
           }
         }

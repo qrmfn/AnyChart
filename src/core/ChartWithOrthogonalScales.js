@@ -19,6 +19,7 @@ anychart.core.ChartWithOrthogonalScales = function(categorizeData) {
   anychart.core.ChartWithOrthogonalScales.base(this, 'constructor');
 
   this.scalesInstances_ = null;
+
   this.scalesChanged_= null;
 
   /**
@@ -2454,8 +2455,6 @@ anychart.core.ChartWithOrthogonalScales.prototype.defaultScalesLastIndex = funct
  * @protected
  */
 anychart.core.ChartWithOrthogonalScales.prototype.setupSeriesByJSON = function(config, scalesInstances, opt_default) {
-  this.defaultSeriesSettings(config['defaultSeriesSettings']);
-
   var i, json;
   var series = config['series'];
   if (goog.isArray(series)) {

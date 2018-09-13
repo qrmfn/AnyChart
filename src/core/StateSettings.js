@@ -771,53 +771,62 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
   anychart.core.StateSettings.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, this.PROPERTY_DESCRIPTORS, config, opt_default);
 
+  var flatThemeSetup = goog.object.isEmpty(config);
   if (goog.isDef(this.descriptorsMeta['labels'])) {
-    this.setEnabledTrue(config['labels']);
-    this.labels().setupInternal(!!opt_default, config['labels']);
+    var labelsConfig = flatThemeSetup ? this.labels().themeSettings : config['labels'];
+    this.setEnabledTrue(labelsConfig);
+    this.labels().setupInternal(!!opt_default, labelsConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['minLabels'])) {
-    this.setEnabledTrue(config['minLabels']);
-    this.minLabels().setupInternal(!!opt_default, config['minLabels']);
+    var minLabelsConfig = flatThemeSetup ? this.minLabels().themeSettings : ['minLabels'];
+    this.setEnabledTrue(minLabelsConfig);
+    this.minLabels().setupInternal(!!opt_default, minLabelsConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['maxLabels'])) {
-    this.setEnabledTrue(config['maxLabels']);
-    this.maxLabels().setupInternal(!!opt_default, config['maxLabels']);
+    var maxLabelsConfig = flatThemeSetup ? this.maxLabels().themeSettings : config['maxLabels'];
+    this.setEnabledTrue(maxLabelsConfig);
+    this.maxLabels().setupInternal(!!opt_default, maxLabelsConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['headers'])) {
-    this.setEnabledTrue(config['headers']);
-    this.headers().setup(config['headers']);
+    var headersConfig = flatThemeSetup ? this.headers().themeSettings : config['headers'];
+    this.setEnabledTrue(headersConfig);
+    this.headers().setup(headersConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['lowerLabels'])) {
-    this.setEnabledTrue(config['lowerLabels']);
-    this.lowerLabels().setupInternal(!!opt_default, config['lowerLabels']);
+    var lowerLabelsConfig = flatThemeSetup ? this.lowerLabels().themeSettings : config['lowerLabels'];
+    this.setEnabledTrue(lowerLabelsConfig);
+    this.lowerLabels().setupInternal(!!opt_default, lowerLabelsConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['upperLabels'])) {
-    this.setEnabledTrue(config['upperLabels']);
-    this.upperLabels().setupInternal(!!opt_default, config['upperLabels']);
+    var upperLabelsConfig = flatThemeSetup ? this.upperLabels().themeSettings : config['upperLabels'];
+    this.setEnabledTrue(upperLabelsConfig);
+    this.upperLabels().setupInternal(!!opt_default, upperLabelsConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['markers'])) {
-    this.setEnabledTrue(config['markers']);
-    this.markers().setupInternal(!!opt_default, config['markers']);
+    var markersConfig = flatThemeSetup ? this.markers().themeSettings : config['markers'];
+    this.setEnabledTrue(markersConfig);
+    this.markers().setupInternal(!!opt_default, markersConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['outlierMarkers'])) {
-    this.setEnabledTrue(config['outlierMarkers']);
-    this.outlierMarkers().setupInternal(!!opt_default, config['outlierMarkers']);
+    var outlierMarkersConfig = flatThemeSetup ? this.outlierMarkers().themeSettings : config['outlierMarkers'];
+    this.setEnabledTrue(outlierMarkersConfig);
+    this.outlierMarkers().setupInternal(!!opt_default, outlierMarkersConfig);
   }
 
   if (goog.isDef(this.descriptorsMeta['connector'])) {
-    this.connector().setupInternal(!!opt_default, config['connector']);
+    this.connector().setupInternal(!!opt_default, flatThemeSetup ? this.connector().themeSettings : config['connector']);
   }
 
   if (goog.isDef(this.descriptorsMeta['outline'])) {
     // this.setEnabledTrue(config['outline']);
-    this.outline().setupInternal(!!opt_default, config['outline']);
+    this.outline().setupInternal(!!opt_default, flatThemeSetup ? this.outline().themeSettings : config['outline']);
   }
 
   if (goog.isDef(this.descriptorsMeta['background'])) {
@@ -828,8 +837,8 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
 
 
 /** @inheritDoc */
-anychart.core.StateSettings.prototype.dropThemes = function() {
-  anychart.core.StateSettings.base(this, 'dropThemes');
+anychart.core.StateSettings.prototype.dropThemes = function(opt_dropDefaultThemes) {
+  anychart.core.StateSettings.base(this, 'dropThemes', opt_dropDefaultThemes);
   this.resolutionChainCache(null);
   return this;
 };
