@@ -2387,9 +2387,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupByJSON = function(config,
   if (config['scales']) {
     this.scalesChanged_ = true;
   }
-  // var scalesInstances = this.getScaleInstance();
+  var scalesInstances = this.getScaleInstances(config);
 
-  // this.setupByJSONWithScales(config, scalesInstances, opt_default);
+  this.setupByJSONWithScales(config, scalesInstances, opt_default);
 };
 
 
