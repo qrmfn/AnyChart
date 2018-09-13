@@ -674,7 +674,7 @@ anychart.ui.ContextMenu.prototype.resolveSpecialValue = function(var_args) {
  * @protected
  */
 anychart.ui.ContextMenu.prototype.setupSpecial = function(var_args) {
-  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  var resolvedValue = this.resolveSpecialValue(arguments[0]);
   if (resolvedValue) {
     this.enabled(resolvedValue['enabled']);
     return true;
