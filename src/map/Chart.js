@@ -1736,6 +1736,7 @@ anychart.mapModule.Chart.prototype.onAxesSettingsSignal = function(event) {
 anychart.mapModule.Chart.prototype.grids = function(opt_value) {
   if (!this.gridSettings_) {
     this.gridSettings_ = new anychart.mapModule.elements.GridSettings(this);
+    this.setupCreated('gridsSettings', this.gridSettings_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -5078,9 +5079,9 @@ anychart.mapModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('axesSettings' in config) {
     this.axes().setupInternal(!!opt_default, config['axesSettings']);
   }
-  if ('gridsSettings' in config) {
-    this.grids().setupInternal(!!opt_default, config['gridsSettings']);
-  }
+  //if ('gridsSettings' in config) {
+  //  this.grids().setupInternal(!!opt_default, config['gridsSettings']);
+  //}
 
   this.crosshair(config['crosshair']);
 

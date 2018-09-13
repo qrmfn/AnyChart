@@ -277,6 +277,10 @@ anychart.core.ChartWithAxes.prototype.defaultYAxisSettings = function(opt_value)
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) {
+  if (!this.defaultGridSettings_) { // we need this for getGridZIndex method to work
+    this.defaultGridSettings_ = anychart.getThemes()[0]['defaultGridSettings'];
+  }
+
   if (goog.isDef(opt_value)) {
     this.defaultGridSettings_ = opt_value;
     return this;
@@ -291,6 +295,10 @@ anychart.core.ChartWithAxes.prototype.defaultGridSettings = function(opt_value) 
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultMinorGridSettings = function(opt_value) {
+  if (!this.defaultMinorGridSettings_) { // we need this for getGridZIndex method to work
+    this.defaultMinorGridSettings_ = anychart.getThemes()[0]['defaultMinorGridSettings'];
+  }
+
   if (goog.isDef(opt_value)) {
     this.defaultMinorGridSettings_ = opt_value;
     return this;
@@ -390,7 +398,6 @@ anychart.core.ChartWithAxes.prototype.xGrid = function(opt_indexOrValue, opt_val
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
-    grid.setup(this.defaultGridSettings());
     grid.zIndex(this.getGridZIndex(true));
     this.xGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -427,7 +434,6 @@ anychart.core.ChartWithAxes.prototype.yGrid = function(opt_indexOrValue, opt_val
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
-    grid.setup(this.defaultGridSettings());
     grid.zIndex(this.getGridZIndex(true));
     this.yGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -464,7 +470,7 @@ anychart.core.ChartWithAxes.prototype.xMinorGrid = function(opt_indexOrValue, op
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
-    grid.setup(this.defaultMinorGridSettings());
+    grid.addThemes('defaultMinorGridSettings');
     grid.zIndex(this.getGridZIndex(false));
     this.xMinorGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -501,7 +507,7 @@ anychart.core.ChartWithAxes.prototype.yMinorGrid = function(opt_indexOrValue, op
     grid = this.createGridInstance();
     grid.setOwner(this);
     grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
-    grid.setup(this.defaultMinorGridSettings());
+    grid.addThemes('defaultMinorGridSettings');
     grid.zIndex(this.getGridZIndex(false));
     this.yMinorGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -1653,6 +1659,18 @@ anychart.core.ChartWithAxes.prototype.setupByJSON = function(config, opt_default
 
 
 /**
+ * Setups scales for grids.
+ */
+anychart.core.ChartWithAxes.prototype.setupGridsWithScales = function() {
+  var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
+  this.setupElementsWithScales(this.getThemeOption('xGrids'), this.xGrid, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('yGrids'), this.yGrid, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('xMinorGrids'), this.xMinorGrid, scalesInstances);
+  this.setupElementsWithScales(this.getThemeOption('yMinorGrids'), this.yMinorGrid, scalesInstances);
+};
+
+
+/**
  * @inheritDoc
  */
 anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, scalesInstances, opt_default) {
@@ -1663,8 +1681,8 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
 
   this.defaultXAxisSettings(config['defaultXAxisSettings']);
   this.defaultYAxisSettings(config['defaultYAxisSettings']);
-  this.defaultGridSettings(config['defaultGridSettings']);
-  this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
+  //this.defaultGridSettings(config['defaultGridSettings']);
+  //this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
   this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
   this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
   this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
@@ -1672,10 +1690,6 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
 
-  this.setupElementsWithScales(config['xGrids'], this.xGrid, scalesInstances);
-  this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances);
-  this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
   this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
   this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
   this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
