@@ -41,6 +41,7 @@ anychart.ganttModule.axisMarkers.Text.PROPERTY_DESCRIPTORS = (function() {
 })();
 anychart.core.settings.populate(anychart.ganttModule.axisMarkers.Text, anychart.ganttModule.axisMarkers.Text.PROPERTY_DESCRIPTORS);
 
+
 //----------------------------------------------------------------------------------------------------------------------
 //  States and signals.
 //----------------------------------------------------------------------------------------------------------------------

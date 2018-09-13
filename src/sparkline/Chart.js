@@ -2300,29 +2300,29 @@ anychart.sparklineModule.Chart.prototype.setupByJSON = function(config, opt_defa
   if (scale)
     this.yScale(scale);
 
-  //if (goog.isArray(lineAxesMarkers)) {
-  //  for (i = 0; i < lineAxesMarkers.length; i++) {
-  //    json = lineAxesMarkers[i];
-  //    this.lineMarker(i, json);
-  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.lineMarker(i).scale(scalesInstances[json['scale']]);
-  //  }
-  //}
+  if (goog.isArray(lineAxesMarkers)) {
+    for (i = 0; i < lineAxesMarkers.length; i++) {
+      json = lineAxesMarkers[i];
+      this.lineMarker(i, json);
+      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.lineMarker(i).scale(scalesInstances[json['scale']]);
+    }
+  }
 
-  //if (goog.isArray(rangeAxesMarkers)) {
-  //  for (i = 0; i < rangeAxesMarkers.length; i++) {
-  //    json = rangeAxesMarkers[i];
-  //    this.rangeMarker(i, json);
-  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.rangeMarker(i).scale(scalesInstances[json['scale']]);
-  //  }
-  //}
+  if (goog.isArray(rangeAxesMarkers)) {
+    for (i = 0; i < rangeAxesMarkers.length; i++) {
+      json = rangeAxesMarkers[i];
+      this.rangeMarker(i, json);
+      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.rangeMarker(i).scale(scalesInstances[json['scale']]);
+    }
+  }
 
-  //if (goog.isArray(textAxesMarkers)) {
-  //  for (i = 0; i < textAxesMarkers.length; i++) {
-  //    json = textAxesMarkers[i];
-  //    this.textMarker(i, json);
-  //    if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.textMarker(i).scale(scalesInstances[json['scale']]);
-  //  }
-  //}
+  if (goog.isArray(textAxesMarkers)) {
+    for (i = 0; i < textAxesMarkers.length; i++) {
+      json = textAxesMarkers[i];
+      this.textMarker(i, json);
+      if (goog.isObject(json) && 'scale' in json && json['scale'] > 1) this.textMarker(i).scale(scalesInstances[json['scale']]);
+    }
+  }
 
   this.stroke(config['stroke']);
 
