@@ -111,17 +111,25 @@ anychart.palettes.HatchFills.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.palettes.HatchFills.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.palettes.HatchFills.prototype.resolveSpecialValue = function(var_args) {
+  var arg0 = arguments[0];
   if (goog.isArray(arg0)) {
-    this.items(arg0);
+    return {'items': arg0};
+  } else if (anychart.utils.instanceOf(arg0, anychart.palettes.HatchFills)) {
+    return {'items': arg0.items()};
+  }
+  return null;
+};
+
+
+/** @inheritDoc */
+anychart.palettes.HatchFills.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    this.items(/** @type {Array.<acgraph.vector.HatchFill|acgraph.vector.HatchFill.HatchFillType|acgraph.vector.PatternFill>} */(resolvedValue['items']));
     return true;
   }
-  if (anychart.utils.instanceOf(arg0, anychart.palettes.HatchFills)) {
-    this.items(/** @type {Array.<acgraph.vector.HatchFill|acgraph.vector.HatchFill.HatchFillType|acgraph.vector.PatternFill>} */(arg0.items()));
-    return true;
-  }
-  return anychart.core.Base.prototype.setupSpecial.apply(this, arguments);
+  return false;
 };
 
 
