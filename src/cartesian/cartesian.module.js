@@ -74,7 +74,7 @@ anychart.bar = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.BAR);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('bar'));
+  // chart.setupInternal(true, anychart.getFullTheme('bar'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['bar'](arguments[i]);
@@ -138,7 +138,7 @@ anychart.column = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.COLUMN);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('column'));
+  // chart.setupInternal(true, anychart.getFullTheme('column'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['column'](arguments[i]);
