@@ -106,7 +106,7 @@ anychart.box = function(var_args) {
   chart.setupAxes();
   chart.setupStateSettings();
 
-  chart.setupInternal(true, anychart.getFullTheme('box'));
+  //chart.setupInternal(true, anychart.getFullTheme('box'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['box'](arguments[i]);
