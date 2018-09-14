@@ -681,17 +681,17 @@ anychart.core.series.Base.prototype.applyConfig = function(config, opt_reapplyCl
   this.normal_.dropThemes();
   this.setupCreated('normal', this.normal_);
   this.normal_.updateChildrenThemes();
-  this.normal_.setupInternal(true, this.normal_.themeSettings);
+  this.normal_.setupInternal(true, {});
 
   this.hovered_.dropThemes();
   this.setupCreated('hovered', this.hovered_);
   this.hovered_.updateChildrenThemes();
-  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+  this.hovered_.setupInternal(true, {});
 
   this.selected_.dropThemes();
   this.setupCreated('selected', this.selected_);
   this.selected_.updateChildrenThemes();
-  this.selected_.setupInternal(true, this.selected_.themeSettings);
+  this.selected_.setupInternal(true, {});
 
   if (this.supportsOutliers()) {
     this.indexToMarkerIndexes_ = {};

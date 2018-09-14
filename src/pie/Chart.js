@@ -4710,13 +4710,13 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 anychart.pieModule.Chart.prototype.setupStateSettings = function() {
   this.normal_.addThemes(this.themeSettings);
   this.setupCreated('normal', this.normal_);
-  this.normal_.setupInternal(true, this.normal_.themeSettings);
+  this.normal_.setupInternal(true, {});
 
   this.setupCreated('hovered', this.hovered_);
-  this.hovered_.setupInternal(true, this.hovered_.themeSettings);
+  this.hovered_.setupInternal(true, {});
 
   this.setupCreated('selected', this.selected_);
-  this.selected_.setupInternal(true, this.selected_.themeSettings);
+  this.selected_.setupInternal(true, {});
 };
 
 
