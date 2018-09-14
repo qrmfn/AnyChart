@@ -553,8 +553,9 @@ anychart.scales.Ordinal.prototype.setupByJSON = function(config, opt_default) {
  * @return {!anychart.scales.Ordinal} Ordinal scale.
  */
 anychart.scales.ordinal = function() {
-  // result.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.ordinal')));
-  return new anychart.scales.Ordinal();
+  var scale = new anychart.scales.Ordinal();
+  scale.setup(scale.themeSettings);
+  return scale;
 };
 
 

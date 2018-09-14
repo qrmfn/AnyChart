@@ -186,9 +186,9 @@ anychart.scales.Logarithmic.prototype.setupByJSON = function(config, opt_default
  * @return {!anychart.scales.Logarithmic} Logarithmic scale.
  */
 anychart.scales.log = function() {
-  // var result = new anychart.scales.Logarithmic();
-  // result.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.log')));
-  return new anychart.scales.Logarithmic();
+  var scale = new anychart.scales.Logarithmic();
+  scale.setup(scale.themeSettings);
+  return scale;
 };
 
 

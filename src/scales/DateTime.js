@@ -170,8 +170,9 @@ anychart.scales.DateTime.prototype.setupByJSON = function(config, opt_default) {
  * @return {!anychart.scales.DateTime} DateTime scale.
  */
 anychart.scales.dateTime = function() {
-  // result.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.dateTime')));
-  return new anychart.scales.DateTime();
+  var scale = new anychart.scales.DateTime();
+  scale.setup(scale.themeSettings);
+  return scale;
 };
 
 
