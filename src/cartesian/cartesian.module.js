@@ -226,7 +226,7 @@ anychart.line = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.LINE);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('line'));
+  // chart.setupInternal(true, anychart.getFullTheme('line'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['line'](arguments[i]);
