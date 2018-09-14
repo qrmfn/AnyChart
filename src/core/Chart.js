@@ -1494,7 +1494,7 @@ anychart.core.Chart.prototype.calculateContentAreaSpace = function(totalBounds) 
   boundsWithoutCredits = this.drawCredits(boundsWithoutBackgroundThickness);
   boundsWithoutPadding = this.padding().tightenBounds(boundsWithoutCredits);
 
-  var title = this.getCreated('title');
+  var title = this.title();
   if (this.hasInvalidationState(anychart.ConsistencyState.CHART_TITLE | anychart.ConsistencyState.BOUNDS)) {
     if (title) {
       title.suspendSignalsDispatching();

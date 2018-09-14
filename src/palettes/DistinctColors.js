@@ -112,17 +112,25 @@ anychart.palettes.DistinctColors.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.palettes.DistinctColors.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.palettes.DistinctColors.prototype.resolveSpecialValue = function(var_args) {
+  var arg0 = arguments[0];
   if (goog.isArray(arg0)) {
-    this.items(arg0);
+    return {'items': arg0};
+  } else if (anychart.utils.instanceOf(arg0, anychart.palettes.DistinctColors)) {
+    return {'items': arg0.items()};
+  }
+  return null;
+};
+
+
+/** @inheritDoc */
+anychart.palettes.DistinctColors.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    this.items(/** @type {Array.<acgraph.vector.Fill>} */(resolvedValue['items']));
     return true;
   }
-  if (anychart.utils.instanceOf(arg0, anychart.palettes.DistinctColors)) {
-    this.items(/** @type {Array.<acgraph.vector.Fill>} */(arg0.items()));
-    return true;
-  }
-  return anychart.core.Base.prototype.setupSpecial.apply(this, arguments);
+  return false;
 };
 
 
