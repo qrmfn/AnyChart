@@ -855,24 +855,38 @@ anychart.core.ui.LabelBase.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.LabelBase.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.core.ui.LabelBase.prototype.resolveSpecialValue = function(var_args) {
+  var arg0 = arguments[0];
   if (goog.isString(arg0)) {
+    return {
+      'text': arg0,
+      'enabled': true
+    };
+  }
+  return null;
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.LabelBase.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
     if (isDefault) {
-      if (this.themeSettings['text'] !== arg0) {
-        this.themeSettings['text'] = arg0;
+      if (this.themeSettings['text'] !== resolvedValue['text']) {
+        this.themeSettings['text'] = resolvedValue['text'];
         this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
       }
     } else {
-      if (this.ownSettings['text'] !== arg0) {
-        this.ownSettings['text'] = arg0;
+      if (this.ownSettings['text'] !== resolvedValue['text']) {
+        this.ownSettings['text'] = resolvedValue['text'];
         this.invalidate(anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
       }
     }
-    this.enabled(true);
+    this.enabled(resolvedValue['enabled']);
     return true;
   }
-  return anychart.core.Text.prototype.setupSpecial.apply(this, arguments);
+
+  return anychart.core.VisualBase.prototype.setupSpecial.apply(this, arguments);
 };
 
 

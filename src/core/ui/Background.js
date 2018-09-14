@@ -657,24 +657,46 @@ anychart.core.ui.Background.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.Background.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.core.ui.Background.prototype.resolveSpecialValue = function(var_args) {
+  var result = null;
+  var arg0 = arguments[0];
   if (goog.isString(arg0)) {
-    if (isDefault) {
-      this.themeSettings['fill'] = arg0;
-      this.themeSettings['stroke'] = null;
-      this.themeSettings['enabled'] = true;
-    } else {
-      this['fill'](arg0);
-      this['stroke'](null);
-      this.enabled(true);
-    }
-    return true;
+    result = {
+      'fill': arg0,
+      'stroke': null,
+      'enabled': true
+    };
   } else if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    if (isDefault)
-      this.themeSettings['enabled'] = !!arg0;
-    else
-      this.enabled(!!arg0);
+    result = {'enabled': !!arg0};
+  }
+  return result;
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.Background.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    if (isDefault) {
+      if ('fill' in resolvedValue)
+        this.themeSettings['fill'] = resolvedValue['fill'];
+
+      if ('stroke' in resolvedValue)
+        this.themeSettings['stroke'] = resolvedValue['stroke'];
+
+      if ('enabled' in resolvedValue)
+        this.themeSettings['enabled'] = resolvedValue['enabled'];
+
+    } else {
+      if ('fill' in resolvedValue)
+        this['fill'](resolvedValue['fill']);
+
+      if ('stroke' in resolvedValue)
+        this['stroke'](resolvedValue['stroke']);
+
+      if ('enabled' in resolvedValue)
+        this.enabled(resolvedValue['enabled']);
+    }
     return true;
   }
   return false;

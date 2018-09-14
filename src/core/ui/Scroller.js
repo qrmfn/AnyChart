@@ -1575,10 +1575,20 @@ anychart.core.ui.Scroller.Thumbs.prototype.setupByJSON = function(config, opt_de
 
 
 /** @inheritDoc */
-anychart.core.ui.Scroller.Thumbs.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.core.ui.Scroller.Thumbs.prototype.resolveSpecialValue = function(var_args) {
+  var arg0 = arguments[0];
   if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    this['enabled'](!!arg0);
+    return {'enabled': !!arg0};
+  }
+  return null;
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.Scroller.Thumbs.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    this.enabled(resolvedValue['enabled']);
     return true;
   }
   return false;

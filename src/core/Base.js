@@ -1196,6 +1196,16 @@ anychart.core.Base.prototype.setupSpecial = function(isDefault, var_args) {
 };
 
 
+/**
+ *
+ * @param {...*} var_args
+ * @return {Object|null}
+ */
+anychart.core.Base.prototype.resolveSpecialValue = function(var_args) {
+  return null;
+};
+
+
 //region --- Theme Map Processing
 //------------------------------------------------------------------------------
 //
@@ -1318,11 +1328,12 @@ anychart.core.Base.prototype.createExtendedThemes = function(sourceThemes, exten
 anychart.core.Base.prototype.flattenThemes = function() {
   var flatTheme = this.themeSettings || {}; // this one is to preserve themeSettings['enabled'] = true from VisualBase constructor
   var baseThemes = anychart.getThemes();
+  var splitPath;
 
   for (var i = 0; i < this.themes_.length; i++) {
     var theme = this.themes_[i];
     if (goog.isString(theme)) {
-      var splitPath = theme.split('.');
+      splitPath = theme.split('.');
       var part;
 
       for (var t = 0; t < baseThemes.length; t++) {
@@ -1333,20 +1344,23 @@ anychart.core.Base.prototype.flattenThemes = function() {
             theme = theme[part];
           }
         }
-        if (goog.isBoolean(theme)) {
-          theme = {
-            'enabled': theme
-          };
-        } else if (goog.isNumber(theme) && (part == 'padding' || part == 'margin'))
-          theme = anychart.core.utils.Space.normalizeSpace(theme);
 
-        if (theme)
-          goog.mixin(flatTheme, theme);
+        if (goog.isDef(theme)) {
+          if (goog.isObject(theme) && goog.isObject(flatTheme))
+            goog.mixin(flatTheme, theme);
+          else {
+            flatTheme = theme;
+          }
+        }
       }
     } else if (goog.isObject(theme))
       goog.mixin(flatTheme, theme);
   }
-  this.themeSettings = flatTheme;
+
+  if (!goog.isObject(flatTheme))
+    flatTheme = this.resolveSpecialValue(flatTheme);
+
+  this.themeSettings = /** @type {!Object} */(flatTheme);
 };
 
 
@@ -1395,12 +1409,17 @@ anychart.core.Base.prototype.getCreated = function(getterName, opt_ignoreEnabled
               theme = theme[part];
             }
           }
-          if (theme && goog.isDef(theme['enabled'])) {
-            if (theme['enabled'])
-              this.setCreated(getterName, opt_getterFunction);
-            else
-              this.createdMap_[getterName].enabled = false;
-            return this.createdMap_[getterName].instance ? this.createdMap_[getterName].instance : null;
+          if (goog.isDef(theme)) {
+            if (goog.isBoolean(theme))
+              theme = {'enabled': theme};
+
+            if (goog.isDef(theme['enabled'])) {
+              if (theme['enabled'])
+                this.setCreated(getterName, opt_getterFunction);
+              else
+                this.createdMap_[getterName].enabled = false;
+              return this.createdMap_[getterName].instance ? this.createdMap_[getterName].instance : null;
+            }
           }
         }
       }
