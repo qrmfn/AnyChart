@@ -621,7 +621,8 @@ anychart.colorScalesModule.Ordinal.prototype.calculate = function() {
  */
 anychart.scales.ordinalColor = function(opt_value) {
   var scale = new anychart.colorScalesModule.Ordinal();
-  scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultOrdinalColorScale')));
+  // scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultOrdinalColorScale')));
+  scale.setup(scale.themeSettings);
   scale.ranges(opt_value);
   return scale;
 };

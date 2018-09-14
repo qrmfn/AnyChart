@@ -344,8 +344,9 @@ anychart.scales.Linear.prototype.setupByJSON = function(config, opt_default) {
  * @return {!anychart.scales.Linear} Linear scale.
  */
 anychart.scales.linear = function() {
-  // result.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.linear')));
-  return new anychart.scales.Linear();
+  var scale = new anychart.scales.Linear();
+  scale.setup(scale.themeSettings);
+  return scale;
 };
 
 

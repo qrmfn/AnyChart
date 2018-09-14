@@ -338,8 +338,9 @@ anychart.colorScalesModule.Linear.prototype.createTicks = function() {
  */
 anychart.scales.linearColor = function(var_args) {
   var scale = new anychart.colorScalesModule.Linear();
-  scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.linear')));
-  scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultLinearColorScale')));
+  scale.setup(scale.themeSettings);
+  // scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultScaleSettings.linear')));
+  // scale.setupByJSON(/** @type {!Object} */(anychart.getFullTheme('defaultLinearColorScale')));
   scale.colors.apply(scale, arguments);
   return scale;
 };
