@@ -423,7 +423,7 @@ anychart.mapModule.elements.Axis.prototype.labelsInvalidated_ = function(event) 
 anychart.mapModule.elements.Axis.prototype.minorLabels = function(opt_value) {
   if (!this.minorLabels_) {
     this.minorLabels_ = new anychart.core.ui.LabelsFactory();
-    this.setupCreated('minorLabesls', this.minorLabels_);
+    this.setupCreated('minorLabels', this.minorLabels_);
     this.minorLabels_.setParentEventTarget(this);
     this.minorLabels_.listenSignals(this.minorLabelsInvalidated_, this);
     this.registerDisposable(this.minorLabels_);

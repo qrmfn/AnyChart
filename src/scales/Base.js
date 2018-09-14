@@ -14,6 +14,8 @@ goog.require('anychart.scales.IXScale');
 anychart.scales.Base = function() {
   anychart.scales.Base.base(this, 'constructor');
 
+  this.addThemes('defaultScaleSettings.linear');
+
   /**
    * The number of current calculation sessions. Each chart starts a calculation session in its calculate() method and
    * finishes it in its draw() method beginning.
@@ -56,8 +58,6 @@ anychart.scales.Base = function() {
    * @private
    */
   this.stackDirection_ = anychart.enums.ScaleStackDirection.DIRECT;
-
-  this.addThemes('defaultScaleSettings.linear');
 };
 goog.inherits(anychart.scales.Base, anychart.core.Base);
 

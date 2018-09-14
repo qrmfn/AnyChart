@@ -15,7 +15,9 @@ goog.require('anychart.scales.ScatterBase');
  */
 anychart.scales.DateTime = function() {
   anychart.scales.DateTime.base(this, 'constructor');
+
   this.addThemes('defaultScaleSettings.dateTime');
+
   /**
    * Major ticks for the scale.
    * @type {anychart.scales.DateTimeTicks}
