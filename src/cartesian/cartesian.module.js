@@ -42,6 +42,7 @@ goog.require('anychart.core.drawers.Stick');
  */
 anychart.area = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('area');
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.AREA);
   chart.setType(anychart.enums.ChartTypes.AREA);
   chart.setupAxes();
