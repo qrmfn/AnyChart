@@ -811,11 +811,24 @@ anychart.core.ui.MarkersFactory.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.ui.MarkersFactory.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
+anychart.core.ui.MarkersFactory.prototype.resolveSpecialValue = function(var_args) {
+  var arg0 = arguments[0];
   if (goog.isString(arg0)) {
-    this.type(arg0);
-    this.enabled(true);
+    return {
+      'type': arg0,
+      'enabled': true
+    };
+  }
+  return null;
+};
+
+
+/** @inheritDoc */
+anychart.core.ui.MarkersFactory.prototype.setupSpecial = function(isDefault, var_args) {
+  var resolvedValue = this.resolveSpecialValue(arguments[1]);
+  if (resolvedValue) {
+    this.type(resolvedValue['type']);
+    this.enabled(resolvedValue['enabled']);
     return true;
   }
   return anychart.core.VisualBase.prototype.setupSpecial.apply(this, arguments);

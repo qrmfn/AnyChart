@@ -920,20 +920,6 @@ anychart.core.GridBase.prototype.serialize = function() {
 
 
 /** @inheritDoc */
-anychart.core.GridBase.prototype.setupSpecial = function(isDefault, var_args) {
-  var arg0 = arguments[1];
-  if (goog.isBoolean(arg0) || goog.isNull(arg0)) {
-    if (isDefault)
-      this.themeSettings['enabled'] = !!arg0;
-    else
-      this.enabled(!!arg0);
-    return true;
-  }
-  return false;
-};
-
-
-/** @inheritDoc */
 anychart.core.GridBase.prototype.setupByJSON = function(config, opt_default) {
   if ('axis' in config) {
     var ax = config['axis'];
