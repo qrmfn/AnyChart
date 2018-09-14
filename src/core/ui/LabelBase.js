@@ -570,7 +570,7 @@ anychart.core.ui.LabelBase.prototype.calculateLabelBounds_ = function() {
 
   var adjustFontSize = this.getOption('adjustFontSize');
 
-  var needAdjust = (adjustFontSize && (canAdjustByWidth && adjustFontSize.width) || (canAdjustByHeight && adjustFontSize.height));
+  var needAdjust = (adjustFontSize && ((canAdjustByWidth && adjustFontSize.width) || (canAdjustByHeight && adjustFontSize.height)));
 
   this.suspendSignalsDispatching();
   if (needAdjust) {
