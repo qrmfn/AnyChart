@@ -2318,6 +2318,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         //json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
+        scale.addThemes(json);
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
@@ -2330,6 +2331,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         // json = anychart.themes.merging.mergeScale(json, i, type, anychart.enums.ScaleTypes.LINEAR); //todo: rework after scales
         scale = anychart.scales.Base.fromString(json['type'], false);
+        scale.addThemes(json);
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
@@ -2344,6 +2346,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], true);
+      scale.addThemes(json);
       scale.setup(scale.themeSettings);
     } else {
       scale = null;
@@ -2360,6 +2363,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         scale = scalesInstances[json];
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], false);
+      scale.addThemes(json);
       scale.setup(scale.themeSettings);
     } else {
       scale = null;

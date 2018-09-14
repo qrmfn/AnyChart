@@ -94,7 +94,7 @@ anychart.quadrant = function(var_args) {
 
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('quadrant'));
+  // chart.setupInternal(true, anychart.getFullTheme('quadrant'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
