@@ -105,6 +105,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.BAR] = anychart.bar;
  */
 anychart.box = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('box');
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.BOX);
   chart.setType(anychart.enums.ChartTypes.BOX);
@@ -161,6 +162,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN] = anychart.column;
  */
 anychart.hilo = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('column');
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.HILO);
   chart.setType(anychart.enums.ChartTypes.HILO);
 
