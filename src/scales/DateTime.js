@@ -31,8 +31,6 @@ anychart.scales.DateTime = function() {
    * @protected
    */
   this.minorTicksObj = null;
-
-  anychart.scales.DateTime.base(this, 'constructor');
 };
 goog.inherits(anychart.scales.DateTime, anychart.scales.ScatterBase);
 

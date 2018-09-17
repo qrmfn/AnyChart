@@ -162,7 +162,7 @@ anychart.hilo = function(var_args) {
   chart.setupAxes();
   chart.setupStateSettings();
 
-  chart.setupInternal(true, anychart.getFullTheme('column'));
+  // chart.setupInternal(true, anychart.getFullTheme('column'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['hilo'](arguments[i]);
@@ -197,7 +197,7 @@ anychart.financial = function(var_args) {
   chart.setupAxes();
   chart.setupStateSettings();
 
-  chart.setupInternal(true, anychart.getFullTheme('financial'));
+  // chart.setupInternal(true, anychart.getFullTheme('financial'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['candlestick'](arguments[i]);
