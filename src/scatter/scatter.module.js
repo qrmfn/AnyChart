@@ -22,6 +22,7 @@ anychart.scatter = function(var_args) {
   chart.addThemes('scatter');
   chart.setupAxes();
   chart.setupStateSettings();
+
   chart.setupInternal(true, anychart.getFullTheme('scatter'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
@@ -46,6 +47,7 @@ anychart.marker = function(var_args) {
   chart.addThemes('marker');
   chart.setupAxes();
   chart.setupStateSettings();
+
   chart.setupInternal(true, anychart.getFullTheme('marker'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
@@ -74,7 +76,6 @@ anychart.bubble = function(var_args) {
   chart.addThemes('bubble');
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('bubble'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['bubble'](arguments[i]);
@@ -97,7 +98,7 @@ anychart.quadrant = function(var_args) {
 
   chart.setupAxes();
   chart.setupStateSettings();
-  // chart.setupInternal(true, anychart.getFullTheme('quadrant'));
+ // chart.setupInternal(true, anychart.getFullTheme('quadrant'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
