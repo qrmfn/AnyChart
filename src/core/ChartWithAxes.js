@@ -717,6 +717,10 @@ anychart.core.ChartWithAxes.prototype.lineMarker = function(opt_indexOrValue, op
   var lineMarker = this.lineAxesMarkers_[index];
   if (!lineMarker) {
     lineMarker = this.createLineMarkerInstance();
+
+    var extendedThemes = this.createExtendedThemes(this.getThemes(), 'defaultLineMarkerSettings');
+    lineMarker.addThemes(extendedThemes);
+
     lineMarker.setChart(this);
     lineMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.lineAxesMarkers_[index] = lineMarker;
@@ -762,6 +766,10 @@ anychart.core.ChartWithAxes.prototype.rangeMarker = function(opt_indexOrValue, o
   var rangeMarker = this.rangeAxesMarkers_[index];
   if (!rangeMarker) {
     rangeMarker = this.createRangeMarkerInstance();
+
+    var extendedThemes = this.createExtendedThemes(this.getThemes(), 'defaultRangeMarkerSettings');
+    rangeMarker.addThemes(extendedThemes);
+
     rangeMarker.setChart(this);
     rangeMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.rangeAxesMarkers_[index] = rangeMarker;
@@ -807,7 +815,11 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
   var textMarker = this.textAxesMarkers_[index];
   if (!textMarker) {
     textMarker = this.createTextMarkerInstance();
-    textMarker.addThemes('cartesianBase.defaultTextMarkerSettings');
+
+    // textMarker.addThemes('cartesianBase.defaultTextMarkerSettings');
+    var extendedThemes = this.createExtendedThemes(this.getThemes(), 'defaultTextMarkerSettings');
+    textMarker.addThemes(extendedThemes);
+
     textMarker.setChart(this);
     textMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.textAxesMarkers_[index] = textMarker;
