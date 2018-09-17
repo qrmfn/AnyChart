@@ -188,6 +188,8 @@ anychart.scales.Logarithmic.prototype.setupByJSON = function(config, opt_default
 anychart.scales.log = function() {
   var scale = new anychart.scales.Logarithmic();
   scale.setup(scale.themeSettings);
+  scale.ticks().setup(scale.ticks().themeSettings);
+  scale.minorTicks().setup(scale.minorTicks().themeSettings);
   return scale;
 };
 
