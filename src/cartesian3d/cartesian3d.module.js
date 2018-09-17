@@ -29,7 +29,7 @@ anychart.area3d = function(var_args) {
   chart.setupAxes();
 
   chart.setupInternal(true, anychart.getFullTheme('area3d'));
-  chart.setupGridsWithScales();
+  chart.setupGrids();
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
@@ -58,7 +58,7 @@ anychart.bar3d = function(var_args) {
   chart.setupAxes();
 
   chart.setupInternal(true, anychart.getFullTheme('bar3d'));
-  chart.setupGridsWithScales();
+  chart.setupGrids();
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
@@ -87,7 +87,7 @@ anychart.column3d = function(var_args) {
   chart.setupAxes();
 
   chart.setupInternal(true, anychart.getFullTheme('column3d'));
-  chart.setupGridsWithScales();
+  chart.setupGrids();
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
@@ -116,7 +116,7 @@ anychart.line3d = function(var_args) {
   chart.setupAxes();
 
   chart.setupInternal(true, anychart.getFullTheme('line3d'));
-  chart.setupGridsWithScales();
+  chart.setupGrids();
 
   if (arguments.length)
     chart.addSeries.apply(chart, arguments);
