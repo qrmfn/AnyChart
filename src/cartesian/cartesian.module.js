@@ -38,11 +38,12 @@ goog.require('anychart.core.drawers.Stick');
  */
 anychart.area = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('area');
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.AREA);
   chart.setType(anychart.enums.ChartTypes.AREA);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('area'));
+  // chart.setupInternal(true, anychart.getFullTheme('area'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['area'](arguments[i]);
@@ -100,13 +101,14 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.BAR] = anychart.bar;
  */
 anychart.box = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('box');
 
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.BOX);
   chart.setType(anychart.enums.ChartTypes.BOX);
   chart.setupAxes();
   chart.setupStateSettings();
 
-  chart.setupInternal(true, anychart.getFullTheme('box'));
+  //chart.setupInternal(true, anychart.getFullTheme('box'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['box'](arguments[i]);
@@ -156,6 +158,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.COLUMN] = anychart.column;
  */
 anychart.hilo = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('column');
   chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.HILO);
   chart.setType(anychart.enums.ChartTypes.HILO);
 
