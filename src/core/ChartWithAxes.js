@@ -1631,8 +1631,8 @@ anychart.core.ChartWithAxes.prototype.setupByJSON = function(config, opt_default
 /**
  * Setup axis markers with scales.
  */
-anychart.core.ChartWithAxes.prototype.setupAxisMarkersWithScales = function() {
-  var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
+anychart.core.ChartWithAxes.prototype.setupAxisMarkers= function() {
+  var scalesInstances = this.getScaleInstances();
   this.setupElementsWithScales(this.getThemeOption('lineAxesMarkers'), this.lineMarker, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('rangeAxesMarkers'), this.rangeMarker, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('textAxesMarkers'), this.textMarker, scalesInstances);
@@ -1642,8 +1642,8 @@ anychart.core.ChartWithAxes.prototype.setupAxisMarkersWithScales = function() {
 /**
  * Setups scales for grids.
  */
-anychart.core.ChartWithAxes.prototype.setupGridsWithScales = function() {
-  var scalesInstances = goog.array.concat(this.xScale(), this.yScale());
+anychart.core.ChartWithAxes.prototype.setupGrids = function() {
+  var scalesInstances = this.getScaleInstances();
   this.setupElementsWithScales(this.getThemeOption('xGrids'), this.xGrid, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('yGrids'), this.yGrid, scalesInstances);
   this.setupElementsWithScales(this.getThemeOption('xMinorGrids'), this.xMinorGrid, scalesInstances);
