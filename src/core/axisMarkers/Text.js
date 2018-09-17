@@ -13,7 +13,7 @@ goog.require('anychart.core.axisMarkers.TextBase');
 anychart.core.axisMarkers.Text = function() {
   anychart.core.axisMarkers.Text.base(this, 'constructor');
 
-  this.addThemes('defaultTextMarkerSettings');
+  this.addThemes('defaultFontSettings', 'defaultLabelSettings', 'defaultTextMarkerSettings');
 
   var valueBeforeInvalidationHook = function() {
     this.invalidate(anychart.ConsistencyState.BOUNDS, this.getValueChangeSignals());
