@@ -196,7 +196,8 @@ anychart.core.ChartWithAxes.prototype.isVertical = function(opt_value) {
     }
     return this;
   }
-  return this.isVerticalInternal;
+
+  return this.isVerticalInternal = goog.isDef(this.isVerticalInternal) ? this.isVerticalInternal : !!this.getOption('isVertical');
 };
 
 
