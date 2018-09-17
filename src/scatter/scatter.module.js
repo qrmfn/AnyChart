@@ -19,10 +19,8 @@ goog.require('anychart.scatterModule.Chart');
  */
 anychart.scatter = function(var_args) {
   var chart = new anychart.scatterModule.Chart();
-  chart.addThemes('scatter');
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('scatter'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart['marker'](arguments[i]);
