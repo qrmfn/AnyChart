@@ -24,9 +24,9 @@ anychart.core.ChartWithOrthogonalScales = function(categorizeData) {
 
   /**
    * If true, all default chart elements layout is swapped.
-   * @type {boolean}
+   * @type {boolean|undefined}
    */
-  this.isVerticalInternal = false;
+  this.isVerticalInternal = void 0;
 
   /**
    * If series data should be sorted and joined
