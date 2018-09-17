@@ -494,7 +494,8 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
   }
 
   var stroke = this.getOption('stroke');
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
+  stroke = acgraph.vector.normalizeStroke(stroke);
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
   var pixelShift = lineThickness % 2 == 0 ? 0 : 0.5;
   var bounds = this.getPixelBounds();
   var markerSize = this.getMarkerSpace_();

@@ -1036,7 +1036,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
   var ticks = /** @type {!anychart.core.AxisTicks} */(isMajor ? this.ticks() : this.minorTicks());
   var stroke = /**@type {acgraph.vector.Stroke|string}*/(this.getOption('stroke'));
   stroke = acgraph.vector.normalizeStroke(stroke);
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
 
   var labels = isMajor ? this.labels() : this.minorLabels();
 
@@ -2064,7 +2064,7 @@ anychart.core.Axis.prototype.getLabelsPositionProvider = function(index, isMajor
   var ticksLength = /** @type {number} */(ticks.getOption('length'));
   var stroke = /**@type {acgraph.vector.Stroke|string}*/(this.getOption('stroke'));
   stroke = acgraph.vector.normalizeStroke(stroke);
-  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(this.getOption('stroke')['thickness']) : 1;
+  var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
 
   var isEnabled = ticks.enabled();
   var position = /** @type {anychart.enums.SidePosition} */(ticks.getOption('position'));

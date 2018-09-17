@@ -253,7 +253,7 @@ anychart.verticalArea = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.VERTICAL_AREA);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('verticalArea'));
+  // chart.setupInternal(true, anychart.getFullTheme('verticalArea'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart[anychart.enums.CartesianSeriesType.AREA](arguments[i]);
@@ -277,7 +277,6 @@ anychart.verticalLine = function(var_args) {
   chart.setType(anychart.enums.ChartTypes.VERTICAL_LINE);
   chart.setupAxes();
   chart.setupStateSettings();
-  chart.setupInternal(true, anychart.getFullTheme('verticalLine'));
 
   for (var i = 0, count = arguments.length; i < count; i++) {
     chart[anychart.enums.CartesianSeriesType.LINE](arguments[i]);
