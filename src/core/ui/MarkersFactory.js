@@ -278,8 +278,6 @@ anychart.core.ui.MarkersFactory.prototype.enabled = function(opt_value) {
  * @return {Function|anychart.core.ui.MarkersFactory} .
  */
 anychart.core.ui.MarkersFactory.prototype.positionFormatter = function(opt_value) {
-  if (!this.positionFormatter_)
-    this.positionFormatter_ = this.getOption('positionFormatter');
   if (goog.isDef(opt_value)) {
     this.positionFormatter_ = opt_value;
     this.changedSettings['positionFormatter'] = true;

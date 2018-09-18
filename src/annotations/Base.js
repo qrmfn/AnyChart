@@ -1284,12 +1284,14 @@ anychart.annotationsModule.Base.prototype.hasOwnOption = function(name) {
  * @param {!Object} value
  */
 anychart.annotationsModule.Base.prototype.setDefaultSettings = function(value) {
-  // debugger;
-  // this.themeSettings = value;
-  this.normal_.setupInternal(true, this.themeSettings);
-  this.normal_.setupInternal(true, this.themeSettings['normal']);
-  this.hovered_.setupInternal(true, this.themeSettings['hovered']);
-  this.selected_.setupInternal(true, this.themeSettings['selected']);
+  this.setupCreated('normal', this.normal_);
+  this.normal_.setupInternal(true, {});
+
+  this.setupCreated('hovered', this.hovered_);
+  this.hovered_.setupInternal(true, {});
+
+  this.setupCreated('selected', this.selected_);
+  this.selected_.setupInternal(true, {});
 };
 
 
