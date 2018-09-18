@@ -283,7 +283,7 @@ anychart.core.Chart.prototype.supportsBaseHighlight = function() {
 /**
  * 3D mode flag.
  * @return {boolean}
- * @protected
+ * @public
  */
 anychart.core.Chart.prototype.isMode3d = function() {
   return false;
