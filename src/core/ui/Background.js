@@ -27,9 +27,7 @@ anychart.core.ui.Background = function() {
   anychart.core.ui.Background.base(this, 'constructor');
 
   this.addDefaultThemes(anychart.themes.DefaultThemes['background']);
-
-  delete this.themeSettings['enabled'];
-
+  
   /**
    * Parent.
    * @type {anychart.core.ui.Background}

@@ -54,7 +54,7 @@ anychart.mekkoModule.Chart = function(opt_useCategoryScale, opt_barmekkoMode) {
    */
   this.barmekkoMode_ = !!opt_barmekkoMode;
 
-  this.setOption('pointsPadding', 0);
+  // this.setOption('pointsPadding', 0);
   this.setOption('defaultSeriesType', anychart.enums.MekkoSeriesType.MEKKO);
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
@@ -155,8 +155,16 @@ anychart.mekkoModule.Chart.prototype.firstCategoriesScale = function(opt_value) 
     return this;
   }
   if (!this.firstCategoriesScale_) {
-    this.firstCategoriesScale_ = /** @type {anychart.scales.Ordinal} */(anychart.scales.Base.setupScale(this.firstCategoriesScale_, {}, anychart.enums.ScaleTypes.ORDINAL,
-        anychart.scales.Base.ScaleTypes.ORDINAL, null, this.categoriesScaleInvalidated, this));
+    var scales = this.getScaleInstances();
+    var scaleIndex = this.getThemeOption('firstCategoriesScale');
+    this.firstCategoriesScale_ = /** @type {anychart.scales.Ordinal} */(anychart.scales.Base.setupScale(
+        this.firstCategoriesScale_,
+        scales[scaleIndex],
+        null,
+        void 0,
+        null,
+        this.categoriesScaleInvalidated,
+        this));
     this.firstCategoriesScale_.resumeSignalsDispatching(false);
   }
   return /** @type {!anychart.scales.Ordinal} */(this.firstCategoriesScale_);
@@ -186,8 +194,15 @@ anychart.mekkoModule.Chart.prototype.lastCategoriesScale = function(opt_value) {
     return this;
   }
   if (!this.lastCategoriesScale_) {
-    this.lastCategoriesScale_ = /** @type {anychart.scales.Ordinal} */(anychart.scales.Base.setupScale(this.lastCategoriesScale_, {}, anychart.enums.ScaleTypes.ORDINAL,
-        anychart.scales.Base.ScaleTypes.ORDINAL, null, this.categoriesScaleInvalidated, this));
+    var scales = this.getScaleInstances();
+    var scaleIndex = this.getThemeOption('lastCategoriesScale');
+    this.lastCategoriesScale_ = /** @type {anychart.scales.Ordinal} */(anychart.scales.Base.setupScale(
+        this.lastCategoriesScale_,
+        scales[scaleIndex],
+        null,
+        void 0,
+        null,
+        this.categoriesScaleInvalidated, this));
     this.lastCategoriesScale_.resumeSignalsDispatching(false);
   }
   return /** @type {!anychart.scales.Ordinal} */(this.lastCategoriesScale_);
