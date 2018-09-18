@@ -1278,9 +1278,9 @@ anychart.annotationsModule.Base.prototype.hasOwnOption = function(name) {
 //----------------------------------------------------------------------------------------------------------------------
 /**
  * Sets default annotation settings.
- * @param {!Object} value
+ * @param {!Object=} opt_value
  */
-anychart.annotationsModule.Base.prototype.setDefaultSettings = function(value) {
+anychart.annotationsModule.Base.prototype.setDefaultSettings = function(opt_value) {
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, {});
 
