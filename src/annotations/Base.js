@@ -16,6 +16,8 @@ goog.require('anychart.math.Rect');
  */
 anychart.annotationsModule.Base = function(chartController) {
   anychart.annotationsModule.Base.base(this, 'constructor');
+
+  //this.addThemes('chart.defaultAnnotationSettings.base');
   /**
    * Chart controller reference.
    * @type {!anychart.annotationsModule.ChartController}
@@ -1189,6 +1191,7 @@ anychart.annotationsModule.Base.prototype.drawMarkers_ = function(state) {
         element = mainFactory.add(positionProvider, i);
       }
       element.resetSettings();
+      element.addThemes('chart.defaultAnnotationSettings.base', 'chart.defaultAnnotationSettings.marker');
       element.currentMarkersFactory(stateFactory || mainFactory);
       element.setSettings();
       element.draw();
@@ -1278,7 +1281,8 @@ anychart.annotationsModule.Base.prototype.hasOwnOption = function(name) {
  * @param {!Object} value
  */
 anychart.annotationsModule.Base.prototype.setDefaultSettings = function(value) {
-  this.themeSettings = value;
+  // debugger;
+  // this.themeSettings = value;
   this.normal_.setupInternal(true, this.themeSettings);
   this.normal_.setupInternal(true, this.themeSettings['normal']);
   this.hovered_.setupInternal(true, this.themeSettings['hovered']);

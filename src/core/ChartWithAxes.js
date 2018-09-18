@@ -1040,6 +1040,7 @@ anychart.core.ChartWithAxes.prototype.annotations = function(opt_annotationsList
      * @private
      */
     this.annotationsPlotController_ = new this.annotationsModule_['PlotController'](this.annotationsChartController_, this);
+    this.setupCreated('annotations', this.annotationsPlotController_);
     this.annotationsPlotController_.listenSignals(this.annotationsInvalidated_, this);
   }
   if (goog.isDef(opt_annotationsList)) {
@@ -1067,6 +1068,9 @@ anychart.core.ChartWithAxes.prototype.annotationsInvalidated_ = function(e) {
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultAnnotationSettings = function(opt_value) {
+  if (!this.defaultAnnotationSettings_)
+    this.defaultAnnotationSettings_ = anychart.getThemes()[0]['chart']['defaultAnnotationSettings'];
+
   if (goog.isDef(opt_value)) {
     this.defaultAnnotationSettings_ = opt_value;
     return this;

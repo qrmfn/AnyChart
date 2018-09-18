@@ -326,6 +326,7 @@ anychart.annotationsModule.ChartController.prototype.createAnnotationByType = fu
   }
   type = anychart.enums.normalizeAnnotationType(type);
   var annotation = /** @type {anychart.annotationsModule.Base} */(new anychart.annotationsModule.AnnotationTypes[type](this));
+  annotation.addThemes('chart.defaultAnnotationSettings.base');
   annotation.setDefaultSettings(this.chart_.defaultAnnotationSettings()[anychart.utils.toCamelCase(annotation.getType())]);
   annotation.setup(config);
   return annotation;
