@@ -1,6 +1,7 @@
 //region --- Requiring and Providing
 goog.provide('anychart.core.ui.Legend');
 goog.provide('anychart.standalones.Legend');
+
 goog.require('acgraph.vector.Text.TextOverflow');
 goog.require('anychart.core.IStandaloneBackend');
 goog.require('anychart.core.Text');
@@ -16,7 +17,9 @@ goog.require('anychart.enums');
 goog.require('anychart.format.Context');
 goog.require('anychart.math.Rect');
 goog.require('anychart.utils');
+
 goog.require('goog.array');
+goog.require('goog.math.Rect');
 goog.require('goog.object');
 //endregion
 
@@ -1442,6 +1445,48 @@ anychart.core.ui.Legend.prototype.initializeLegendItems_ = function(items) {
     this.clearItems();
   }
 
+  /*
+    DEV NOTE: Such sequence of DOM-operations allows to minimize
+    forced reflow calculation time:
+      1) Add to DOM.
+      2) Setup all elements.
+      3) Ask numeric measurements (like el.getBBox()). This triggers
+         flow recalculation for first measurement request. Another
+         measurements are already calculated on first request.
+
+      See more: https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
+   */
+  var textEl, style, sett;
+  for (i = 0; i < this.items_.length; i++) {
+    item = this.items_[i];
+    sett = item.textSettings();
+    style = anychart.utils.toStyleString(sett);
+    textEl = item.predefinedElement();
+    if (!textEl) {
+      textEl = this.renderer.createTextElement();
+      this.measurementG_.appendChild(textEl);
+      item.predefinedElement(textEl);
+    }
+    textEl.style.cssText = style;
+    textEl.textContent = item.text();
+  }
+
+  var paginatorTextEl = this.renderer.createTextElement();
+  this.measurementG_.appendChild(paginatorTextEl);
+  sett = this.paginator_.textSettings();
+  style = anychart.utils.toStyleString(sett);
+  paginatorTextEl.style.cssText = style;
+  paginatorTextEl.textContent = '0 / 0';
+
+  for (i = 0; i < this.items_.length; i++) {
+    item = this.items_[i];
+    textEl = item.predefinedElement();
+    var bbox = textEl['getBBox']();
+    item.predefinedBounds(new goog.math.Rect(bbox.x, bbox.y, bbox.width, bbox.height));
+  }
+  var pb = paginatorTextEl['getBBox']();
+  this.paginator_.predefinedTextBounds(new goog.math.Rect(pb.x, pb.y, pb.width, pb.height));
+
   this.recreateItems_ = false;
   this.invalidate(anychart.ConsistencyState.BOUNDS);
 };
@@ -1508,7 +1553,7 @@ anychart.core.ui.Legend.prototype.draw = function() {
   if (!this.rootElement) {
     /**
      * Layer of legend.
-     * @type {!acgraph.vector.Layer}
+     * @type {acgraph.vector.Layer}
      */
     this.rootElement = acgraph.layer();
     this.bindHandlersToGraphics(this.rootElement);
@@ -1535,6 +1580,13 @@ anychart.core.ui.Legend.prototype.draw = function() {
   if (this.hasInvalidationState(anychart.ConsistencyState.CONTAINER)) {
     this.rootElement.parent(container);
     this.markConsistent(anychart.ConsistencyState.CONTAINER);
+
+    if (acgraph.type() == acgraph.StageType.SVG) {
+      this.renderer = acgraph.getRenderer();
+      var m = this.renderer.createMeasurement();
+      this.measurementG_ = this.renderer.createLayerElement();
+      goog.dom.appendChild(m, this.measurementG_);
+    }
   }
 
   var manualSuspend = stage && !stage.isSuspended();
@@ -2087,35 +2139,41 @@ anychart.core.ui.Legend.prototype.setupByJSON = function(config, opt_default) {
 anychart.core.ui.Legend.prototype.disposeInternal = function() {
   anychart.core.ui.Legend.base(this, 'disposeInternal');
 
+  if (this.measurementG_) {
+    goog.dom.removeChildren(this.measurementG_);
+    goog.dom.removeNode(this.measurementG_);
+  }
+
   goog.disposeAll(
       this.dragHandler_,
       this.tooltip_,
       this.paginator_,
       this.itemsPool_,
       this.items_,
+      this.itemsLayer_,
       this.margin_,
       this.padding_,
       this.background_,
       this.title_,
       this.titleSeparator_,
-      this.paginator_,
+      this.tooltip_,
       this.rootElement,
-      this.itemsLayer_
+      this.measurementG_
   );
 
   this.dragHandler_ = null;
-  this.tooltip_ = null;
-  this.paginator_ = null;
   this.itemsPool_ = null;
   this.items_ = null;
   this.margin_ = null;
   this.padding_ = null;
+  this.paginator_ = null;
+  this.itemsLayer_ = null;
   this.background_ = null;
   this.title_ = null;
   this.titleSeparator_ = null;
-  this.paginator_ = null;
-  //this.rootElement = null;
-  this.itemsLayer_ = null;
+  this.tooltip_ = null;
+  this.rootElement = null;
+  this.measurementG_ = null;
 };
 
 
@@ -2149,7 +2207,7 @@ anychart.standalones.Legend.prototype.dependsOnContainerSize = function() {
   return anychart.utils.isPercent(width) || anychart.utils.isPercent(height) || goog.isNull(width) || goog.isNull(height);
 };
 
- 
+
 //endregion
 /**
  * Removes signal listeners.
