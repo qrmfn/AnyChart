@@ -493,7 +493,7 @@ anychart.colorScalesModule.ui.ColorRange.prototype.drawLine = function() {
       break;
   }
 
-  var stroke = this.getOption('stroke');
+  var stroke = /**@type {acgraph.vector.Stroke|string}*/(this.getOption('stroke'));
   stroke = acgraph.vector.normalizeStroke(stroke);
   var lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
   var pixelShift = lineThickness % 2 == 0 ? 0 : 0.5;
