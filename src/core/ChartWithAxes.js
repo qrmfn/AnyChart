@@ -1072,9 +1072,6 @@ anychart.core.ChartWithAxes.prototype.annotationsInvalidated_ = function(e) {
  * @return {Object}
  */
 anychart.core.ChartWithAxes.prototype.defaultAnnotationSettings = function(opt_value) {
-  if (!this.defaultAnnotationSettings_)
-    this.defaultAnnotationSettings_ = anychart.getThemes()[0]['chart']['defaultAnnotationSettings'];
-
   if (goog.isDef(opt_value)) {
     this.defaultAnnotationSettings_ = opt_value;
     return this;
