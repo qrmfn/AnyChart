@@ -288,9 +288,11 @@ anychart.core.series.Base = function(chart, plot, type, config) {
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.HOVER);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+  this.hovered_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_MARKERS_CONSTRUCTOR_NO_THEME);
 
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.SELECT);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+  this.selected_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_MARKERS_CONSTRUCTOR_NO_THEME);
   function markLabelsAllConsistent(factory) {
     anychart.core.StateSettings.DEFAULT_LABELS_AFTER_INIT_CALLBACK.call(this, factory);
     factory.markConsistent(anychart.ConsistencyState.ALL);

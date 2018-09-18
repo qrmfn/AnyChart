@@ -35,15 +35,17 @@ goog.require('goog.math.Coordinate');
  *  MMarker.draw({x: 200, y: 50});
  * @param {boolean=} opt_isNonInteractive
  * @param {boolean=} opt_crispEdges
+ * @param {boolean=} opt_skipDefaultThemes
  * @constructor
  * @extends {anychart.core.VisualBase}
  * @implements {anychart.core.IStandaloneBackend}
  */
-anychart.core.ui.MarkersFactory = function(opt_isNonInteractive, opt_crispEdges) {
+anychart.core.ui.MarkersFactory = function(opt_isNonInteractive, opt_crispEdges, opt_skipDefaultThemes) {
   this.suspendSignalsDispatching();
   anychart.core.ui.MarkersFactory.base(this, 'constructor');
 
-  this.addDefaultThemes(anychart.themes.DefaultThemes['markersFactory']);
+  if (!opt_skipDefaultThemes)
+    this.addDefaultThemes(anychart.themes.DefaultThemes['markersFactory']);
 
   delete this.themeSettings['enabled'];
 

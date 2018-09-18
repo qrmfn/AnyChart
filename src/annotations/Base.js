@@ -120,17 +120,20 @@ anychart.annotationsModule.Base = function(chartController) {
   this.normal_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR, markersConstructor);
   this.normal_.setOption(anychart.core.StateSettings.MARKERS_AFTER_INIT_CALLBACK, anychart.core.StateSettings.DEFAULT_MARKERS_AFTER_INIT_CALLBACK);
 
+  var markersConstructorNoTheme = function() {
+    return new anychart.core.ui.MarkersFactory(true, true, true);
+  };
   var hoveredMap = {};
   anychart.core.settings.createDescriptorsMeta(hoveredMap, this.getHoveredDescriptorsMeta());
   this.hovered_ = new anychart.core.StateSettings(this, hoveredMap, anychart.PointState.HOVER);
   this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
-  this.hovered_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR, markersConstructor);
+  this.hovered_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR, markersConstructorNoTheme);
 
   var selectedMap = {};
   anychart.core.settings.createDescriptorsMeta(selectedMap, this.getSelectedDescriptorsMeta());
   this.selected_ = new anychart.core.StateSettings(this, selectedMap, anychart.PointState.SELECT);
   this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
-  this.selected_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR, markersConstructor);
+  this.selected_.setOption(anychart.core.StateSettings.MARKERS_FACTORY_CONSTRUCTOR, markersConstructorNoTheme);
 };
 goog.inherits(anychart.annotationsModule.Base, anychart.core.VisualBaseWithBounds);
 anychart.core.settings.populateAliases(anychart.annotationsModule.Base, ['markers'], 'normal');

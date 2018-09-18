@@ -182,6 +182,16 @@ anychart.core.StateSettings.DEFAULT_MARKERS_CONSTRUCTOR = function() {
 
 
 /**
+ * Default labels factory constructor. But without using defaultMarkerFactory theme
+ * @this {*}
+ * @return {anychart.core.ui.MarkersFactory}
+ */
+anychart.core.StateSettings.DEFAULT_MARKERS_CONSTRUCTOR_NO_THEME = function() {
+  return new anychart.core.ui.MarkersFactory(void 0, void 0, true);
+};
+
+
+/**
  * Default outline settings constructor.
  * @this {*}
  * @return {anychart.core.ui.Outline}
