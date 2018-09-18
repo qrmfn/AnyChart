@@ -1473,8 +1473,8 @@ anychart.core.ui.Legend.prototype.initializeLegendItems_ = function(items) {
 
   var paginatorTextEl = this.renderer.createTextElement();
   this.measurementG_.appendChild(paginatorTextEl);
-  sett = this.paginator_.textSettings();
-  style = anychart.utils.toStyleString(sett);
+  sett = this.paginator().textSettings();
+  style = anychart.utils.toStyleString(/** @type {Object} */ (sett));
   paginatorTextEl.style.cssText = style;
   paginatorTextEl.textContent = '0 / 0';
 
