@@ -360,7 +360,7 @@ anychart.core.ChartWithAxes.prototype.xGrid = function(opt_indexOrValue, opt_val
   if (!grid) {
     grid = this.createGridInstance();
     grid.setOwner(this);
-    grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
+    grid.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
     grid.zIndex(this.getGridZIndex(true));
     this.xGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
