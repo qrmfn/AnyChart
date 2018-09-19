@@ -569,8 +569,6 @@ anychart.annotationsModule.Label.prototype.serialize = function() {
 /** @inheritDoc */
 anychart.annotationsModule.Label.prototype.setDefaultSettings = function(value) {
   anychart.annotationsModule.Label.base(this, 'setDefaultSettings', value);
-  //this.background().setupInternal(true, value['background']);
-  //this.padding().setupInternal(true, value['padding']);
 };
 
 
