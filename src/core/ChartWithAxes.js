@@ -1677,11 +1677,11 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
 
-  // this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
-  // this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
-  // this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
-  // this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
-  // this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
+  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
+  this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
+  this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
+  this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
 
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);
