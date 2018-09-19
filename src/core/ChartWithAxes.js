@@ -137,7 +137,7 @@ anychart.core.ChartWithAxes.MAX_ATTEMPTS_AXES_CALCULATION = 5;
  * @protected
  */
 anychart.core.ChartWithAxes.prototype.setDefaultScaleForLayoutBasedElements = function(item) {
-  var sc = /** @type {anychart.scales.Base} */ (!!(item.isHorizontal() ^ this.isVerticalInternal) ? this.yScale() : this.xScale());
+  var sc = /** @type {anychart.scales.Base} */ (!!(item.isHorizontal() ^ this.isVertical()) ? this.yScale() : this.xScale());
 
   if (anychart.utils.instanceOf(item, anychart.core.GridBase))
     item.setAutoScale(sc);
@@ -360,7 +360,7 @@ anychart.core.ChartWithAxes.prototype.xGrid = function(opt_indexOrValue, opt_val
   if (!grid) {
     grid = this.createGridInstance();
     grid.setOwner(this);
-    grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
+    grid.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
     grid.zIndex(this.getGridZIndex(true));
     this.xGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -396,7 +396,7 @@ anychart.core.ChartWithAxes.prototype.yGrid = function(opt_indexOrValue, opt_val
   if (!grid) {
     grid = this.createGridInstance();
     grid.setOwner(this);
-    grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
+    grid.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     grid.zIndex(this.getGridZIndex(true));
     this.yGrids_[index] = grid;
     grid.listenSignals(this.onGridSignal, this);
@@ -432,7 +432,7 @@ anychart.core.ChartWithAxes.prototype.xMinorGrid = function(opt_indexOrValue, op
   if (!grid) {
     grid = this.createGridInstance();
     grid.setOwner(this);
-    grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
+    grid.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.HORIZONTAL : anychart.enums.Layout.VERTICAL);
     grid.addThemes('defaultMinorGridSettings');
     grid.zIndex(this.getGridZIndex(false));
     this.xMinorGrids_[index] = grid;
@@ -469,7 +469,7 @@ anychart.core.ChartWithAxes.prototype.yMinorGrid = function(opt_indexOrValue, op
   if (!grid) {
     grid = this.createGridInstance();
     grid.setOwner(this);
-    grid.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
+    grid.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     grid.addThemes('defaultMinorGridSettings');
     grid.zIndex(this.getGridZIndex(false));
     this.yMinorGrids_[index] = grid;
@@ -726,7 +726,7 @@ anychart.core.ChartWithAxes.prototype.lineMarker = function(opt_indexOrValue, op
     lineMarker.addThemes(extendedThemes);
 
     lineMarker.setChart(this);
-    lineMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
+    lineMarker.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.lineAxesMarkers_[index] = lineMarker;
     lineMarker.listenSignals(this.onMarkersSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES_MARKERS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -775,7 +775,7 @@ anychart.core.ChartWithAxes.prototype.rangeMarker = function(opt_indexOrValue, o
     rangeMarker.addThemes(extendedThemes);
 
     rangeMarker.setChart(this);
-    rangeMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
+    rangeMarker.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.rangeAxesMarkers_[index] = rangeMarker;
     rangeMarker.listenSignals(this.onMarkersSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES_MARKERS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -825,7 +825,7 @@ anychart.core.ChartWithAxes.prototype.textMarker = function(opt_indexOrValue, op
     textMarker.addThemes(extendedThemes);
 
     textMarker.setChart(this);
-    textMarker.setDefaultLayout(this.isVerticalInternal ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
+    textMarker.setDefaultLayout(this.isVertical() ? anychart.enums.Layout.VERTICAL : anychart.enums.Layout.HORIZONTAL);
     this.textAxesMarkers_[index] = textMarker;
     textMarker.listenSignals(this.onMarkersSignal, this);
     this.invalidate(anychart.ConsistencyState.AXES_CHART_AXES_MARKERS | anychart.ConsistencyState.SCALE_CHART_SCALES_STATISTICS, anychart.Signal.NEEDS_REDRAW);
@@ -874,7 +874,7 @@ anychart.core.ChartWithAxes.prototype.getAdditionalScales = function(scales, isX
   for (i = 0; i < elementsWithScale.length; i++) {
     var item = elementsWithScale[i];
     if (item) {
-      isY = !!(item.isHorizontal() ^ this.isVerticalInternal);
+      isY = !!(item.isHorizontal() ^ this.isVertical());
 
       // isX - means we are collecting xScales
       // isY - means that element's scale supposed to be yScale
@@ -961,7 +961,7 @@ anychart.core.ChartWithAxes.prototype.extendScalesByMarkers = function(scalesObj
   for (var i = 0; i < markers.length; i++) {
     var marker = markers[i];
     if (marker && marker.enabled()) {
-      var autoScale = /** @type {anychart.scales.Base} */ (!!(marker.isHorizontal() ^ this.isVerticalInternal) ? this.yScale() : this.xScale());
+      var autoScale = /** @type {anychart.scales.Base} */ (!!(marker.isHorizontal() ^ this.isVertical()) ? this.yScale() : this.xScale());
       var markerScale = marker.scale() ? marker.scale() : autoScale;
       if (markerScale) {
         for (var j = 0; j < scales.length; j++) {
