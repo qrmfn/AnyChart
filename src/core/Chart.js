@@ -965,6 +965,8 @@ anychart.core.Chart.prototype.contextMenu = function(opt_value) {
       this.registerDisposable(this.contextMenu_);
       this.contextMenu_['itemsProvider'](this.contextMenuItemsProvider);
     }
+    if (!opt_value)
+      opt_value = this.themeSettings['contextMenu'];
   }
 
   if (goog.isDef(opt_value)) {
@@ -1584,8 +1586,8 @@ anychart.core.Chart.prototype.drawInternal = function() {
   var manualSuspend = stage && !stage.isSuspended();
   if (manualSuspend) stage.suspend();
 
-  if (this.contextMenu_) {
-    this.contextMenu_['attach'](this);
+  if (this.contextMenu().enabled()) {
+    this.contextMenu()['attach'](this);
   }
 
   //start clear container consistency states
