@@ -1324,12 +1324,10 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   this.markerPalette(config['markerPalette']);
   this.hatchFillPalette(config['hatchFillPalette']);
   this.dataArea().setupInternal(!!opt_default, config['dataArea']);
-
-  // todo: uncomment when merge
-  // this.normal_.setupInternal(!!opt_default, config);
-  // this.normal_.setupInternal(!!opt_default, config['normal']);
-  // this.hovered_.setupInternal(!!opt_default, config['hovered']);
-  // this.selected_.setupInternal(!!opt_default, config['selected']);
+  this.normal_.setupInternal(!!opt_default, config);
+  this.normal_.setupInternal(!!opt_default, config['normal']);
+  this.hovered_.setupInternal(!!opt_default, config['hovered']);
+  this.selected_.setupInternal(!!opt_default, config['selected']);
 };
 
 
