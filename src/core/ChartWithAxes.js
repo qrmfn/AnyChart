@@ -1666,22 +1666,22 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if ('isVertical' in config)
     this.isVerticalInternal = !!config['isVertical'];
 
-  // this.defaultXAxisSettings(config['defaultXAxisSettings']);
-  // this.defaultYAxisSettings(config['defaultYAxisSettings']);
-  // this.defaultGridSettings(config['defaultGridSettings']);
-  // this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
-  // this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
-  // this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
-  // this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
+  this.defaultXAxisSettings(config['defaultXAxisSettings']);
+  this.defaultYAxisSettings(config['defaultYAxisSettings']);
+  this.defaultGridSettings(config['defaultGridSettings']);
+  this.defaultMinorGridSettings(config['defaultMinorGridSettings']);
+  this.defaultLineMarkerSettings(config['defaultLineMarkerSettings']);
+  this.defaultTextMarkerSettings(config['defaultTextMarkerSettings']);
+  this.defaultRangeMarkerSettings(config['defaultRangeMarkerSettings']);
   this.defaultAnnotationSettings(config['defaultAnnotationSettings']);
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
 
-  // this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
-  // this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
-  // this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
-  // this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
-  // this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
+  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
+  this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
+  this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
+  this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
 
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);

@@ -102,7 +102,7 @@ goog.inherits(anychart.core.Axis, anychart.core.VisualBase);
 anychart.core.Axis.prototype.getOption = function(name) {
   var res = anychart.core.Axis.base(this, 'getOption', name);
 
-  if (!goog.isDef(res)) {
+  if ((name == 'orientation' && !goog.isDefAndNotNull(res)) || !goog.isDef(res)) {
     res = this.autoSettings[name];
   }
   return res;
@@ -1057,6 +1057,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
   var labelPosition = /** @type {anychart.enums.SidePosition} */(labels.getOption('position'));
   var side = anychart.utils.sidePositionToNumber(labelPosition);
   var tickLength = anychart.utils.getAffectBoundsTickLength(ticks, side);
+
 
   switch (this.getOption('orientation')) {
     case anychart.enums.Orientation.TOP:
