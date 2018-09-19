@@ -1281,6 +1281,8 @@ anychart.annotationsModule.Base.prototype.hasOwnOption = function(name) {
  * @param {!Object=} opt_value
  */
 anychart.annotationsModule.Base.prototype.setDefaultSettings = function(opt_value) {
+  if (anychart.utils.toCamelCase(this.getType()) == 'label')
+    this.normal_.addThemes('defaultFontSettings');
   this.setupCreated('normal', this.normal_);
   this.normal_.setupInternal(true, {});
 
