@@ -294,7 +294,7 @@ anychart.core.utils.Quarter.prototype.serialize = function() {
   var json = anychart.core.utils.Quarter.base(this, 'serialize');
   var title = this.getCreated('title');
   if (title) {
-    json['title'] = title;
+    json['title'] = title.serialize();
   }
   json['margin'] = this.margin().serialize();
   json['padding'] = this.padding().serialize();
