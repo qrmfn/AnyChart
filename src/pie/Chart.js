@@ -4709,6 +4709,10 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
     this.hovered().setupInternal(!!opt_default, config['hovered']);
   if ('selected' in config)
     this.selected().setupInternal(!!opt_default, config['selected']);
+  if ('hatchFillPalette' in config)
+    this.hatchFillPalette().setupInternal(!!opt_default, config['hatchFillPalette']);
+  if ('palette' in config)
+    this.palette().setupInternal(!!opt_default, config['palette']);
 };
 
 
