@@ -771,7 +771,7 @@ anychart.core.StateSettings.prototype.serialize = function() {
  *  @param {Object} config
  */
 anychart.core.StateSettings.prototype.setEnabledTrue = function(config) {
-  if (goog.isObject(config) && !('enabled' in config))
+  if (goog.typeOf(config) == 'object' && !('enabled' in config))
     config['enabled'] = true;
 };
 
@@ -789,7 +789,7 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
   }
 
   if (goog.isDef(this.descriptorsMeta['minLabels'])) {
-    var minLabelsConfig = flatThemeSetup ? this.minLabels().themeSettings : ['minLabels'];
+    var minLabelsConfig = flatThemeSetup ? this.minLabels().themeSettings : config['minLabels'];
     this.setEnabledTrue(minLabelsConfig);
     this.minLabels().setupInternal(!!opt_default, minLabelsConfig);
   }
