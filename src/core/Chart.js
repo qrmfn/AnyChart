@@ -1584,6 +1584,9 @@ anychart.core.Chart.prototype.drawInternal = function() {
   var manualSuspend = stage && !stage.isSuspended();
   if (manualSuspend) stage.suspend();
 
+  if (!this.contextMenu_ && goog.isDef(this.themeSettings['contextMenu']))
+    this.contextMenu(this.themeSettings['contextMenu']);
+
   if (this.contextMenu_) {
     this.contextMenu_['attach'](this);
   }

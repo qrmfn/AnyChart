@@ -2304,13 +2304,18 @@ anychart.core.ChartWithOrthogonalScales.prototype.getCsvGrouperAlias = function(
 anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(opt_config) {
   if (!this.scalesInstances_ || this.scalesChanged_) {
     var i, json, scale;
-    var scales = opt_config ? opt_config['scales'] : this.getThemeOption('scales');
+    var defaultScales = this.getThemeOption('scales');
+    var scales = opt_config ? opt_config['scales'] : defaultScales;
     var scalesInstances = {};
     if (goog.isArray(scales)) {
       for (i = 0; i < scales.length; i++) {
         json = scales[i];
         if (goog.isString(json)) {
           json = {'type': json};
+        }
+        if (!goog.isDef(json['type'])) {
+          goog.mixin(defaultScales[i], json);
+          json = defaultScales[i];
         }
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.addThemes(json);
