@@ -465,7 +465,7 @@ anychart.core.StateSettings.prototype.labels = function(opt_value) {
  */
 anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
   if (!this.minLabels_) {
-    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR;
+    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME;
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.minLabels_ = labelsFactoryConstructor();
     this.minLabels_.supportsEnabledSuspension = false;
@@ -493,7 +493,7 @@ anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
  */
 anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
   if (!this.maxLabels_) {
-    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR;
+    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME;
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.maxLabels_ = labelsFactoryConstructor();
     this.maxLabels_.supportsEnabledSuspension = false;
@@ -771,7 +771,7 @@ anychart.core.StateSettings.prototype.serialize = function() {
  *  @param {Object} config
  */
 anychart.core.StateSettings.prototype.setEnabledTrue = function(config) {
-  if (goog.isObject(config) && !('enabled' in config))
+  if (goog.typeOf(config) == 'object' && !('enabled' in config))
     config['enabled'] = true;
 };
 
@@ -789,7 +789,7 @@ anychart.core.StateSettings.prototype.setupByJSON = function(config, opt_default
   }
 
   if (goog.isDef(this.descriptorsMeta['minLabels'])) {
-    var minLabelsConfig = flatThemeSetup ? this.minLabels().themeSettings : ['minLabels'];
+    var minLabelsConfig = flatThemeSetup ? this.minLabels().themeSettings : config['minLabels'];
     this.setEnabledTrue(minLabelsConfig);
     this.minLabels().setupInternal(!!opt_default, minLabelsConfig);
   }
