@@ -4703,6 +4703,21 @@ anychart.pieModule.Chart.prototype.setupByJSON = function(config, opt_default) {
 
   if ('tooltip' in config)
     this.tooltip().setupInternal(!!opt_default, config['tooltip']);
+
+  if ('normal' in config)
+    this.normal().setupInternal(!!opt_default, config['normal']);
+
+  if ('hovered' in config)
+    this.hovered().setupInternal(!!opt_default, config['hovered']);
+
+  if ('selected' in config)
+    this.selected().setupInternal(!!opt_default, config['selected']);
+
+  if ('hatchFillPalette' in config)
+    this.hatchFillPalette().setupInternal(!!opt_default, config['hatchFillPalette']);
+
+  if ('palette' in config)
+    this.palette(config['palette']);
 };
 
 

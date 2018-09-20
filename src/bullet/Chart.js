@@ -729,8 +729,8 @@ anychart.bulletModule.Chart.prototype.setupByJSON = function(config, opt_default
 
   this.data(config['data']);
   anychart.core.settings.deserialize(this, anychart.bulletModule.Chart.PROPERTY_DESCRIPTORS, config);
-  //this.rangePalette(config['rangePalette']);
-  //this.markerPalette(config['markerPalette']);
+  this.rangePalette().setupInternal(!!opt_default, config['rangePalette']);
+  this.markerPalette().setupInternal(!!opt_default, config['markerPalette']);
 
   var scaleJson = config['scale'];
   var scale;
