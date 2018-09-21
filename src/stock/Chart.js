@@ -1174,7 +1174,12 @@ anychart.stockModule.Chart.prototype.getCurrentScrollerMinDistance = function() 
  * @return {number} Number of plots.
  */
 anychart.stockModule.Chart.prototype.getPlotsCount = function() {
-  return this.plots_.length;
+  var count = 0;
+  for (var i = 0; i < this.plots_.length; i++) {
+    if (this.plots_[i])
+      count++;
+  }
+  return count;
 };
 
 
@@ -2592,7 +2597,7 @@ anychart.stockModule.Chart.contextMenuItems = {
     'text': 'Start zoom marquee',
     'eventType': 'anychart.startZoomMarquee',
     'action': function(context) {
-      context['chart'].startZoomMarquee(false);
+      context['menuParent'].startZoomMarquee(false);
     }
   }
 };
