@@ -469,8 +469,6 @@ anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.minLabels_ = labelsFactoryConstructor();
     this.minLabels_.supportsEnabledSuspension = false;
-
-    // this.minLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('minLabels', this.minLabels_);
 
     afterInitCallback.call(this.stateHolder, this.minLabels_);
@@ -498,8 +496,6 @@ anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.maxLabels_ = labelsFactoryConstructor();
     this.maxLabels_.supportsEnabledSuspension = false;
-
-    // this.maxLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('maxLabels', this.maxLabels_);
 
     afterInitCallback.call(this.stateHolder, this.maxLabels_);
@@ -523,8 +519,9 @@ anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
  */
 anychart.core.StateSettings.prototype.headers = function(opt_value) {
   if (!this.headers_) {
+    var labelsFactoryConstructor = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR)) || anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME;
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.HEADERS_AFTER_INIT_CALLBACK)) || anychart.core.StateSettings.DEFAULT_HEADERS_AFTER_INIT_CALLBACK;
-    this.headers_ = new anychart.core.ui.LabelsFactory();
+    this.headers_ = labelsFactoryConstructor();
     this.setupCreated('headers', this.headers_);
     afterInitCallback.call(this.stateHolder, this.headers_);
   }
@@ -878,9 +875,6 @@ anychart.core.StateSettings.prototype.updateChildrenThemes = function() {
     if (child && child.dropThemes) {
       child.dropThemes();
       child.restoreDefaultThemes();
-      // if (getterName == 'minLabels' || getterName == 'maxLabels') {
-      //   child.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
-      // }
       this.setupCreated(getterName, child);
     }
   }
