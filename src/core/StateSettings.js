@@ -878,9 +878,9 @@ anychart.core.StateSettings.prototype.updateChildrenThemes = function() {
     if (child && child.dropThemes) {
       child.dropThemes();
       child.restoreDefaultThemes();
-      if (getterName == 'minLabels' || getterName == 'maxLabels') {
-        child.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
-      }
+      // if (getterName == 'minLabels' || getterName == 'maxLabels') {
+      //   child.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
+      // }
       this.setupCreated(getterName, child);
     }
   }
