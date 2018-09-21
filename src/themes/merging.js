@@ -773,10 +773,6 @@ anychart.themes.merging.mergingMap_ = (function() {
       ]
     },
     {
-      defaultObj: 'sunburst.normal',
-      targets: ['chart.leaves']
-    },
-    {
       defaultObj: 'defaultCrosshairLabel',
       targets: [
         [[
