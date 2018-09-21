@@ -469,7 +469,8 @@ anychart.core.StateSettings.prototype.minLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.minLabels_ = labelsFactoryConstructor();
     this.minLabels_.supportsEnabledSuspension = false;
-    this.minLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
+
+    // this.minLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('minLabels', this.minLabels_);
 
     afterInitCallback.call(this.stateHolder, this.minLabels_);
@@ -497,7 +498,8 @@ anychart.core.StateSettings.prototype.maxLabels = function(opt_value) {
     var afterInitCallback = /** @type {Function} */ (this.getOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK)) || goog.nullFunction;
     this.maxLabels_ = labelsFactoryConstructor();
     this.maxLabels_.supportsEnabledSuspension = false;
-    this.maxLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
+
+    // this.maxLabels_.addThemes(this.createExtendedThemes(this.getThemes(), 'labels'));
     this.setupCreated('maxLabels', this.maxLabels_);
 
     afterInitCallback.call(this.stateHolder, this.maxLabels_);
