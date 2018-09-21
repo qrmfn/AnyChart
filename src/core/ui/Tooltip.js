@@ -67,7 +67,7 @@ anychart.core.ui.Tooltip = function(capability) {
    * @type {number}
    * @private
    */
-  this.hideDelay_;
+  this.hideDelay_ = 0;
 
   /**
    * Root layer.
