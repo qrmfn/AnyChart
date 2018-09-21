@@ -339,6 +339,8 @@ anychart.mapModule.elements.Axis.prototype.title = function(opt_value) {
     // todo: (chernetsky) Remove this when mapModule.elements.Axis is refactored
     //this.setupCreated('title', this.title_);
     this.title_.dropThemes();
+    this.title_.padding().dropThemes();
+    this.title_.margin().dropThemes();
   }
 
   if (goog.isDef(opt_value)) {

@@ -5079,9 +5079,9 @@ anychart.mapModule.Chart.prototype.setupByJSON = function(config, opt_default) {
   if ('axesSettings' in config) {
     this.axes().setupInternal(!!opt_default, config['axesSettings']);
   }
-  //if ('gridsSettings' in config) {
-  //  this.grids().setupInternal(!!opt_default, config['gridsSettings']);
-  //}
+  if ('gridsSettings' in config) {
+    this.grids().setupInternal(!!opt_default, config['gridsSettings']);
+  }
 
   this.crosshair(config['crosshair']);
 
