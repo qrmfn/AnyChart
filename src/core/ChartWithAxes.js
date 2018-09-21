@@ -1713,7 +1713,7 @@ anychart.core.ChartWithAxes.prototype.serialize = function() {
 anychart.core.ChartWithAxes.prototype.serializeWithScales = function(json, scales, scaleIds) {
   anychart.core.ChartWithAxes.base(this, 'serializeWithScales', json, scales, scaleIds);
 
-  json['isVertical'] = this.isVerticalInternal;
+  json['isVertical'] = this.isVertical();
 
   var axesIds = [];
   this.serializeElementsWithScales(json, 'xAxes', this.xAxes_, this.serializeAxis, scales, scaleIds, axesIds);
