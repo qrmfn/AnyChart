@@ -2277,8 +2277,8 @@ anychart.core.ui.Tooltip.prototype.setThemeSettings = function(config) {
 anychart.core.ui.Tooltip.prototype.serialize = function() {
   var json = anychart.core.ui.Tooltip.base(this, 'serialize');
 
-  anychart.core.settings.serialize(this, this.TEXT_PROPERTY_DESCRIPTORS, json);
-  anychart.core.settings.serialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, json);
+  anychart.core.settings.serialize(this, this.TEXT_PROPERTY_DESCRIPTORS, json, void 0, void 0, true);
+  anychart.core.settings.serialize(this, this.TOOLTIP_SIMPLE_DESCRIPTORS, json, void 0, void 0, true);
 
   delete json['x'];
   delete json['y'];
