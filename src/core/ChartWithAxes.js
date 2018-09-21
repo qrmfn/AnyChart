@@ -1677,15 +1677,15 @@ anychart.core.ChartWithAxes.prototype.setupByJSONWithScales = function(config, s
   if (this.annotationsModule_)
     this.annotations(config['annotations']);
 
-  this.setupElementsWithScales(config['xGrids'], this.xGrid, scalesInstances);
-  this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances);
-  this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances);
-  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances);
-  this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances);
-  this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances);
-  this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances);
+  this.setupElementsWithScales(config['xGrids'], this.xGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['xAxes'], this.xAxis, scalesInstances, true);
+  this.setupElementsWithScales(config['yAxes'], this.yAxis, scalesInstances, true);
+  this.setupElementsWithScales(config['lineAxesMarkers'], this.lineMarker, scalesInstances, true);
+  this.setupElementsWithScales(config['rangeAxesMarkers'], this.rangeMarker, scalesInstances, true);
+  this.setupElementsWithScales(config['textAxesMarkers'], this.textMarker, scalesInstances, true);
 
   if ('crosshair' in config)
     this.crosshair().setupInternal(!!opt_default, config['crosshair']);

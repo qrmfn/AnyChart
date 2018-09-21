@@ -735,10 +735,10 @@ anychart.radarPolarBaseModule.Chart.prototype.setupByJSONWithScales = function(c
 
   anychart.core.settings.deserialize(this, anychart.radarPolarBaseModule.Chart.PROPERTY_DESCRIPTORS, config);
 
-  this.setupElementsWithScales(config['xGrids'], this.xGrid, scalesInstances);
-  this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances);
-  this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances);
-  this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances);
+  this.setupElementsWithScales(config['xGrids'], this.xGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['yGrids'], this.yGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['xMinorGrids'], this.xMinorGrid, scalesInstances, true);
+  this.setupElementsWithScales(config['yMinorGrids'], this.yMinorGrid, scalesInstances, true);
 
   var json = config['xAxis'];
   this.xAxis().setupInternal(!!opt_default, json);

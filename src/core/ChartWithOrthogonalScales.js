@@ -2535,14 +2535,21 @@ anychart.core.ChartWithOrthogonalScales.prototype.serializeSeries = function(jso
  * @param {*} items
  * @param {Function} itemConstructor
  * @param {Object} scaleInstances
+ * @param {boolean=} opt_setupElement
  * @protected
  */
-anychart.core.ChartWithOrthogonalScales.prototype.setupElementsWithScales = function(items, itemConstructor, scaleInstances) {
+anychart.core.ChartWithOrthogonalScales.prototype.setupElementsWithScales = function(items, itemConstructor, scaleInstances, opt_setupElement) {
   if (goog.isArray(items)) {
     for (var i = 0; i < items.length; i++) {
       var json = items[i];
       var element = itemConstructor.call(this, i);
-      element.addThemes(json);
+
+      if (opt_setupElement) {
+        element.setup(json);
+      } else {
+        element.addThemes(json);
+      }
+
       var scale = goog.isObject(json) && 'scale' in json ? json['scale'] : element.getThemeOption('scale');
       if (scale > this.defaultScalesLastIndex())
         element.scale(scaleInstances[scale]);
