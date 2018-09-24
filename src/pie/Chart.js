@@ -246,16 +246,16 @@ anychart.core.settings.populateAliases(anychart.pieModule.Chart, ['explode'], 's
 //region --- Static props
 /**
  * @typedef {{
- *   centerX: number,
- *   centerY: number,
- *   innerRadius: number,
- *   outerRadius: number,
- *   innerOutlineRadius: number,
- *   outerOutlineRadius: number,
- *   startAngle: number,
- *   sweepAngle: number,
- *   explodeX: number,
- *   explodeY: number,
+ *   centerX: !number,
+ *   centerY: !number,
+ *   innerRadius: !number,
+ *   outerRadius: !number,
+ *   innerOutlineRadius: !number,
+ *   outerOutlineRadius: !number,
+ *   startAngle: !number,
+ *   sweepAngle: !number,
+ *   explodeX: !number,
+ *   explodeY: !number,
  *   path: !acgraph.vector.Path
  * }}
  */
