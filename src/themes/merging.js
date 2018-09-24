@@ -757,6 +757,7 @@ anychart.themes.merging.mergingMap_ = (function() {
           'venn',
           'pieFunnelPyramidBase',
           'sunburst',
+          ['sankey.', ['node', 'flow', 'dropoff']],
           [['heat', 'tree'], 'Map'],
           [[
             'chart.defaultAnnotation',
@@ -1086,7 +1087,8 @@ anychart.themes.merging.mergingMap_ = (function() {
         'resource',
         'mekko',
         'venn',
-        'sunburst'
+        'sunburst',
+        'sankey'
       ]
     },
     {
