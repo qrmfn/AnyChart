@@ -2299,7 +2299,7 @@ anychart.core.ui.Tooltip.prototype.serialize = function() {
   if (!goog.object.isEmpty(paddingConfig))
     json['padding'] = paddingConfig;
 
-  if (goog.isDef(this.hideDelay_))
+  if (this.hideDelay_) //Zero value is default, we don't need to save it.
     json['hideDelay'] = this.hideDelay_;
 
   return json;
