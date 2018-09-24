@@ -2062,6 +2062,7 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
         this.separator().parent(null);
         this.background().parent(null);
         this.padding().parent(null);
+        this.contentInternal().parent(null);
         this.contentInternal().padding().parent(null);
         delete this.parent_.childTooltipsMap[uid];
         this.parent_ = null;
@@ -2073,6 +2074,7 @@ anychart.core.ui.Tooltip.prototype.parent = function(opt_value) {
         this.separator().dropThemes().parent(this.parent_.separator());
         this.background().dropThemes().parent(this.parent_.background());
         this.padding().parent(this.parent_.padding());
+        this.contentInternal().parent(this.parent_.contentInternal());
         this.contentInternal().padding().parent(this.parent_.contentInternal().padding());
         this.parent_.childTooltipsMap[uid] = this;
         this.beforeUseHtmlHook();
