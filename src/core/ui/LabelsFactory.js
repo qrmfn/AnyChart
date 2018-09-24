@@ -1108,8 +1108,8 @@ anychart.core.ui.LabelsFactory.prototype.serialize = function() {
   if (!(adjustFontSize && (goog.isDef(adjustFontSize['width']) || goog.isDef(adjustFontSize['height']))))
     delete json['adjustFontSize'];
 
-  anychart.core.settings.serialize(this, this.TEXT_DESCRIPTORS, json, 'Labels factory label text');
-  anychart.core.settings.serialize(this, this.SIMPLE_PROPS_DESCRIPTORS, json, 'Labels factory label props');
+  anychart.core.settings.serialize(this, this.TEXT_DESCRIPTORS, json, 'Labels factory label text', void 0, true);
+  anychart.core.settings.serialize(this, this.SIMPLE_PROPS_DESCRIPTORS, json, 'Labels factory label props', void 0, true);
 
   return json;
 };
