@@ -78,7 +78,7 @@ anychart.core.SeparateChart.prototype.getType = function() {
 anychart.core.SeparateChart.prototype.legend = function(opt_value) {
   if (!this.legend_) {
     this.legend_ = new anychart.core.ui.Legend();
-    this.legend_.listenSignals(this.onLegendSignal_, this);
+    this.legend_.listenSignals(this.onLegendSignal, this);
     this.legend_.setParentEventTarget(this);
     this.setupCreated('legend', this.legend_);
   }
