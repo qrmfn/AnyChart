@@ -45,21 +45,6 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
   this.suspendSignalsDispatching();
 
   /**
-   * @this {anychart.pieModule.Chart.SliceDrawerContext}
-   * @private
-   */
-  this.sliceDrawer_ = function() {
-    acgraph.vector.primitives.donut(
-        this.path,
-        this.centerX + this.explodeX,
-        this.centerY + this.explodeY,
-        this.outerRadius,
-        this.innerRadius,
-        this.startAngle,
-        this.sweepAngle);
-  };
-
-  /**
    * Pie point provider.
    * @type {anychart.format.Context}
    * @private
@@ -176,7 +161,8 @@ anychart.pieModule.Chart = function(opt_data, opt_csvSettings) {
     ['outsideLabelsCriticalAngle', anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
     ['forceHoverLabels', anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
     ['connectorStroke', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW],
-    ['mode3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW]
+    ['mode3d', anychart.ConsistencyState.APPEARANCE | anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.PIE_LABELS, anychart.Signal.NEEDS_REDRAW],
+    ['sliceDrawer', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
   ]);
 
   var normalDescriptorsMeta = {};
@@ -475,7 +461,8 @@ anychart.pieModule.Chart.PROPERTY_DESCRIPTORS = (function() {
         [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'outsideLabelsCriticalAngle', criticalAngleNormalizer],
         [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'forceHoverLabels', anychart.core.settings.asIsNormalizer],
         [anychart.enums.PropertyHandlerType.MULTI_ARG, 'connectorStroke', anychart.core.settings.strokeNormalizer],
-        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'mode3d', anychart.core.settings.booleanNormalizer]
+        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'mode3d', anychart.core.settings.booleanNormalizer],
+        [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'sliceDrawer', anychart.core.settings.functionNormalizer]
   ]);
   return map;
 })();
@@ -2650,23 +2637,6 @@ anychart.pieModule.Chart.prototype.drawLabel_ = function(pointState, opt_updateC
 
 
 /**
- * Setter/getter for slice drawer.
- * @param {function(this:anychart.pieModule.Chart.SliceDrawerContext)=} opt_value Drawer function.
- * @return {function(this:anychart.pieModule.Chart.SliceDrawerContext)|anychart.pieModule.Chart}
- */
-anychart.pieModule.Chart.prototype.sliceDrawer = function(opt_value) {
-  if (goog.isDef(opt_value)) {
-    if (this.sliceDrawer_ != opt_value) {
-      this.sliceDrawer_ = opt_value;
-      this.invalidate(anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW);
-    }
-    return this;
-  }
-  return this.sliceDrawer_;
-};
-
-
-/**
  * Internal function for drawing a slice by arguments.
  * @param {anychart.PointState|number} pointState Point state.
  * @param {boolean=} opt_update Whether to update current slice.
@@ -2751,7 +2721,11 @@ anychart.pieModule.Chart.prototype.drawSlice_ = function(pointState, opt_update)
         acgraph.vector.primitives.donut(sliceOutline, this.cx + ex, this.cy + ey, outerOutlineRadius, innerOutlineRadius, start, sweep);
       }
     }
-    this.sliceDrawer_.call(ctx);
+    /**
+     * @type {function(this:anychart.pieModule.Chart.SliceDrawerContext)}
+     */
+    var sliceDrawer = /** @type {function(this:anychart.pieModule.Chart.SliceDrawerContext)} */ (this.getOption('sliceDrawer'));
+    sliceDrawer.call(ctx);
     // slice = acgraph.vector.primitives.donut(slice, this.cx + ex, this.cy + ey, outerSliceRadius, this.innerRadiusValue_, start, sweep);
 
     slice.tag = {
@@ -5232,6 +5206,7 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calculate = function()
   // proto['connectorStroke'] = proto.connectorStroke;//doc|ex
   // proto['mode3d'] = proto.mode3d;
   // proto['forceHoverLabels'] = proto.forceHoverLabels;
+  // proto['sliceDrawer'] = proto.sliceDrawer;
   //deprecated
   // proto['outsideLabelsSpace'] = proto.outsideLabelsSpace;//doc|ewx
   proto['explodeSlice'] = proto.explodeSlice;//doc|ex
@@ -5251,7 +5226,6 @@ anychart.pieModule.Chart.PieOutsideLabelsDomain.prototype.calculate = function()
   proto['getType'] = proto.getType;
   proto['getPoint'] = proto.getPoint;
   proto['toCsv'] = proto.toCsv;
-  proto['sliceDrawer'] = proto.sliceDrawer;
 
   proto['hover'] = proto.hover;
   proto['unhover'] = proto.unhover;
