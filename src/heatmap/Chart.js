@@ -44,7 +44,7 @@ anychart.heatmapModule.Chart = function(opt_data, opt_csvSettings) {
    * @type {anychart.heatmapModule.Series}
    * @private
    */
-  this.series_ = /** @type {anychart.heatmapModule.Series} */(this.createSeriesByType(this.getOption('defaultSeriesType'), opt_data || null, opt_csvSettings));
+  this.series_ = /** @type {anychart.heatmapModule.Series} */(this.createSeriesByType(/** @type {string} */ (this.getOption('defaultSeriesType')), opt_data || null, opt_csvSettings));
 
   /**
    * @this {anychart.heatmapModule.Chart}

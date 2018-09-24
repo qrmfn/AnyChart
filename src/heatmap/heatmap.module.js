@@ -17,7 +17,7 @@ goog.require('anychart.heatmapModule.Chart');
  */
 anychart.heatMap = function(opt_data, opt_csvSettings) {
   var chart = new anychart.heatmapModule.Chart(opt_data, opt_csvSettings);
-  chart.setupColorScale(chart.getThemeOption('colorScale'), chart.getScaleInstances());
+  chart.setupColorScale(/** @type {Object|string} */ (chart.getThemeOption('colorScale')), chart.getScaleInstances());
   chart.setupAxes();
   chart.setupStateSettings();
   //chart.setupInternal(true, anychart.getFullTheme('heatMap'));
