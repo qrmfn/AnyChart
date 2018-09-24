@@ -2722,10 +2722,10 @@ anychart.pieModule.Chart.prototype.drawSlice_ = function(pointState, opt_update)
       }
     }
     /**
-     * @type {function(this:anychart.pieModule.Chart.SliceDrawerContext)}
+     * @type {function(this:anychart.pieModule.Chart.SliceDrawerContext, anychart.pieModule.Chart.SliceDrawerContext)}
      */
-    var sliceDrawer = /** @type {function(this:anychart.pieModule.Chart.SliceDrawerContext)} */ (this.getOption('sliceDrawer'));
-    sliceDrawer.call(ctx);
+    var sliceDrawer = /** @type {function(this:anychart.pieModule.Chart.SliceDrawerContext, anychart.pieModule.Chart.SliceDrawerContext)} */ (this.getOption('sliceDrawer'));
+    sliceDrawer.call(ctx, ctx);
     // slice = acgraph.vector.primitives.donut(slice, this.cx + ex, this.cy + ey, outerSliceRadius, this.innerRadiusValue_, start, sweep);
 
     slice.tag = {
