@@ -634,7 +634,7 @@ anychart.core.ui.Background.prototype.getRemainingBounds = function() {
 anychart.core.ui.Background.prototype.serialize = function() {
   var json = anychart.core.ui.Background.base(this, 'serialize');
 
-  anychart.core.settings.serialize(this, this.SIMPLE_PROPS_DESCRIPTORS, json, 'Background');
+  anychart.core.settings.serialize(this, this.SIMPLE_PROPS_DESCRIPTORS, json, 'Background', void 0, true);
 
   var corners = /** @type {Array} */(this.getOwnOption('corners'));
   if (corners) {
