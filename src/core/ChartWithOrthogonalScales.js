@@ -2544,16 +2544,17 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupElementsWithScales = func
     for (var i = 0; i < items.length; i++) {
       var json = items[i];
       var element = itemConstructor.call(this, i);
+      if (!goog.object.isEmpty(json)) {
+        if (opt_setupElement) {
+          element.setup(json);
+        } else {
+          element.addThemes(json);
+        }
 
-      if (opt_setupElement) {
-        element.setup(json);
-      } else {
-        element.addThemes(json);
+        var scale = goog.isObject(json) && 'scale' in json ? json['scale'] : element.getThemeOption('scale');
+        if (scale > this.defaultScalesLastIndex())
+          element.scale(scaleInstances[scale]);
       }
-
-      var scale = goog.isObject(json) && 'scale' in json ? json['scale'] : element.getThemeOption('scale');
-      if (scale > this.defaultScalesLastIndex())
-        element.scale(scaleInstances[scale]);
     }
   }
 };
