@@ -1345,7 +1345,7 @@ anychart.pieModule.Chart.prototype.createPositionProvider = function() {
       dR = anychart.utils.normalizeSize(insideLabelsOffset, radius) + this.innerRadiusValue_ + explode;
     }
 
-    return {'value': {'angle': angle, 'radius': dR}};
+    return {'value': {'angle': angle, 'radius': dR, 'outerRadius': this.radiusValue_, 'innerRadius': this.innerRadiusValue_}};
   }
 };
 
