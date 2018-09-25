@@ -1900,7 +1900,7 @@ anychart.core.settings.populate(anychart.core.Chart, anychart.core.Chart.PROPERT
  */
 anychart.core.Chart.prototype.toJson = function(opt_stringify) {
   var data = this.isDisposed() ? {} : this.serialize();
-  data = /** @type {!Object} */(anychart.themes.merging.demerge(data, this.getDefaultThemeObj())) || {};
+  // data = /** @type {!Object} */(anychart.themes.merging.demerge(data, this.getDefaultThemeObj())) || {};
   return opt_stringify ? goog.json.hybrid.stringify(data) : data;
 };
 
