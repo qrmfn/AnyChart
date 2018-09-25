@@ -2370,6 +2370,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
     if (scale)
       this.yScale(scale);
     this.scalesInstances_ = scalesInstances;
+    this.scalesChanged_ = false;
   }
   return this.scalesInstances_;
 };
