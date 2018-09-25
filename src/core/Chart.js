@@ -533,7 +533,7 @@ anychart.core.Chart.prototype.title = function(opt_value) {
   if (!this.title_) {
     this.title_ = new anychart.core.ui.Title();
     this.title_.setParentEventTarget(this);
-    this.title_.listenSignals(this.onTitleSignal_, this);
+    this.title_.listenSignals(this.onTitleSignal, this);
     this.registerDisposable(this.title_);
   }
 
@@ -549,9 +549,9 @@ anychart.core.Chart.prototype.title = function(opt_value) {
 /**
  * Internal title invalidation handler.
  * @param {anychart.SignalEvent} event Event object.
- * @private
+ * @protected
  */
-anychart.core.Chart.prototype.onTitleSignal_ = function(event) {
+anychart.core.Chart.prototype.onTitleSignal = function(event) {
   var state = 0;
   var signal = 0;
   if (event.hasSignal(anychart.Signal.NEEDS_REDRAW)) {
@@ -1769,7 +1769,7 @@ anychart.core.Chart.prototype.autoRedraw = function(opt_value) {
  */
 anychart.core.Chart.prototype.resizeHandler = function(evt) {
   if (this.bounds().dependsOnContainerSize()) {
-    this.invalidate(anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.CHART_LEGEND,
+    this.invalidate(anychart.ConsistencyState.BOUNDS | anychart.ConsistencyState.CHART_LEGEND | anychart.ConsistencyState.CHART_LABELS,
         anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED);
   }
 };
