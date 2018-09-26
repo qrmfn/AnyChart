@@ -723,7 +723,7 @@ anychart.ganttModule.elements.TimelineElement.prototype.setupByJSON = function(c
  */
 anychart.ganttModule.elements.TimelineElement.prototype.serialize = function() {
   var json = anychart.ganttModule.elements.TimelineElement.base(this, 'serialize');
-  anychart.core.settings.serialize(this, anychart.ganttModule.elements.TimelineElement.DESCRIPTORS, json);
+  anychart.core.settings.serialize(this, anychart.ganttModule.elements.TimelineElement.DESCRIPTORS, json, void 0, void 0, true);
   json['labels'] = this.labels().serialize();
   json['rendering'] = this.rendering().serialize();
   json['normal'] = this.normal().serialize();
