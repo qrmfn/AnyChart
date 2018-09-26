@@ -1310,7 +1310,8 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
   } else {
     var textEl = label.getTextElement();
 
-    if (textEl.bounds) {
+    //TODO (A.Kudryavtsev): Looks like an issue.
+    if (!textEl.bounds) {
       var measurementNode = acgraph.getRenderer().createMeasurement();
       textEl.renderTo(measurementNode);
       label.invalidate(anychart.ConsistencyState.CONTAINER);
