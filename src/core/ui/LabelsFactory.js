@@ -1943,7 +1943,7 @@ anychart.core.ui.LabelsFactory.Label.prototype.getFinalSettings = function(value
 anychart.core.ui.LabelsFactory.Label.prototype.iterateDrawingPlans = function(processor, opt_invert, opt_field, opt_handler) {
   var iterator = opt_invert ? goog.array.forEachRight : goog.array.forEach;
 
-  var result = void 0;
+  var result = null;
   var settings = this.getDrawingPlan();
 
   iterator(settings, function(state, i) {
