@@ -1927,7 +1927,10 @@ anychart.core.ui.LabelsFactory.Label.prototype.getFinalSettings = function(value
     });
     return {width: adjustByWidth, height: adjustByHeight};
   } else {
-    return this.resolveSetting_(value);
+    var result = this.resolveSetting_(value);
+    if (value == 'background' && !goog.isDef(result))
+      result = null;
+    return result;
   }
 };
 
