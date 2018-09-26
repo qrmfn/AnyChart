@@ -1927,7 +1927,10 @@ anychart.core.ui.LabelsFactory.Label.prototype.getFinalSettings = function(value
     });
     return {width: adjustByWidth, height: adjustByHeight};
   } else {
-    return this.resolveSetting_(value);
+    var result = this.resolveSetting_(value);
+    if (value == 'background' && !goog.isDef(result))
+      result = null;
+    return result;
   }
 };
 
@@ -1943,7 +1946,7 @@ anychart.core.ui.LabelsFactory.Label.prototype.getFinalSettings = function(value
 anychart.core.ui.LabelsFactory.Label.prototype.iterateDrawingPlans = function(processor, opt_invert, opt_field, opt_handler) {
   var iterator = opt_invert ? goog.array.forEachRight : goog.array.forEach;
 
-  var result = null;
+  var result = void 0;
   var settings = this.getDrawingPlan();
 
   iterator(settings, function(state, i) {
