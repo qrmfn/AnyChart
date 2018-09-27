@@ -322,13 +322,17 @@ anychart.scales.Linear.prototype.setupByJSON = function(config, opt_default) {
   //TODO (A.Kudryavtsev): Pretty dirty activities. Need to drop this mess.
   if ('ticks' in config) {
     var ticksConf = {};
-    goog.mixin(ticksConf, this.ticks().themeSettings);
+    if (opt_default) {
+      goog.mixin(ticksConf, this.ticks().themeSettings);
+    }
     goog.mixin(ticksConf, config['ticks']);
     this.ticks(ticksConf);
   }
   if ('minorTicks' in config) {
     var minorTicksConf = {};
-    goog.mixin(minorTicksConf, this.minorTicks().themeSettings);
+    if (opt_default) {
+      goog.mixin(minorTicksConf, this.minorTicks().themeSettings);
+    }
     goog.mixin(minorTicksConf, config['minorTicks']);
     this.minorTicks(minorTicksConf);
   }
