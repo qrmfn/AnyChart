@@ -3107,10 +3107,6 @@ anychart.core.series.Base.prototype.draw = function() {
 
   this.calcColorScale();
 
-  if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_COLOR)) {
-    this.updateAutoMarkersColors();
-  }
-
   if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_POINTS)) {
     this.invalidate(anychart.ConsistencyState.SERIES_LABELS |
         anychart.ConsistencyState.SERIES_MARKERS |
@@ -3145,7 +3141,7 @@ anychart.core.series.Base.prototype.draw = function() {
       factory.setAutoZIndex(/** @type {number} */(this.zIndex() + this.LABELS_ZINDEX + (this.planIsStacked() ? 1 : 0)));
       // see DVF-2259
       factory.invalidate(anychart.ConsistencyState.Z_INDEX);
-      if (this.check(anychart.core.series.Capabilities.SUPPORTS_LABELS))
+      if (this.check(anychart.core.series.Capabilities.SUPPORTS_LABELS) && factory.enabled())
         elementsDrawers.push(this.drawLabel);
       factoriesToFinalize.push(factory);
       labelsAreToBeRedrawn = true;
@@ -3159,17 +3155,25 @@ anychart.core.series.Base.prototype.draw = function() {
     this.markConsistent(anychart.ConsistencyState.SERIES_LABELS);
   }
 
+  var updateMarkers = false;
   if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_MARKERS | COMMON_STATES)) {
     factory = /** @type {anychart.core.ui.MarkersFactory} */(this.normal_.markers());
+    updateMarkers = factory.enabled();
+
     stateFactoriesEnabled = /** @type {boolean} */(this.hovered_.markers().enabled() || this.selected_.markers().enabled());
     if (this.prepareFactory(factory, stateFactoriesEnabled, this.planHasPointMarkers(),
             anychart.core.series.Capabilities.SUPPORTS_MARKERS, anychart.ConsistencyState.SERIES_MARKERS)) {
       factory.setAutoZIndex(/** @type {number} */(this.zIndex() + anychart.core.shapeManagers.MARKERS_ZINDEX + (this.planIsStacked() ? 1 : 0)));
-      if (this.check(anychart.core.series.Capabilities.SUPPORTS_MARKERS))
+      if (this.check(anychart.core.series.Capabilities.SUPPORTS_MARKERS) && updateMarkers) {
         elementsDrawers.push(this.drawMarker);
+      }
       factoriesToFinalize.push(factory);
     }
     this.markConsistent(anychart.ConsistencyState.SERIES_MARKERS);
+  }
+
+  if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_COLOR) && updateMarkers) {
+    this.updateAutoMarkersColors();
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_ERROR | COMMON_STATES)) {
@@ -3226,8 +3230,10 @@ anychart.core.series.Base.prototype.draw = function() {
         this.makePointMeta(iterator, yValueNames, columns);
         this.drawPoint(iterator, state);
 
-        var group = /** @type {Object.<string, acgraph.vector.Shape>} */(iterator.meta(metaName));
-        this.shapeManager.updateMarkersColors(state, group);
+        if (updateMarkers) {
+          var group = /** @type {Object.<string, acgraph.vector.Shape>} */(iterator.meta(metaName));
+          this.shapeManager.updateMarkersColors(state, group);
+        }
 
         for (i = 0; i < elementsDrawersLength; i++)
           elementsDrawers[i].call(this, iterator, state, false);
