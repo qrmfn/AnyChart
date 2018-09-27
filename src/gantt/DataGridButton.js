@@ -29,8 +29,8 @@ anychart.ganttModule.DataGridButton = function(dataGrid) {
 
   //todo: Should think about it after themes refactoring. Hack for gantt DataGrid serialize
   this.normal().background().serializeOnlyOwn = false;
-  this.normal().background().serializeOnlyOwn = false;
-  this.normal().background().serializeOnlyOwn = false;
+  this.hovered().background().serializeOnlyOwn = false;
+  this.selected().background().serializeOnlyOwn = false;
 
   this.supportsEnabledSuspension = false;
 
