@@ -1351,13 +1351,12 @@ anychart.core.Base.prototype.flattenThemes = function() {
         }
 
         if (goog.isDef(theme)) {
-          theme = (goog.isObject(theme) && goog.isObject(flatTheme)) ? theme :
+          theme = goog.isObject(theme) ? theme :
               goog.isBoolean(theme) ?
                   {'enabled': theme} :
                   this.resolveSpecialValue(theme);
 
           goog.mixin(flatTheme, theme);
-
         }
       }
     } else if (goog.isObject(theme))
