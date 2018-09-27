@@ -27,6 +27,11 @@ anychart.ganttModule.DataGridButton = function(dataGrid) {
    */
   this.dataItemIndex_ = -1;
 
+  //todo: Should think about it after themes refactoring. Hack for gantt DataGrid serialize
+  this.normal().background().serializeOnlyOwn = false;
+  this.normal().background().serializeOnlyOwn = false;
+  this.normal().background().serializeOnlyOwn = false;
+
   this.supportsEnabledSuspension = false;
 
   this.setParentEventTarget(this.dataGrid_);
