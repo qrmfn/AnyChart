@@ -735,8 +735,6 @@ anychart.scales.ScatterTicks.prototype.setupSpecial = function(isDefault, var_ar
 /** @inheritDoc */
 anychart.scales.ScatterTicks.prototype.setupByJSON = function(config, opt_default) {
   anychart.scales.ScatterTicks.base(this, 'setupByJSON', config, opt_default);
-  //todo: (I.Kurnoy) incoming config should be mixined with current theme/own settings to prevent situations with existing minCount and maxCount being NaN'ed when not in config
-  //example config: { base: 5.5 }
   this.mode(config['mode']);
   this.base(config['base']);
   this.explicit_ = config['explicit'] || null;

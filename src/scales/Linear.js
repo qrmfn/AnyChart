@@ -322,8 +322,7 @@ anychart.scales.Linear.prototype.setupByJSON = function(config, opt_default) {
   //TODO (A.Kudryavtsev): Pretty dirty activities. Need to drop this mess.
   if ('ticks' in config) {
     var ticksConf = {};
-    //todo: (I.Kurnoy) this is hack, look at ScatterTicks.js, setupByJson()
-    if (opt_default || this.getType() == 'log') {
+    if (opt_default) {
       goog.mixin(ticksConf, this.ticks().themeSettings);
     }
     goog.mixin(ticksConf, config['ticks']);
