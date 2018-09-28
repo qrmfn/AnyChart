@@ -75,8 +75,14 @@ anychart.core.Axis = function() {
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['width', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
-    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropStaggeredLabelsCache_, this],
+    ['drawFirstLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {
+      this.dropBoundsCache();
+      this.dropStaggeredLabelsCache_();
+    }, this],
+    ['drawLastLabel', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, function() {
+      this.dropBoundsCache();
+      this.dropStaggeredLabelsCache_();
+    }, this],
     ['staggerMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED, 0, this.dropBoundsCache, this],
     ['overlapMode', this.ALL_VISUAL_STATES, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['staggerMaxLines', 0, 0, 0, function() {
