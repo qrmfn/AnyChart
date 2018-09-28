@@ -2307,6 +2307,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
     var defaultScales = this.getThemeOption('scales');
     var scales = opt_config ? opt_config['scales'] : defaultScales;
     var scalesInstances = {};
+    var theme;
     if (goog.isArray(scales)) {
       for (i = 0; i < scales.length; i++) {
         json = scales[i];
@@ -2319,6 +2320,18 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.addThemes(json);
+
+        if (scale['ticks']) {
+          theme = scale['ticks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['ticks']);
+          scale.themeSettings['ticks'] = theme;
+        }
+        if (scale['minorTicks']) {
+          theme = scale['minorTicks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['minorTicks']);
+          scale.themeSettings['minorTicks'] = theme;
+        }
+
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
@@ -2331,6 +2344,18 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         }
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.addThemes(json);
+
+        if (scale['ticks']) {
+          theme = scale['ticks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['ticks']);
+          scale.themeSettings['ticks'] = theme;
+        }
+        if (scale['minorTicks']) {
+          theme = scale['minorTicks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['minorTicks']);
+          scale.themeSettings['minorTicks'] = theme;
+        }
+
         scale.setup(scale.themeSettings);
         scalesInstances[i] = scale;
       }
@@ -2346,6 +2371,18 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], true);
       scale.addThemes(json);
+
+      if (scale['ticks']) {
+        theme = scale['ticks']().themeSettings;
+        goog.mixin(theme, scale.themeSettings['ticks']);
+        scale.themeSettings['ticks'] = theme;
+      }
+      if (scale['minorTicks']) {
+        theme = scale['minorTicks']().themeSettings;
+        goog.mixin(theme, scale.themeSettings['minorTicks']);
+        scale.themeSettings['minorTicks'] = theme;
+      }
+
       scale.setup(scale.themeSettings);
     } else {
       scale = null;
@@ -2363,6 +2400,18 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
     } else if (goog.isObject(json)) {
       scale = anychart.scales.Base.fromString(json['type'], false);
       scale.addThemes(json);
+
+      if (scale['ticks']) {
+        theme = scale['ticks']().themeSettings;
+        goog.mixin(theme, scale.themeSettings['ticks']);
+        scale.themeSettings['ticks'] = theme;
+      }
+      if (scale['minorTicks']) {
+        theme = scale['minorTicks']().themeSettings;
+        goog.mixin(theme, scale.themeSettings['minorTicks']);
+        scale.themeSettings['minorTicks'] = theme;
+      }
+
       scale.setup(scale.themeSettings);
     } else {
       scale = null;
