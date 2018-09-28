@@ -3170,8 +3170,8 @@ anychart.core.series.Base.prototype.draw = function() {
     if (this.prepareFactory(factory, stateFactoriesEnabled, this.planHasPointMarkers(),
             anychart.core.series.Capabilities.SUPPORTS_MARKERS, anychart.ConsistencyState.SERIES_MARKERS)) {
       factory.setAutoZIndex(/** @type {number} */(this.zIndex() + anychart.core.shapeManagers.MARKERS_ZINDEX + (this.planIsStacked() ? 1 : 0)));
-      // if (this.check(anychart.core.series.Capabilities.SUPPORTS_MARKERS))
-      //   elementsDrawers.push(this.drawMarker);
+      if (this.check(anychart.core.series.Capabilities.SUPPORTS_MARKERS))
+        elementsDrawers.push(this.drawMarker);
       factoriesToFinalize.push(factory);
     }
     this.markConsistent(anychart.ConsistencyState.SERIES_MARKERS);
