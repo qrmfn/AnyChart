@@ -1672,7 +1672,7 @@
 
     <xsd:complexType name="palettes.HatchFillsItems">
         <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-            <xsd:element name="item" type="simple.HatchFill"/>
+            <xsd:element name="item" type="HatchFill"/>
         </xsd:sequence>
     </xsd:complexType>
 
