@@ -18,7 +18,7 @@ anychart.circularGaugeModule.pointers.Bar = function() {
     ['width', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['position', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
     ['radius', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED],
-    ['barDrawer', anychart.ConsistencyState.APPEARANCE, anychart.Signal.NEEDS_REDRAW]
+    ['barDrawer', anychart.ConsistencyState.BOUNDS, anychart.Signal.NEEDS_REDRAW | anychart.Signal.BOUNDS_CHANGED]
   ]);
 };
 goog.inherits(anychart.circularGaugeModule.pointers.Bar, anychart.circularGaugeModule.pointers.Base);
@@ -195,26 +195,8 @@ anychart.circularGaugeModule.pointers.Bar.prototype.draw = function() {
     barDrawer.call(ctx, ctx);
     this.makeInteractive(/** @type {acgraph.vector.Path} */(this.domElement));
 
-    if (this.hatchFillElement) {
-      this.hatchFillElement.clear();
-      this.hatchFillElement.circularArc(
-          cx,
-          cy,
-          pixRadius - pixWidth / 2,
-          pixRadius - pixWidth / 2,
-          startAngle,
-          sweepAngle);
-
-      this.hatchFillElement.circularArc(
-          cx,
-          cy,
-          pixRadius + pixWidth / 2,
-          pixRadius + pixWidth / 2,
-          startAngle + sweepAngle,
-          -sweepAngle, true);
-
-      this.hatchFillElement.close();
-    }
+    if (this.hatchFillElement)
+      this.hatchFillElement.deserialize(this.domElement.serialize());
 
     if (goog.isFunction(this.fill()) || goog.isFunction(this.stroke()))
       this.invalidate(anychart.ConsistencyState.APPEARANCE);
@@ -264,5 +246,5 @@ anychart.circularGaugeModule.pointers.Bar.prototype.disposeInternal = function()
 // proto['width'] = proto.width;
 // proto['position'] = proto.position;
 // proto['radius'] = proto.radius;
-// proto['sliceDrawer'] = proto.sliceDrawer;
+// proto['barDrawer'] = proto.barDrawer;
 //})();
