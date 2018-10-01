@@ -1667,11 +1667,9 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
 anychart.core.Axis.prototype.insideBounds = function(opt_value) {
   if (goog.isDef(opt_value)) {
     this.insideBounds_ = opt_value;
-    // todo(AntonKagakin): rollback of DVF-2825-axis-posiion-inside
-    // it may break something up
-    // this.dropOverlappedLabelsCache_();
-    // this.dropStaggeredLabelsCache_();
-    // this.dropBoundsCache();
+    this.dropOverlappedLabelsCache_();
+    this.dropStaggeredLabelsCache_();
+    this.dropBoundsCache();
     return this;
   }
 
