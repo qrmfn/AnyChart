@@ -1304,8 +1304,11 @@ anychart.core.Axis.prototype.dropBoundsCache = function() {
   if (this.labelsBoundingRects_) this.labelsBoundingRects_.length = 0;
   this.labelsBounds_.length = 0;
   this.minorLabelsBounds_.length = 0;
+
+  // todo: (chernetsky) Performance bottleneck from DVF-2825-axis-posiion-inside
   this.pixelBoundsWithInside = null;
   this.pixelBounds = null;
+  // todo
 };
 
 
@@ -1665,9 +1668,12 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
 anychart.core.Axis.prototype.insideBounds = function(opt_value) {
   if (goog.isDef(opt_value)) {
     this.insideBounds_ = opt_value;
+
+    // todo: (chernetsky) Performance bottleneck from DVF-2825-axis-posiion-inside
     this.dropOverlappedLabelsCache_();
     this.dropStaggeredLabelsCache_();
     this.dropBoundsCache();
+    // todo
     return this;
   }
 
