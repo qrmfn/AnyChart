@@ -103,7 +103,6 @@ anychart.palettes.HatchFills.prototype.serialize = function() {
   var res = [];
   var hatchFills = this.items();
   for (var i = 0; i < hatchFills.length; i++) {
-    debugger;
     res.push(anychart.color.serialize(/** @type {acgraph.vector.Fill} */(hatchFills[i])));
   }
   json['items'] = res;
