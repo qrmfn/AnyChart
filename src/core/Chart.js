@@ -603,7 +603,7 @@ anychart.core.Chart.prototype.label = function(opt_indexOrValue, opt_value) {
     label = this.createChartLabel();
     label.setParentEventTarget(this);
     label.addThemes('defaultFontSettings', 'defaultLabelSettings');
-    
+
     this.chartLabels_[index] = label;
     this.registerDisposable(label);
     label.listenSignals(this.onLabelSignal_, this);
@@ -1900,7 +1900,9 @@ anychart.core.settings.populate(anychart.core.Chart, anychart.core.Chart.PROPERT
  */
 anychart.core.Chart.prototype.toJson = function(opt_stringify) {
   var data = this.isDisposed() ? {} : this.serialize();
-  // data = /** @type {!Object} */(anychart.themes.merging.demerge(data, this.getDefaultThemeObj())) || {};
+  // todo: Hack for cases when getFullTheme was called and demerge is necessary
+  if (goog.isDef(anychart.getThemes()[0]['chart']['background']['fill']))
+    data = /** @type {!Object} */(anychart.themes.merging.demerge(data, this.getDefaultThemeObj())) || {};
   return opt_stringify ? goog.json.hybrid.stringify(data) : data;
 };
 

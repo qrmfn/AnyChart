@@ -57,7 +57,7 @@ anychart.core.settings.populate(anychart.ganttModule.axisMarkers.Range, anychart
  * @inheritDoc
  */
 anychart.ganttModule.axisMarkers.Range.prototype.getFormattedValue = function() {
-  return 'From: ' + this.getOption('from') + ' to: ' + this.getOption('to');
+    return 'From: ' + this.getOption('from') + ' to: ' + this.getOption('to');
 };
 
 
