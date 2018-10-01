@@ -2597,8 +2597,9 @@ anychart.core.series.Base.prototype.drawSingleFactoryElement = function(factorie
 
     var metaName = anychart.utils.instanceOf(this.shapeManager, anychart.core.shapeManagers.PerPoint) ? 'shapes' : 'shapeNames';
     var group = /** @type {Object.<string, acgraph.vector.Shape>} */(iterator.meta(metaName));
-    // var state = this.getPointState(iterator.getIndex());
-    this.shapeManager.updateMarkersColors(anychart.PointState.NORMAL, group);
+    var state = this.getPointState(iterator.getIndex());
+    // this.shapeManager.updateMarkersColors(anychart.PointState.NORMAL, group);
+    this.shapeManager.updateMarkersColors(state, group);
 
     var color = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */(
         iterator.meta(this.check(anychart.core.drawers.Capabilities.USES_STROKE_AS_FILL) ? 'markerStroke' : 'markerFill'));
