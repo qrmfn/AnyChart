@@ -1304,10 +1304,8 @@ anychart.core.Axis.prototype.dropBoundsCache = function() {
   if (this.labelsBoundingRects_) this.labelsBoundingRects_.length = 0;
   this.labelsBounds_.length = 0;
   this.minorLabelsBounds_.length = 0;
-  // todo(AntonKagakin): rollback of DVF-2825-axis-posiion-inside
-  // it may break something up
-  // this.pixelBoundsWithInside = null;
-  // this.pixelBounds = null;
+  this.pixelBoundsWithInside = null;
+  this.pixelBounds = null;
 };
 
 
