@@ -585,6 +585,13 @@ anychart.sankeyModule.Chart.prototype.createLabelsContextProvider = function(ele
 
   var values = {};
   this.createContextValues(values, element);
+  if (element.type != anychart.sankeyModule.Chart.ElementType.NODE) {
+    var iterator = this.getIterator();
+    iterator.select(element.dataIndex);
+    this.labelsContextProvider_.dataSource(iterator);
+  } else {
+    this.labelsContextProvider_.dataSource(null);
+  }
 
   return /** @type {anychart.format.Context} */ (this.labelsContextProvider_.propagate(values));
 };
@@ -664,7 +671,15 @@ anychart.sankeyModule.Chart.prototype.createContextProvider = function(tag) {
     this.contextProvider_ = new anychart.format.Context();
 
   var values = {};
-  this.createContextValues(values, tag.element);
+  var element = /** @type {anychart.sankeyModule.Chart.Node|anychart.sankeyModule.Chart.Flow} */ (tag.element);
+  this.createContextValues(values, element);
+  if (element.type != anychart.sankeyModule.Chart.ElementType.NODE) {
+    var iterator = this.getIterator();
+    iterator.select(element.dataIndex);
+    this.contextProvider_.dataSource(iterator);
+  } else {
+    this.contextProvider_.dataSource(null);
+  }
 
   return /** @type {anychart.format.Context} */ (this.contextProvider_.propagate(values));
 };
