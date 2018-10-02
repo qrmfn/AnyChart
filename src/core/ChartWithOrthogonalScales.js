@@ -2310,6 +2310,8 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         if (opt_config['scales'][k])
           goog.mixin(scales[k], opt_config['scales'][k]);
       }
+      if (opt_config['scales'].length > scales.length)
+        scales = goog.array.concat(scales, goog.array.slice(opt_config['scales'], scales.length));
     }
     var scalesInstances = {};
     var theme;
