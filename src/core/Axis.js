@@ -1194,7 +1194,7 @@ anychart.core.Axis.prototype.getLabelBounds_ = function(index, isMajor, ticksArr
     var textEl = label.getTextElement();
 
     //TODO (A.Kudryavtsev): Looks like an issue.
-    if (textEl.bounds) {
+    if (textEl.bounds && index != 0) { // should fix _qa_tests/charts/stock/complex.html in HC mode
       var measurementNode = acgraph.getRenderer().createMeasurement();
       textEl.renderTo(measurementNode);
       label.invalidate(anychart.ConsistencyState.CONTAINER);
