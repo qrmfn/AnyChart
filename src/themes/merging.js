@@ -2117,4 +2117,5 @@ anychart.themes.DefaultThemes = {
 };
 
 anychart.themes.DefaultThemes['xScroller'] = anychart.themes.DefaultThemes['scroller'];
+anychart.themes.DefaultThemes['yScroller'] = anychart.themes.DefaultThemes['scroller'];
 anychart.themes.DefaultThemes['titleSeparator'] = anychart.themes.DefaultThemes['separator'];
