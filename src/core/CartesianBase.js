@@ -21,6 +21,8 @@ goog.require('anychart.enums');
 anychart.core.CartesianBase = function(opt_categorizeData) {
   anychart.core.CartesianBase.base(this, 'constructor', goog.isDef(opt_categorizeData) ? opt_categorizeData : true);
 
+  this.addThemes('cartesianBase');
+
   /**
    * Zoom settings.
    * @type {anychart.core.utils.OrdinalZoom}
@@ -61,10 +63,26 @@ anychart.core.CartesianBase.PROPERTY_DESCRIPTORS = (function() {
   function zAngleNormalizer(opt_value) {
     return goog.math.clamp(anychart.utils.toNumber(opt_value), 0, 90);
   }
+  anychart.core.settings.createDescriptor(
+      map,
+      anychart.enums.PropertyHandlerType.SINGLE_ARG,
+      'zAngle',
+      zAngleNormalizer);
 
   function zAspectNormalizer(opt_value) {
     return goog.isNumber(opt_value) ? Math.max(opt_value, 0) : opt_value;
   }
+  anychart.core.settings.createDescriptor(
+      map,
+      anychart.enums.PropertyHandlerType.SINGLE_ARG,
+      'zAspect',
+      zAspectNormalizer);
+
+  anychart.core.settings.createDescriptor(
+      map,
+      anychart.enums.PropertyHandlerType.SINGLE_ARG,
+      'zDistribution',
+      anychart.core.settings.booleanNormalizer);
 
   function zPaddingNormalizer(opt_value) {
     return Math.max(anychart.utils.toNumber(opt_value), 0) || 0;
@@ -187,6 +205,8 @@ anychart.core.CartesianBase.prototype.xScroller = function(opt_value) {
         anychart.ConsistencyState.CARTESIAN_X_SCROLLER |
         anychart.ConsistencyState.BOUNDS,
         anychart.Signal.NEEDS_REDRAW);
+
+    this.setupCreated('xScroller', this.xScroller_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -214,6 +234,8 @@ anychart.core.CartesianBase.prototype.yScroller = function(opt_value) {
         anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
         anychart.ConsistencyState.BOUNDS,
         anychart.Signal.NEEDS_REDRAW);
+
+    this.setupCreated('yScroller', this.yScroller_);
   }
 
   if (goog.isDef(opt_value)) {
@@ -545,8 +567,11 @@ anychart.core.CartesianBase.prototype.setupByJSONWithScales = function(config, s
   anychart.core.CartesianBase.base(this, 'setupByJSONWithScales', config, scalesInstances, opt_default);
 
   anychart.core.settings.deserialize(this, anychart.core.CartesianBase.PROPERTY_DESCRIPTORS, config);
-  this.xScroller().setupInternal(!!opt_default, config['xScroller']);
-  this.yScroller().setupInternal(!!opt_default, config['yScroller']);
+
+  if ('xScroller' in config)
+    this.xScroller().setupInternal(!!opt_default, config['xScroller']);
+  if ('yScroller' in config)
+    this.xScroller().setupInternal(!!opt_default, config['yScroller']);
 
   var tmp;
   var xZoom = config['xZoom'];

@@ -12,6 +12,7 @@ goog.require('anychart.core.ui.Center');
 goog.require('anychart.core.ui.LabelsFactory');
 goog.require('anychart.core.ui.Tooltip');
 goog.require('anychart.core.utils.InteractivityState');
+goog.require('anychart.core.utils.Padding');
 goog.require('anychart.core.utils.TypedLayer');
 goog.require('anychart.data.Set');
 goog.require('anychart.enums');
@@ -38,6 +39,8 @@ goog.require('goog.ui.KeyboardShortcutHandler');
  */
 anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
   anychart.sunburstModule.Chart.base(this, 'constructor', opt_data, opt_fillMethod);
+
+  this.addThemes('sunburst');
 
   /**
    * Interactivity state.
@@ -108,7 +111,7 @@ anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
     ['labels', 0, 0]
   ]);
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL);
-  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.sunburstModule.Chart} */ function(factory) {
     factory.listenSignals(this.labelsInvalidated, this);
     factory.setParentEventTarget(this);
@@ -123,7 +126,7 @@ anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
     ['labels', 0, 0]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, hoveredDescriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   var selectedDescriptorsMeta = {};
   anychart.core.settings.createDescriptorsMeta(selectedDescriptorsMeta, [
@@ -133,7 +136,7 @@ anychart.sunburstModule.Chart = function(opt_data, opt_fillMethod) {
     ['labels', 0, 0]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, selectedDescriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.CIRCULAR_LABELS_CONSTRUCTOR_NO_THEME);
 
   /**
    * Aaync init mouse and keyboard interactivity for cases when chart have no stage on draw moment.
@@ -2313,8 +2316,8 @@ anychart.sunburstModule.Chart.prototype.getLabelRadialTextPath = function(label,
 
   var dr = outerRadius - innerRadius;
   var padding = label.getFinalSettings('padding');
-  outerRadius -= anychart.utils.normalizeSize(/** @type {number|string} */(padding.getOption('left')), dr);
-  innerRadius += anychart.utils.normalizeSize(/** @type {number|string} */(padding.getOption('right')), dr);
+  outerRadius -= anychart.utils.normalizeSize(/** @type {number|string} */(padding.left), dr);
+  innerRadius += anychart.utils.normalizeSize(/** @type {number|string} */(padding.right), dr);
 
   var dAngle = 90;
   var flip = mainAngle > dAngle && mainAngle < dAngle + 180;
@@ -2367,7 +2370,7 @@ anychart.sunburstModule.Chart.prototype.getLabelCircularTextPath = function(labe
   var sweep = /** @type {number} */(iterator.meta('sweep'));
   var start = /** @type {number} */(iterator.meta('start'));
   start = sweep == 360 ? anychart.sunburstModule.Chart.DEFAULT_START_ANGLE : start;
-  var padding = label.getFinalSettings('padding');
+  var padding = new anychart.core.utils.Padding().setup(label.getFinalSettings('padding'));
   var pxPerDegree = (2 * Math.PI * radius) / 360;
   var startAngle = start;
   var endAngle = start + sweep;
@@ -2641,7 +2644,7 @@ anychart.sunburstModule.Chart.prototype.drawLabel_ = function(pointState, opt_up
         .width(width);
 
     position = label.getFinalSettings('position');
-    padding = label.getFinalSettings('padding');
+    padding = new anychart.core.utils.Padding().setup(label.getFinalSettings('padding'));
     // start = /** @type {number} */ (iterator.meta('start'));
     sweep = /** @type {number} */ (iterator.meta('sweep'));
     innerRadius = /** @type {number} */ (iterator.meta('innerRadius'));
