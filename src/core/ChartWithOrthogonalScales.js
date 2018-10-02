@@ -2304,8 +2304,13 @@ anychart.core.ChartWithOrthogonalScales.prototype.getCsvGrouperAlias = function(
 anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(opt_config) {
   if (!this.scalesInstances_ || this.scalesChanged_) {
     var i, json, scale;
-    var defaultScales = this.getThemeOption('scales');
-    var scales = opt_config ? opt_config['scales'] : defaultScales;
+    var scales = this.getThemeOption('scales');
+    if (opt_config && opt_config['scales']) {
+      for (var k = 0; k < scales.length; k++) {
+        if (opt_config['scales'][k])
+          goog.mixin(scales[k], opt_config['scales'][k]);
+      }
+    }
     var scalesInstances = {};
     var theme;
     if (goog.isArray(scales)) {
@@ -2313,10 +2318,6 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
         json = scales[i];
         if (goog.isString(json)) {
           json = {'type': json};
-        }
-        if (!goog.isDef(json['type'])) {
-          goog.mixin(defaultScales[i], json);
-          json = defaultScales[i];
         }
         scale = anychart.scales.Base.fromString(json['type'], false);
         scale.addThemes(json);
