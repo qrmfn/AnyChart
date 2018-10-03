@@ -897,7 +897,7 @@ anychart.core.ui.LegendItem.prototype.calculateBounds_ = function() {
   var parentWidth, parentHeight;
   var t = this.text();
   /** @type {anychart.math.Rect} */
-  var textBounds = goog.isNull(t) || (t.indexOf('\n') < 0) ? this.predefinedBounds_ : this.textElement_.getBounds();
+  var textBounds = (goog.isNull(t) || (t.indexOf('\n') < 0)) && !this.getOption('useHtml') ? this.predefinedBounds_ : this.textElement_.getBounds();
   var width = textBounds.width;
   var height = textBounds.height;
 
