@@ -141,7 +141,7 @@ anychart.bulletModule.Marker.prototype.scale = function(opt_value) {
  */
 anychart.bulletModule.Marker.prototype.setDefaultType = function(value) {
   if (goog.isDef(value)) {
-    value = anychart.enums.normalizeBulletMarkerType(value, this.getThemeOption('type'));
+    value = anychart.enums.normalizeBulletMarkerType(value, /** @type {anychart.enums.BulletMarkerType} */(this.getThemeOption('type')));
     if (this.getThemeOption('type') != value) {
       this.themeSettings['type'] = value;
       if (!goog.isDef(this.getOwnOption('type'))) {
@@ -158,7 +158,7 @@ anychart.bulletModule.Marker.prototype.setDefaultType = function(value) {
  */
 anychart.bulletModule.Marker.prototype.setDefaultLayout = function(value) {
   if (goog.isDef(value)) {
-    value = anychart.enums.normalizeLayout(value, this.getThemeOption('layout'));
+    value = anychart.enums.normalizeLayout(value, /** @type {anychart.enums.Layout} */(this.getThemeOption('layout')));
     if (this.getThemeOption('layout') != value) {
       this.themeSettings['layout'] = value;
       if (!goog.isDef(this.getOwnOption('layout'))) {
