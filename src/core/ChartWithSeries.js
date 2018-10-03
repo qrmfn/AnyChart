@@ -1342,7 +1342,9 @@ anychart.core.ChartWithSeries.prototype.setupByJSON = function(config, opt_defau
   this.palette(config['palette']);
   this.markerPalette(config['markerPalette']);
   this.hatchFillPalette(config['hatchFillPalette']);
-  this.dataArea().setupInternal(!!opt_default, config['dataArea']);
+  if (config['dataArea']) {
+    this.dataArea().setupInternal(!!opt_default, config['dataArea']);
+  }
   this.normal_.setupInternal(!!opt_default, config);
   this.normal_.setupInternal(!!opt_default, config['normal']);
   this.hovered_.setupInternal(!!opt_default, config['hovered']);
@@ -1374,8 +1376,8 @@ anychart.core.ChartWithSeries.prototype.serialize = function() {
   json['palette'] = this.palette().serialize();
   json['markerPalette'] = this.markerPalette().serialize();
   json['hatchFillPalette'] = this.hatchFillPalette().serialize();
-  json['dataArea'] = this.dataArea().serialize();
-
+  if (this.dataArea_)
+    json['dataArea'] = this.dataArea().serialize();
   json['normal'] = this.normal().serialize();
   json['hovered'] = this.hovered().serialize();
   json['selected'] = this.selected().serialize();
