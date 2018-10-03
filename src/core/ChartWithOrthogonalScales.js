@@ -2304,7 +2304,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getCsvGrouperAlias = function(
 anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(opt_config) {
   if (!this.scalesInstances_ || this.scalesChanged_) {
     var i, json, scale;
-    var scales = this.getThemeOption('scales');
+    var scales = anychart.utils.recursiveClone(this.getThemeOption('scales'));
     if (opt_config && opt_config['scales']) {
       for (var k = 0; k < scales.length; k++) {
         if (opt_config['scales'][k])
