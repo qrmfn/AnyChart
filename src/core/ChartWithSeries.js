@@ -64,7 +64,7 @@ anychart.core.ChartWithSeries = function() {
     ['maxLabels', 0, 0]
   ]);
   this.normal_ = new anychart.core.StateSettings(this, normalDescriptorsMeta, anychart.PointState.NORMAL);
-  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+  this.normal_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
   this.normal_.setOption(anychart.core.StateSettings.LABELS_AFTER_INIT_CALLBACK, /** @this {anychart.core.ChartWithSeries} */ function(factory) {
     factory.markConsistent(anychart.ConsistencyState.ALL);
     factory.listenSignals(this.labelsInvalidated_, this);
@@ -77,7 +77,7 @@ anychart.core.ChartWithSeries = function() {
     ['maxLabels', 0, 0]
   ]);
   this.hovered_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.HOVER);
-  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+  this.hovered_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
 
   anychart.core.settings.createDescriptorsMeta(descriptorsMeta, [
     ['labels', 0, 0],
@@ -85,7 +85,7 @@ anychart.core.ChartWithSeries = function() {
     ['maxLabels', 0, 0]
   ]);
   this.selected_ = new anychart.core.StateSettings(this, descriptorsMeta, anychart.PointState.SELECT);
-  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR,  anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
+  this.selected_.setOption(anychart.core.StateSettings.LABELS_FACTORY_CONSTRUCTOR, anychart.core.StateSettings.DEFAULT_LABELS_CONSTRUCTOR_NO_THEME);
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
     ['defaultSeriesType', 0, 0],
@@ -721,7 +721,8 @@ anychart.core.ChartWithSeries.prototype.setupPalette_ = function(cls, opt_cloneF
     if (opt_cloneFrom)
       this.palette_.setup(opt_cloneFrom);
     this.palette_.listenSignals(this.paletteInvalidated_, this);
-    this.registerDisposable(this.palette_);
+    this.setupCreated('palette', this.palette_);
+    this.palette_.restoreDefaults();
     if (doDispatch)
       this.invalidate(anychart.ConsistencyState.SERIES_CHART_PALETTE | anychart.ConsistencyState.CHART_LEGEND, anychart.Signal.NEEDS_REDRAW);
   }

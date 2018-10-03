@@ -497,7 +497,6 @@ anychart.core.Chart.prototype.background = function(opt_value) {
   if (!this.background_) {
     this.background_ = new anychart.core.ui.Background();
     this.background_.listenSignals(this.backgroundInvalidated_, this);
-    this.registerDisposable(this.background_);
 
     this.setupCreated('background', this.background_);
   }
@@ -2077,12 +2076,13 @@ anychart.core.Chart.prototype.setupStateSettings = goog.nullFunction();
 
 /** @inheritDoc */
 anychart.core.Chart.prototype.disposeInternal = function() {
-  goog.disposeAll(this.animation_, this.a11y_, this.tooltip_, this.noDataSettings_, this.interactivity_);
+  goog.disposeAll(this.animation_, this.a11y_, this.tooltip_, this.noDataSettings_, this.interactivity_, this.background_);
   this.animation_ = null;
   this.a11y_ = null;
   this.tooltip_ = null;
   this.noDataSettings_ = null;
   this.interactivity_ = null;
+  this.background_ = null;
 
   anychart.core.Chart.base(this, 'disposeInternal');
 
