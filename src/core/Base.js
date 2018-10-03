@@ -1351,7 +1351,7 @@ anychart.core.Base.prototype.flattenThemes = function() {
         }
 
         if (goog.isDef(theme)) {
-          theme = goog.isObject(theme) ? theme :
+          theme = goog.isObject(theme) && !goog.isArray(theme) ? theme :
               goog.isBoolean(theme) ?
                   {'enabled': theme} :
                   this.resolveSpecialValue(theme);
