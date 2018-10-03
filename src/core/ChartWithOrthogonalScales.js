@@ -2365,7 +2365,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
     }
 
     var scaleGetters = ['xScale', 'yScale'];
-    for (var j in scaleGetters) {
+    for (var j = 0; j < scaleGetters.length; j++) {
       var scaleGetter = scaleGetters[j];
       json = opt_config ? opt_config[scaleGetter] : this.getThemeOption(scaleGetter);
 
