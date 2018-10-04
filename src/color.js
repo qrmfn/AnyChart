@@ -661,7 +661,7 @@ anychart.color.getColor = function(colorName, normalizer, isHatchFill, canBeHove
   }
 
   if (goog.isFunction(color)) {
-    if (!anychart.core.defaultTheme.isDefFunction(color)) {
+    if (!anychart.core.defaultTheme.isDefaultFunction(color)) {
       context = isHatchFill ?
           series.getHatchFillResolutionContext(opt_ignorePointSettings) :
           series.getColorResolutionContext(/** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */(baseColor), opt_ignorePointSettings, opt_ignoreColorScale);
@@ -669,7 +669,6 @@ anychart.color.getColor = function(colorName, normalizer, isHatchFill, canBeHove
       context = {'sourceColor': baseColor || series.getOption('color') || 'blue'};
     }
     color = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke|acgraph.vector.PatternFill} */(normalizer(color.call(context, context)));
-    debugger;
   }
   if (stateColor) { // it is a function and not a hatch fill here
     context = series.getColorResolutionContext(

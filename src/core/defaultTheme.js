@@ -680,6 +680,9 @@ anychart.core.defaultTheme.tooltipTitleFormatter = function(contextProvider) {
 };
 
 
+/**
+ * @type {Array.<Function>}
+ */
 anychart.core.defaultTheme.defaultFunctions = [
   anychart.core.defaultTheme.returnSourceColor,
   anychart.core.defaultTheme.returnSourceColor70,
@@ -698,7 +701,11 @@ anychart.core.defaultTheme.defaultFunctions = [
 ];
 
 
-anychart.core.defaultTheme.isDefFunction = function(f) {
+/**
+ * @param {Function} f
+ * @return {boolean}
+ */
+anychart.core.defaultTheme.isDefaultFunction = function(f) {
   for (var i = 0; i < anychart.core.defaultTheme.defaultFunctions.length; i++) {
     if (f == anychart.core.defaultTheme.defaultFunctions[i]) return true;
   }
