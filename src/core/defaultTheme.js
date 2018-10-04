@@ -678,6 +678,32 @@ anychart.core.defaultTheme.tooltipTitleFormatter = function(contextProvider) {
       return anychart.core.defaultTheme.locNum(contextProvider['x']);
   }
 };
+
+
+anychart.core.defaultTheme.defaultFunctions = [
+  anychart.core.defaultTheme.returnSourceColor,
+  anychart.core.defaultTheme.returnSourceColor70,
+  anychart.core.defaultTheme.returnSourceColor65,
+  anychart.core.defaultTheme.returnSourceColor50,
+  anychart.core.defaultTheme.returnSourceColor85,
+  anychart.core.defaultTheme.returnDarkenSourceColor,
+  anychart.core.defaultTheme.returnLightenSourceColor,
+  anychart.core.defaultTheme.returnLightenSourceColor50,
+  anychart.core.defaultTheme.returnStrokeSourceColor,
+  anychart.core.defaultTheme.returnStrokeSourceColor1,
+  anychart.core.defaultTheme.returnLightenStrokeSourceColor,
+  anychart.core.defaultTheme.returnLightenStrokeSourceColor1,
+  anychart.core.defaultTheme.returnThickenedStrokeSourceColor,
+  anychart.core.defaultTheme.returnDashedStrokeSourceColor
+];
+
+
+anychart.core.defaultTheme.isDefFunction = function(f) {
+  for (var i = 0; i < anychart.core.defaultTheme.defaultFunctions.length; i++) {
+    if (f == anychart.core.defaultTheme.defaultFunctions[i]) return true;
+  }
+  return false;
+};
 //endregion
 
 
