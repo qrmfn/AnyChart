@@ -62,6 +62,6 @@ anychart.core.IShapeManagerUser.prototype.getHatchFillResolutionContext = functi
  * @param {boolean=} opt_ignoreColorScale - Whether should use color scale.
  * @return {Object}
  */
-anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale) {};
+anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale, opt_simpleContext) {};
 
 

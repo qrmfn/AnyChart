@@ -697,7 +697,8 @@ anychart.core.defaultTheme.defaultFunctions = [
   anychart.core.defaultTheme.returnLightenStrokeSourceColor,
   anychart.core.defaultTheme.returnLightenStrokeSourceColor1,
   anychart.core.defaultTheme.returnThickenedStrokeSourceColor,
-  anychart.core.defaultTheme.returnDashedStrokeSourceColor
+  anychart.core.defaultTheme.returnDashedStrokeSourceColor,
+  anychart.core.defaultTheme.returnStrokeWithThickness
 ];
 
 
