@@ -279,7 +279,10 @@ anychart.core.series.Cartesian.prototype.prepareData = function() {
 //endregion
 //region --- Path manager interface methods
 /** @inheritDoc */
-anychart.core.series.Cartesian.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale) {
+anychart.core.series.Cartesian.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale, opt_simpleContext) {
+  if (!!opt_simpleContext) {
+    return {'sourceColor': opt_baseColor || this.getOption('color') || 'blue'};
+  }
   var pointProvider = this.getPointProvider();
 
   var iterator = !!opt_ignorePointSettings ? this.getDetachedIterator() : this.getIterator();
@@ -323,7 +326,10 @@ anychart.core.series.Cartesian.prototype.getColorResolutionContext = function(op
 
 
 /** @inheritDoc */
-anychart.core.series.Cartesian.prototype.getHatchFillResolutionContext = function(opt_ignorePointSettings) {
+anychart.core.series.Cartesian.prototype.getHatchFillResolutionContext = function(opt_ignorePointSettings, opt_simpleContext) {
+  if (!!opt_simpleContext) {
+    return {'sourceHatchFill': this.getAutoHatchFill()};
+  }
   var pointProvider = this.getPointProvider();
 
   var iterator = !!opt_ignorePointSettings ? this.getDetachedIterator() : this.getIterator();

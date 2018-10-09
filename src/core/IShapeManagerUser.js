@@ -49,9 +49,10 @@ anychart.core.IShapeManagerUser.prototype.getAutoHatchFill = function() {};
  * Returns hatch fill resolution context.
  * This context is used to resolve a hatch fill set as a function for current point.
  * @param {boolean=} opt_ignorePointSettings - Whether should take detached iterator.
+ * @param {boolean=} opt_simpleContext - Return simple context without statistics.
  * @return {Object}
  */
-anychart.core.IShapeManagerUser.prototype.getHatchFillResolutionContext = function(opt_ignorePointSettings) {};
+anychart.core.IShapeManagerUser.prototype.getHatchFillResolutionContext = function(opt_ignorePointSettings, opt_simpleContext) {};
 
 
 /**
@@ -60,8 +61,9 @@ anychart.core.IShapeManagerUser.prototype.getHatchFillResolutionContext = functi
  * @param {(acgraph.vector.Fill|acgraph.vector.Stroke)=} opt_baseColor - .
  * @param {boolean=} opt_ignorePointSettings - Whether should take detached iterator.
  * @param {boolean=} opt_ignoreColorScale - Whether should use color scale.
+ * @param {boolean=} opt_simpleContext - Return simple context without statistics.
  * @return {Object}
  */
-anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale) {};
+anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale, opt_simpleContext) {};
 
 
