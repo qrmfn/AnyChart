@@ -60,9 +60,8 @@ anychart.core.IShapeManagerUser.prototype.getHatchFillResolutionContext = functi
  * @param {(acgraph.vector.Fill|acgraph.vector.Stroke)=} opt_baseColor - .
  * @param {boolean=} opt_ignorePointSettings - Whether should take detached iterator.
  * @param {boolean=} opt_ignoreColorScale - Whether should use color scale.
- * @param {boolean=} opt_simpleContext - Return simple context without creating statistics
  * @return {Object}
  */
-anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale, opt_simpleContext) {};
+anychart.core.IShapeManagerUser.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale) {};
 
 

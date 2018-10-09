@@ -279,59 +279,46 @@ anychart.core.series.Cartesian.prototype.prepareData = function() {
 //endregion
 //region --- Path manager interface methods
 /** @inheritDoc */
-anychart.core.series.Cartesian.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale, opt_simpleContext) {
-  if (opt_simpleContext) {
-    var pointProvider = this.getPointProvider();
+anychart.core.series.Cartesian.prototype.getColorResolutionContext = function(opt_baseColor, opt_ignorePointSettings, opt_ignoreColorScale) {
+  var pointProvider = this.getPointProvider();
 
-    var ignoreColorScale = goog.isDef(opt_ignoreColorScale) && opt_ignoreColorScale;
-    var colorScale = this.colorScale();
-    var scaledColor;
-    if (colorScale && !ignoreColorScale) {
-      if (goog.isDef(value))
-        scaledColor = colorScale.valueToColor(value);
-    }
-    return pointProvider.propagate({'sourceColor': {value: scaledColor || opt_baseColor || this.getOption('color') || 'blue', type: anychart.enums.TokenType.UNKNOWN}});
-  } else {
-    var pointProvider = this.getPointProvider();
+  var iterator = !!opt_ignorePointSettings ? this.getDetachedIterator() : this.getIterator();
+  var index = iterator.getIndex();
 
-    var iterator = !!opt_ignorePointSettings ? this.getDetachedIterator() : this.getIterator();
-    var index = iterator.getIndex();
+  pointProvider
+    .dataSource(iterator)
+    .statisticsSources([this.getPoint(index), this]);
 
-    pointProvider
-      .dataSource(iterator)
-      .statisticsSources([this.getPoint(index), this]);
+  var scaledColor;
+  var source = opt_baseColor || this.getOption('color') || 'blue';
+  var x = iterator.getX();
+  var value = iterator.get('value');
+  var name = goog.isDef(iterator.get('name')) ? iterator.get('name') : x;
+  var values = {
+    'x': {value: x, type: anychart.enums.TokenType.DATE_TIME},
+    'value': {value: value, type: anychart.enums.TokenType.NUMBER},
+    'index': {value: index, type: anychart.enums.TokenType.NUMBER},
+    'iterator': {value: iterator, type: anychart.enums.TokenType.UNKNOWN},
+    'autoColor': {value: source, type: anychart.enums.TokenType.UNKNOWN},
+    'chart': {value: this.chart, type: anychart.enums.TokenType.UNKNOWN},
+    'plot': {value: this.plot, type: anychart.enums.TokenType.UNKNOWN},
+    'series': {value: this, type: anychart.enums.TokenType.UNKNOWN},
+    'name': {value: name, type: anychart.enums.TokenType.STRING}
+  };
 
-    var scaledColor;
-    var source = opt_baseColor || this.getOption('color') || 'blue';
-    var x = iterator.getX();
-    var value = iterator.get('value');
-    var name = goog.isDef(iterator.get('name')) ? iterator.get('name') : x;
-    var values = {
-      'x': {value: x, type: anychart.enums.TokenType.DATE_TIME},
-      'value': {value: value, type: anychart.enums.TokenType.NUMBER},
-      'index': {value: index, type: anychart.enums.TokenType.NUMBER},
-      'iterator': {value: iterator, type: anychart.enums.TokenType.UNKNOWN},
-      'autoColor': {value: source, type: anychart.enums.TokenType.UNKNOWN},
-      'chart': {value: this.chart, type: anychart.enums.TokenType.UNKNOWN},
-      'plot': {value: this.plot, type: anychart.enums.TokenType.UNKNOWN},
-      'series': {value: this, type: anychart.enums.TokenType.UNKNOWN},
-      'name': {value: name, type: anychart.enums.TokenType.STRING}
-    };
+  var ignoreColorScale = goog.isDef(opt_ignoreColorScale) && opt_ignoreColorScale;
+  var colorScale = this.colorScale();
+  if (colorScale && !ignoreColorScale) {
+    if (goog.isDef(value))
+      scaledColor = colorScale.valueToColor(value);
 
-    var ignoreColorScale = goog.isDef(opt_ignoreColorScale) && opt_ignoreColorScale;
-    var colorScale = this.colorScale();
-    if (colorScale && !ignoreColorScale) {
-      if (goog.isDef(value))
-        scaledColor = colorScale.valueToColor(value);
-
-      values['scaledColor'] = {value: scaledColor, type: anychart.enums.TokenType.UNKNOWN};
-      values['colorScale'] = {value: colorScale, type: anychart.enums.TokenType.UNKNOWN};
-    }
-
-    values['sourceColor'] = {value: scaledColor || source, type: anychart.enums.TokenType.UNKNOWN};
-
-    return pointProvider.propagate(values);
+    values['scaledColor'] = {value: scaledColor, type: anychart.enums.TokenType.UNKNOWN};
+    values['colorScale'] = {value: colorScale, type: anychart.enums.TokenType.UNKNOWN};
   }
+
+  values['sourceColor'] = {value: scaledColor || source, type: anychart.enums.TokenType.UNKNOWN};
+
+  return pointProvider.propagate(values);
 };
 
 

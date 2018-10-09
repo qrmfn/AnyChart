@@ -641,7 +641,7 @@ anychart.color.getColor = function(colorName, normalizer, isHatchFill, canBeHove
       if (!goog.isFunction(stateColor))
         return /** @type {acgraph.vector.Fill|acgraph.vector.Stroke|acgraph.vector.PatternFill} */(stateColor);
       else if (isHatchFill) { // hatch fills set as function some why cannot nest by initial implementation
-        context = series.getHatchFillResolutionContext(opt_ignorePointSettings);
+        context = {};//series.getHatchFillResolutionContext(opt_ignorePointSettings);
         return /** @type {acgraph.vector.PatternFill} */(normalizer(stateColor.call(context, context)));
       }
     }
@@ -655,15 +655,23 @@ anychart.color.getColor = function(colorName, normalizer, isHatchFill, canBeHove
   if (opt_baseColorName && !isHatchFill && colorName != opt_baseColorName) {
     baseColor = series.resolveOption(opt_baseColorName, 0, iterator, normalizer, scrollerSelected, void 0, opt_ignorePointSettings);
     if (goog.isFunction(baseColor)) {
-      context = series.getColorResolutionContext(void 0, opt_ignorePointSettings, opt_ignoreColorScale, anychart.core.defaultTheme.isDefaultFunction(baseColor));
+      context = {};//series.getColorResolutionContext(void 0, opt_ignorePointSettings, opt_ignoreColorScale);
       baseColor = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke|acgraph.vector.PatternFill} */(normalizer(baseColor.call(context, context)));
     }
   }
 
   if (goog.isFunction(color)) {
-    context = isHatchFill ?
-        series.getHatchFillResolutionContext(opt_ignorePointSettings) :
-        series.getColorResolutionContext(/** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */(baseColor), opt_ignorePointSettings, opt_ignoreColorScale, anychart.core.defaultTheme.isDefaultFunction(color));
+    if (anychart.core.defaultTheme.isDefaultFunction(color)) {
+      if (isHatchFill)
+        context = {'sourceHatchFill': series.getAutoHatchFill()};
+      else
+        context = {'sourceColor': baseColor || series.getOption('color') || 'blue'};
+    } else {
+      context = isHatchFill ?
+          series.getHatchFillResolutionContext(opt_ignorePointSettings) :
+          series.getColorResolutionContext(/** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */(baseColor), opt_ignorePointSettings, opt_ignoreColorScale);
+    }
+
     color = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke|acgraph.vector.PatternFill} */(normalizer(color.call(context, context)));
   }
   if (stateColor) { // it is a function and not a hatch fill here
