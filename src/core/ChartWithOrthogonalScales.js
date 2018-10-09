@@ -411,7 +411,6 @@ anychart.core.ChartWithOrthogonalScales.prototype.calculate = function() {
     this.calculateXYScales();
     this.applyComplexZoom();
   }
-  this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
   this.resumeSignalsDispatching(false);
   anychart.performance.end('Scale calculations');
 };

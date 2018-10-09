@@ -63,26 +63,10 @@ anychart.core.CartesianBase.PROPERTY_DESCRIPTORS = (function() {
   function zAngleNormalizer(opt_value) {
     return goog.math.clamp(anychart.utils.toNumber(opt_value), 0, 90);
   }
-  anychart.core.settings.createDescriptor(
-      map,
-      anychart.enums.PropertyHandlerType.SINGLE_ARG,
-      'zAngle',
-      zAngleNormalizer);
 
   function zAspectNormalizer(opt_value) {
     return goog.isNumber(opt_value) ? Math.max(opt_value, 0) : opt_value;
   }
-  anychart.core.settings.createDescriptor(
-      map,
-      anychart.enums.PropertyHandlerType.SINGLE_ARG,
-      'zAspect',
-      zAspectNormalizer);
-
-  anychart.core.settings.createDescriptor(
-      map,
-      anychart.enums.PropertyHandlerType.SINGLE_ARG,
-      'zDistribution',
-      anychart.core.settings.booleanNormalizer);
 
   function zPaddingNormalizer(opt_value) {
     return Math.max(anychart.utils.toNumber(opt_value), 0) || 0;
@@ -415,8 +399,6 @@ anychart.core.CartesianBase.prototype.applyXZoom = function(opt_doNotInvalidate)
     }
     this.xScroller().setRangeInternal(this.xZoom().getStartRatio(), this.xZoom().getEndRatio());
     if (!opt_doNotInvalidate) {
-      // this state marked on ChartWithOrthogonalScales#calculate
-      // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
       this.invalidate(
           anychart.ConsistencyState.SCALE_CHART_Y_SCALES |
           anychart.ConsistencyState.CARTESIAN_X_SCROLLER |
@@ -436,8 +418,6 @@ anychart.core.CartesianBase.prototype.applyYZoom = function(opt_doNotInvalidate)
     }
     this.yScroller().setRangeInternal(this.yZoom().getStartRatio(), this.yZoom().getEndRatio());
     if (!opt_doNotInvalidate) {
-      // this state marked on ChartWithOrthogonalScales#calculate
-      // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
       this.invalidate(
           anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
           anychart.ConsistencyState.AXES_CHART_ANNOTATIONS);
@@ -454,13 +434,19 @@ anychart.core.CartesianBase.prototype.applyComplexZoom = function() {
     this.applyXZoom(true);
     this.applyYZoom(true);
 
-    // this state marked on ChartWithOrthogonalScales#calculate
-    // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
     this.invalidate(
         anychart.ConsistencyState.CARTESIAN_X_SCROLLER |
         anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
         anychart.ConsistencyState.AXES_CHART_ANNOTATIONS);
   }
+};
+
+
+/** @inheritDoc */
+anychart.core.CartesianBase.prototype.calculate = function() {
+  anychart.core.CartesianBase.base(this, 'calculate');
+  // mark ZOOM as calculated and applied (in ChartWithOrthogonalScales#calculate)
+  this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
 };
 
 
