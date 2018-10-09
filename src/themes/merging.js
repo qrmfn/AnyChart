@@ -1039,12 +1039,10 @@ anychart.themes.merging.mergingMap_ = (function() {
       defaultObj: 'defaultScroller',
       targets: [
         [[
-          'cartesianBase.x',
-          'cartesianBase.y'
-          /*['heatMap.', [
+          ['cartesianBase.', [
             'x',
             'y'
-          ]]*/
+          ]]
         ], 'Scroller'],
         [[
           'stock',

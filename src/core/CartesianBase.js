@@ -198,7 +198,7 @@ anychart.core.CartesianBase.prototype.xScroller = function(opt_value) {
   if (!this.xScroller_) {
     this.xScroller_ = new anychart.core.ui.ChartScroller();
     this.xScroller_.setParentEventTarget(this);
-    this.xScroller_.listenSignals(this.xScrollerInvalidated_, this);
+    this.xScroller_.listenSignals(this.scrollerInvalidated_, this);
     this.eventsHandler.listen(this.xScroller_, anychart.enums.EventType.SCROLLER_CHANGE, this.scrollerChangeHandler);
     this.eventsHandler.listen(this.xScroller_, anychart.enums.EventType.SCROLLER_CHANGE_FINISH, this.scrollerChangeHandler);
     this.invalidate(
@@ -227,7 +227,7 @@ anychart.core.CartesianBase.prototype.yScroller = function(opt_value) {
   if (!this.yScroller_) {
     this.yScroller_ = new anychart.core.ui.ChartScroller();
     this.yScroller_.setParentEventTarget(this);
-    this.yScroller_.listenSignals(this.yScrollerInvalidated_, this);
+    this.yScroller_.listenSignals(this.scrollerInvalidated_, this);
     this.eventsHandler.listen(this.yScroller_, anychart.enums.EventType.SCROLLER_CHANGE, this.scrollerChangeHandler);
     this.eventsHandler.listen(this.yScroller_, anychart.enums.EventType.SCROLLER_CHANGE_FINISH, this.scrollerChangeHandler);
     this.invalidate(
@@ -248,29 +248,12 @@ anychart.core.CartesianBase.prototype.yScroller = function(opt_value) {
 
 
 /**
- * TODO(AntonKagakin): We can extract one method form xScrollerInvalidated_ and yScrollerInvalidated_
  * Scroller signals handler.
  * @param {anychart.SignalEvent} e
  * @private
  */
-anychart.core.CartesianBase.prototype.xScrollerInvalidated_ = function(e) {
-  var state = anychart.ConsistencyState.CARTESIAN_X_SCROLLER;
-  var signal = anychart.Signal.NEEDS_REDRAW;
-  if (e.hasSignal(anychart.Signal.BOUNDS_CHANGED)) {
-    state |= anychart.ConsistencyState.BOUNDS;
-    signal |= anychart.Signal.BOUNDS_CHANGED;
-  }
-  this.invalidate(state, signal);
-};
-
-
-/**
- * Scroller signals handler.
- * @param {anychart.SignalEvent} e
- * @private
- */
-anychart.core.CartesianBase.prototype.yScrollerInvalidated_ = function(e) {
-  var state = anychart.ConsistencyState.CARTESIAN_Y_SCROLLER;
+anychart.core.CartesianBase.prototype.scrollerInvalidated_ = function(e) {
+  var state = e.target == this.xScroller() ? anychart.ConsistencyState.CARTESIAN_X_SCROLLER : anychart.ConsistencyState.CARTESIAN_Y_SCROLLER;
   var signal = anychart.Signal.NEEDS_REDRAW;
   if (e.hasSignal(anychart.Signal.BOUNDS_CHANGED)) {
     state |= anychart.ConsistencyState.BOUNDS;
@@ -432,6 +415,7 @@ anychart.core.CartesianBase.prototype.applyXZoom = function(opt_doNotInvalidate)
     }
     this.xScroller().setRangeInternal(this.xZoom().getStartRatio(), this.xZoom().getEndRatio());
     if (!opt_doNotInvalidate) {
+      // this state marked on ChartWithOrthogonalScales#calculate
       // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
       this.invalidate(
           anychart.ConsistencyState.SCALE_CHART_Y_SCALES |
@@ -443,7 +427,7 @@ anychart.core.CartesianBase.prototype.applyXZoom = function(opt_doNotInvalidate)
 
 
 /** @inheritDoc */
-anychart.core.CartesianBase.prototype.applyYZoom = function() {
+anychart.core.CartesianBase.prototype.applyYZoom = function(opt_doNotInvalidate) {
   if (this.hasInvalidationState(anychart.ConsistencyState.CARTESIAN_ZOOM)) {
     for (var i in this.yScales) {
       var start = this.yZoom().getStartRatio();
@@ -451,33 +435,29 @@ anychart.core.CartesianBase.prototype.applyYZoom = function() {
       (/** @type {anychart.scales.Base} */(this.yScales[i])).setZoom(factor, start);
     }
     this.yScroller().setRangeInternal(this.yZoom().getStartRatio(), this.yZoom().getEndRatio());
-    this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
-    this.invalidate(
-        anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
-        anychart.ConsistencyState.AXES_CHART_ANNOTATIONS);
+    if (!opt_doNotInvalidate) {
+      // this state marked on ChartWithOrthogonalScales#calculate
+      // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
+      this.invalidate(
+          anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
+          anychart.ConsistencyState.AXES_CHART_ANNOTATIONS);
+    }
   }
 };
 
 
 /**
  * Applies both X and Y zooms.
- * TODO(AntonKagakin): Use this.applyYZoom here
  */
 anychart.core.CartesianBase.prototype.applyComplexZoom = function() {
   if (this.hasInvalidationState(anychart.ConsistencyState.CARTESIAN_ZOOM)) {
-    var start, factor, i;
-
     this.applyXZoom(true);
+    this.applyYZoom(true);
 
-    for (i in this.yScales) {
-      start = this.yZoom().getStartRatio();
-      factor = 1 / (this.yZoom().getEndRatio() - start);
-      (/** @type {anychart.scales.Base} */(this.yScales[i])).setZoom(factor, start);
-    }
-    this.yScroller().setRangeInternal(this.yZoom().getStartRatio(), this.yZoom().getEndRatio());
-
-    this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
-    this.invalidate(anychart.ConsistencyState.CARTESIAN_X_SCROLLER |
+    // this state marked on ChartWithOrthogonalScales#calculate
+    // this.markConsistent(anychart.ConsistencyState.CARTESIAN_ZOOM);
+    this.invalidate(
+        anychart.ConsistencyState.CARTESIAN_X_SCROLLER |
         anychart.ConsistencyState.CARTESIAN_Y_SCROLLER |
         anychart.ConsistencyState.AXES_CHART_ANNOTATIONS);
   }
