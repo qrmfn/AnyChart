@@ -57,6 +57,7 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
 
   var hash = '';
   var stateName = anychart.utils.pointStateToName(state);
+  var colorScale = this.series.colorScale();
   for (var name in names) {
     var descriptor = this.defs[name];
 
@@ -76,7 +77,7 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
      */
     var seriesColorer = this.series[name]();
 
-    if (goog.isFunction(seriesColorer)) {
+    if (goog.isFunction(seriesColorer) || colorScale) {
       /*
       This actually is something like
       - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.stroke
@@ -98,7 +99,7 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
 
       // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
 
-      if (seriesColorer == defaultColorer) {
+      if (seriesColorer == defaultColorer && !colorScale) {
         var ctx = {'sourceColor': this.series.getOption('color')};
         if (isStroke)
           descStroke = seriesColorer.call(ctx);

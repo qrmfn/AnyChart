@@ -3137,7 +3137,7 @@ anychart.core.series.Base.prototype.draw = function() {
   this.calcColorScale();
 
   if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_COLOR)) {
-    this.updateAutoMarkersColors();
+    // this.updateAutoMarkersColors();
   }
 
   if (this.hasInvalidationState(anychart.ConsistencyState.SERIES_POINTS)) {
