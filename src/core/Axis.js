@@ -1593,10 +1593,10 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
     var parentBounds = /** @type {anychart.math.Rect} */(this.parentBounds());
     if (parentBounds) {
       var parentLength, parentSize;
-      parentBounds.top = Math.round(parentBounds.top);
-      parentBounds.left = Math.round(parentBounds.left);
-      parentBounds.width = Math.round(parentBounds.width);
-      parentBounds.height = Math.round(parentBounds.height);
+      parentBounds.top = /*Math.round*/(parentBounds.top);
+      parentBounds.left = /*Math.round*/(parentBounds.left);
+      parentBounds.width = /*Math.round*/(parentBounds.width);
+      parentBounds.height = /*Math.round*/(parentBounds.height);
       if (this.isHorizontal()) {
         parentLength = parentBounds.width;
         parentSize = parentBounds.height;
@@ -1643,7 +1643,7 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
       }
 
       bounds = new anychart.math.Rect(x, y, width, height);
-      bounds.round();
+      // bounds.round();
 
       if (affectInsideContent)
         this.pixelBoundsWithInside = bounds;
@@ -2002,7 +2002,7 @@ anychart.core.Axis.prototype.draw = function() {
     var ticksStroke = axisTicks.getOption('stroke');
     var tickThickness = ticksStroke && ticksStroke['thickness'] ? parseFloat(ticksStroke['thickness']) : 1;
     var tickVal, ratio, drawLabel, drawTick;
-    var pixelBounds = this.parentBounds() ||  anychart.math.rect(0, 0, 0, 0);//getPixelBounds();
+    var pixelBounds = this.getPixelBounds();
     var lineBounds = this.line.getBounds();
     var stroke =  /**@type {acgraph.vector.Stroke|string}*/(this.getOption('stroke'));
     stroke = acgraph.vector.normalizeStroke(stroke);
