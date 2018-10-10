@@ -768,12 +768,18 @@ anychart.core.ui.Crosshair.prototype.drawLine_ = function(axis, xDirection, mous
     var isHorizontal = axis.isHorizontal();
 
     var startX, startY, endX, endY;
+    var scale = axis.scale();
 
     var offset = isHorizontal ? dataPlotOffsetX : dataPlotOffsetY;
     var side = isHorizontal ? width : height;
     var start = isHorizontal ? bounds.getLeft() : bounds.getTop();
 
-    var ratio = offset / side;
+    var ratio;
+    var scaleType = scale.getType();
+    if (scaleType == 'linear' || scaleType == 'datetime' || scaleType == 'log') //hack: on this scales there is no need in aligning and precision is lost on inversetTransform/transform
+      ratio = offset / side;
+    else
+      ratio = scale.transform(scale.inverseTransform(offset / side), .5); //aligning
     if (ratio < 0 || ratio > 1) {
       line.clear();
       return;
