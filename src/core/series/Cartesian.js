@@ -41,6 +41,12 @@ anychart.core.series.Cartesian = function(chart, plot, type, config, sortedMode)
    */
   this.sortedMode_ = sortedMode;
 
+  anychart.core.settings.createDescriptorMeta(this.descriptorsMeta,
+      'xMode',
+      anychart.ConsistencyState.SERIES_POINTS,
+      anychart.Signal.NEEDS_RECALCULATION | anychart.Signal.NEEDS_REDRAW,
+      anychart.core.series.Capabilities.ANY);
+
   this.data(null);
 };
 goog.inherits(anychart.core.series.Cartesian, anychart.core.series.Base);
@@ -147,6 +153,25 @@ anychart.core.series.Cartesian.prototype.hoverMode_;
  * @private
  */
 anychart.core.series.Cartesian.prototype.pointProvider_;
+
+
+//endregion
+//region --- Descriptors
+/**
+ * Properties that should be defined in series.Base prototype.
+ * @type {!Object.<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.core.series.Cartesian.OWN_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'xMode', anychart.enums.normalizeXMode]
+  ]);
+
+  return map;
+})();
+anychart.core.settings.populate(anychart.core.series.Cartesian, anychart.core.series.Cartesian.OWN_DESCRIPTORS);
 
 
 //endregion
@@ -923,8 +948,20 @@ anychart.core.series.Cartesian.prototype.getOrdinalDrawingPlan = function(xHashM
       return result || null;
     };
   } else {
+    var xModeScatter = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
     if (opt_seriesIndependent) {
       dataPusher = function(data, point) {
+        data.push(point);
+        return null;
+      };
+    } else if (xModeScatter) {
+      dataPusher = function(data, point) {
+        var xValue = point.data['x'];
+        var xHash = anychart.utils.hash(xValue);
+        if (!(xHash in xHashMap)) {
+          xHashMap[xHash] = xArray.length;
+          xArray.push(xValue);
+        }
         data.push(point);
         return null;
       };
@@ -952,7 +989,7 @@ anychart.core.series.Cartesian.prototype.getOrdinalDrawingPlan = function(xHashM
     return a === undefined;
   };
 
-  var result = this.getDrawingData(new Array(xArray.length), dataPusher, xNormalizer, xMissingChecker);
+  var result = this.getDrawingData(xModeScatter ? [] : new Array(xArray.length), dataPusher, xNormalizer, xMissingChecker);
   var data = result.data;
   for (var i = 0; i < data.length; i++) {
     if (!data[i])
