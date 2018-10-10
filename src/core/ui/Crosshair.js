@@ -765,7 +765,6 @@ anychart.core.ui.Crosshair.prototype.drawLine_ = function(axis, xDirection, mous
     var height = bounds.getBottom() - bounds.getTop();
     var dataPlotOffsetX = mouseX - bounds.getLeft();
     var dataPlotOffsetY = mouseY - bounds.getTop();
-    var shift = line.strokeThickness() % 2 == 0 ? 0 : -.5;
     var isHorizontal = axis.isHorizontal();
 
     var startX, startY, endX, endY;
@@ -781,15 +780,15 @@ anychart.core.ui.Crosshair.prototype.drawLine_ = function(axis, xDirection, mous
       return;
     }
 
-    var coord = Math.round(start + ratio * side);
+    var coord = start + ratio * side;
     if (isHorizontal) {
-      startX = coord - shift;
+      startX = anychart.utils.applyPixelShift(coord, /** @type {number} */(line.strokeThickness()));
       startY = bounds.getTop();
       endX = startX;
       endY = bounds.getBottom();
     } else {
       startX = bounds.getLeft();
-      startY = coord - shift;
+      startY = anychart.utils.applyPixelShift(coord, /** @type {number} */(line.strokeThickness()));
       endX = bounds.getRight();
       endY = startY;
     }

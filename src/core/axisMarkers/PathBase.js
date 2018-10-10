@@ -471,18 +471,17 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
   if (isNaN(ratio)) return this;
 
   if (ratio >= 0 && ratio <= 1) {
-    var shift = el.strokeThickness() % 2 == 0 ? 0 : -.5;
     var bounds = this.parentBounds();
     var axesLinesSpace = this.axesLinesSpace();
 
     if (this.isHorizontal()) {
-      var y = Math.round(bounds.getTop() + bounds.height - ratio * bounds.height);
-      ratio == 1 ? y -= shift : y += shift;
+      var y = bounds.getTop() + bounds.height - ratio * bounds.height;
+      y = anychart.utils.applyPixelShift(y, /** @type {number} */(el.strokeThickness()), ratio != 1);
       el.moveTo(bounds.getLeft(), y);
       el.lineTo(bounds.getRight(), y);
     } else {
-      var x = Math.round(bounds.getLeft() + ratio * bounds.width);
-      ratio == 1 ? x += shift : x -= shift;
+      var x = bounds.getLeft() + ratio * bounds.width;
+      x = anychart.utils.applyPixelShift(x, /** @type {number} */(el.strokeThickness()), ratio == 1);
       el.moveTo(x, bounds.getTop());
       el.lineTo(x, bounds.getBottom());
     }
@@ -539,6 +538,7 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
     var axesLinesSpace = this.axesLinesSpace();
 
     if (this.isHorizontal()) {
+      // todo (i.kurnoy) take a look here one more time (applyPixesShift and everything related to it)
       var y_max = Math.floor(bounds.getBottom() - bounds.height * ratioMaxValue);
       var y_min = Math.ceil(bounds.getBottom() - bounds.height * ratioMinValue);
       var x_start = bounds.getLeft();
