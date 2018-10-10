@@ -178,7 +178,7 @@ anychart.core.AxisTicks.prototype.drawTopTick = function(ratio, bounds, lineBoun
   /** @type {number} */
   var dy;
 
-  anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()), ratio == 1);
+  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()), ratio == 1);
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));
@@ -216,7 +216,7 @@ anychart.core.AxisTicks.prototype.drawRightTick = function(ratio, bounds, lineBo
   /** @type {number} */
   var dx;
 
-  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.path.strokeThickness()), ratio != 1);
+  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.path.strokeThickness()));
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));
@@ -254,7 +254,7 @@ anychart.core.AxisTicks.prototype.drawBottomTick = function(ratio, bounds, lineB
   /** @type {number} */
   var dy;
 
-  anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()), ratio == 1);
+  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()), ratio == 1);
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));
@@ -293,7 +293,7 @@ anychart.core.AxisTicks.prototype.drawLeftTick = function(ratio, bounds, lineBou
   /** @type {number} */
   var dx;
 
-  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.path.strokeThickness()), ratio != 1);
+  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.path.strokeThickness()));
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));

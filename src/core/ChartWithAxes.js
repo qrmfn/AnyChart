@@ -1108,7 +1108,7 @@ anychart.core.ChartWithAxes.prototype.getPlotBounds = function() {
  * @protected
  */
 anychart.core.ChartWithAxes.prototype.getContentAreaBounds = function(bounds) {
-  return bounds.clone().round();
+  return bounds.clone();//.round();
 };
 
 
@@ -1272,7 +1272,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       axis.resumeSignalsDispatching(false);
     }
   }
-  return boundsWithoutAxes.clone().round();
+  return boundsWithoutAxes.clone();//.round();
 };
 
 

@@ -1693,10 +1693,11 @@ anychart.core.Axis.prototype.insideBounds = function(opt_value) {
  * @protected
  */
 anychart.core.Axis.prototype.drawTopLine = function(bounds, pixelShift, lineThickness, offset, size) {
-  var y = bounds.top + bounds.height + lineThickness / 2;
+  var y = bounds.top + bounds.height;
+  y = anychart.utils.applyPixelShift(y, lineThickness);
   this.line
-      .moveTo(bounds.left + pixelShift, y)
-      .lineTo(bounds.left - pixelShift + bounds.width, y);
+      .moveTo(anychart.utils.applyPixelShift(bounds.left, 1), y)
+      .lineTo(anychart.utils.applyPixelShift(bounds.left + bounds.width, 1), y);
 };
 
 
@@ -1710,10 +1711,11 @@ anychart.core.Axis.prototype.drawTopLine = function(bounds, pixelShift, lineThic
  * @protected
  */
 anychart.core.Axis.prototype.drawRightLine = function(bounds, pixelShift, lineThickness, offset, size) {
-  var x = bounds.left - lineThickness / 2;
+  var x = bounds.left;
+  x = anychart.utils.applyPixelShift(x, lineThickness);
   this.line
-      .moveTo(x, bounds.top + pixelShift)
-      .lineTo(x, bounds.top - pixelShift + bounds.height);
+      .moveTo(x, anychart.utils.applyPixelShift(bounds.top, 1))
+      .lineTo(x, anychart.utils.applyPixelShift(bounds.top + bounds.height, 1));
 };
 
 
@@ -1727,10 +1729,12 @@ anychart.core.Axis.prototype.drawRightLine = function(bounds, pixelShift, lineTh
  * @protected
  */
 anychart.core.Axis.prototype.drawBottomLine = function(bounds, pixelShift, lineThickness, offset, size) {
-  var y = bounds.top - lineThickness / 2;
+  var y = bounds.top;
+  y = anychart.utils.applyPixelShift(y, lineThickness);
+  console.log("Bottom axis left: ", anychart.utils.applyPixelShift(bounds.left, 1));
   this.line
-      .moveTo(bounds.left + pixelShift, y)
-      .lineTo(bounds.left - pixelShift + bounds.width, y);
+      .moveTo(anychart.utils.applyPixelShift(bounds.left, 1), y)
+      .lineTo(anychart.utils.applyPixelShift(bounds.left + bounds.width, 1), y);
 };
 
 
@@ -1744,10 +1748,11 @@ anychart.core.Axis.prototype.drawBottomLine = function(bounds, pixelShift, lineT
  * @protected
  */
 anychart.core.Axis.prototype.drawLeftLine = function(bounds, pixelShift, lineThickness, offset, size) {
-  var x = bounds.left + bounds.width + lineThickness / 2;
+  var x = bounds.left + bounds.width;
+  x = anychart.utils.applyPixelShift(x, lineThickness);
   this.line
-      .moveTo(x, bounds.top + pixelShift)
-      .lineTo(x, bounds.top - pixelShift + bounds.height);
+      .moveTo(x, anychart.utils.applyPixelShift(bounds.top, 1))
+      .lineTo(x, anychart.utils.applyPixelShift(bounds.top + bounds.height, 1));
 };
 
 

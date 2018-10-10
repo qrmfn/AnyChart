@@ -42,9 +42,9 @@ anychart.stockModule.Grid.prototype.drawLineHorizontal = function(ratio, shift) 
   var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
   /** @type {number}*/
   var y = parentBounds.getBottom() - ratio * parentBounds.height;
-  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.lineElement().strokeThickness()), ratio != 1);
-  this.lineElementInternal.moveTo(parentBounds.getLeft(), y);
-  this.lineElementInternal.lineTo(parentBounds.getRight(), y);
+  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.lineElement().strokeThickness()));
+  this.lineElementInternal.moveTo(anychart.utils.applyPixelShift(parentBounds.getLeft(), 1), y);
+  this.lineElementInternal.lineTo(anychart.utils.applyPixelShift(parentBounds.getRight(), 1), y);
 };
 
 
@@ -80,10 +80,10 @@ anychart.stockModule.Grid.prototype.drawInterlaceHorizontal = function(ratio, pr
     //shift = shift ? 0.5 : 0;
 
     var y1 = parentBounds.getBottom() - prevRatio * parentBounds.height;
-    y1 = anychart.utils.applyPixelShift(y1, /** @type {number} */(this.lineElement().strokeThickness()), prevRatio != 1);
+    y1 = anychart.utils.applyPixelShift(y1, /** @type {number} */(this.lineElement().strokeThickness()));
 
     var y2 = parentBounds.getBottom() - ratio * parentBounds.height;
-    y2 = anychart.utils.applyPixelShift(y2, /** @type {number} */(this.lineElement().strokeThickness()), ratio != 1);
+    y2 = anychart.utils.applyPixelShift(y2, /** @type {number} */(this.lineElement().strokeThickness()));
 
     path.moveTo(parentBounds.getLeft(), y1);
     path.lineTo(parentBounds.getRight(), y1);
@@ -107,7 +107,7 @@ anychart.stockModule.Grid.prototype.drawInterlaceVertical = function(ratio, prev
     var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
 
     var x1 = parentBounds.getLeft() + prevRatio * parentBounds.width;// * 2);
-    x1 = anychart.utils.applyPixelShift(x1, /** @type {number} */(this.lineElement().strokeThickness()), prevRatio == 1);
+    x1 = anychart.utils.applyPixelShift(x1, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
     // if (shift ^ (x1 % 2 == 1))
     //   x1 += 1;
     // x1 /= 2;
