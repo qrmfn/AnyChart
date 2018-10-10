@@ -2002,10 +2002,10 @@ anychart.core.Axis.prototype.draw = function() {
     var ticksStroke = axisTicks.getOption('stroke');
     var tickThickness = ticksStroke && ticksStroke['thickness'] ? parseFloat(ticksStroke['thickness']) : 1;
     var tickVal, ratio, drawLabel, drawTick;
-    var pixelBounds = this.getPixelBounds();
+    var pixelBounds = this.parentBounds() ||  anychart.math.rect(0, 0, 0, 0);//getPixelBounds();
     var lineBounds = this.line.getBounds();
     var stroke =  /**@type {acgraph.vector.Stroke|string}*/(this.getOption('stroke'));
-    stroke =acgraph.vector.normalizeStroke(stroke);
+    stroke = acgraph.vector.normalizeStroke(stroke);
     lineThickness = !stroke || anychart.utils.isNone(stroke) ? 0 : stroke['thickness'] ? parseFloat(stroke['thickness']) : 1;
 
     if (anychart.utils.instanceOf(scale, anychart.scales.ScatterBase)) {
