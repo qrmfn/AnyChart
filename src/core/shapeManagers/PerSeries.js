@@ -83,7 +83,7 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
       - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.fill
       - ...
      */
-      var defaultColorer = anychart.themes['defaultTheme']['chart']['defaultSeriesSettings']['base'][stateName][name];
+      var defaultColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings']['base'][stateName][name];
 
       // /*
       //   This actually is something like
@@ -93,7 +93,7 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
       //  */
       // var defaultTypeColorer;
       // try {
-      //   defaultTypeColorer = anychart.themes['defaultTheme']['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
+      //   defaultTypeColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
       // } catch (e) {}
 
       // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
