@@ -45,7 +45,7 @@ anychart.cartesianModule.Grid.prototype.drawLineHorizontal = function(ratio, shi
   var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
   /** @type {number}*/
   var y = parentBounds.getBottom() - ratio * parentBounds.height;
-  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 0);
+  y = anychart.utils.applyPixelShift(y, /** @type {number} */(this.lineElement().strokeThickness()));
   this.lineElementInternal.moveTo(anychart.utils.applyPixelShift(parentBounds.getLeft(), 1), y);
   this.lineElementInternal.lineTo(anychart.utils.applyPixelShift(parentBounds.getRight(), 1), y);
 };
@@ -57,7 +57,7 @@ anychart.cartesianModule.Grid.prototype.drawLineVertical = function(ratio, shift
   /** @type {number}*/
   var x = parentBounds.getLeft() + ratio * parentBounds.width;
   x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
-  this.lineElementInternal.moveTo(x, anychart.utils.applyPixelShift(parentBounds.getBottom(), 1));
+  this.lineElementInternal.moveTo(x, parentBounds.getBottom());
   this.lineElementInternal.lineTo(x, parentBounds.getTop());
 };
 
@@ -67,10 +67,10 @@ anychart.cartesianModule.Grid.prototype.drawInterlaceHorizontal = function(ratio
   if (!isNaN(prevRatio)) {
     var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
     var y1 = parentBounds.getBottom() - prevRatio * parentBounds.height;
-    y1 = anychart.utils.applyPixelShift(y1, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 0);
+    y1 = anychart.utils.applyPixelShift(y1, /** @type {number} */(this.lineElement().strokeThickness()));
 
     var y2 = parentBounds.getBottom() - ratio * parentBounds.height;
-    y2 = anychart.utils.applyPixelShift(y2, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 0);
+    y2 = anychart.utils.applyPixelShift(y2, /** @type {number} */(this.lineElement().strokeThickness()));
 
 
     path.moveTo(anychart.utils.applyPixelShift(parentBounds.getLeft(), 1), y1);
