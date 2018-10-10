@@ -779,7 +779,7 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
 
   // anychart.performance.end('Drawing plan calc');
   this.invalidate(anychart.ConsistencyState.SERIES_DATA);
-  return this.drawingPlan = {
+  this.drawingPlan = {
     data: data,
     series: this,
     hasPointLabels: this.supportsLabels() &&
@@ -820,6 +820,8 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
     hasPointYErrors: hasYErrors,
     hasPointErrors: hasXErrors || hasYErrors
   };
+
+  return this.drawingPlan;
 };
 
 

@@ -52,11 +52,69 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
   var iterator = this.series.getIterator();
 
   var fill, stroke;
+  var descFill;
+  var descStroke;
+
   var hash = '';
+  var stateName = anychart.utils.pointStateToName(state);
   for (var name in names) {
     var descriptor = this.defs[name];
-    var descFill = /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state));
-    var descStroke = /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
+
+    //TODO (A.Kudryavtsev): This shit below is written for boost performance purposes.
+    /*
+      Kind of stupid hack.
+      Matches 's<troke>', 'risingS<troke>', etc.
+      If not isStroke - dealing with fill.
+     */
+    var isStroke = goog.string.contains(name, 'troke');
+
+    /*
+      This actually is
+      - this.series.fill
+      - this.series.stroke
+      - ...
+     */
+    var seriesColorer = this.series[name]();
+
+    if (goog.isFunction(seriesColorer)) {
+      /*
+      This actually is something like
+      - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.stroke
+      - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.fill
+      - ...
+     */
+      var defaultColorer = anychart.themes['defaultTheme']['chart']['defaultSeriesSettings']['base'][stateName][name];
+
+      // /*
+      //   This actually is something like
+      //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.stroke
+      //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.fill
+      //   - ...
+      //  */
+      // var defaultTypeColorer;
+      // try {
+      //   defaultTypeColorer = anychart.themes['defaultTheme']['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
+      // } catch (e) {}
+
+      // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
+
+      if (seriesColorer == defaultColorer) {
+        var ctx = {'sourceColor': this.series.getOption('color')};
+        if (isStroke)
+          descStroke = seriesColorer.call(ctx);
+        else
+          descFill = seriesColorer.call(ctx);
+      } else {
+        descFill = /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state));
+        descStroke = /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
+      }
+    } else {
+      if (isStroke) {
+        descStroke = acgraph.vector.normalizeStroke(seriesColorer);
+      } else {
+        descFill = acgraph.vector.normalizeFill(seriesColorer);
+      }
+    }
 
     if (!descriptor.isHatchFill) {
       if (descFill && anychart.color.isNotNullColor(descFill))

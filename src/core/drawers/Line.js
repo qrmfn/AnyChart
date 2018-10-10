@@ -107,7 +107,10 @@ anychart.core.drawers.Line.prototype.drawFirstPoint = function(point, state) {
   var x = /** @type {number} */(point.meta('x'));
   var y = /** @type {number} */(point.meta('value'));
 
-  anychart.core.drawers.move(/** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]), this.isVertical, x, y);
+  var line = /** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]);
+  line.suspend();
+
+  anychart.core.drawers.move(line, this.isVertical, x, y);
   if (isNaN(this.firstPointX)) {
     this.firstPointX = x;
     this.firstPointY = y;
@@ -169,6 +172,8 @@ anychart.core.drawers.Line.prototype.drawSubsequentPoint = function(point, state
 anychart.core.drawers.Line.prototype.finalizeDrawing = function() {
   this.additionalFinalize();
   anychart.core.drawers.Line.base(this, 'finalizeDrawing');
+  var line = /** @type {acgraph.vector.Path} */(this.currentShapes[this.prevShapeNames.stroke]);
+  line.resume();
 };
 
 
