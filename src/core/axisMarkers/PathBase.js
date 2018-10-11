@@ -485,7 +485,7 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
       el.moveTo(x, anychart.utils.applyPixelShift(bounds.getTop(), 1));
       el.lineTo(x, anychart.utils.applyPixelShift(bounds.getBottom(), 1));
     }
-    el.clip(anychart.utils.applyPixelShiftToRect(bounds));
+    el.clip(/** @type {goog.math.Rect} */(bounds));
   }
   return this;
 };

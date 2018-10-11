@@ -758,7 +758,7 @@ anychart.core.GridBase.prototype.drawInternal = function() {
   }
   var axesLinesSpace = this.axesLinesSpace();
 
-  bounds = anychart.utils.applyPixelShiftToRect(bounds, strokeThickness);
+  bounds = anychart.utils.applyPixelShiftToRect(/** @type {!goog.math.Rect}*/(bounds), strokeThickness);
   bounds.width += strokeThickness / 2;
   bounds.top -= strokeThickness / 2;
 
