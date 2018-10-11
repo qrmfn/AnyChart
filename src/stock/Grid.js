@@ -57,7 +57,7 @@ anychart.stockModule.Grid.prototype.drawLineHorizontal = function(ratio, shift) 
 anychart.stockModule.Grid.prototype.drawLineVertical = function(ratio, shift) {
   var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
   var x = (parentBounds.getLeft() + ratio * parentBounds.width);// * 2;
-  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
+  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.lineElement().strokeThickness()));
   // if (shift ^ (x % 2 == 1))
   //   x += 1;
   // x /= 2;
@@ -107,13 +107,13 @@ anychart.stockModule.Grid.prototype.drawInterlaceVertical = function(ratio, prev
     var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
 
     var x1 = parentBounds.getLeft() + prevRatio * parentBounds.width;// * 2);
-    x1 = anychart.utils.applyPixelShift(x1, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
+    x1 = anychart.utils.applyPixelShift(x1, /** @type {number} */(this.lineElement().strokeThickness()));
     // if (shift ^ (x1 % 2 == 1))
     //   x1 += 1;
     // x1 /= 2;
 
     var x2 = parentBounds.getLeft() + ratio * parentBounds.width;// * 2);
-    x2 = anychart.utils.applyPixelShift(x2, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
+    x2 = anychart.utils.applyPixelShift(x2, /** @type {number} */(this.lineElement().strokeThickness()));
     // if (shift ^ (x2 % 2 == 1))
     //   x2 += 1;
     // x2 /= 2;
@@ -160,10 +160,15 @@ anychart.stockModule.Grid.prototype.drawInternal = function() {
   this.lineElement().clear();
 
   var bounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
-  var axesLinesSpace = this.axesLinesSpace();
-  var clip = axesLinesSpace.tightenBounds(/** @type {!anychart.math.Rect} */(bounds));
 
-  this.lineElement().clip(clip);
+  var strokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
+  if (this.isHorizontal()) {
+    console.log('horizontal');
+    bounds.height += strokeThickness;
+  } else {
+    bounds.width += strokeThickness;
+  }
+  this.lineElement().clip(bounds);
 
   var drawInterlace = layout[1];
   var drawLine = layout[0];
