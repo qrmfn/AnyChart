@@ -28,6 +28,10 @@ anychart.cartesianModule.Chart = function() {
 
   this.addThemes('cartesian');
 
+  anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
+    ['categorizedBySeries', 0, 0]
+  ]);
+
   this.setType(anychart.enums.ChartTypes.CARTESIAN);
 };
 goog.inherits(anychart.cartesianModule.Chart, anychart.core.CartesianBase);
@@ -450,6 +454,54 @@ anychart.cartesianModule.Chart.prototype.isSeriesVisible = function(series) {
     visible = false;
   return (enabled && visible);
 };
+
+
+//endregion
+//region Categorization By Series
+/** @inheritDoc */
+anychart.cartesianModule.Chart.prototype.autoCalcOrdinalXScale = function(xScale, drawingPlans, hasExcludes, excludesMap) {
+  if (!this.getOption('categorizedBySeries')) {
+    anychart.cartesianModule.Chart.base(this, 'autoCalcOrdinalXScale', xScale, drawingPlan, hasExcludes, excludesMap);
+  } else {
+    debugger;
+    var xArray = drawingPlans.map(function(plan) {
+      return plan.series.name();
+    });
+    var xHashMap = xArray.reduce(function(xHashMap, item, index) {
+      var xHash = anychart.utils.hash(item);
+      xHashMap[xHash] = index;
+      return xHashMap;
+    }, {});
+    xScale.setAutoValues(xHashMap, xArray);
+  }
+};
+
+
+/** @inheritDoc */
+anychart.cartesianModule.Chart.prototype.finishOrdinalXScaleCalculation = function(xScale, drawingPlans) {
+  if (!this.getOption('categorizedBySeries')) {
+    anychart.cartesianModule.Chart.base(this, 'finishOrdinalXScaleCalculation', xScale, drawingPlans);
+  }
+};
+
+
+//endregion
+//region --- Descriptors
+/**
+ * Properties that should be defined in class prototype.
+ * @type {!Object.<string, anychart.core.settings.PropertyDescriptor>}
+ */
+anychart.cartesianModule.Chart.OWN_DESCRIPTORS = (function() {
+  /** @type {!Object.<string, anychart.core.settings.PropertyDescriptor>} */
+  var map = {};
+
+  anychart.core.settings.createDescriptors(map, [
+    [anychart.enums.PropertyHandlerType.SINGLE_ARG, 'categorizedBySeries', anychart.core.settings.booleanNormalizer]
+  ]);
+
+  return map;
+})();
+anychart.core.settings.populate(anychart.cartesianModule.Chart, anychart.cartesianModule.Chart.OWN_DESCRIPTORS);
 //endregion
 
 
@@ -540,10 +592,13 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.CARTESIAN] = anychart.cartesian
   proto['getPlotBounds'] = proto.getPlotBounds;
   proto['xZoom'] = proto.xZoom;
   proto['xScroller'] = proto.xScroller;
+  // auto form CartesianBase
   //proto['zAspect'] = proto.zAspect;
   //proto['zAngle'] = proto.zAngle;
   //proto['zDistribution'] = proto.zDistribution;
   //proto['zPadding'] = proto.zPadding;
+  // auto
+  //proto['categorizedBySeries'] = proto.categorizedBySeries;
   proto['getStat'] = proto.getStat;
   proto['annotations'] = proto.annotations;
   proto['getXScales'] = proto.getXScales;
