@@ -1643,7 +1643,7 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
       }
 
       bounds = new anychart.math.Rect(x, y, width, height);
-      bounds.round();
+      // bounds.round();
 
       if (affectInsideContent)
         this.pixelBoundsWithInside = bounds;

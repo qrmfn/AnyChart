@@ -254,7 +254,7 @@ anychart.core.AxisTicks.prototype.drawBottomTick = function(ratio, bounds, lineB
   /** @type {number} */
   var dy;
 
-  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()), ratio == 1);
+  x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.path.strokeThickness()));
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));

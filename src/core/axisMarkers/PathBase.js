@@ -482,10 +482,10 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
     } else {
       var x = bounds.getLeft() + ratio * bounds.width;
       x = anychart.utils.applyPixelShift(x, /** @type {number} */(el.strokeThickness()));
-      el.moveTo(x, bounds.getTop());
-      el.lineTo(x, bounds.getBottom());
+      el.moveTo(x, anychart.utils.applyPixelShift(bounds.getTop(), 1));
+      el.lineTo(x, anychart.utils.applyPixelShift(bounds.getBottom(), 1));
     }
-    el.clip(axesLinesSpace.tightenBounds(/** @type {!anychart.math.Rect} */(bounds)));
+    el.clip(anychart.utils.applyPixelShiftToRect(bounds));
   }
   return this;
 };

@@ -745,20 +745,22 @@ anychart.core.GridBase.prototype.drawInternal = function() {
 
   var bounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
   var mode3d = this.owner_ && this.owner_.isMode3d();
+  var strokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke')));
   if (mode3d) {
     var owner = /** @type {anychart.cartesian3dModule.Chart} */(this.owner_);
     this.x3dShift = owner.x3dShift;
     this.y3dShift = owner.y3dShift;
 
-    var strokeThickness = acgraph.vector.getThickness(/** @type {acgraph.vector.Stroke} */(this.getOption('stroke'))) / 2;
+
     bounds.top -= this.y3dShift + strokeThickness;
     bounds.height += this.y3dShift + strokeThickness;
     bounds.width += this.x3dShift;
   }
   var axesLinesSpace = this.axesLinesSpace();
-  var clip = axesLinesSpace.tightenBounds(/** @type {!anychart.math.Rect} */(bounds));
 
-  this.lineElement().clip(clip);
+  bounds = anychart.utils.applyPixelShiftToRect(bounds, strokeThickness);
+
+  this.lineElement().clip(bounds);
 
   var drawInterlace = layout[1];
   var drawLine = layout[0];
