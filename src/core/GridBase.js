@@ -751,7 +751,6 @@ anychart.core.GridBase.prototype.drawInternal = function() {
     this.x3dShift = owner.x3dShift;
     this.y3dShift = owner.y3dShift;
 
-
     bounds.top -= this.y3dShift + strokeThickness / 2;
     bounds.height += this.y3dShift + strokeThickness / 2;
     bounds.width += this.x3dShift;

@@ -477,13 +477,13 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
     if (this.isHorizontal()) {
       var y = bounds.getTop() + bounds.height - ratio * bounds.height;
       y = anychart.utils.applyPixelShift(y, /** @type {number} */(el.strokeThickness()));
-      el.moveTo(anychart.utils.applyPixelShift(bounds.getLeft(), 1), y);
-      el.lineTo(anychart.utils.applyPixelShift(bounds.getRight(), 1), y);
+      el.moveTo(bounds.getLeft(), y);
+      el.lineTo(bounds.getRight(), y);
     } else {
       var x = bounds.getLeft() + ratio * bounds.width;
       x = anychart.utils.applyPixelShift(x, /** @type {number} */(el.strokeThickness()));
-      el.moveTo(x, anychart.utils.applyPixelShift(bounds.getTop(), 1));
-      el.lineTo(x, anychart.utils.applyPixelShift(bounds.getBottom(), 1));
+      el.moveTo(x, bounds.getTop());
+      el.lineTo(x, bounds.getBottom());
     }
     el.clip(/** @type {goog.math.Rect} */(bounds));
   }
@@ -538,7 +538,6 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
     var axesLinesSpace = this.axesLinesSpace();
 
     if (this.isHorizontal()) {
-      // todo (i.kurnoy) take a look here one more time (applyPixesShift and everything related to it)
       var y_max = Math.floor(bounds.getBottom() - bounds.height * ratioMaxValue);
       var y_min = Math.ceil(bounds.getBottom() - bounds.height * ratioMinValue);
       var x_start = bounds.getLeft();

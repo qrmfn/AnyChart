@@ -506,10 +506,6 @@ anychart.core.ui.Background.prototype.draw = function() {
       var thicknessHalf = strokeThickness / 2;
       if (isNaN(thicknessHalf)) thicknessHalf = .5;
 
-      // bounds.left += thicknessHalf;
-      // bounds.top += thicknessHalf;
-      // bounds.width -= thicknessHalf + thicknessHalf;
-      // bounds.height -= thicknessHalf + thicknessHalf;
       bounds = anychart.utils.applyPixelShiftToRect(bounds, strokeThickness);
 
       points = [

@@ -66,11 +66,12 @@ anychart.cartesianModule.Grid.prototype.drawLineVertical = function(ratio, shift
 anychart.cartesianModule.Grid.prototype.drawInterlaceHorizontal = function(ratio, prevRatio, path, shift) {
   if (!isNaN(prevRatio)) {
     var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
+    var strokeThickness = /** @type {number} */(this.lineElement().strokeThickness());
     var y1 = parentBounds.getBottom() - prevRatio * parentBounds.height;
-    y1 = anychart.utils.applyPixelShift(y1, /** @type {number} */(this.lineElement().strokeThickness()));
+    y1 = anychart.utils.applyPixelShift(y1, strokeThickness);
 
     var y2 = parentBounds.getBottom() - ratio * parentBounds.height;
-    y2 = anychart.utils.applyPixelShift(y2, /** @type {number} */(this.lineElement().strokeThickness()));
+    y2 = anychart.utils.applyPixelShift(y2, strokeThickness);
 
 
     path.moveTo(parentBounds.getLeft(), y1);
@@ -86,11 +87,12 @@ anychart.cartesianModule.Grid.prototype.drawInterlaceHorizontal = function(ratio
 anychart.cartesianModule.Grid.prototype.drawInterlaceVertical = function(ratio, prevRatio, path, shift) {
   if (!isNaN(prevRatio)) {
     var parentBounds = this.parentBounds() || anychart.math.rect(0, 0, 0, 0);
+    var strokeThickness = /** @type {number} */(this.lineElement().strokeThickness());
     var x1 = parentBounds.getLeft() + prevRatio * parentBounds.width;
-    x1 = anychart.utils.applyPixelShift(x1, /** @type {number} */(this.lineElement().strokeThickness()));
+    x1 = anychart.utils.applyPixelShift(x1, strokeThickness);
 
     var x2 = parentBounds.getLeft() + ratio * parentBounds.width;
-    x2 = anychart.utils.applyPixelShift(x2, /** @type {number} */(this.lineElement().strokeThickness()));
+    x2 = anychart.utils.applyPixelShift(x2, strokeThickness);
 
 
     path.moveTo(x1, parentBounds.getTop());

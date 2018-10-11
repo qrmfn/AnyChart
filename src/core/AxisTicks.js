@@ -285,7 +285,6 @@ anychart.core.AxisTicks.prototype.drawBottomTick = function(ratio, bounds, lineB
  * @protected
  */
 anychart.core.AxisTicks.prototype.drawLeftTick = function(ratio, bounds, lineBounds, lineThickness, pixelShift) {
-
   /** @type {number} */
   var x = lineBounds.left;
   /** @type {number} */
@@ -297,6 +296,7 @@ anychart.core.AxisTicks.prototype.drawLeftTick = function(ratio, bounds, lineBou
 
   var position = /** @type {anychart.enums.SidePosition} */(this.getOption('position'));
   var length = /** @type {number} */(this.getOption('length'));
+
   if (position == anychart.enums.SidePosition.OUTSIDE) {
     x -= lineThickness / 2;
     dx = /** @type {number} */(-length);

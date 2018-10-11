@@ -3111,6 +3111,7 @@ anychart.core.series.Base.prototype.draw = function() {
   // resolving bounds
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
     this.pixelBoundsCache = this.getPixelBounds();
+    // todo (i.kurnoy) this hack breaks animation
     this.boundsWithoutAxes = /*this.axesLinesSpace_ ?
         this.axesLinesSpace_.tightenBounds(this.pixelBoundsCache) :*/
         this.pixelBoundsCache;
