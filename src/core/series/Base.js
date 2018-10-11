@@ -3111,8 +3111,8 @@ anychart.core.series.Base.prototype.draw = function() {
   // resolving bounds
   if (this.hasInvalidationState(anychart.ConsistencyState.BOUNDS)) {
     this.pixelBoundsCache = this.getPixelBounds();
-    this.boundsWithoutAxes = this.axesLinesSpace_ ?
-        this.axesLinesSpace_.tightenBounds(this.pixelBoundsCache) :
+    this.boundsWithoutAxes = /*this.axesLinesSpace_ ?
+        this.axesLinesSpace_.tightenBounds(this.pixelBoundsCache) :*/
         this.pixelBoundsCache;
     var size = Math.min(this.pixelBoundsCache.height, this.pixelBoundsCache.width);
     this.minimumSizeValue_ = anychart.utils.normalizeSize(this.minimumSizeSetting_, size);
