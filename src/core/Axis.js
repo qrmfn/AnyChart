@@ -1643,7 +1643,7 @@ anychart.core.Axis.prototype.getPixelBounds = function(opt_includeInsideContent)
       }
 
       bounds = new anychart.math.Rect(x, y, width, height);
-      // bounds.round();
+      bounds.round();
 
       if (affectInsideContent)
         this.pixelBoundsWithInside = bounds;
@@ -1730,10 +1730,7 @@ anychart.core.Axis.prototype.drawRightLine = function(bounds, pixelShift, lineTh
  */
 anychart.core.Axis.prototype.drawBottomLine = function(bounds, pixelShift, lineThickness, offset, size) {
   var y = bounds.top;
-  var afterShift = anychart.utils.applyPixelShift(y, lineThickness);
-  if (afterShift > y)
-    afterShift = anychart.utils.applyPixelShift(y, lineThickness, true);
-  y = afterShift;
+  y = anychart.utils.applyPixelShift(y, lineThickness);
   this.line
       .moveTo(anychart.utils.applyPixelShift(bounds.left, 1), y)
       .lineTo(anychart.utils.applyPixelShift(bounds.left + bounds.width, 1), y);
@@ -1751,12 +1748,10 @@ anychart.core.Axis.prototype.drawBottomLine = function(bounds, pixelShift, lineT
  */
 anychart.core.Axis.prototype.drawLeftLine = function(bounds, pixelShift, lineThickness, offset, size) {
   var x = bounds.left + bounds.width;
-  var afterShift = anychart.utils.applyPixelShift(x, lineThickness);
-  if (afterShift < x)
-    afterShift = anychart.utils.applyPixelShift(x, lineThickness, true);
+  x = anychart.utils.applyPixelShift(x, lineThickness);
   this.line
-      .moveTo(afterShift, anychart.utils.applyPixelShift(bounds.top, 1))
-      .lineTo(afterShift, anychart.utils.applyPixelShift(bounds.top + bounds.height, 1));
+      .moveTo(x, anychart.utils.applyPixelShift(bounds.top, 1))
+      .lineTo(x, anychart.utils.applyPixelShift(bounds.top + bounds.height, 1));
 };
 
 

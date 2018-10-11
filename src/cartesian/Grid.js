@@ -57,8 +57,8 @@ anychart.cartesianModule.Grid.prototype.drawLineVertical = function(ratio, shift
   /** @type {number}*/
   var x = parentBounds.getLeft() + ratio * parentBounds.width;
   x = anychart.utils.applyPixelShift(x, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
-  this.lineElementInternal.moveTo(x, parentBounds.getBottom());
-  this.lineElementInternal.lineTo(x, parentBounds.getTop());
+  this.lineElementInternal.moveTo(x, anychart.utils.applyPixelShift(parentBounds.getBottom(), 1));
+  this.lineElementInternal.lineTo(x, anychart.utils.applyPixelShift(parentBounds.getTop(), 1));
 };
 
 
@@ -93,10 +93,10 @@ anychart.cartesianModule.Grid.prototype.drawInterlaceVertical = function(ratio, 
     x2 = anychart.utils.applyPixelShift(x2, /** @type {number} */(this.lineElement().strokeThickness()), ratio == 1);
 
 
-    path.moveTo(x1, parentBounds.getTop());
-    path.lineTo(x2, parentBounds.getTop());
-    path.lineTo(x2, parentBounds.getBottom());
-    path.lineTo(x1, parentBounds.getBottom());
+    path.moveTo(x1, anychart.utils.applyPixelShift(parentBounds.getTop(), 1));
+    path.lineTo(x2, anychart.utils.applyPixelShift(parentBounds.getTop(), 1));
+    path.lineTo(x2, anychart.utils.applyPixelShift(parentBounds.getBottom(), 1));
+    path.lineTo(x1, anychart.utils.applyPixelShift(parentBounds.getBottom(), 1));
     path.close();
   }
 };

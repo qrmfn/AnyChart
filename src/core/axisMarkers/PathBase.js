@@ -476,12 +476,12 @@ anychart.core.axisMarkers.PathBase.prototype.drawLine = function() {
 
     if (this.isHorizontal()) {
       var y = bounds.getTop() + bounds.height - ratio * bounds.height;
-      y = anychart.utils.applyPixelShift(y, /** @type {number} */(el.strokeThickness()), ratio != 1);
-      el.moveTo(bounds.getLeft(), y);
-      el.lineTo(bounds.getRight(), y);
+      y = anychart.utils.applyPixelShift(y, /** @type {number} */(el.strokeThickness()));
+      el.moveTo(anychart.utils.applyPixelShift(bounds.getLeft(), 1), y);
+      el.lineTo(anychart.utils.applyPixelShift(bounds.getRight(), 1), y);
     } else {
       var x = bounds.getLeft() + ratio * bounds.width;
-      x = anychart.utils.applyPixelShift(x, /** @type {number} */(el.strokeThickness()), ratio == 1);
+      x = anychart.utils.applyPixelShift(x, /** @type {number} */(el.strokeThickness()));
       el.moveTo(x, bounds.getTop());
       el.lineTo(x, bounds.getBottom());
     }
