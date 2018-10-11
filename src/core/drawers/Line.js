@@ -13,6 +13,12 @@ goog.require('anychart.enums');
  */
 anychart.core.drawers.Line = function(series) {
   anychart.core.drawers.Line.base(this, 'constructor', series);
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.lineIsSuspended_ = false;
 };
 goog.inherits(anychart.core.drawers.Line, anychart.core.drawers.Base);
 anychart.core.drawers.AvailableDrawers[anychart.enums.SeriesDrawerTypes.LINE] = anychart.core.drawers.Line;
@@ -109,6 +115,7 @@ anychart.core.drawers.Line.prototype.drawFirstPoint = function(point, state) {
 
   var line = /** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]);
   line.suspend();
+  this.lineIsSuspended_ = true;
 
   anychart.core.drawers.move(line, this.isVertical, x, y);
   if (isNaN(this.firstPointX)) {
@@ -172,8 +179,11 @@ anychart.core.drawers.Line.prototype.drawSubsequentPoint = function(point, state
 anychart.core.drawers.Line.prototype.finalizeDrawing = function() {
   this.additionalFinalize();
   anychart.core.drawers.Line.base(this, 'finalizeDrawing');
-  var line = /** @type {acgraph.vector.Path} */(this.currentShapes[this.prevShapeNames.stroke]);
-  line.resume();
+  if (this.lineIsSuspended_) {
+    var line = /** @type {acgraph.vector.Path} */(this.currentShapes[this.prevShapeNames.stroke]);
+    line.resume();
+    this.lineIsSuspended_ = false;
+  }
 };
 
 

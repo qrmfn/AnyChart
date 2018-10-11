@@ -124,7 +124,9 @@ anychart.core.shapeManagers.Base = function(series, config, interactive, opt_sha
       zIndex: +shapeConfig.zIndex,
       isHatchFill: shapeConfig.isHatchFill,
       cls: cls,
-      shapeType: type
+      shapeType: type,
+      fillName: shapeConfig.fillName,
+      strokeName: shapeConfig.strokeName
     };
   }
 };
@@ -138,7 +140,9 @@ goog.inherits(anychart.core.shapeManagers.Base, goog.Disposable);
  *   zIndex: (number),
  *   isHatchFill: boolean,
  *   cls: function():acgraph.vector.Shape,
- *   shapeType: string
+ *   shapeType: string,
+ *   fillName: string,
+ *   strokeName: string
  * }}
  */
 anychart.core.shapeManagers.Base.ShapeDescriptor;
