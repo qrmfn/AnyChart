@@ -168,7 +168,7 @@ anychart.stockModule.Grid.prototype.drawInternal = function() {
   } else {
     bounds.width += strokeThickness;
   }
-  this.lineElement().clip(bounds);
+  this.lineElement().clip(/** @type {goog.math.Rect}*/(bounds));
 
   var drawInterlace = layout[1];
   var drawLine = layout[0];

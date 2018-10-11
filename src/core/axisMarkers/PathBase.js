@@ -559,7 +559,7 @@ anychart.core.axisMarkers.PathBase.prototype.drawRange = function() {
           .lineTo(x_max, y_start)
           .close();
     }
-    el.clip(axesLinesSpace.tightenBounds(/** @type {!anychart.math.Rect} */(bounds)));
+    el.clip(/** @type {goog.math.Rect}*/(bounds));
   }
   return this;
 };
