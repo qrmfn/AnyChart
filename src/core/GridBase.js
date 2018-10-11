@@ -752,13 +752,15 @@ anychart.core.GridBase.prototype.drawInternal = function() {
     this.y3dShift = owner.y3dShift;
 
 
-    bounds.top -= this.y3dShift + strokeThickness;
-    bounds.height += this.y3dShift + strokeThickness;
+    bounds.top -= this.y3dShift + strokeThickness / 2;
+    bounds.height += this.y3dShift + strokeThickness / 2;
     bounds.width += this.x3dShift;
   }
   var axesLinesSpace = this.axesLinesSpace();
 
   bounds = anychart.utils.applyPixelShiftToRect(bounds, strokeThickness);
+  bounds.width += strokeThickness / 2;
+  bounds.top -= strokeThickness / 2;
 
   this.lineElement().clip(bounds);
 
