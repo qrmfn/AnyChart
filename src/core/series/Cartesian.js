@@ -955,11 +955,13 @@ anychart.core.series.Cartesian.prototype.getOrdinalDrawingPlan = function(xHashM
   };
 
   var result = this.getDrawingData(new Array(xArray.length), dataPusher, xNormalizer, xMissingChecker);
-  // var data = result.data;
-  // for (var i = 0; i < data.length; i++) {
-  //   if (!data[i])
-  //     data[i] = anychart.core.series.Cartesian.makeMissingPoint(xArray[i]);
-  // }
+
+  //TODO (A.Kudryavtsev): Looks like overhead. Can we avoid this passage somehow?
+  var data = result.data;
+  for (var i = 0; i < data.length; i++) {
+    if (!data[i])
+      data[i] = anychart.core.series.Cartesian.makeMissingPoint(xArray[i]);
+  }
   result.xHashMap = xHashMap;
   result.xArray = xArray;
   return result;
