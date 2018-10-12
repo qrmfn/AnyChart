@@ -461,9 +461,8 @@ anychart.cartesianModule.Chart.prototype.isSeriesVisible = function(series) {
 /** @inheritDoc */
 anychart.cartesianModule.Chart.prototype.autoCalcOrdinalXScale = function(xScale, drawingPlans, hasExcludes, excludesMap) {
   if (!this.getOption('categorizedBySeries')) {
-    anychart.cartesianModule.Chart.base(this, 'autoCalcOrdinalXScale', xScale, drawingPlan, hasExcludes, excludesMap);
+    anychart.cartesianModule.Chart.base(this, 'autoCalcOrdinalXScale', xScale, drawingPlans, hasExcludes, excludesMap);
   } else {
-    debugger;
     var xArray = drawingPlans.map(function(plan) {
       return plan.series.name();
     });

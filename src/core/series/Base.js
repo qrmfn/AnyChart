@@ -3246,12 +3246,16 @@ anychart.core.series.Base.prototype.draw = function() {
         this.drawPoint(point, this.getPointState(point.getIndex()));
       }
 
+      //TODO(AntonKagakin): mess just to draw that we need
+      var categorizedBySeries = this.chart.getOption('categorizedBySeries');
+      var makePointMeta = categorizedBySeries ? this.makePointMetaCategorizedBySeries : this.makePointMeta;
+
       // main points drawing cycle
       iterator.reset();
       while (iterator.advance()) {
         iterator.meta('destinationValue', NaN); //for animation-after-draw purposes.
         state = this.getPointState(iterator.getIndex());
-        this.makePointMeta(iterator, yValueNames, columns);
+        makePointMeta.call(this, iterator, yValueNames, columns);
         this.drawPoint(iterator, state);
 
         // if (updateMarkers) {
@@ -4147,6 +4151,37 @@ anychart.core.series.Base.prototype.makePointMeta = function(rowInfo, yNames, yC
       pointMissing = this.metaMakers[i].call(this, rowInfo, yNames, yColumns, pointMissing, xRatio);
     }
   }
+  rowInfo.meta('missing', pointMissing);
+};
+
+
+anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(rowInfo, yNames, yColumns) {
+  var pointMissing = this.considerMetaEmpty() ?
+      0 :
+      (Number(rowInfo.meta('missing')) || 0) & ~anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
+  if (!this.isPointVisible(rowInfo))
+    pointMissing |= anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
+
+  var xScale = this.getXScale();
+  var pointIndex = rowInfo.getIndex();
+  var seriesName = this.name();
+
+  var leftCategoryX = xScale.transformInternal(seriesName, pointIndex, 0);
+  var rightCategoryX = xScale.transformInternal(seriesName, pointIndex, 1);
+  var count = rowInfo.getRowsCountNonMissing();
+  var cw = 1 / count;
+  var xRatio = leftCategoryX + cw * (pointIndex + 0.5) * (rightCategoryX - leftCategoryX);
+
+  // we write it here, because meta makers can rewrite this field (in radar/polar, for ex.)
+  rowInfo.meta('xRatio', xRatio);
+  if (pointMissing) {
+    this.makeMissing(rowInfo, yNames, xRatio);
+  } else {
+    for (var i = 0; i < this.metaMakers.length; i++) {
+      pointMissing = this.metaMakers[i].call(this, rowInfo, yNames, yColumns, pointMissing, xRatio);
+    }
+  }
+
   rowInfo.meta('missing', pointMissing);
 };
 

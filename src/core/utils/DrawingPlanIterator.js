@@ -80,6 +80,18 @@ anychart.core.utils.DrawingPlanIterator.prototype.getRowsCount = function() {
 };
 
 
+//TODO(AntonKagakin): mess to draw points justified by category
+anychart.core.utils.DrawingPlanIterator.prototype.getRowsCountNonMissing = function() {
+  var count = this.data_.length;
+  for (var i = 0; i < this.data_.length; i++) {
+    var data = this.data_[i];
+    if (data.meta.missing)
+      count--;
+  }
+  return count;
+};
+
+
 /** @inheritDoc */
 anychart.core.utils.DrawingPlanIterator.prototype.meta = function(name, opt_value) {
   var isSetter = arguments.length > 1;
