@@ -108,6 +108,8 @@ anychart.core.drawers.Line.prototype.drawFirstPoint = function(point, state) {
   var y = /** @type {number} */(point.meta('value'));
 
   var line = /** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]);
+  this.cachedLineElement = line;
+  this.cachedLineElement.suspend();
   anychart.core.drawers.move(line, this.isVertical, x, y);
   if (isNaN(this.firstPointX)) {
     this.firstPointX = x;
@@ -123,26 +125,26 @@ anychart.core.drawers.Line.prototype.drawFirstPoint = function(point, state) {
 
 /** @inheritDoc */
 anychart.core.drawers.Line.prototype.drawSubsequentPoint = function(point, state) {
-  var shapesManager = this.shapesManager;
+  // var shapesManager = this.shapesManager;
   var value = /** @type {number} */(point.get(this.series.getYValueNames()[0]));
-  var names = this.getShapeNames(value, this.prevValue);
-  var shapeNames = {};
-  shapeNames[names.stroke] = true;
+  // var names = this.getShapeNames(value, this.prevValue);
+  // var shapeNames = {};
+  // shapeNames[names.stroke] = true;
 
-  var shapes = shapesManager.getShapesGroup(this.seriesState, shapeNames);
+  // var shapes = shapesManager.getShapesGroup(this.seriesState, shapeNames);
 
   var x = /** @type {number} */(point.meta('x'));
   var y = /** @type {number} */(point.meta('value'));
 
-  if (shapes != this.currentShapes) {
+  /*if (shapes != this.currentShapes) {
     var crossX, crossY, prevX, prevY;
-    prevX = /** @type {number} */(this.prevX);
-    prevY = /** @type {number} */(this.prevY);
+    prevX = /!** @type {number} *!/(this.prevX);
+    prevY = /!** @type {number} *!/(this.prevY);
 
     var isBaselineIntersect = this.isBaselineIntersect(value);
 
     if (this.hasNegativeColoring && isBaselineIntersect) {
-      crossY = /** @type {number} */(point.meta('zero'));
+      crossY = /!** @type {number} *!/(point.meta('zero'));
       crossX = (x - this.prevX) * (crossY - this.prevY) / (y - this.prevY) + this.prevX;
     } else if (this.hasRisingFallingColoring && !this.hasNegativeColoring) {
       crossX = prevX;
@@ -152,17 +154,17 @@ anychart.core.drawers.Line.prototype.drawSubsequentPoint = function(point, state
       crossY = prevY + (y - prevY) / 2;
     }
 
-    anychart.core.drawers.line(/** @type {acgraph.vector.Path} */(this.currentShapes[this.prevShapeNames.stroke]), this.isVertical, crossX, crossY);
+    anychart.core.drawers.line(/!** @type {acgraph.vector.Path} *!/(this.currentShapes[this.prevShapeNames.stroke]), this.isVertical, crossX, crossY);
     this.currentShapes = shapes;
-    anychart.core.drawers.move(/** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]), this.isVertical, crossX, crossY);
-  }
+    anychart.core.drawers.move(/!** @type {acgraph.vector.Path} *!/(this.currentShapes[names.stroke]), this.isVertical, crossX, crossY);
+  }*/
 
-  anychart.core.drawers.line(/** @type {acgraph.vector.Path} */(this.currentShapes[names.stroke]), this.isVertical, x, y);
+  anychart.core.drawers.line(/** @type {acgraph.vector.Path} */(this.cachedLineElement), this.isVertical, x, y);
 
   this.prevX = x;
   this.prevY = y;
   this.prevValue = value;
-  this.prevShapeNames = names;
+  // this.prevShapeNames = names;
 };
 
 
@@ -179,7 +181,7 @@ anychart.core.drawers.Line.prototype.finalizeDrawing = function() {
  */
 anychart.core.drawers.Line.prototype.additionalFinalize = function() {
   if (this.closed && !isNaN(this.firstPointX) && (this.connectMissing || this.prevPointDrawn && !this.firstPointMissing)) {
-    anychart.core.drawers.line(/** @type {acgraph.vector.Path} */(this.currentShapes[this.prevShapeNames.stroke]),
-        this.isVertical, this.firstPointX, this.firstPointY);
+    anychart.core.drawers.line(/** @type {acgraph.vector.Path} */(this.cachedLineElement), this.isVertical, this.firstPointX, this.firstPointY);
+    this.cachedLineElement.resume();
   }
 };

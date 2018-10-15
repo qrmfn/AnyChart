@@ -1264,7 +1264,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
 
   for (i = 0, count = axes.length; i < count; i++) {
     axis = axes[i];
-    if (axis && axis.enabled()) {
+    if (axis && axis.enabled() && axis.hasInsideElements()) {
       if (axis == firstTopAxis || axis == firstBottomAxis || axis == firstLeftAxis || axis == firstRightAxis) {
         axis.insideBounds(axesInsideBounds);
       }

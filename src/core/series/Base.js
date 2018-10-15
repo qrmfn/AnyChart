@@ -4129,9 +4129,8 @@ anychart.core.series.Base.prototype.getXPointPosition = function() {
  * @protected
  */
 anychart.core.series.Base.prototype.makePointMeta = function(rowInfo, yNames, yColumns) {
-  var pointMissing = this.considerMetaEmpty() ?
-      0 :
-      (Number(rowInfo.meta('missing')) || 0) & ~anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
+  var metaObject = (rowInfo.currentPoint_ && rowInfo.currentPoint_.meta) || {};
+  var pointMissing = (Number(metaObject['missing']) || 0) & ~anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
   if (!this.isPointVisible(rowInfo))
     pointMissing |= anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
   var xRatio = this.getXScale().transformInternal(
@@ -4139,15 +4138,87 @@ anychart.core.series.Base.prototype.makePointMeta = function(rowInfo, yNames, yC
       rowInfo.getIndex(),
       this.getXPointPosition());
   // we write it here, because meta makers can rewrite this field (in radar/polar, for ex.)
-  rowInfo.meta('xRatio', xRatio);
+  metaObject['xRatio'] = xRatio;
+  var i, val;
   if (pointMissing) {
-    this.makeMissing(rowInfo, yNames, xRatio);
-  } else {
-    for (var i = 0; i < this.metaMakers.length; i++) {
-      pointMissing = this.metaMakers[i].call(this, rowInfo, yNames, yColumns, pointMissing, xRatio);
+    // this.makeMissing(rowInfo, yNames, xRatio);
+    var xPix = this.applyRatioToBounds(xRatio, true);
+    metaObject['x'] = xPix;
+    for (i = 0; i < yNames.length; i++) {
+      metaObject[yNames[i]] = undefined;
+      metaObject[yNames[i] + 'X'] = xPix;
     }
+  } else {
+    // makeUnstackedMeta
+    var yScale = /** @type {anychart.scales.Base} */(this.yScale());
+    var map = {};
+    for (i = 0; i < yColumns.length; i++) {
+      val = yScale.transform(rowInfo.get(/** @type {string} */ (yColumns[i])), 0.5);
+      if (isNaN(val)) pointMissing |= anychart.core.series.PointAbsenceReason.VALUE_FIELD_MISSING;
+      map[yNames[i]] = val;
+    }
+
+    // this.makePointsMetaFromMap(rowInfo, map, xRatio);
+    var names = [];
+    var ys = [];
+    for (i in map) {
+      names.push(i);
+      ys.push(map[i]);
+    }
+    var points = this.ratiosToPixelPairs(xRatio, ys);
+    for (var j = 0; j < names.length; j++) {
+      metaObject[names[j] + 'X'] = points[j * 2];
+      metaObject[names[j]] = points[j * 2 + 1];
+    }
+    metaObject['x'] = points[0];
+
+    // makeZeroMeta
+    metaObject['zeroX'] = metaObject['x'];
+    metaObject['zero'] = this.zeroY;
+    metaObject['zeroMissing'] = false;
+
+    // makeExtremumMeta
+    var isMinPoint = false;
+    var isMaxPoint = false;
+    if (!pointMissing && 0 <= xRatio && xRatio <= 1) {
+      var min = Infinity;
+      var max = -Infinity;
+      var minCache = Math.min.apply(null, this.referenceValuesCache_);
+      var maxCache = Math.max.apply(null, this.referenceValuesCache_);
+
+      for (i = 0; i < yColumns.length; i++) {
+        var comparisonMode = anychart.utils.instanceOf(yScale, anychart.scales.Linear) ?
+            /** @type {anychart.scales.Linear} */(yScale).comparisonMode() : null;
+        if (comparisonMode && comparisonMode != anychart.enums.ScaleComparisonMode.NONE) {
+          if (comparisonMode == anychart.enums.ScaleComparisonMode.VALUE)
+            val = Number(metaObject['valueChange']);
+          else {
+            val = Number(metaObject['valuePercentChange']);
+            minCache = anychart.math.round(minCache, 2);
+            maxCache = anychart.math.round(maxCache, 2);
+          }
+        } else
+          val = Number(rowInfo.get(/** @type {string} */ (yColumns[i])));
+
+        if (!isNaN(val)) {
+          if (max < val)
+            max = val;
+          if (min > val)
+            min = val;
+        }
+      }
+
+      isMinPoint = isFinite(min) && minCache >= min;
+      isMaxPoint = isFinite(max) && maxCache <= max;
+    }
+    metaObject['isMinPoint'] = isMinPoint;
+    metaObject['isMaxPoint'] = isMaxPoint;
+
+    // for (var i = 0; i < this.metaMakers.length; i++) {
+    //   pointMissing = this.metaMakers[i].call(this, rowInfo, yNames, yColumns, pointMissing, xRatio);
+    // }
   }
-  rowInfo.meta('missing', pointMissing);
+  metaObject['missing'] = pointMissing;
 };
 
 
