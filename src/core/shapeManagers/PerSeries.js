@@ -52,50 +52,56 @@ anychart.core.shapeManagers.PerSeries.prototype.clearShapes = function() {
 anychart.core.shapeManagers.PerSeries.prototype.colorize_ = function(descriptor, state, colorerName, opt_isFill) {
   var result = void 0;
   if (colorerName) {
-    var colorScale = this.series.colorScale();
-    var stateName = anychart.utils.pointStateToName(state);
+    var pointData = this.series.getIterator().get(colorerName);
+    if (pointData) {
+      // Here we suppose that user passes point data as valid color object.
+      result = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */ (pointData);
+    } else {
+      var colorScale = this.series.colorScale();
+      var stateName = anychart.utils.pointStateToName(state);
 
-    /*
-        This actually is
-        - this.series.hovered.fill
-        - this.series.normal.stroke
+      /*
+          This actually is
+          - this.series.hovered.fill
+          - this.series.normal.stroke
+          - ...
+         */
+      var seriesColorer = this.series[stateName]()[colorerName]();
+
+
+      if (goog.isFunction(seriesColorer) || colorScale) {
+        /*
+        This actually is something like
+        - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.stroke
+        - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.fill
         - ...
        */
-    var seriesColorer = this.series[stateName]()[colorerName]();
+        var defaultColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings']['base'][stateName][colorerName];
 
+        // /*
+        //   This actually is something like
+        //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.stroke
+        //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.fill
+        //   - ...
+        //  */
+        // var defaultTypeColorer;
+        // try {
+        //   defaultTypeColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
+        // } catch (e) {}
 
-    if (goog.isFunction(seriesColorer) || colorScale) {
-      /*
-      This actually is something like
-      - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.stroke
-      - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.fill
-      - ...
-     */
-      var defaultColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings']['base'][stateName][colorerName];
+        // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
 
-      // /*
-      //   This actually is something like
-      //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.stroke
-      //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.fill
-      //   - ...
-      //  */
-      // var defaultTypeColorer;
-      // try {
-      //   defaultTypeColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
-      // } catch (e) {}
-
-      // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
-
-      if (seriesColorer == defaultColorer && !colorScale) {
-        var ctx = {'sourceColor': this.series.getOption('color')};
-        result = seriesColorer.call(ctx);
+        if (seriesColorer == defaultColorer && !colorScale) {
+          var ctx = {'sourceColor': this.series.getOption('color')};
+          result = seriesColorer.call(ctx);
+        } else {
+          result = opt_isFill ?
+              /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state)) :
+              /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
+        }
       } else {
-        result = opt_isFill ?
-            /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state)) :
-            /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
+        result = seriesColorer;
       }
-    } else {
-      result = seriesColorer;
     }
   }
   return result;
