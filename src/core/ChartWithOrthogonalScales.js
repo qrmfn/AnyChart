@@ -261,7 +261,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.invalidateScaleBasedElements =
  */
 anychart.core.ChartWithOrthogonalScales.prototype.xScale = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    var val = anychart.scales.Base.setupScale(this.xScale_, opt_value, null, this.getXScaleAllowedTypes(), this.getXScaleWrongTypeError(), this.xScaleInvalidated, this);
+    var val = anychart.scales.Base.setupScale(this.xScale_, opt_value, this.getXScaleDefaultType(), this.getXScaleAllowedTypes(), this.getXScaleWrongTypeError(), this.xScaleInvalidated, this);
     if (val) {
       var dispatch = this.xScale_ == val;
       this.oldXScaleUid = this.xScale_ ? String(goog.getUid(this.xScale_)) : null; //this.fixes DVF-3678
@@ -321,7 +321,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.xScaleInvalidated = function(e
  */
 anychart.core.ChartWithOrthogonalScales.prototype.yScale = function(opt_value) {
   if (goog.isDef(opt_value)) {
-    var val = anychart.scales.Base.setupScale(this.yScale_, opt_value, null, this.getYScaleAllowedTypes(), this.getYScaleWrongTypeError(), this.yScaleInvalidated, this);
+    var val = anychart.scales.Base.setupScale(this.yScale_, opt_value, this.getYScaleDefaultType(), this.getYScaleAllowedTypes(), this.getYScaleWrongTypeError(), this.yScaleInvalidated, this);
     if (val) {
       var dispatch = this.yScale_ == val;
       this.oldYScaleUid = this.yScale_ ? String(goog.getUid(this.yScale_)) : null; //this.fixes DVF-3678
@@ -2364,66 +2364,49 @@ anychart.core.ChartWithOrthogonalScales.prototype.getScaleInstances = function(o
       }
     }
 
-    json = opt_config ? opt_config['xScale'] : this.getThemeOption('xScale');
-    if (goog.isNumber(json)) {
-      scale = scalesInstances[json];
-    } else if (goog.isString(json)) {
-      scale = anychart.scales.Base.fromString(json, null);
-      if (!scale)
+    var scaleGetters = ['xScale', 'yScale'];
+    for (var j = 0; j < scaleGetters.length; j++) {
+      var scaleGetter = scaleGetters[j];
+      json = opt_config ? opt_config[scaleGetter] : this.getThemeOption(scaleGetter);
+
+      if (goog.isNumber(json) || (goog.isString(json) && !isNaN(Number(json)))) {
         scale = scalesInstances[json];
-    } else if (goog.isObject(json)) {
-      scale = anychart.scales.Base.fromString(json['type'], true);
-      scale.addThemes(json);
 
-      if (scale['ticks']) {
-        theme = scale['ticks']().themeSettings;
-        goog.mixin(theme, scale.themeSettings['ticks']);
-        scale.themeSettings['ticks'] = theme;
-      }
-      if (scale['minorTicks']) {
-        theme = scale['minorTicks']().themeSettings;
-        goog.mixin(theme, scale.themeSettings['minorTicks']);
-        scale.themeSettings['minorTicks'] = theme;
+      } else if (goog.isString(json)) {
+        scale = anychart.scales.Base.fromString(json, null);
+
+      } else if (goog.isObject(json)) {
+        if (json['type']) {
+          scale = anychart.scales.Base.fromString(json['type'], true);
+        } else
+          scale = this[scaleGetter]();
+
+        scale.addThemes(json);
+
+        if (scale['ticks']) {
+          theme = scale['ticks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['ticks']);
+          scale.themeSettings['ticks'] = theme;
+        }
+        if (scale['minorTicks']) {
+          theme = scale['minorTicks']().themeSettings;
+          goog.mixin(theme, scale.themeSettings['minorTicks']);
+          scale.themeSettings['minorTicks'] = theme;
+        }
+
+        scale.setup(scale.themeSettings);
+      } else {
+        scale = null;
       }
 
-      scale.setup(scale.themeSettings);
-    } else {
-      scale = null;
+      if (scale)
+        this[scaleGetter](scale);
     }
-    if (scale)
-      this.xScale(scale);
 
-    json = opt_config ? opt_config['yScale'] : this.getThemeOption('yScale');
-    if (goog.isNumber(json)) {
-      scale = scalesInstances[json];
-    } else if (goog.isString(json)) {
-      scale = anychart.scales.Base.fromString(json, null);
-      if (!scale)
-        scale = scalesInstances[json];
-    } else if (goog.isObject(json)) {
-      scale = anychart.scales.Base.fromString(json['type'], false);
-      scale.addThemes(json);
-
-      if (scale['ticks']) {
-        theme = scale['ticks']().themeSettings;
-        goog.mixin(theme, scale.themeSettings['ticks']);
-        scale.themeSettings['ticks'] = theme;
-      }
-      if (scale['minorTicks']) {
-        theme = scale['minorTicks']().themeSettings;
-        goog.mixin(theme, scale.themeSettings['minorTicks']);
-        scale.themeSettings['minorTicks'] = theme;
-      }
-
-      scale.setup(scale.themeSettings);
-    } else {
-      scale = null;
-    }
-    if (scale)
-      this.yScale(scale);
     this.scalesInstances_ = scalesInstances;
     this.scalesChanged_ = false;
   }
+
   return this.scalesInstances_;
 };
 
@@ -2441,7 +2424,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.setupByJSON = function(config,
   anychart.core.ChartWithOrthogonalScales.base(this, 'setupByJSON', config, opt_default);
   anychart.core.settings.deserialize(this, anychart.core.ChartWithOrthogonalScales.PROPERTY_DESCRIPTORS, config);
 
-  if (config['scales']) {
+  if (config['scales'] || config['xScale'] || config['yScale']) {
     this.scalesChanged_ = true;
   }
   var scalesInstances = this.getScaleInstances(config);

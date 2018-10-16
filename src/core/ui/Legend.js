@@ -1894,15 +1894,15 @@ anychart.core.ui.Legend.prototype.drawLegendContent_ = function(pageNumber, cont
           dx = tx.getTranslateX();
           dy = tx.getTranslateY();
         }
-        var itemsContentBounds = this.itemsLayer_.getAbsoluteBounds();
+        // var itemsContentBounds = this.itemsLayer_.getAbsoluteBounds();
         var titleBounds = this.title_.getContentBounds();
         titleBounds.top += dy;
         titleBounds.left += dx;
 
-        var topTranslate = titleBounds.top + titleBounds.height / 2 - (itemsContentBounds.top + itemsContentBounds.height / 2);
-        topTranslate = Math.min(this.contentAreaBounds_.height - itemsContentBounds.height, Math.max(topTranslate, 0));
-
-        this.itemsLayer_.setTransformationMatrix(1, 0, 0, 1, 0, topTranslate);
+        // var topTranslate = titleBounds.top + titleBounds.height / 2 - (itemsContentBounds.top + itemsContentBounds.height / 2);
+        // topTranslate = Math.min(this.contentAreaBounds_.height - itemsContentBounds.height, Math.max(topTranslate, 0));
+        //
+        // // this.itemsLayer_.setTransformationMatrix(1, 0, 0, 1, 0, topTranslate);
       }
     }
   }
