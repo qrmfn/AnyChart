@@ -288,7 +288,7 @@ anychart.core.AxisTicks.prototype.drawLeftTick = function(ratio, bounds, lineBou
   /** @type {number} */
   var x = lineBounds.left;
   /** @type {number} */
-  var y = bounds.top + bounds.height - ratio * (bounds.height);
+  var y = bounds.top + bounds.height - ratio * bounds.height;
   /** @type {number} */
   var dx;
 
