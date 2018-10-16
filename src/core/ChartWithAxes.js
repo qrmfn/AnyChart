@@ -1443,8 +1443,10 @@ anychart.core.ChartWithAxes.prototype.drawContent = function(bounds) {
   this.drawElements();
   anychart.performance.end('Cartesian elements drawing');
 
-  this.drawSeries(this.topAxisPadding_, this.rightAxisPadding_, this.bottomAxisPadding_,
-      this.leftAxisPadding_);
+  // this is because bounds for series already are clipped from axes and no need in additional paddings
+  this.drawSeries(0,0,0,0);
+  // this.drawSeries(this.topAxisPadding_, this.rightAxisPadding_, this.bottomAxisPadding_,
+  //     this.leftAxisPadding_);
 
   if (this.hasInvalidationState(anychart.ConsistencyState.AXES_CHART_CROSSHAIR)) {
     var crosshair = this.getCreated('crosshair');
