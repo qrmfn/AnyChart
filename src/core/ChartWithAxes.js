@@ -1272,7 +1272,7 @@ anychart.core.ChartWithAxes.prototype.getBoundsWithoutAxes = function(contentAre
       axis.resumeSignalsDispatching(false);
     }
   }
-  return boundsWithoutAxes.clone().round();
+  return boundsWithoutAxes.clone();//.round();
 };
 
 
