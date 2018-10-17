@@ -41,6 +41,7 @@ anychart.core.shapeManagers.PerSeries.prototype.clearShapes = function() {
 
 
 /**
+ * Wrapper on the series coloring to boost performance skipping heavyweight operations like color resolving.
  *
  * @param {anychart.core.shapeManagers.Base.ShapeDescriptor} descriptor - Descriptor.
  * @param {anychart.PointState|number} state - State .
@@ -52,13 +53,18 @@ anychart.core.shapeManagers.PerSeries.prototype.clearShapes = function() {
 anychart.core.shapeManagers.PerSeries.prototype.colorize_ = function(descriptor, state, colorerName, opt_isFill) {
   var result = void 0;
   if (colorerName) {
-    var pointData = this.series.getIterator().get(colorerName);
+    var iterator = this.series.getIterator();
+    var stateName = anychart.utils.pointStateToName(state);
+    var stateObj = iterator.get(stateName);
+    var pointData = stateObj ?
+        stateObj[colorerName] :
+        (state == anychart.PointState.NORMAL ? iterator.get(colorerName) : void 0);
+
     if (pointData) {
       // Here we suppose that user passes point data as valid color object.
       result = /** @type {acgraph.vector.Fill|acgraph.vector.Stroke} */ (pointData);
     } else {
       var colorScale = this.series.colorScale();
-      var stateName = anychart.utils.pointStateToName(state);
 
       /*
           This actually is
@@ -78,23 +84,11 @@ anychart.core.shapeManagers.PerSeries.prototype.colorize_ = function(descriptor,
        */
         var defaultColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings']['base'][stateName][colorerName];
 
-        // /*
-        //   This actually is something like
-        //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.stroke
-        //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.fill
-        //   - ...
-        //  */
-        // var defaultTypeColorer;
-        // try {
-        //   defaultTypeColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
-        // } catch (e) {}
-
-        // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
-
         if (seriesColorer == defaultColorer && !colorScale) {
           var ctx = {'sourceColor': this.series.getOption('color')};
           result = seriesColorer.call(ctx);
         } else {
+          //Color resolution is here. Heavyweight operation.
           result = opt_isFill ?
               /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state)) :
               /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
@@ -124,60 +118,11 @@ anychart.core.shapeManagers.PerSeries.prototype.calcPointColors = function(state
   var descStroke;
 
   var hash = '';
-  // var colorScale = this.series.colorScale();
   for (var name in names) {
     var descriptor = this.defs[name];
 
     var strokeName = descriptor.strokeName;
     var fillName = descriptor.fillName;
-
-    // /*
-    //   This actually is
-    //   - this.series.fill
-    //   - this.series.stroke
-    //   - ...
-    //  */
-    // var seriesColorer = this.series[name]();
-    //
-    // if (goog.isFunction(seriesColorer) || colorScale) {
-    //   /*
-    //   This actually is something like
-    //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.stroke
-    //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.base.hovered.fill
-    //   - ...
-    //  */
-    //   var defaultColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings']['base'][stateName][name];
-    //
-    //   // /*
-    //   //   This actually is something like
-    //   //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.stroke
-    //   //   - anychart.themes.defaultTheme.chart.defaultSeriesSettings.candlestick.hovered.fill
-    //   //   - ...
-    //   //  */
-    //   // var defaultTypeColorer;
-    //   // try {
-    //   //   defaultTypeColorer = anychart.window['anychart']['themes'][anychart.DEFAULT_THEME]['chart']['defaultSeriesSettings'][this.series.getType()][stateName][name];
-    //   // } catch (e) {}
-    //
-    //   // if (seriesColorer == defaultColorer || seriesColorer == defaultTypeColorer) {
-    //
-    //   if (seriesColorer == defaultColorer && !colorScale) {
-    //     var ctx = {'sourceColor': this.series.getOption('color')};
-    //     if (isStroke)
-    //       descStroke = seriesColorer.call(ctx);
-    //     else
-    //       descFill = seriesColorer.call(ctx);
-    //   } else {
-    //     descFill = /** @type {acgraph.vector.Fill} */(descriptor.fill(this.series, state));
-    //     descStroke = /** @type {acgraph.vector.Stroke} */(descriptor.stroke(this.series, state));
-    //   }
-    // } else {
-    //   if (isStroke) {
-    //     descStroke = acgraph.vector.normalizeStroke(seriesColorer);
-    //   } else {
-    //     descFill = acgraph.vector.normalizeFill(seriesColorer);
-    //   }
-    // }
 
     descFill = this.colorize_(descriptor, state, fillName, true);
     descStroke = this.colorize_(descriptor, state, strokeName);
