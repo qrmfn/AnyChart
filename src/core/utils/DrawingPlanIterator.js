@@ -81,14 +81,11 @@ anychart.core.utils.DrawingPlanIterator.prototype.getRowsCount = function() {
 
 
 //TODO(AntonKagakin): mess to draw points justified by category
+/**
+ * @return {number} Count of non missing points.
+ */
 anychart.core.utils.DrawingPlanIterator.prototype.getRowsCountNonMissing = function() {
-  var count = this.data_.length;
-  for (var i = 0; i < this.data_.length; i++) {
-    var data = this.data_[i];
-    if (data.meta.missing)
-      count--;
-  }
-  return count;
+  return this.series_.drawingPlan.nonMissingCount;
 };
 
 

@@ -3247,7 +3247,7 @@ anychart.core.series.Base.prototype.draw = function() {
       }
 
       //TODO(AntonKagakin): mess just to draw that we need
-      var categorizedBySeries = this.chart.getOption('categorizedBySeries');
+      var categorizedBySeries = /** @type {boolean} */ (this.chart.getOption('categorizedBySeries'));
       var makePointMeta = categorizedBySeries ? this.makePointMetaCategorizedBySeries : this.makePointMeta;
 
       // main points drawing cycle

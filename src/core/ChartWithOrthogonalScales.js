@@ -1784,11 +1784,13 @@ anychart.core.ChartWithOrthogonalScales.prototype.distributeClusters = function(
   var barGroupsPadding = /** @type {number} */ (this.getOption('barGroupsPadding'));
   if (numClusters > 0) {
     numClusters = numClusters + (numClusters - 1) * barsPadding + barGroupsPadding;
-    barWidthRatio = 1 / numClusters;
-    currPosition = barWidthRatio * barGroupsPadding / 2;
+    var categorizedBySeries = /** @type {boolean} */ (this.getOption('categorizedBySeries'));
+    var widthByClusters = 1 / numClusters;
+    currPosition = widthByClusters * barGroupsPadding / 2;
     seenScales = {};
     for (var i = 0; i < drawingPlansOfScale.length; i++) {
       wSeries = drawingPlansOfScale[i].series;
+      barWidthRatio = categorizedBySeries ? (wSeries.getCategoryRatio(wSeries.autoIndex()) / wSeries.drawingPlan.nonMissingCount) : widthByClusters;
       if (wSeries.isWidthDistributed() && (horizontal ^ (/** @type {boolean} */(wSeries.getOption('isVertical'))))) {
         scale = /** @type {anychart.scales.Base} */(wSeries.yScale());
         if (this.getYScaleStackMode(scale) == anychart.enums.ScaleStackMode.NONE) {

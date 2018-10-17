@@ -72,6 +72,7 @@ anychart.core.series.Cartesian.prototype.SUPPORTED_SIGNALS = anychart.core.serie
  * @typedef {{
  *   series: anychart.core.series.Cartesian,
  *   data: Array.<Object>,
+ *   nonMissingCount: number,
  *   stacked: (boolean|undefined),
  *   firstIndex: (number|undefined),
  *   lastIndex: (number|undefined),
@@ -181,6 +182,23 @@ anychart.core.series.Cartesian.prototype.getCategoryWidth = function(opt_categor
   }
   return (ratio || (this.xScale().getZoomFactor() / this.getIterator().getRowsCount())) *
       (this.getOption('isVertical') ? this.pixelBoundsCache.height : this.pixelBoundsCache.width);
+};
+
+
+/**
+ * TODO(AntonKagakin) remove
+ * Dummy. Just for dev purpose.
+ * @param opt_categoryIndex
+ * @return {*|number}
+ */
+anychart.core.series.Cartesian.prototype.getCategoryRatio = function(opt_categoryIndex) {
+  var ratio;
+  if (goog.isDef(opt_categoryIndex) && anychart.utils.instanceOf(this.xScale(), anychart.scales.Ordinal)) {
+    ratio = this.xScale().weightRatios()[opt_categoryIndex];
+  } else {
+    ratio = this.xScale().getPointWidthRatio();
+  }
+  return (ratio || (this.xScale().getZoomFactor() / this.getIterator().getRowsCount()));
 };
 
 
@@ -739,6 +757,7 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
 
   var postProcessingMeta = this.initPostProcessingMeta();
 
+  var nonMissingCount = 0;
   while (iterator.advance()) {
     var xValue = xNormalizer(iterator.get('x'));
     if (xMissingChecker(xValue)) // we do not add missings for points that have undefined X
@@ -764,7 +783,12 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
     }
 
     var meta = {};
-    meta['missing'] = missing ? anychart.core.series.PointAbsenceReason.VALUE_FIELD_MISSING : 0;
+    if (missing) {
+      meta['missing'] = anychart.core.series.PointAbsenceReason.VALUE_FIELD_MISSING;
+    } else {
+      meta['missing'] = 0;
+      nonMissingCount++;
+    }
     meta['rawIndex'] = iterator.getIndex();
 
     var point = {
@@ -782,6 +806,7 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
   return this.drawingPlan = {
     data: data,
     series: this,
+    nonMissingCount: nonMissingCount,
     hasPointLabels: this.supportsLabels() &&
         (
             dataSource.checkFieldExist('normal') ||
