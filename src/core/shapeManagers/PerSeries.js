@@ -58,7 +58,7 @@ anychart.core.shapeManagers.PerSeries.prototype.colorize_ = function(descriptor,
     var stateObj = iterator.get(stateName);
     var pointData = stateObj ?
         stateObj[colorerName] :
-        (state == anychart.PointState.NORMAL ? iterator.get(colorerName) : void 0);
+        iterator.get(anychart.color.getPrefixedColorName(state, colorerName)); //Deprecated data fields support.
 
     if (pointData) {
       // Here we suppose that user passes point data as valid color object.
