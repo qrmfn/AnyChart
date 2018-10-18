@@ -2197,7 +2197,7 @@ anychart.core.series.Base.prototype.prepareFactory = function(factory, stateFact
 
 /**
  * Settings in format [obj, mode, obj, mode,...]
- * Description 0 - plain object with settings, 1 - 
+ * Description 0 - plain object with settings, 1 -
  * @param {Array} settingsArray
  * @param {string=} opt_callProp
  * @return {Array}
@@ -2268,7 +2268,7 @@ anychart.core.series.Base.prototype.drawFactoryElement = function(seriesFactoryG
   var mainFactory;
   if (seriesFactoryGetters[0])
     mainFactory = seriesFactoryGetters[0].call(this.normal_);
-  
+
   var chartNormal, seriesNormal, pointNormal,
       chartState, seriesState, pointState,
       chartExtremumNormal, seriesExtremumNormal, pointExtremumNormal,
@@ -2289,7 +2289,7 @@ anychart.core.series.Base.prototype.drawFactoryElement = function(seriesFactoryG
       tmp = point.get('normal');
       pointNormal = tmp ? tmp[overrideNames[0]] : point.get(overrideNames[0]);
     }
-    
+
     if (seriesFactoryGetters.length > 3) {
       if (chartFactoryGetters[3])
         chartExtremumNormal = chartFactoryGetters[3].call(this.chart.normal_);
@@ -2300,7 +2300,7 @@ anychart.core.series.Base.prototype.drawFactoryElement = function(seriesFactoryG
         pointExtremumNormal = tmp ? tmp[overrideNames[3]] : point.get(overrideNames[3]);
       }
     }
-    
+
     if (state) {
       var stateName = state == 1 ? 'hovered' : 'selected';
 
@@ -3235,9 +3235,25 @@ anychart.core.series.Base.prototype.draw = function() {
       this.prepareMetaMakers(columns, yValueNames);
       if (labelsAreToBeRedrawn)
         this.additionalLabelsInitialize();
-      this.startDrawing();
 
       iterator = this.getResetIterator();
+
+      var makePointMeta;
+      var categorizedBySeries = /** @type {boolean} */ (this.chart.getOption('categorizedBySeries'));
+      if (categorizedBySeries) {
+        makePointMeta = this.makePointMetaCategorizedBySeries;
+        var barsPadding = /** @type {number} */ (this.chart.getOption('barsPadding'));
+        var barGroupsPadding = /** @type {number} */ (this.chart.getOption('barGroupsPadding'));
+        var nonMissingCount = iterator.getRowsCountNonMissing();
+        nonMissingCount = nonMissingCount + (nonMissingCount - 1) * barsPadding + barGroupsPadding;
+        this.barWidthRatio = 1 / nonMissingCount;
+        this.setAutoPointWidth(this.barWidthRatio);
+        this.prepareAdditional();
+      } else {
+        makePointMeta = this.makePointMeta;
+      }
+
+      this.startDrawing();
       // currently this section is actual only for Stock, because
       // Cartesian processes preFirst point as a regular point in iterator
       var point = this.getPreFirstPoint();
@@ -3245,10 +3261,6 @@ anychart.core.series.Base.prototype.draw = function() {
         this.makePointMeta(point, yValueNames, columns);
         this.drawPoint(point, this.getPointState(point.getIndex()));
       }
-
-      //TODO(AntonKagakin): mess just to draw that we need
-      var categorizedBySeries = /** @type {boolean} */ (this.chart.getOption('categorizedBySeries'));
-      var makePointMeta = categorizedBySeries ? this.makePointMetaCategorizedBySeries : this.makePointMeta;
 
       // main points drawing cycle
       iterator.reset();
@@ -4155,6 +4167,13 @@ anychart.core.series.Base.prototype.makePointMeta = function(rowInfo, yNames, yC
 };
 
 
+/**
+ * Calculates pixel value
+ * @param {anychart.data.IRowInfo} rowInfo
+ * @param {Array.<string>} yNames
+ * @param {Array.<string|number>} yColumns
+ * @protected
+ */
 anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(rowInfo, yNames, yColumns) {
   var pointMissing = this.considerMetaEmpty() ?
       0 :
@@ -4163,14 +4182,17 @@ anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(
     pointMissing |= anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
 
   var xScale = this.getXScale();
-  var pointIndex = rowInfo.getIndex();
+  var pointIndex = rowInfo.meta('ordinalIndex');
   var seriesName = this.name();
 
   var leftCategoryX = xScale.transformInternal(seriesName, pointIndex, 0);
   var rightCategoryX = xScale.transformInternal(seriesName, pointIndex, 1);
-  var count = rowInfo.getRowsCountNonMissing();
-  var cw = 1 / count;
-  var xRatio = leftCategoryX + cw * (pointIndex + 0.5) * (rightCategoryX - leftCategoryX);
+
+  var barsPadding = /** @type {number} */ (this.chart.getOption('barsPadding'));
+  var barGroupsPadding = /** @type {number} */ (this.chart.getOption('barGroupsPadding'));
+  var catWidth = rightCategoryX - leftCategoryX;
+  var xRatio = leftCategoryX + catWidth * (
+      (barGroupsPadding / 2 * this.barWidthRatio) + (this.barWidthRatio / 2) + pointIndex * this.barWidthRatio * (1 + barsPadding));
 
   // we write it here, because meta makers can rewrite this field (in radar/polar, for ex.)
   rowInfo.meta('xRatio', xRatio);

@@ -466,7 +466,13 @@ anychart.core.ChartWithOrthogonalScales.prototype.makeScaleMaps = function() {
 };
 
 
-//TODO(AntonKagakin): DOCS
+/**
+ * Calculates auto values for ordinal x scale.
+ * @param {anychart.scales.Ordinal} xScale
+ * @param {Object.<string, Array.<Object>>} drawingPlans
+ * @param {boolean} hasExcludes
+ * @param {Object} excludesMap
+ */
 anychart.core.ChartWithOrthogonalScales.prototype.autoCalcOrdinalXScale = function(xScale, drawingPlans, hasExcludes, excludesMap) {
   var i, xHashMap, xArray;
   var drawingPlan = drawingPlans[0];
@@ -488,7 +494,12 @@ anychart.core.ChartWithOrthogonalScales.prototype.autoCalcOrdinalXScale = functi
 };
 
 
-//TODO(AntonKagakin): DOCS
+/**
+ * Finish ordinal x scale calculation.
+ * Calculates auto names, depends on from-data-field for ordinal scale.
+ * @param {anychart.scales.Ordinal} xScale
+ * @param {Object.<string, Array.<Object>>} drawingPlans
+ */
 anychart.core.ChartWithOrthogonalScales.prototype.finishOrdinalXScaleCalculation = function(xScale, drawingPlans) {
   var i, j, val;
   var namesField = xScale.getNamesField();
@@ -1784,13 +1795,11 @@ anychart.core.ChartWithOrthogonalScales.prototype.distributeClusters = function(
   var barGroupsPadding = /** @type {number} */ (this.getOption('barGroupsPadding'));
   if (numClusters > 0) {
     numClusters = numClusters + (numClusters - 1) * barsPadding + barGroupsPadding;
-    var categorizedBySeries = /** @type {boolean} */ (this.getOption('categorizedBySeries'));
-    var widthByClusters = 1 / numClusters;
-    currPosition = widthByClusters * barGroupsPadding / 2;
+    barWidthRatio = 1 / numClusters;
+    currPosition = barWidthRatio * barGroupsPadding / 2;
     seenScales = {};
     for (var i = 0; i < drawingPlansOfScale.length; i++) {
       wSeries = drawingPlansOfScale[i].series;
-      barWidthRatio = categorizedBySeries ? (wSeries.getCategoryRatio(wSeries.autoIndex()) / wSeries.drawingPlan.nonMissingCount) : widthByClusters;
       if (wSeries.isWidthDistributed() && (horizontal ^ (/** @type {boolean} */(wSeries.getOption('isVertical'))))) {
         scale = /** @type {anychart.scales.Base} */(wSeries.yScale());
         if (this.getYScaleStackMode(scale) == anychart.enums.ScaleStackMode.NONE) {

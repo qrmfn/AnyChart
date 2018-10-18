@@ -29,7 +29,7 @@ anychart.cartesianModule.Chart = function() {
   this.addThemes('cartesian');
 
   anychart.core.settings.createDescriptorsMeta(this.descriptorsMeta, [
-    ['categorizedBySeries', 0, 0]
+    ['categorizedBySeries', anychart.ConsistencyState.SCALE_CHART_SCALES | anychart.ConsistencyState.SCALE_CHART_Y_SCALES, anychart.Signal.NEEDS_REDRAW]
   ]);
 
   this.setType(anychart.enums.ChartTypes.CARTESIAN);
@@ -463,14 +463,22 @@ anychart.cartesianModule.Chart.prototype.autoCalcOrdinalXScale = function(xScale
   if (!this.getOption('categorizedBySeries')) {
     anychart.cartesianModule.Chart.base(this, 'autoCalcOrdinalXScale', xScale, drawingPlans, hasExcludes, excludesMap);
   } else {
-    var xArray = drawingPlans.map(function(plan) {
-      return plan.series.name();
-    });
-    var xHashMap = xArray.reduce(function(xHashMap, item, index) {
-      var xHash = anychart.utils.hash(item);
-      xHashMap[xHash] = index;
-      return xHashMap;
-    }, {});
+    var i;
+    var len = drawingPlans.length;
+
+    var xArray = [];
+    for (i = 0; i < len; i++) {
+      var plan = drawingPlans[i];
+      xArray.push(plan.series.name());
+    }
+
+    var xHashMap = {};
+    for (i = 0; i < len; i++) {
+      var x = xArray[i];
+      var xHash = anychart.utils.hash(x);
+      xHashMap[xHash] = i;
+    }
+
     xScale.setAutoValues(xHashMap, xArray);
   }
 };

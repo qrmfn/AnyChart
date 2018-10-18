@@ -790,6 +790,7 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
       nonMissingCount++;
     }
     meta['rawIndex'] = iterator.getIndex();
+    meta['ordinalIndex'] = (nonMissingCount - 1);
 
     var point = {
       data: pointData,
