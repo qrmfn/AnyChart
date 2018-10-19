@@ -3240,11 +3240,10 @@ anychart.core.series.Base.prototype.draw = function() {
       if (labelsAreToBeRedrawn)
         this.additionalLabelsInitialize();
 
-      iterator = this.getResetIterator();
-
       var makePointMeta;
       var categorizedBySeries = /** @type {boolean} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('categorizedBySeries'));
       if (categorizedBySeries) {
+        iterator = this.getResetIterator();
         makePointMeta = this.makePointMetaCategorizedBySeries;
         var barsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barsPadding'));
         var barGroupsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barGroupsPadding'));
@@ -3270,6 +3269,9 @@ anychart.core.series.Base.prototype.draw = function() {
       } else {
         makePointMeta = this.makePointMeta;
         this.startDrawing();
+        // this move need because mapModule.Series call getResetIterator() in startDrawing()->calculate() chain
+        // and rewrite original link to this.iterator
+        iterator = this.getResetIterator();
       }
 
       // currently this section is actual only for Stock, because
