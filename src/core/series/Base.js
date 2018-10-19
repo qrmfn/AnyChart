@@ -721,13 +721,13 @@ anychart.core.series.Base.prototype.recreateShapeManager = function() {
   var smc = (this.config.shapeManagerType == anychart.enums.ShapeManagerTypes.PER_POINT) ?
       anychart.core.shapeManagers.PerPoint :
       anychart.core.shapeManagers.PerSeries;
-  this.shapeManager = new smc(
+  this.shapeManager = /** @type {!anychart.core.shapeManagers.Base} */ (new smc(
       this,
       this.renderingSettings_.getShapesConfig(),
       this.check(anychart.core.series.Capabilities.ALLOW_INTERACTIVITY),
       null,
       this.config.postProcessor,
-      this.disableStrokeScaling);
+      this.disableStrokeScaling));
 };
 
 
@@ -851,6 +851,10 @@ anychart.core.series.Base.prototype.name = function(opt_value) {
     if (this.name_ != opt_value) {
       this.name_ = opt_value;
       this.dispatchSignal(anychart.Signal.NEED_UPDATE_LEGEND);
+      if (!!/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('categorizedBySeries')) {
+        // TODO(AntonKagakin): Possible overhead for calculation. We should try to find less agressive way.
+        /** @type {anychart.scales.Ordinal} */ (this.getXScale()).dispatchSignal(anychart.Signal.NEEDS_RECALCULATION);
+      }
     }
     return this;
   }
@@ -3244,11 +3248,24 @@ anychart.core.series.Base.prototype.draw = function() {
         makePointMeta = this.makePointMetaCategorizedBySeries;
         var barsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barsPadding'));
         var barGroupsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barGroupsPadding'));
-        var nonMissingCount = iterator.getRowsCountNonMissing();
-        nonMissingCount = nonMissingCount + (nonMissingCount - 1) * barsPadding + barGroupsPadding;
-        this.barWidthRatio = 1 / nonMissingCount;
+        var pointsCount = iterator.getRowsCountNonMissing();
+
+        // formula:
+        // barGroupsPadding - ratio in term of barWidth and means padding between category groups
+        // barsPadding - ratio in term of barWidth and means padding between bars
+        // _||__||_ - full category
+        // _        - barGroupsPadding / 2 (one for left and for right, sum = barGroupsPadding)
+        // __       - barsPadding
+        // ||       - point
+        // 1 = barGroupsPadding * barWidth + barsPadding * (pointsCount - 1) * barWidth + pointsCount * barWidth
+        // 1 = barWidth * (barGroupsPadding + barsPadding * (pointsCount - 1) + pointsCount)
+        this.barWidthRatio = 1 / (barGroupsPadding + barsPadding * (pointsCount - 1) + pointsCount);
         this.setAutoPointWidth(this.barWidthRatio);
+
+        // recalculate cache values for drawer
         this.prepareAdditional();
+
+        // disable crispEdges forcely
         this.startDrawing(false);
       } else {
         makePointMeta = this.makePointMeta;
@@ -4170,18 +4187,18 @@ anychart.core.series.Base.prototype.makePointMeta = function(rowInfo, yNames, yC
 
 
 /**
- * Calculates pixel value
+ * Calculates pixel value and additional meta for drawing.
  * @param {anychart.data.IRowInfo} rowInfo
  * @param {Array.<string>} yNames
  * @param {Array.<string|number>} yColumns
  * @protected
  */
 anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(rowInfo, yNames, yColumns) {
-  var pointMissing = this.considerMetaEmpty() ?
-      0 :
-      (Number(rowInfo.meta('missing')) || 0) & ~anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
+  var pointMissing = (Number(rowInfo.meta('missing')) || 0) & ~anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
   if (!this.isPointVisible(rowInfo))
     pointMissing |= anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
+
+  //TODO(AntonKagakin): Should we work here only with points that are rly visible?
 
   var xScale = this.getXScale();
   var pointIndex = /** @type {number} */ (rowInfo.meta('ordinalIndex'));
@@ -4196,7 +4213,6 @@ anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(
   var xRatio = leftCategoryX + catWidth * (
       (barGroupsPadding / 2 * this.barWidthRatio) + (this.barWidthRatio / 2) + pointIndex * this.barWidthRatio * (1 + barsPadding));
 
-  // we write it here, because meta makers can rewrite this field (in radar/polar, for ex.)
   rowInfo.meta('xRatio', xRatio);
   if (pointMissing) {
     this.makeMissing(rowInfo, yNames, xRatio);

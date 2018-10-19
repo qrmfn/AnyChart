@@ -739,6 +739,10 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
 
   var postProcessingMeta = this.initPostProcessingMeta();
 
+  /**
+   * Counter for points that are not missing.
+   * @type {number}
+   */
   var nonMissingCount = 0;
   while (iterator.advance()) {
     var xValue = xNormalizer(iterator.get('x'));
@@ -772,6 +776,12 @@ anychart.core.series.Cartesian.prototype.getDrawingData = function(data, dataPus
       nonMissingCount++;
     }
     meta['rawIndex'] = iterator.getIndex();
+
+    /**
+     * Ordinal index for points that are visible (not missing).
+     * Used for points distribution in categorizedBySeries mode.
+     * @type {number}
+     */
     meta['ordinalIndex'] = (nonMissingCount - 1);
 
     var point = {

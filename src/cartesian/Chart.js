@@ -600,12 +600,12 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.CARTESIAN] = anychart.cartesian
   proto['xZoom'] = proto.xZoom;
   proto['xScroller'] = proto.xScroller;
   // auto form CartesianBase
-  //proto['zAspect'] = proto.zAspect;
-  //proto['zAngle'] = proto.zAngle;
-  //proto['zDistribution'] = proto.zDistribution;
-  //proto['zPadding'] = proto.zPadding;
+  // proto['zAspect'] = proto.zAspect;
+  // proto['zAngle'] = proto.zAngle;
+  // proto['zDistribution'] = proto.zDistribution;
+  // proto['zPadding'] = proto.zPadding;
   // auto
-  //proto['categorizedBySeries'] = proto.categorizedBySeries;
+  // proto['categorizedBySeries'] = proto.categorizedBySeries;
   proto['getStat'] = proto.getStat;
   proto['annotations'] = proto.annotations;
   proto['getXScales'] = proto.getXScales;
