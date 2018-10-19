@@ -579,7 +579,7 @@ anychart.ganttModule.Chart.prototype.scrollTo = function(opt_value) {
 
 /**
  * Performs vertical scroll to rowIndex specified.
- * TODO (A.Kudryavtsev): See full description in related method of controller.
+ * @see anychart.ganttModule.Controller#scrollToRow
  * @param {number} rowIndex - Row index.
  * @return {anychart.ganttModule.Chart} - Itself for method chaining.
  */
@@ -605,6 +605,7 @@ anychart.ganttModule.Chart.prototype.xScale = function(opt_value) {
 
 /**
  * Scrolls vertically to specified index.
+ * @see anychart.ganttModule.Controller#scrollToEnd
  * @param {number=} opt_index - End index to scroll to.
  * @return {anychart.ganttModule.Chart} - Itself for method chaining.
  */
