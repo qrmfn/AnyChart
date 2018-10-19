@@ -469,7 +469,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.makeScaleMaps = function() {
 /**
  * Calculates auto values for ordinal x scale.
  * @param {anychart.scales.Ordinal} xScale
- * @param {Object.<string, Array.<Object>>} drawingPlans
+ * @param {Array.<Object>} drawingPlans
  * @param {boolean} hasExcludes
  * @param {Object} excludesMap
  */
@@ -498,7 +498,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.autoCalcOrdinalXScale = functi
  * Finish ordinal x scale calculation.
  * Calculates auto names, depends on from-data-field for ordinal scale.
  * @param {anychart.scales.Ordinal} xScale
- * @param {Object.<string, Array.<Object>>} drawingPlans
+ * @param {Array.<Object>} drawingPlans
  */
 anychart.core.ChartWithOrthogonalScales.prototype.finishOrdinalXScaleCalculation = function(xScale, drawingPlans) {
   var i, j, val;
@@ -732,7 +732,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.calculateXScales = function() 
       drawingPlan = drawingPlans[0];
       if (xScale.needsAutoCalc()) {
         if (anychart.utils.instanceOf(xScale, anychart.scales.Ordinal)) {
-          this.autoCalcOrdinalXScale(xScale, drawingPlans, hasExcludes, excludesMap);
+          this.autoCalcOrdinalXScale(/** @type {anychart.scales.Ordinal} */ (xScale), drawingPlans, hasExcludes, excludesMap);
         } else if (drawingPlan.data.length) {
           if (hasExcludes) {
             for (i = 0; i < drawingPlan.data.length; i++) {
@@ -773,7 +773,7 @@ anychart.core.ChartWithOrthogonalScales.prototype.calculateXScales = function() 
         }
       }
       if (anychart.utils.instanceOf(xScale, anychart.scales.Ordinal)) {
-        this.finishOrdinalXScaleCalculation(xScale, drawingPlans);
+        this.finishOrdinalXScaleCalculation(/** @type {anychart.scales.Ordinal} */ (xScale), drawingPlans);
       }
     }
 

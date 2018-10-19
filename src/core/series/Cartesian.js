@@ -186,24 +186,6 @@ anychart.core.series.Cartesian.prototype.getCategoryWidth = function(opt_categor
 
 
 /**
- * TODO(AntonKagakin) remove
- * Dummy. Just for dev purpose.
- * @param opt_categoryIndex
- * @return {*|number}
- */
-anychart.core.series.Cartesian.prototype.getCategoryRatio = function(opt_categoryIndex) {
-  var ratio;
-  if (goog.isDef(opt_categoryIndex) && anychart.utils.instanceOf(this.xScale(), anychart.scales.Ordinal)) {
-    ratio = this.xScale().weightRatios()[opt_categoryIndex];
-  } else {
-    ratio = this.xScale().getPointWidthRatio();
-  }
-  return (ratio || (this.xScale().getZoomFactor() / this.getIterator().getRowsCount()));
-};
-
-
-
-/**
  * Returns values, needed to be counted on in scale min/max determining.
  * @param {boolean=} opt_skipOutOfRangeRows
  * @return {!Array.<number>}

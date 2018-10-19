@@ -3239,21 +3239,22 @@ anychart.core.series.Base.prototype.draw = function() {
       iterator = this.getResetIterator();
 
       var makePointMeta;
-      var categorizedBySeries = /** @type {boolean} */ (this.chart.getOption('categorizedBySeries'));
+      var categorizedBySeries = /** @type {boolean} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('categorizedBySeries'));
       if (categorizedBySeries) {
         makePointMeta = this.makePointMetaCategorizedBySeries;
-        var barsPadding = /** @type {number} */ (this.chart.getOption('barsPadding'));
-        var barGroupsPadding = /** @type {number} */ (this.chart.getOption('barGroupsPadding'));
+        var barsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barsPadding'));
+        var barGroupsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barGroupsPadding'));
         var nonMissingCount = iterator.getRowsCountNonMissing();
         nonMissingCount = nonMissingCount + (nonMissingCount - 1) * barsPadding + barGroupsPadding;
         this.barWidthRatio = 1 / nonMissingCount;
         this.setAutoPointWidth(this.barWidthRatio);
         this.prepareAdditional();
+        this.startDrawing(false);
       } else {
         makePointMeta = this.makePointMeta;
+        this.startDrawing();
       }
 
-      this.startDrawing();
       // currently this section is actual only for Stock, because
       // Cartesian processes preFirst point as a regular point in iterator
       var point = this.getPreFirstPoint();
@@ -3352,10 +3353,11 @@ anychart.core.series.Base.prototype.draw = function() {
 
 /**
  * Starts drawing.
+ * @param {boolean=} opt_crispEdges Whether to use crisp edges.
  * @protected
  */
-anychart.core.series.Base.prototype.startDrawing = function() {
-  this.drawer.startDrawing(this.shapeManager);
+anychart.core.series.Base.prototype.startDrawing = function(opt_crispEdges) {
+  this.drawer.startDrawing(this.shapeManager, opt_crispEdges);
 };
 
 
@@ -4182,14 +4184,14 @@ anychart.core.series.Base.prototype.makePointMetaCategorizedBySeries = function(
     pointMissing |= anychart.core.series.PointAbsenceReason.OUT_OF_RANGE;
 
   var xScale = this.getXScale();
-  var pointIndex = rowInfo.meta('ordinalIndex');
+  var pointIndex = /** @type {number} */ (rowInfo.meta('ordinalIndex'));
   var seriesName = this.name();
 
   var leftCategoryX = xScale.transformInternal(seriesName, pointIndex, 0);
   var rightCategoryX = xScale.transformInternal(seriesName, pointIndex, 1);
 
-  var barsPadding = /** @type {number} */ (this.chart.getOption('barsPadding'));
-  var barGroupsPadding = /** @type {number} */ (this.chart.getOption('barGroupsPadding'));
+  var barsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barsPadding'));
+  var barGroupsPadding = /** @type {number} */ (/** @type {anychart.cartesianModule.Chart} */ (this.chart).getOption('barGroupsPadding'));
   var catWidth = rightCategoryX - leftCategoryX;
   var xRatio = leftCategoryX + catWidth * (
       (barGroupsPadding / 2 * this.barWidthRatio) + (this.barWidthRatio / 2) + pointIndex * this.barWidthRatio * (1 + barsPadding));
