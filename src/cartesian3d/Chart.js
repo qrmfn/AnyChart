@@ -898,6 +898,7 @@ anychart.cartesian3dModule.Chart.prototype.setupByJSON = function(config, opt_de
   proto['removeAllSeries'] = proto.removeAllSeries;
   proto['getPlotBounds'] = proto.getPlotBounds;
   proto['xZoom'] = proto.xZoom;
+  proto['yZoom'] = proto.yZoom;
   proto['xScroller'] = proto.xScroller;
   proto['yScroller'] = proto.yScroller;
   //proto['zAspect'] = proto.zAspect;
