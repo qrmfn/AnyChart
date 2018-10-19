@@ -564,7 +564,7 @@ anychart.ganttModule.Chart.prototype.fitToTask = function(taskId) {
 
 /**
  * Performs vertical scroll to pxOffset.
- * TODO (A.Kudryavtsev): See full description in related method of controller.
+ * @see anychart.ganttModule.Controller#scrollTo
  * @param {number=} opt_value - Pixel offset.
  * @return {anychart.ganttModule.Chart|number} - Itself for method chaining.
  */
