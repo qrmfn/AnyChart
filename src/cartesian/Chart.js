@@ -457,7 +457,7 @@ anychart.cartesianModule.Chart.prototype.isSeriesVisible = function(series) {
 
 
 //endregion
-//region Categorization By Series
+//region --- Categorization By Series
 /** @inheritDoc */
 anychart.cartesianModule.Chart.prototype.autoCalcOrdinalXScale = function(xScale, drawingPlans, hasExcludes, excludesMap) {
   if (!this.getOption('categorizedBySeries')) {
@@ -509,6 +509,25 @@ anychart.cartesianModule.Chart.OWN_DESCRIPTORS = (function() {
   return map;
 })();
 anychart.core.settings.populate(anychart.cartesianModule.Chart, anychart.cartesianModule.Chart.OWN_DESCRIPTORS);
+
+
+//endregion
+//region --- Serialize / Setup / Dispose
+/** @inheritDoc */
+anychart.cartesianModule.Chart.prototype.serialize = function() {
+  var json = anychart.cartesianModule.Chart.base(this, 'serialize');
+  anychart.core.settings.serialize(this, anychart.cartesianModule.Chart.OWN_DESCRIPTORS, json['chart']);
+  return json;
+};
+
+
+/** @inheritDoc */
+anychart.cartesianModule.Chart.prototype.setupByJSON = function(config, opt_default) {
+  anychart.cartesianModule.Chart.base(this, 'setupByJSON', config, opt_default);
+  anychart.core.settings.deserialize(this, anychart.cartesianModule.Chart.OWN_DESCRIPTORS, config);
+};
+
+
 //endregion
 
 
