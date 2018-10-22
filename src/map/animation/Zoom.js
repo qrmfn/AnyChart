@@ -64,7 +64,8 @@ anychart.mapModule.animation.Zoom.prototype.doZoom_ = function(zoom) {
   this.map.fullZoom = zoom;
 
   var tx = mapLayer.getSelfTransformation();
-  this.map.scale().setMapZoom(tx.getScaleX());
+  var scaleX = anychart.math.round(tx.getScaleX(), 7);
+  this.map.scale().setMapZoom(scaleX);
   this.map.scale().setOffsetFocusPoint(tx.getTranslateX(), tx.getTranslateY());
   this.map.updateSeriesOnZoomOrMove();
 
