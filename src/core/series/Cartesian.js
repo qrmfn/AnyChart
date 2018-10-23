@@ -678,6 +678,10 @@ anychart.core.series.Cartesian.prototype.planIsXScaleInverted = function() {
 /** @inheritDoc */
 anychart.core.series.Cartesian.prototype.isPointVisible = function(point) {
   var index = point.getIndex();
+  var xModeScatter = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
+  if (xModeScatter) {
+    index = this.drawingPlan.xHashMap[anychart.utils.hash(this.drawingPlan.data[index].data['x'])];
+  }
   return (index >= this.drawingPlan.firstIndex && index <= this.drawingPlan.lastIndex);
 };
 
@@ -1039,10 +1043,10 @@ anychart.core.series.Cartesian.prototype.findX = function(fieldValue) {
       if (isNaN(res)) {
         return -1;
       } else {
-        var isScatterMode = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
+        var xModeScatter = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
 
         // in scatter mode there can be more than one index for category
-        if (isScatterMode) {
+        if (xModeScatter) {
           res = [];
           var dataArray = this.drawingPlan.data;
           // search data indexes for category
@@ -1093,7 +1097,7 @@ anychart.core.series.Cartesian.prototype.findInRangeByX = function(minValue, max
   if (this.drawingPlan) { // no plan yet - strange situation, falling back to data view search
     var res = [];
     var i, start, end;
-    var isScatterMode = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
+    var xModeScatter = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
     if (this.drawingPlan.xHashMap) { // ordinal plan
       start = this.drawingPlan.xHashMap[anychart.utils.hash(minValue)];
       end = this.drawingPlan.xHashMap[anychart.utils.hash(maxValue)];
@@ -1113,7 +1117,7 @@ anychart.core.series.Cartesian.prototype.findInRangeByX = function(minValue, max
         start = end;
         end = tmp;
       }
-      if (!isScatterMode) {
+      if (!xModeScatter) {
         end = Math.min(end, this.drawingPlan.data.length - 1);
         for (i = start; i <= end; i++)
           res.push(i);
