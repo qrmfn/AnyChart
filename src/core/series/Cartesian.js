@@ -1029,14 +1029,32 @@ anychart.core.series.Cartesian.comparePointsXNumericAsc = function(a, b) {
 
 /**
  * @param {*} fieldValue
- * @return {number}
+ * @return {number|Array.<number>}
  */
 anychart.core.series.Cartesian.prototype.findX = function(fieldValue) {
   var res;
   if (this.drawingPlan) { // no plan yet - strange situation, falling back to data view search
     if (this.drawingPlan.xHashMap) { // ordinal plan
       res = this.drawingPlan.xHashMap[anychart.utils.hash(fieldValue)];
-      return isNaN(res) ? -1 : res;
+      if (isNaN(res)) {
+        return -1;
+      } else {
+        var isScatterMode = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
+
+        // in scatter mode there can be more than one index for category
+        if (isScatterMode) {
+          res = [];
+          var dataArray = this.drawingPlan.data;
+          // search data indexes for category
+          for (var i = 0; i < dataArray.length; i++) {
+            var data = dataArray[i];
+            if (data.data['x'] == fieldValue) {
+              res.push(data.meta['rawIndex']);
+            }
+          }
+        }
+        return res;
+      }
     } else if (this.drawingPlan.data.length) { // scatter case - plan.data should be sorted by X field
       res = goog.array.binarySelect(this.drawingPlan.data, function(val) {
         return /** @type {number} */(fieldValue) - val.data['x'];
@@ -1075,6 +1093,7 @@ anychart.core.series.Cartesian.prototype.findInRangeByX = function(minValue, max
   if (this.drawingPlan) { // no plan yet - strange situation, falling back to data view search
     var res = [];
     var i, start, end;
+    var isScatterMode = this.getOption('xMode') == anychart.enums.XMode.SCATTER;
     if (this.drawingPlan.xHashMap) { // ordinal plan
       start = this.drawingPlan.xHashMap[anychart.utils.hash(minValue)];
       end = this.drawingPlan.xHashMap[anychart.utils.hash(maxValue)];
@@ -1094,9 +1113,21 @@ anychart.core.series.Cartesian.prototype.findInRangeByX = function(minValue, max
         start = end;
         end = tmp;
       }
-      end = Math.min(end, this.drawingPlan.data.length - 1);
-      for (i = start; i <= end; i++)
-        res.push(i);
+      if (!isScatterMode) {
+        end = Math.min(end, this.drawingPlan.data.length - 1);
+        for (i = start; i <= end; i++)
+          res.push(i);
+      } else {
+        var dataArray = this.drawingPlan.data;
+        // search data indexes for category
+        for (i = 0; i < dataArray.length; i++) {
+          var data = dataArray[i];
+          var dataX = data.data['x'];
+          var dataNumber = this.drawingPlan.xHashMap[anychart.utils.hash(dataX)];
+          if (dataNumber >= start && dataNumber <= end)
+            res.push(data.meta['rawIndex']);
+        }
+      }
     }
     return res;
   } else {
@@ -1431,19 +1462,25 @@ anychart.core.series.Cartesian.prototype.makeBrowserEvent = function(e) {
     var bounds = this.pixelBoundsCache || anychart.math.rect(0, 0, 0, 0);
     var x, min, range;
     var value, index;
+    var clientPosition = this.container().getStage().getClientPosition();
+    var clientX = res['clientX'];
+    var clientY = res['clientY'];
 
     if (/** @type {boolean} */(this.getOption('isVertical'))) {
-      x = res['clientY'];
-      min = bounds.top + this.container().getStage().getClientPosition().y + bounds.height;
+      x = clientY;
+      min = bounds.top + clientPosition.y + bounds.height;
       range = -bounds.height;
     } else {
-      x = res['clientX'];
-      min = bounds.left + this.container().getStage().getClientPosition().x;
+      x = clientX;
+      min = bounds.left + clientPosition.x;
       range = bounds.width;
     }
     value = this.xScale().inverseTransform((x - min) / range);
 
     index = this.findX(value);
+    if (goog.isArray(index) && index.length > 1) {
+      index = this.findNearestIndex(/** @type {Array.<number>} */ (index), clientX - clientPosition.x, clientY - clientPosition.y);
+    }
 
     if (index < 0) index = NaN;
 
@@ -1451,6 +1488,36 @@ anychart.core.series.Cartesian.prototype.makeBrowserEvent = function(e) {
   }
 
   return res;
+};
+
+
+/**
+ * Finds nearest point to cursors x, y
+ * Indexes should be always array of length greater than 1.
+ * @param {Array.<number>} indexes Indexes of the points.
+ * @param {number} x Cursor x position
+ * @param {number} y Cursor y position
+ * @return {number}
+ */
+anychart.core.series.Cartesian.prototype.findNearestIndex = function(indexes, x, y) {
+  var iterator = this.getIterator();
+  var minLength = Infinity;
+  var minLengthIndex = -1;
+  for (var j = 0; j < indexes.length; j++) {
+    if (iterator.select(indexes[j])) {
+      var pixX = /** @type {number} */(iterator.meta('x'));
+      var names = this.getYValueNames();
+      for (var k = 0; k < names.length; k++) {
+        var pixY = /** @type {number} */(iterator.meta(names[k]));
+        var length = anychart.math.vectorLength(pixX, pixY, x, y);
+        if (length < minLength) {
+          minLength = length;
+          minLengthIndex = indexes[j];
+        }
+      }
+    }
+  }
+  return minLengthIndex;
 };
 
 

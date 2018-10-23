@@ -2074,8 +2074,9 @@ anychart.core.ChartWithOrthogonalScales.prototype.getByXInfo = function(clientX,
     if (series && series.enabled()) {
       value = series.xScale().inverseTransform(ratio);
       if (this.categorizeData) {
+        // tmp can be number or array (if series in scatter x mode)
         var tmp = series.findX(value);
-        indexes = tmp >= 0 ? [tmp] : [];
+        indexes = tmp >= 0 ? [tmp] : goog.isArray(tmp) ? tmp : [];
       } else {
         indexes = series.data().findClosestByX(value, anychart.utils.instanceOf(series.xScale(), anychart.scales.Ordinal));
       }
