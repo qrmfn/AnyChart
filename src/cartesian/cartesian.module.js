@@ -287,6 +287,75 @@ anychart.verticalLine = function(var_args) {
 anychart.chartTypesMap[anychart.enums.ChartTypes.VERTICAL_LINE] = anychart.verticalLine;
 
 
+/**
+ * Default stick chart.<br/>
+ * <b>Note:</b> Contains predefined settings for axes and grids.
+ * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ */
+anychart.stick = function(var_args) {
+  var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('column');
+  chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.STICK);
+  chart.setType(anychart.enums.ChartTypes.STICK);
+  chart.setupAxes();
+  chart.setupStateSettings();
+
+  for (var i = 0, count = arguments.length; i < count; i++) {
+    chart[anychart.enums.CartesianSeriesType.STICK](arguments[i]);
+  }
+
+  return chart;
+};
+anychart.chartTypesMap[anychart.enums.ChartTypes.STICK] = anychart.stick;
+
+
+/**
+ * Default jump line chart.<br/>
+ * <b>Note:</b> Contains predefined settings for axes and grids.
+ * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ */
+anychart.jumpLine = function(var_args) {
+  var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('column');
+  chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.JUMP_LINE);
+  chart.setType(anychart.enums.ChartTypes.JUMP_LINE);
+  chart.setupAxes();
+  chart.setupStateSettings();
+  var seriesType = anychart.utils.toCamelCase(anychart.enums.CartesianSeriesType.JUMP_LINE);
+  for (var i = 0, count = arguments.length; i < count; i++) {
+    chart[seriesType](arguments[i]);
+  }
+
+  return chart;
+};
+anychart.chartTypesMap[anychart.enums.ChartTypes.JUMP_LINE] = anychart.jumpLine;
+
+
+/**
+ * Default step line chart.<br/>
+ * <b>Note:</b> Contains predefined settings for axes and grids.
+ * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ */
+anychart.stepLine = function(var_args) {
+  var chart = new anychart.cartesianModule.Chart();
+  chart.addThemes('column');
+  chart.setOption('defaultSeriesType', anychart.enums.CartesianSeriesType.STEP_LINE);
+  chart.setType(anychart.enums.ChartTypes.STEP_LINE);
+  chart.setupAxes();
+  chart.setupStateSettings();
+  var seriesType = anychart.utils.toCamelCase(anychart.enums.CartesianSeriesType.STEP_LINE);
+  for (var i = 0, count = arguments.length; i < count; i++) {
+    chart[seriesType](arguments[i]);
+  }
+
+  return chart;
+};
+anychart.chartTypesMap[anychart.enums.ChartTypes.STEP_LINE] = anychart.stepLine;
+
+
 //exports
 goog.exportSymbol('anychart.area', anychart.area);
 goog.exportSymbol('anychart.bar', anychart.bar);

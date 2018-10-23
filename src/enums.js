@@ -42,6 +42,7 @@ anychart.enums.ChartTypes = {
   PYRAMID: 'pyramid',
   RADAR: 'radar',
   SCATTER: 'scatter',
+  STEP_LINE: 'step-line',
   SPARKLINE: 'sparkline',
   HEAT_MAP: 'heat-map',
   TREE_MAP: 'tree-map',
