@@ -291,7 +291,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.VERTICAL_LINE] = anychart.verti
  * Default stick chart.<br/>
  * <b>Note:</b> Contains predefined settings for axes and grids.
  * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
- * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for stick series.
  */
 anychart.stick = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
@@ -314,7 +314,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.STICK] = anychart.stick;
  * Default jump line chart.<br/>
  * <b>Note:</b> Contains predefined settings for axes and grids.
  * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
- * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for jump line series.
  */
 anychart.jumpLine = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();
@@ -337,7 +337,7 @@ anychart.chartTypesMap[anychart.enums.ChartTypes.JUMP_LINE] = anychart.jumpLine;
  * Default step line chart.<br/>
  * <b>Note:</b> Contains predefined settings for axes and grids.
  * @param {...(anychart.data.View|anychart.data.Set|Array)} var_args Series data.
- * @return {anychart.cartesianModule.Chart} Chart with defaults for vertical line series.
+ * @return {anychart.cartesianModule.Chart} Chart with defaults for step line series.
  */
 anychart.stepLine = function(var_args) {
   var chart = new anychart.cartesianModule.Chart();

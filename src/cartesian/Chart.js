@@ -471,7 +471,7 @@ anychart.cartesianModule.Chart.prototype.isSeriesVisible = function(series) {
 anychart.cartesian = function() {
   var chart = new anychart.cartesianModule.Chart();
   chart.setupStateSettings();
-  chart.setupAxes();
+  chart.setupAxes(); //DVF-3085 Cartesian should have axes
   // chart.setupInternal(true, anychart.getFullTheme('cartesian'));
   return chart;
 };
