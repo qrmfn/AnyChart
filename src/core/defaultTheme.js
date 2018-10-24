@@ -198,13 +198,6 @@ anychart.core.defaultTheme.PERCENT_VALUE_TOKEN = '{%PercentValue}{decimalsCount:
 anychart.core.defaultTheme.locNum = function(val, opt_decimalsCountOrLocale, opt_decimalPoint, opt_groupsSeparator,
                       opt_scale, opt_zeroFillDecimals, opt_scaleSuffixSeparator, opt_useBracketsForNegative) {
   var val_ = (val === null) || (typeof val == 'boolean') || (val == '') ? NaN : +/** @type {number} */(val);
-
-  // if val is string here, then something going wrong, because it comes from providers that should formalize
-  // values to proper types. So if the value number string (like '2020') - it still should be treated as string
-  // and should't be localized as a number
-  // fixes DVF-3957
-  if (goog.isString(val) && !isNaN(val_)) return val;
-
   return isNaN(val_) ? val : anychart.format.number(val_, opt_decimalsCountOrLocale, opt_decimalPoint, opt_groupsSeparator,
       opt_scale, opt_zeroFillDecimals, opt_scaleSuffixSeparator, opt_useBracketsForNegative);
 };
