@@ -1015,6 +1015,11 @@ anychart.core.ChartWithOrthogonalScales.prototype.calculateYScales = function() 
             var k;
             for (j = firstIndex; j <= lastIndex; j++) {
               point = data[j];
+              // TODO(AntonKagakin): this is so wrong action
+              // TODO(AntonKagakin): because firstIndex lastIndex should be category indexes, not point data indexes
+              // TODO(AntonKagakin): drawing plan should be rewritten to work with categories indexes after DVF-3893
+              // TODO(AntonKagakin): (xMode scatter) cause now there can be several points in category.
+              if (!point) continue;
               if (!anychart.core.series.filterPointAbsenceReason(point.meta['missing'],
                   anychart.core.series.PointAbsenceReason.ANY_BUT_RANGE)) {
                 for (k = 0; k < names.length; k++) {
